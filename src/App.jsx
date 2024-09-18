@@ -5,9 +5,7 @@ import { Container } from "react-bootstrap";
 function App() {
     return (
         <div>
-        <Container>
-        <Register/>
-        </Container>     
+           
         </div>
     );
 }
