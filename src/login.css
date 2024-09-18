@@ -64,7 +64,7 @@ input {
 }
 
 .links a {
-  font-size: xx-small;
+  font-size: 10px;
   color: #333;
   text-decoration: none;
   flex: 1;
