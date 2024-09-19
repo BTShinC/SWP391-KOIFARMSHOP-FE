@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './login.css'; 
 
-function Login() {
+function Login({setUser}    ) {
   return (
     <div className="login-container">
       <img src="/logo.svg" alt="Logo" className="logo" />
@@ -12,6 +12,7 @@ function Login() {
         <input type="password" placeholder="Mật khẩu" required />
         <button type="submit" className="login-button">Đăng nhập</button>
       </form>
+      <button className="google-login-button">Đăng nhập với Google</button>
       <div className="links">
         <Link to="/register">Đăng ký</Link> 
         <Link to="/forgot-password">Quên mật khẩu</Link>
