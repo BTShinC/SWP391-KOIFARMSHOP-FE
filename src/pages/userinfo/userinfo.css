@@ -1,0 +1,21 @@
+.userinfo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    height: 75vh;
+    justify-content: center;
+  }
+
+.userinfo-item {
+  margin-bottom: 10px;
+}
+
+.userinfo-item span {
+  font-weight: bold;
+  margin-right: 10px;
+}
