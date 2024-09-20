@@ -1,0 +1,72 @@
+.header {
+  background-color: red;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 50px;
+
+  &__logo {
+    display: flex;
+    background-color: blue;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+
+    .logo {
+      img {
+        /* logo */
+        width: 61px;
+        height: 59px;
+        /* Inside auto layout */
+        flex: none;
+        order: 0;
+        flex-grow: 0;
+      }
+    }
+
+    .name {
+      /* SkinClinic */
+
+      width: 123px;
+      height: 41px;
+
+      font-family: "Montserrat";
+      font-style: normal;
+      font-weight: 700;
+      font-size: 34px;
+      line-height: 41px;
+
+      color: #000000;
+
+      /* Inside auto layout */
+      flex: none;
+      order: 1;
+      flex-grow: 0;
+    }
+  } 
+
+  &__nav {
+    
+    ul {
+      display: flex;
+      list-style: none;
+      gap: 30px;
+
+      li {
+        color: #fff;
+        font-size: 15px;
+        a {
+          text-decoration: none;
+          color: black;
+        }
+      }
+    }
+  }
+
+  &__icon{
+    ul{
+        display: flex;
+        gap: 10px;
+    }
+  }
+}
