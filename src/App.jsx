@@ -1,18 +1,12 @@
 
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import HomePage from "./pages/home";
-
-
+import Register from "./features/Register";
+import { Container } from "react-bootstrap";
 
 function App() {
-    const router = createBrowserRouter([
-        {
-          path: "/",
-          element: <HomePage/>,
-        },
-        
-    
-      ]);
-      return <RouterProvider router={router} />;
+    return (
+        <div>
+           
+        </div>
+    );
 }
 export default App
