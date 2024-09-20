@@ -3,11 +3,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 50px;
+  padding: 5px 50px;
+  
 
   &__logo {
-    display: flex;
-    background-color: blue;
+    display: flex; 
     gap: 10px;
     justify-content: center;
     align-items: center;
@@ -51,10 +51,12 @@
       display: flex;
       list-style: none;
       gap: 30px;
+      justify-content: center;
+      align-items: center;
+      
 
       li {
-        color: #fff;
-        font-size: 15px;
+        font-size: 12px;
         a {
           text-decoration: none;
           color: black;
@@ -66,7 +68,15 @@
   &__icon{
     ul{
         display: flex;
-        gap: 10px;
+        list-style: none;
+        gap: 30px;
+        justify-content: center;
+        align-items: center;
+        a{
+            text-decoration: none;
+            color: black;
+        }
+        
     }
   }
 }
