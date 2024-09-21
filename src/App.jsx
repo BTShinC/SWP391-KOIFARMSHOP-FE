@@ -9,10 +9,14 @@ import LoginPage from "./pages/login";
 function App() {
     const router = createBrowserRouter([
         {
-          path: "/home",
+          path: "/",
           element: <HomePage/>,
         },
-        
+
+        {
+          path: "/login",
+          element: <LoginPage/>,
+        },
     
       ]);
       return <RouterProvider router={router} />;

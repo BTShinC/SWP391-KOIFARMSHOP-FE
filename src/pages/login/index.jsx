@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
 import { useState } from "react";
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate } from "react-router-dom";
 
 import "./index.scss";
 
@@ -14,7 +14,7 @@ const initFormValue = {
   password: "",
 };
 
-function LoginPage({ setUser }) {
+function LoginPage() {
   const [formValue, setFormValue] = useState(initFormValue);
 
   const handleChange = (event) => {
@@ -29,16 +29,17 @@ function LoginPage({ setUser }) {
     event.preventDefault();
     console.log("Login Values:", formValue);
     // cho api login
-    Navigate("/home");// chuyen thang toi home khi logic, chua co login logic
+    Navigate("/home"); // chuyen thang toi home khi logic, chua co login logic
   };
 
   return (
     <div className="login-container">
-      <img src="./logo.svg" alt="Logo" className="logo" />
-      <h2 className="shop-name">Koifish</h2>
+      <div className="login__logo">
+        <img src="./logo.svg" alt="Logo" className="logo" />
+        <h2 className="shop-name">Koifish</h2>
+      </div>
 
       <div>
-
         <form onSubmit={handleSubmit}>
           <div>
             <label className="form-label"></label>
