@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+  background-image: url('https://images.hdqwalls.com/wallpapers/koi-fishes-minimal-4k-vh.jpg');
+  background-size: cover;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem;
+  background-color: white;
+  background-image: url('https://images.rawpixel.com/image_social_square/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvdjczMy10YW5nLTExYl8xLmpwZw.jpg');
+  background-size: auto;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 350px;
+  width: 350px;
+  height: auto;
+  min-height: 85vh;
+  justify-content: center;
+}
+
+.logo {
+  display: flex;
+  width: 120px;
+}
+
+.shop-name {
+  display: flex;
+  font-family: Poppins;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 350px;
+}
+
+input {
+  display: flex;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem;
+  border: 1px solid #D4C8B2;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.login-button,
+.google-login-button {
+  background-color: #F9F1E7;
+  color: black;
+  border: 1px solid #D4C8B2;
+  padding: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.google-login-button {
+  margin-top: 1rem;
+}
+
+.links {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 350px;
+}
+
+.links a {
+  font-size: small;
+  font-style: italic;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+  flex: 1;
+  text-align: center;
+  padding: 0 0.5rem;
+}
