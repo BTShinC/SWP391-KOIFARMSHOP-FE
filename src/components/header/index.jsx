@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import logo from "./images/logo.svg";
+import logo from "swp391-koifarmshop-fe/public/images/logo.svg"
 
 import {
   SearchOutlined,

@@ -1,0 +1,103 @@
+.body {
+  &__poster {
+    margin-top: 15px;
+    width: 100%;
+    filter: drop-shadow(0px 4px 4px rgba(238, 238, 238, 0.25));
+
+    img {
+      object-fit: cover;
+      width: 100%;
+      height: 80vh;
+      left: 0px;
+      top: 90.76px;
+      filter: drop-shadow(0px 4px 4px rgba(238, 238, 238, 0.25));
+    }
+  }
+  &__content {
+    margin-top: 50px;
+    h2 {
+      text-align: center;
+      height: 43px;
+      font-weight: 700;
+      font-size: 32px;
+      line-height: 48px;
+      color: #333333;
+    }
+
+    &__image {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+        padding-top: 80px ;
+        padding-left: 100px;
+        gap: 50px;
+        list-style: none; 
+        text-decoration: none;
+        
+        li {
+          width: 12%; 
+          min-width: 240px; 
+
+          a {
+            text-decoration: none; 
+            color: inherit;
+          }
+          .ant-card {
+            transition: all 0.3s ease;
+
+            &:hover {
+              transform: translateY(-10px); 
+              box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); 
+            }
+
+            img {
+              width: 100%;
+              height: auto;
+              object-fit: cover; 
+            }
+
+            .ant-card-meta-title {
+              text-align: center;
+              font-size: 18px;
+              font-weight: 500;
+              color: #333;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &__carousel {
+    h2 {
+      margin-top: 110px;
+      margin-bottom: 40px;
+      width: 100%;
+      height: 61.02px;
+      font-weight: 700;
+      font-size: 32px;
+      line-height: 120%;
+      text-align: center;
+      color: #3a3a3a;
+    }
+    .more-button {
+      display: flex;
+      margin: 30px auto 0 auto;
+      background-color: white;
+      color: #b88e2f;
+      border: 2px solid #b88e2f;
+      padding: 20px 25px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: #b88e2f;
+        color: white;
+      }
+    }
+  }
+}
