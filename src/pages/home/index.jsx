@@ -6,8 +6,12 @@ function HomePage() {
   return (
     <div>
       <Header />
+homepage3
       <Body/>
       <Footer/>
+
+      <Body />
+home+login
     </div>
   );
 }
