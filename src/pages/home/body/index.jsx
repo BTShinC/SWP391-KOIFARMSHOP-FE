@@ -2,7 +2,7 @@ import poster from "swp391-koifarmshop-fe/public/images/poster.svg";
 
 import "./index.scss";
 import { Link } from "react-router-dom";
-import Carousel from "../../../components/carousel";
+
 import { Button, Card } from "antd";
 import Meta from "antd/es/card/Meta";
 
@@ -10,6 +10,7 @@ import koi1 from "swp391-koifarmshop-fe/public/images/koi1.svg";
 import koi2 from "swp391-koifarmshop-fe/public/images/koi2.svg";
 import koi3 from "swp391-koifarmshop-fe/public/images/koi3.svg";
 import koi4 from "swp391-koifarmshop-fe/public/images/koi4.svg";
+import Carousel from "../../../components/carousel";
 
 function Body() {
   const koiImages = [
@@ -56,6 +57,40 @@ function Body() {
         <Carousel />
         <Button className="more-button">Xem thêm</Button>
       </div>
+
+      <div className="body__background">
+        <div className="body__background__content">
+          <h1>50+ Loại cá đẹp trong cửa hàng</h1>
+          <h5>
+            Cá Koi không chỉ làm không gian thêm sinh động mà còn giúp giảm căng
+            thẳng và mệt mỏi.
+          </h5>
+          <button className="view-more-button">Xem thêm</button>
+        </div>
+        <div className="body__background__carousel">
+          <Carousel slidesPerView={2} />
+        </div>
+      </div>
+
+      <div className="body__introduction">
+        <div className="body__introduction__content">
+          <h1>Giới thiệu về Koifish - Đam mê Koi Nhật</h1>
+          <h5>
+            Chào mừng bạn đến với Koi69, nơi niềm đam mê với cá Koi Nhật Bản
+            được kết hợp với sự chuyên nghiệp và tận tâm. Chúng tôi tự hào là
+            một trong những địa chỉ uy tín hàng đầu cung cấp cá Koi chất lượng
+            cao tại Việt Nam. Với tiêu chuẩn vượt trội và cam kết mang lại dịch
+            vụ hoàn hảo, Koi69 luôn nỗ lực để mỗi khách hàng đều hài lòng.
+          </h5>
+          <button className="view-more-button">Xem thêm</button>
+        </div>
+
+        <div className="body__introduction__image">
+          <img src="/images/imtro.svg" alt="" />
+        </div>
+      </div>
+
+      
     </body>
   );
 }
