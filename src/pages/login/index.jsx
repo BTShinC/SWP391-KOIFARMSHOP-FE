@@ -4,7 +4,8 @@ import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 
 import "./index.scss";
-import Header from "../../components/Header";
+import Header from "../../components/header";
+
 
 LoginPage.propTypes = {
   setUser: PropTypes.func,

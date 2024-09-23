@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './index.scss';
-import Header from '../../components/header';
+
 
 function AddFishPage() {
     const [formData, setFormData] = useState({
@@ -57,7 +57,7 @@ function AddFishPage() {
                         <select name="type" onChange={handleChange} required>
                             <option value="">Phân loại</option>
                             <option value="Ký gửi">Consignment</option>
-                            <option value="Nông trại">Farm's</option>
+                            <option value="Nông trại">Farm</option>
                         </select>
                         <input type="text" name="quality" placeholder="Chất lượng" required onChange={handleChange} />
                     </div>
