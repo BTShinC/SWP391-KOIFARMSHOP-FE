@@ -148,6 +148,7 @@ function RegisterForm() {
         <Link to="/Login">Đăng nhập ngay</Link>
       </div>
     </div>
+    </div>
   );
 }
 
