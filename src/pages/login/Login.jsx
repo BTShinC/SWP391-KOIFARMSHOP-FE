@@ -72,10 +72,13 @@ function LoginPage() {
               Đăng nhập
             </button>
           </form>
+
+          {/* Nút đăng nhập với Google */}
           <button className="google-login-button">
             <img src={googleLogo} alt="Google Logo" className="google-logo" />
             Đăng nhập với Google
           </button>
+
           <div className="links">
             <Link to="/register">Đăng ký</Link>
             <Link to="/forgot-password">Quên mật khẩu</Link>

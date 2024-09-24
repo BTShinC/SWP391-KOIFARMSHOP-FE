@@ -8,7 +8,7 @@
 
 .image-container {
   flex: 1;
-  background-image: url('/public/images/a.jpg');
+  background-image: url('/public/images/a.jpg'); /* Đặt ảnh nền */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -27,16 +27,16 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-image: url('/public/images/a.jpg');
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  padding: 3rem;
-  background-color: white;
+  padding: 2rem;
+  background-color: rgba(255, 255, 255, 0.85); /* Màu nền trắng với độ trong suốt */
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  max-width: 450px;
+  max-width: 400px; /* Hạn chế độ rộng tối đa của form */
   width: 100%;
+  background-image: url('/public/images/a.jpg'); /* Đặt ảnh nền trong form */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .login__logo {
@@ -47,12 +47,12 @@
 }
 
 .logo {
-  width: 100px;
+  width: 80px;
   margin-bottom: 10px;
 }
 
 .shop-name {
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: bold;
 }
 
@@ -60,10 +60,12 @@
   display: block;
   margin-bottom: 8px;
   font-weight: bold;
+  width: 100%;
 }
 
 .form-control {
-  width: 100%;
+  width: 100% !important;
+  max-width: 300px !important; /* Hạn chế chiều rộng của input */
   margin-bottom: 1.5rem;
   padding: 0.75rem;
   border: 1px solid #d4c8b2;
@@ -82,11 +84,11 @@
   font-weight: 600;
   font-size: 1.1rem;
   width: 100%;
+  max-width: 300px; /* Hạn chế chiều rộng của nút */
   box-sizing: border-box;
   margin-bottom: 1rem;
 }
 
-/* Thiết kế nút đăng nhập với Google giống Shopee */
 .google-login-button {
   display: flex;
   align-items: center;
@@ -100,12 +102,13 @@
   font-weight: 600;
   font-size: 1.1rem;
   width: 100%;
+  max-width: 300px; /* Hạn chế chiều rộng của nút Google */
   box-sizing: border-box;
   transition: background-color 0.3s ease;
 }
 
 .google-login-button:hover {
-  background-color: #f9f1e7; /* Khi hover, giống Shopee */
+  background-color: #f9f1e7;
 }
 
 .google-logo {
@@ -114,10 +117,11 @@
 }
 
 .links {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   display: flex;
   justify-content: space-between;
   width: 100%;
+  max-width: 300px; /* Giới hạn chiều rộng của phần links */
 }
 
 .links a {
