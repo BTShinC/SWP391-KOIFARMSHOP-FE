@@ -1,25 +1,24 @@
 
-import './index.scss';
-import Header from '/src/components/headers/index';
-
-function AddFishPage() {
-    const [formData, setFormData] = useState({
-        breed: '',
-        size: '',
-        sex: '',
-        healthStatus: '',
-        personalityTrait: '',
-        origin: '',
-        description: '',
-        image: '',
-        price: '',
-        certificate: '',
-        type: '',
-        quality: '',
-        status: '',
-        koiConsignmentID: '',
-        quantity: ''
-    });
+import "./index.scss";
+import { useState } from "react";
+function AddFish() {
+  const [formData, setFormData] = useState({
+    breed: "",
+    size: "",
+    sex: "",
+    healthStatus: "",
+    personalityTrait: "",
+    origin: "",
+    description: "",
+    image: "",
+    price: "",
+    certificate: "",
+    type: "",
+    quality: "",
+    status: "",
+    koiConsignmentID: "",
+    quantity: "",
+  });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -77,4 +76,5 @@ function AddFishPage() {
     );
 }
 
-export default AddFishPage;
+export default AddFish;
+
