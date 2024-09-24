@@ -1,14 +1,17 @@
+
 import "./index.scss";
 import Header from "/src/components/header/index";
 import ModalEditUser from "./EditUserModal";
 import { Container } from "react-bootstrap";
 import logo from "/public/images/logo.svg";
 const UserInfoPage = () => {
+
   const user = {
     fullName: "John Doe",
     address: "123 Main St, Anytown, USA",
     email: "john.doe@example.com",
     phoneNumber: "(555) 123-4567",
+
     accountBalance: 5000.0,
   };
   return (
@@ -44,3 +47,7 @@ const UserInfoPage = () => {
 };
 
 export default UserInfoPage;
+
+
+
+

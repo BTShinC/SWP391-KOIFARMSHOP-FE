@@ -1,17 +1,17 @@
 
-import { Container } from "react-bootstrap";
+import Body from "./body";
 import Header from "../../components/header";
 import Footer from "../../components/footer";
-import Body from "./body";
-const HomePage = () => {
+
+function HomePage() {
   return (
     <div>
-      <Container>
-        <Header/>
-        <Body/>
-        <Footer/> 
-      </Container>
+      <Header />
+      <Body/>
+      <Footer/>
     </div>
   );
-};
+}
+
+
 export default HomePage;
