@@ -25,7 +25,7 @@ const Admin = () => {
       <div className="content">
         <AdminHeader/>
         <h1 className="content__title">Trang quản lý</h1>
-        <AdminFilter onSearch={handleSearch} buttonText="Thêm mới người dùng" />
+        <AdminFilter onSearch={handleSearch} buttonText="Thêm sản phẩm mới" />
         <AdminTable data={userData} columns={columns} title="Hồ sơ khách hàng" />
       </div>
     </div>
