@@ -4,6 +4,7 @@ import Admin from './pages/admin/index';
 import Home from './pages/home/index';
 import LoginPage from './pages/login/Login';
 import UserInfoPage from './pages/userinfo';
+import AboutPage from './components/about';
 function App() {
   const router = createBrowserRouter([
     {
@@ -25,6 +26,10 @@ function App() {
     {
       path: "/admin",
       element: <Admin />,
+    },
+    {
+      path: "/about",
+      element: <AboutPage />,
     },
   ]);
   return <RouterProvider router={router} />;

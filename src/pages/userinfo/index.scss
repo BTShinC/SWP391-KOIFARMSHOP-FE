@@ -1,18 +1,13 @@
 .userinfo__container {
   display: flex;
-  flex-direction: row;
-  align-items: center; 
-  justify-content: center; 
-  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  gap: 5rem;
   padding: 2rem;
   background-color: #f9f9f9;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  height: 100vh;
-}
-
-.userinfo__logo {
-  flex-shrink: 0;
+  height: 60vh;
 }
 
 .userinfo__avatar {
@@ -26,7 +21,6 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  justify-content: center;
 }
 
 .userinfo__item {
@@ -36,9 +30,4 @@
 
 .userinfo__label {
   font-weight: bold;
-  margin-right: 10px;
-}
-
-.edit-user__modal {
-  margin-top: 1.5rem;
 }

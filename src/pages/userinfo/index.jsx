@@ -3,7 +3,7 @@ import Header from "/src/components/header/index";
 import ModalEditUser from "./EditUserModal";
 import { Container } from "react-bootstrap";
 import logo from "/public/images/logo.svg";
-
+import Footer from '/src/components/footer/index';
 const UserInfoPage = () => {
   const user = {
     fullName: "John Doe",
@@ -37,12 +37,11 @@ const UserInfoPage = () => {
             <div className="userinfo__item">
               <span className="userinfo__label">Số dư:</span> ${user.accountBalance.toFixed(2)}
             </div>
-            <div className="edit-user__modal">
               <ModalEditUser />
-            </div>
           </div>
         </div>
       </Container>
+      <Footer/>
     </div>
   );
 };
