@@ -4,6 +4,8 @@ import Admin from './pages/admin/index';
 import Home from './pages/home/index';
 import LoginPage from './pages/login/Login';
 import UserInfoPage from './pages/userinfo';
+import AboutPage from './pages/about';
+
 function App() {
   const router = createBrowserRouter([
     {
@@ -15,17 +17,26 @@ function App() {
       element: <div className='login'><LoginPage /></div>,
     },
     {
-      path: "/userinfo", 
-      element: <UserInfoPage/>,
+      path: "/userinfo",
+      element: <UserInfoPage />,
     },
     {
       path: "/register",
-      element:<div className='register'><RegisterForm /></div>,
+      element: <div className='register'><RegisterForm /></div>,
     },
     {
       path: "/admin",
       element: <Admin />,
     },
+
+    {
+      path: "/about",
+      element: <AboutPage />,
+    },
+
+  
+
+
   ]);
   return <RouterProvider router={router} />;
 }

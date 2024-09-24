@@ -29,7 +29,7 @@ function Header() {
             <Link to="/home">Trang chủ</Link>
           </li>
           <li>
-            <Link to="/">Giới thiệu</Link>
+            <Link to="/about">Giới thiệu</Link>
           </li>
           <li>
             <Link to="/">Cá Koi Nhật</Link>
