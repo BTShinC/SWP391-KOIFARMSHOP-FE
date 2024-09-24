@@ -5,8 +5,6 @@ function ModalEditUser() {
   const initFormValue = {
     firstName: "",
     lastName: "",
-    password: "",
-    confirmPassword: "",
     email: "",
     address: "",
     image: null,
@@ -39,14 +37,6 @@ function ModalEditUser() {
     setOpen(true);
   };
   const handleOk = () => {
-    if (formValue.password.length < 6) {
-      alert("Mật khẩu phải có ít nhất 6 ký tự!");
-      return;
-    }
-    if (formValue.password !== formValue.confirmPassword) {
-      alert("Password và Confirm Password không khớp!");
-      return;
-    }
     console.log("Thông tin mới", formValue);
     setOpen(false);
   };
@@ -112,27 +102,7 @@ function ModalEditUser() {
                 value={formValue.lastName}
                 onChange={handleChange}
               />
-            </div>
-            <div>
-              <label className="form-label">Mật khẩu mới:</label>
-              <input
-                className="form-control"
-                type="password"
-                name="password"
-                value={formValue.password}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label className="form-label">Nhập lại mật khẩu mới:</label>
-              <input
-                className="form-control"
-                type="password"
-                name="confirmPassword"
-                value={formValue.confirmPassword}
-                onChange={handleChange}
-              />
-            </div>
+            </div>      
             <div>
               <label className="form-label">Emai:</label>
               <input
