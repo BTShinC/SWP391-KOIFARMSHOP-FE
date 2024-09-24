@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import logo from "/public/images/logo.svg";
-import googleLogo from "/public/images/google.svg"; // Thêm logo Google
+import googleLogo from "/public/images/google logo.svg";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./login.scss";
@@ -34,54 +34,56 @@ function LoginPage() {
   };
 
   return (
-    <div className="login-page">
-      <div className="image-container"></div>
-      <div className="login-container-wrapper">
-        <div className="login-container">
-          <div className="login__logo">
-            <img src={logo} alt="Logo" className="logo" />
-            <h2 className="shop-name">Koifish</h2>
-          </div>
 
-          <form onSubmit={handleSubmit}>
-            <div>
-              <label className="form-label">Tên đăng nhập</label>
-              <input
-                className="form-control"
-                type="text"
-                name="username"
-                value={formValue.username}
-                placeholder="Nhập tên đăng nhập"
-                onChange={handleChange}
-                required
-              />
+    <div className="login">
+      <div className="login-page">
+        <div className="image-container"></div>
+        <div className="login-container-wrapper">
+          <div className="login-container">
+            <div className="login__logo">
+              <img src={logo} alt="Logo" className="logo" />
+              <h2 className="shop-name">Koifish</h2>
             </div>
-            <div>
-              <label className="form-label">Mật khẩu</label>
-              <input
-                className="form-control"
-                type="password"
-                name="password"
-                value={formValue.password}
-                placeholder="Nhập mật khẩu"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <button type="submit" className="login-button">
-              Đăng nhập
+
+            <form onSubmit={handleSubmit}>
+              <div>
+                <label className="form-label">Tên đăng nhập</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  name="username"
+                  value={formValue.username}
+                  placeholder="Nhập tên đăng nhập"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label className="form-label">Mật khẩu</label>
+                <input
+                  className="form-control"
+                  type="password"
+                  name="password"
+                  value={formValue.password}
+                  placeholder="Nhập mật khẩu"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <button type="submit" className="login-button">
+                Đăng nhập
+              </button>
+            </form>
+            {/* Nút đăng nhập với Google */}
+            <button className="google-login-button">
+              <img src={googleLogo} alt="Google Logo" className="google-logo" />
+              Đăng nhập với Google
             </button>
-          </form>
 
-          {/* Nút đăng nhập với Google */}
-          <button className="google-login-button">
-            <img src={googleLogo} alt="Google Logo" className="google-logo" />
-            Đăng nhập với Google
-          </button>
-
-          <div className="links">
-            <Link to="/register">Đăng ký</Link>
-            <Link to="/forgot-password">Quên mật khẩu</Link>
+            <div className="links">
+              <Link to="/register">Đăng ký</Link>
+              <Link to="/forgot-password">Quên mật khẩu</Link>
+            </div>
           </div>
         </div>
       </div>

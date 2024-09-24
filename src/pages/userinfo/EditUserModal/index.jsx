@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { Button, Modal } from "antd";
-import "./index.scss";
+import './index.scss'
 function ModalEditUser() {
   const initFormValue = {
     firstName: "",
     lastName: "",
-    password: "",
-    confirmPassword: "",
     email: "",
     address: "",
     image: null,
@@ -39,14 +37,6 @@ function ModalEditUser() {
     setOpen(true);
   };
   const handleOk = () => {
-    if (formValue.password.length < 6) {
-      alert("Mật khẩu phải có ít nhất 6 ký tự!");
-      return;
-    }
-    if (formValue.password !== formValue.confirmPassword) {
-      alert("Password và Confirm Password không khớp!");
-      return;
-    }
     console.log("Thông tin mới", formValue);
     setOpen(false);
   };
@@ -73,7 +63,7 @@ function ModalEditUser() {
         onOk={handleOk}
         onCancel={handleCancel}
         centered
-      >
+      > 
         <form>
           <div className="edit-user__modal">
             <h2>Thông tin cá nhân</h2>
@@ -112,7 +102,7 @@ function ModalEditUser() {
                 value={formValue.lastName}
                 onChange={handleChange}
               />
-            </div>
+            </div>      
             <div>
               <label className="form-label">Emai:</label>
               <input

@@ -48,6 +48,7 @@ function RegisterForm() {
     navigate("/login");
   };
   return (
+    <div className="register">
     <div className="register__form">
       <div className="register__form__title">
         <img src="/public/images/logo.svg" />
