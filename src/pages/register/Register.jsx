@@ -49,103 +49,108 @@ function RegisterForm() {
   };
   return (
     <div className="register">
-    <div className="register__form">
-      <div className="register__form__title">
-        <img src="/public/images/logo.svg" />
-        <h2>Đăng ký</h2>
-      </div>
-      <form>
-        <div>
-          <label className="form-label">Họ:</label>
-          <input
-            className="form-control"
-            type="text"
-            name="firstName"
-            value={formValue.firstName}
-            placeholder="Nhập họ"
-            onChange={handleChange}
-            required
-          />
+      <div className="register__form">
+        <div className="register__form__title">
+          <img src="/public/images/logo.svg" />
+          <h2>Đăng ký</h2>
         </div>
-        <div>
-          <label className="form-label">Tên:</label>
-          <input
-            className="form-control"
-            type="text"
-            name="lastName"
-            placeholder="Nhập tên"
-            value={formValue.lastName}
-            onChange={handleChange}
-            required
-          />
+        <form>
+          <div>
+            <label className="form-label">Họ:</label>
+            <input
+              className="form-control"
+              type="text"
+              name="firstName"
+              value={formValue.firstName}
+              placeholder="Nhập họ"
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <label className="form-label">Tên:</label>
+            <input
+              className="form-control"
+              type="text"
+              name="lastName"
+              placeholder="Nhập tên"
+              value={formValue.lastName}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <label className="form-label">Tên đăng nhập:</label>
+            <input
+              className="form-control"
+              type="text"
+              name="userName"
+              placeholder="Nhập tên đăng nhập"
+              value={formValue.userName}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <label className="form-label">Mật khẩu:</label>
+            <input
+              className="form-control"
+              type="password"
+              name="password"
+              placeholder="Nhập mật khẩu"
+              value={formValue.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <label className="form-label">Nhập lại mật khẩu:</label>
+            <input
+              className="form-control"
+              type="password"
+              name="confirmPassword"
+              placeholder="Nhập lại mật khẩu"
+              value={formValue.confirmPassword}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <label className="form-label">Emai:</label>
+            <input
+              className="form-control"
+              type="text"
+              name="email"
+              placeholder="Nhập email"
+              value={formValue.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <label className="form-label">Địa chỉ:</label>
+            <input
+              className="form-control"
+              type="text"
+              name="address"
+              placeholder="Nhập địa chỉ"
+              value={formValue.address}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="submit-button"
+            onClick={handleSubmit}
+          >
+            Đăng ký
+          </button>
+        </form>
+        <div className="back-to-login">
+          <span>Bạn đã là thành viên ?</span>
+          <Link to="/Login">Đăng nhập ngay</Link>
         </div>
-        <div>
-          <label className="form-label">Tên đăng nhập:</label>
-          <input
-            className="form-control"
-            type="text"
-            name="userName"
-            placeholder="Nhập tên đăng nhập"
-            value={formValue.userName}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label className="form-label">Mật khẩu:</label>
-          <input
-            className="form-control"
-            type="password"
-            name="password"
-            placeholder="Nhập mật khẩu"
-            value={formValue.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label className="form-label">Nhập lại mật khẩu:</label>
-          <input
-            className="form-control"
-            type="password"
-            name="confirmPassword"
-            placeholder="Nhập lại mật khẩu"
-            value={formValue.confirmPassword}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label className="form-label">Emai:</label>
-          <input
-            className="form-control"
-            type="text"
-            name="email"
-            placeholder="Nhập email"
-            value={formValue.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label className="form-label">Địa chỉ:</label>
-          <input
-            className="form-control"
-            type="text"
-            name="address"
-            placeholder="Nhập địa chỉ"
-            value={formValue.address}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <button type="submit" className="submit-button" onClick={handleSubmit}>
-          Đăng ký
-        </button>
-      </form>
-      <div className="back-to-login">
-        <span>Bạn đã là thành viên ?</span>
-        <Link to="/Login">Đăng nhập ngay</Link>
       </div>
     </div>
   );
