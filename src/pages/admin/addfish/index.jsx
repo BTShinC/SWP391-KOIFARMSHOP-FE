@@ -1,6 +1,6 @@
 import "./index.scss";
 import { useState } from "react";
-function AddFishPage() {
+function AddFish() {
   const [formData, setFormData] = useState({
     breed: "",
     size: "",
@@ -154,4 +154,4 @@ function AddFishPage() {
   );
 }
 
-export default AddFishPage;
+export default AddFish;
