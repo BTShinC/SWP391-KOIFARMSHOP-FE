@@ -46,5 +46,4 @@ const UserInfoPage = () => {
     </div>
   );
 };
-
 export default UserInfoPage;
