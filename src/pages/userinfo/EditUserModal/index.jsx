@@ -114,26 +114,6 @@ function ModalEditUser() {
               />
             </div>
             <div>
-              <label className="form-label">Mật khẩu mới:</label>
-              <input
-                className="form-control"
-                type="password"
-                name="password"
-                value={formValue.password}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label className="form-label">Nhập lại mật khẩu mới:</label>
-              <input
-                className="form-control"
-                type="password"
-                name="confirmPassword"
-                value={formValue.confirmPassword}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
               <label className="form-label">Emai:</label>
               <input
                 className="form-control"
