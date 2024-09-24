@@ -1,0 +1,52 @@
+.user-info {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  &__avatar {
+    margin-right: 10px;
+  }
+  &__details {
+    display: flex;
+    flex-direction: column;
+  }
+  &__name {
+    font-weight: bold;
+    color: #333;
+  }
+  &__role {
+    font-size: 12px;
+    color: #666;
+  }
+}
+.content {
+  &__welcome {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+    h3 {
+      margin: 0;
+      font-size: 20px;
+      color: #333;
+    }
+    span {
+      margin-top: 5px;
+      font-size: 16px;
+      color: #666;
+    }
+  }
+  &__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; /* Phân chia các phần tử con trong flex */
+    align-items: center; /* Căn giữa các phần tử con theo chiều dọc */
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+  }
+}
+.avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  background-color: #c4c4c4;
+  border-radius: 50%;
+}

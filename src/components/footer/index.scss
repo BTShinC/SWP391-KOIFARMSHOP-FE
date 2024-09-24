@@ -1,0 +1,54 @@
+.footer {
+    display: flex;
+    justify-content: space-between; /* Đặt khoảng cách đều giữa các cột */
+    padding: 60px;
+    background-color: #fdfdfd;
+
+    &__contact{
+        margin-left: 50px;
+        width: 50vh;
+    }
+  
+    /* Căn chỉnh tất cả nội dung trong footer */
+     &__nav, &__help {
+      display: flex;
+      flex-direction: column; /* Các phần tử bên trong cột sẽ xếp từ trên xuống */
+      align-items: center; /* Căn giữa nội dung trong mỗi cột */
+      flex: 1; /* Đặt kích thước bằng nhau cho các cột */
+    }
+  
+    /* Styling cho phần địa chỉ và tên shop */
+    &__address__shopname {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+    }
+  
+    &__address__address, &__address__phonenumber {
+      font-size: 1rem;
+      margin-top: 20px;
+      color: #666;
+    }
+  
+    /* Styling cho danh sách link trong footer */
+    ul {
+      list-style: none; /* Xóa dấu chấm trong danh sách */
+      padding: 0;
+  
+      li {
+        margin-bottom: 30px; /* Khoảng cách giữa các liên kết */
+      }
+  
+      a {
+        text-decoration: none; /* Xóa gạch chân */
+        color: #333;
+        font-size: 1rem;
+  
+        &:hover {
+          color: #b88e2f; /* Đổi màu khi rê chuột */
+        }
+      }
+    }
+  }
+  
