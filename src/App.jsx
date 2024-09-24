@@ -7,7 +7,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./pages/home";
 import LoginPage from "./pages/login";
 import UserInfoPage from "./pages/userinfo";
-import AddFishPage from "./pages/addfish";
+import AddFish from "./pages/addfish";
 
 
 
@@ -31,7 +31,7 @@ function App() {
 
         {
           path: "/addfish",
-          element: <AddFishPage/>,
+          element: <AddFish/>,
         },
         
     
