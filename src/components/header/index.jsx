@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import logo from "/src/img/logo.svg";
+
 import {
   SearchOutlined,
   UserOutlined,
@@ -14,9 +14,9 @@ function Header() {
 
       <div className="header__logo">
         <div className="logo">
-          <img src={logo} alt="Logo" />
+        <img src="images/logo.svg" alt="Logo" />
         </div>
-
+    
         <div className="name">
           <div className="shopname">Koifish</div>
         </div>

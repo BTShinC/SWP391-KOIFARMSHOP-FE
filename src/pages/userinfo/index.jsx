@@ -1,8 +1,8 @@
 import "./index.scss";
-import Header from "/src/components/headers/index";
+import Header from "/src/components/header/index";
 import ModalEditUser from "./EditUserModal";
 import { Container } from "react-bootstrap";
-import logo from "/src/img/logo.svg";
+import logo from "/public/images/logo.svg";
 const UserInfoPage = () => {
   const user = {
     fullName: "John Doe",

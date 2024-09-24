@@ -6,7 +6,7 @@ function SideBar() {
     <>
       <div className="sidebar">
         <div className="sidebar__logo-container">
-          <img src="/src/img/logo.svg" alt="Logo" className="sidebar__logo" />
+          <img src="/images/logo.svg" alt="Logo" className="sidebar__logo" />
         </div>
         <div className="sidebar__item active">
           <span className="sidebar__icon">⌘</span>

@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import logo from '/src/img/logo.svg'
+import logo from '/public/images/logo.svg'
 import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import "./login.scss";
