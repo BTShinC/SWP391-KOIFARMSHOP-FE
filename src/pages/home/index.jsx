@@ -1,3 +1,4 @@
+
 import Body from "./body";
 import Header from "../../components/header";
 import Footer from "../../components/footer";
@@ -11,5 +12,6 @@ function HomePage() {
     </div>
   );
 }
+
 
 export default HomePage;

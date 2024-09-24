@@ -14,6 +14,7 @@ function Header() {
 
       <div className="header__logo">
         <div className="logo">
+
         <img src="/images/logo.svg" alt="Logo" />
         </div>
 
