@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, Modal } from "antd";
-import './index.scss'
+import "./index.scss";
 function ModalEditUser() {
   const initFormValue = {
     firstName: "",
@@ -73,7 +73,7 @@ function ModalEditUser() {
         onOk={handleOk}
         onCancel={handleCancel}
         centered
-      > 
+      >
         <form>
           <div className="edit-user__modal">
             <h2>Thông tin cá nhân</h2>
@@ -110,26 +110,6 @@ function ModalEditUser() {
                 type="text"
                 name="lastName"
                 value={formValue.lastName}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label className="form-label">Mật khẩu mới:</label>
-              <input
-                className="form-control"
-                type="password"
-                name="password"
-                value={formValue.password}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label className="form-label">Nhập lại mật khẩu mới:</label>
-              <input
-                className="form-control"
-                type="password"
-                name="confirmPassword"
-                value={formValue.confirmPassword}
                 onChange={handleChange}
               />
             </div>
