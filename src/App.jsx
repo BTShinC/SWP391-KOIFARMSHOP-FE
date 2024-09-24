@@ -4,6 +4,7 @@ import Admin from './pages/admin/index';
 import HomePage from './pages/home/index';
 import LoginPage from './pages/login/Login';
 import UserInfoPage from './pages/userinfo';
+import './main.scss'
 function App() {
   const router = createBrowserRouter([
     {
@@ -12,7 +13,7 @@ function App() {
     },
     {
       path: "/login",
-      element: <div className='login'><LoginPage /></div>,
+      element:<LoginPage />,
     },
     {
       path: "/userinfo", 

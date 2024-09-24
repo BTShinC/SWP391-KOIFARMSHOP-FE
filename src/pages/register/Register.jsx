@@ -49,11 +49,11 @@ function RegisterForm() {
   };
   return (
     <div className="register__form">
+      <div className="register__form__title">
+        <img src="/public/images/logo.svg" />
+        <h2>Đăng ký</h2>
+      </div>
       <form>
-        <div className="register__form__title">
-          <img src="/public/images/logo.svg"/>
-          <h2>Đăng ký</h2>
-        </div>
         <div>
           <label className="form-label">Họ:</label>
           <input
@@ -139,7 +139,7 @@ function RegisterForm() {
           />
         </div>
         <button type="submit" className="submit-button" onClick={handleSubmit}>
-          Register
+          Đăng ký
         </button>
       </form>
       <div className="back-to-login">
