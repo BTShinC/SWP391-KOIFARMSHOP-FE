@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
+
 import logo from "/public/images/logo.svg";
+
 import {
   SearchOutlined,
   UserOutlined,
@@ -14,7 +16,9 @@ function Header() {
 
       <div className="header__logo">
         <div className="logo">
+
           <img src={logo} alt="Logo" />
+
         </div>
 
         <div className="name">
@@ -26,10 +30,12 @@ function Header() {
       <div className="header__nav">
         <ul>
           <li>
+
             <Link to="/">Trang chủ</Link>
           </li>
           <li>
             <Link to="/about">Giới thiệu</Link>
+
           </li>
           <li>
             <Link to="/">Cá Koi Nhật</Link>
@@ -68,5 +74,5 @@ function Header() {
     </header>
   );
 }
-
 export default Header;
+

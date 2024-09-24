@@ -7,7 +7,7 @@ import AdminTable from "../../components/admin-table";
 const handleSearch = (value) => {
   console.log(value);
 };
-const userData = [
+const fishData = [
   {
     name: "Francisco Chang",
     email: "chang@example.com",
@@ -17,7 +17,7 @@ const userData = [
   },
 ];
 
-const columns = ["Họ và tên", "Email", "Số điện thoại", "Địa chỉ", "Số dư ví", "Thao tác"];
+const columns = [""];
 const Admin = () => {
   return (
     <div className="admin">
@@ -26,7 +26,7 @@ const Admin = () => {
         <AdminHeader/>
         <h1 className="content__title">Trang quản lý</h1>
         <AdminFilter onSearch={handleSearch} buttonText="Thêm mới người dùng" />
-        <AdminTable data={userData} columns={columns} title="Hồ sơ khách hàng" />
+        <AdminTable data={fishData} columns={columns} title="Hồ sơ khách hàng" />
       </div>
     </div>
   );

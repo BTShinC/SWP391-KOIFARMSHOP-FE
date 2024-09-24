@@ -28,6 +28,7 @@
   justify-content: center;
   align-items: center;
   padding: 2rem;
+
   background-color: rgba(255, 255, 255, 0.85); 
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -183,7 +184,9 @@
 
 .form-control {
   width: 100% !important;
+
   max-width: 100% !important;
+
   margin-bottom: 1.5rem;
   padding: 0.75rem;
   border: 1px solid #d4c8b2;
@@ -202,7 +205,9 @@
   font-weight: 600;
   font-size: 1.1rem;
   width: 100%;
-  max-width: 100%; /* Làm nút rộng bằng form */
+
+  max-width: 100%; 
+
   box-sizing: border-box;
   margin-bottom: 1rem;
 }
@@ -220,10 +225,12 @@
   font-weight: 600;
   font-size: 1.1rem;
   width: 100%;
+
   max-width: 100%;
   box-sizing: border-box;
   transition: background-color 0.3s ease;
   margin-bottom: 1rem;
+
 }
 
 .google-login-button:hover {
@@ -240,7 +247,9 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-  gap: 1rem; /* Khoảng cách giữa các link */
+
+  gap: 1rem; 
+
 }
 
 .links a {
@@ -250,6 +259,7 @@
   text-decoration: none;
   flex: 1;
   text-align: center;
+
 }
 
 .links a:hover {

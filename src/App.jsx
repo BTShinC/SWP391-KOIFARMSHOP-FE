@@ -1,3 +1,4 @@
+
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RegisterForm from './pages/register/Register';
 import Admin from './pages/admin/index';

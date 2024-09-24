@@ -140,14 +140,13 @@ function RegisterForm() {
           />
         </div>
         <button type="submit" className="submit-button" onClick={handleSubmit}>
-          Register
+          Đăng ký
         </button>
       </form>
       <div className="back-to-login">
         <span>Bạn đã là thành viên ?</span>
         <Link to="/Login">Đăng nhập ngay</Link>
       </div>
-    </div>
     </div>
   );
 }

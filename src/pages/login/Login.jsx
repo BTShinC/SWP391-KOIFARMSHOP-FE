@@ -34,6 +34,7 @@ function LoginPage() {
   };
 
   return (
+
     <div className="login">
       <div className="login-page">
         <div className="image-container"></div>
@@ -73,7 +74,6 @@ function LoginPage() {
                 Đăng nhập
               </button>
             </form>
-
             {/* Nút đăng nhập với Google */}
             <button className="google-login-button">
               <img src={googleLogo} alt="Google Logo" className="google-logo" />

@@ -39,11 +39,11 @@
   &__header {
     display: flex;
     flex-direction: row;
-    justify-content: space-between; /* Phân chia các phần tử con trong flex */
-    align-items: center; /* Căn giữa các phần tử con theo chiều dọc */
+    justify-content: space-between; 
+    align-items: center; 
     background-color: #f5f5f5;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
 }
 .avatar-placeholder {
