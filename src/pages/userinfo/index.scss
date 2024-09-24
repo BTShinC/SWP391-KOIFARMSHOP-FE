@@ -1,38 +1,44 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
-
-.userinfo {
-  &__container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 1.5rem;
-    padding: 3rem;
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 50%;
-    height: 40vh;
-    margin: auto;
-    img {
-      margin-bottom: 20px;
-      border-radius: 50%; /* Bo tròn ảnh đại diện */
-      width: 100px; /* Kích thước ảnh đại diện */
-      height: 100px; /* Kích thước ảnh đại diện */
-    }
-  }
-  &__item {
-    margin-bottom: 10px;
-    text-align: left;
-    span {
-      font-weight: bold;
-      margin-right: 10px;
-    }
-  }
-}
-.edit-user__modal {
-  margin-top: 20px;
+.userinfo__container {
   display: flex;
+  flex-direction: row;
+  align-items: center; 
+  justify-content: center; 
+  gap: 2rem;
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  height: 100vh;
+}
+
+.userinfo__logo {
+  flex-shrink: 0;
+}
+
+.userinfo__avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.userinfo__details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   justify-content: center;
-  width: 100%;
+}
+
+.userinfo__item {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.userinfo__label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.edit-user__modal {
+  margin-top: 1.5rem;
 }

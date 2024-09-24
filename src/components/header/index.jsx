@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import logo from "/src/img/logo.svg";
+import logo from "/public/images/logo.svg";
 import {
   SearchOutlined,
   UserOutlined,

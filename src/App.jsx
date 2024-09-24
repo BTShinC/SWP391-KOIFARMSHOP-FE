@@ -12,7 +12,7 @@ function App() {
     },
     {
       path: "/login",
-      element: <div className='login'><LoginPage /></div>,
+      element: <LoginPage />
     },
     {
       path: "/userinfo", 
@@ -20,7 +20,7 @@ function App() {
     },
     {
       path: "/register",
-      element:<div className='register'><RegisterForm /></div>,
+      element:<RegisterForm />
     },
     {
       path: "/admin",

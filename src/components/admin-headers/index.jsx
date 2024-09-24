@@ -8,7 +8,7 @@ function AdminHeader() {
       </div>
       <div className="user-info">
         <div className="user-info__avatar">
-          <img className="avatar-placeholder" src="/src/img/logo.svg" />
+          <img className="avatar-placeholder" src="/public/images/logo.svg" />
         </div>
         <div className="user-info__details">      
           <span className="user-info__name">Lekan Okeowo</span>

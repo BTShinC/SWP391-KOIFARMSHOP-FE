@@ -1,8 +1,25 @@
-.login {
+.login-page {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
+}
+
+.image-container {
+  flex: 1;
+  background-image: url('/public/images/a.jpg'); /* Đặt ảnh nền */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+
+.login-container-wrapper {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; 
 }
 
 .login-container {
@@ -10,81 +27,110 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 3rem;
-  background-color: red;
-  background-image: url('https://images.rawpixel.com/image_social_square/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvdjczMy10YW5nLTExYl8xLmpwZw.jpg');
-  background-size: cover;
+  padding: 2rem;
+  background-color: rgba(255, 255, 255, 0.85); 
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 400px; 
   width: 100%;
-  max-width: 350px;
-  height: auto;
-  min-height: 85vh;
+  background-image: url('/public/images/a.jpg'); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 
+.login__logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
 
-  .logo {
-    display: flex;
-    width: 120px;
-  }
-  
-  .shop-name {
-    display: flex;
-    font-family: Poppins;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    font-size: 1.5rem;
-  }
-  
-  .login-form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 350px;
-  }
-  
-  input {
-    display: flex;
-    margin-bottom: 1.5rem;
-    padding: 0.75rem;
-    border: 1px solid #D4C8B2;
-    border-radius: 4px;
-    font-size: 1rem;
-  }
-  
-  .login-button,
-  .google-login-button {
-    background-color: #F9F1E7;
-    color: black;
-    border: 1px solid #D4C8B2;
-    padding: 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 1rem;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
-  .google-login-button {
-    margin-top: 1rem;
-  }
-  
-  .links {
-    margin-top: 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 350px;
-  }
-  
-  .links a {
-    font-size: small;
-    font-style: italic;
-    font-weight: bold;
-    color: #333;
-    text-decoration: none;
-    flex: 1;
-    text-align: center;
-    padding: 0 0.5rem;
-  }
+.logo {
+  width: 80px;
+  margin-bottom: 10px;
+}
+
+.shop-name {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  width: 100%;
+}
+
+.form-control {
+  width: 100% !important;
+  max-width: 300px !important;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem;
+  border: 1px solid #d4c8b2;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  box-sizing: border-box;
+}
+
+.login-button {
+  background-color: #f9f1e7;
+  color: black;
+  border: 1px solid #d4c8b2;
+  padding: 1.25rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.1rem;
+  width: 100%;
+  max-width: 300px; /* Hạn chế chiều rộng của nút */
+  box-sizing: border-box;
+  margin-bottom: 1rem;
+}
+
+.google-login-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: #555;
+  border: 1px solid #d4c8b2;
+  padding: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.1rem;
+  width: 100%;
+  max-width: 300px;
+  box-sizing: border-box;
+  transition: background-color 0.3s ease;
+}
+
+.google-login-button:hover {
+  background-color: #f9f1e7;
+}
+
+.google-logo {
+  width: 20px;
+  margin-right: 10px;
+}
+
+.links {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 300px; /* Giới hạn chiều rộng của phần links */
+}
+
+.links a {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+}
+
+.links a:hover {
+  color: #007bff;
 }
