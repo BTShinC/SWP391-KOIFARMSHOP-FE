@@ -1,11 +1,11 @@
 .admin-sidebar {
-  width: 280px; /* Tăng chiều rộng của sidebar */
+  width: 280px;
   padding: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
-  background-color: #f0f0f0;
+  background-color: #f6f2e7;  
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   height: 100vh;
   .sidebar__logo-container {
@@ -32,7 +32,7 @@
     margin-top: 1rem;
     margin-bottom: 1rem;
     font-size: 16px;
-    color: #94a3b8;
+    color: #5e5e5e;
     text-decoration: none;
     border-radius: 5rem;
     cursor: pointer;
@@ -54,12 +54,12 @@
     }
 
     &:hover {
-      background-color: #3b82f6;
+      background-color: #d4c8b2; 
       color: #ffffff;
     }
 
     &.active {
-      background-color: #1d4ed8;
+      background-color: #b3a48f; 
       color: #ffffff;
     }
   }
@@ -67,7 +67,7 @@
   .sidebar__logout {
     margin-top: auto;
     padding: 15px;
-    background-color: #ff6f6f;
+    background-color: #d4c8b2; 
     border-radius: 5px;
     text-align: center;
     transition: background-color 0.3s ease;
@@ -79,7 +79,7 @@
     }
 
     &:hover {
-      background-color: #ff8787;
+      background-color: #b3a48f; 
     }
   }
 }

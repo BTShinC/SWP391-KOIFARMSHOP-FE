@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "antd";
 import PropTypes from "prop-types";
 import "./index.scss";
@@ -22,15 +22,15 @@ function FishTable({ columns, fishData, title }) {
       <table>
         <thead>
           <tr>
-            {columns.map((col) => (
-              <th key={col}>{col}</th>
+            {columns.map((col,index) => (
+              <th key={index}>{col}</th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {fishData.map((fish) => (
-            <>
-              <tr key={fish.productID}>
+          {fishData.map((fish,index) => (
+            <React.Fragment key={fish.productID || index}>
+              <tr>
                 <td>{fish.productID}</td>
                 <td>{fish.breed}</td>
                 <td>{fish.size}</td>
@@ -77,7 +77,7 @@ function FishTable({ columns, fishData, title }) {
                   </td>
                 </tr>
               )}
-            </>
+            </React.Fragment>
           ))}
         </tbody>
       </table>
