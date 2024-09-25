@@ -4,7 +4,7 @@ import "./index.scss";
 function AdminSideBar() {
   return (
     <>
-      <div className="sidebar">
+      <div className="admin-sidebar">
         <div className="sidebar__logo-container">
           <img src="/public/images/logo.svg" alt="Logo" className="sidebar__logo" />
         </div>

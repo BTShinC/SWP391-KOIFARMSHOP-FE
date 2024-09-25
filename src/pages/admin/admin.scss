@@ -1,16 +1,7 @@
 .admin {
   display: flex;
   height: 100vh;
-  font-family: "Poppins", sans-serif;
-
-  .sidebar {
-    width: 250px;
-    height: 100vh; /* Đảm bảo sidebar chiếm chiều cao toàn màn hình */
-    background-color: #f0f0f0; /* Màu nền để dễ nhận biết */
-    padding: 1rem;
-  }
-
-.content {
+.admin-content {
   flex-grow: 1;
   background-color: #f5f7fa;
   padding: 20px;

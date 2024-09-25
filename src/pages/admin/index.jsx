@@ -1,6 +1,6 @@
 import "./admin.scss";
 import AdminHeader from "../../components/admin-components/admin-headers";
-import AdminSideBar from "../../components/admin-components/sidebar";
+import AdminSideBar from "/src/components/admin-components/admin-sidebar";
 import AdminFilter from "../../components/admin-components/admin-filter";
 import AdminTable from "../../components/admin-components/admin-table";
 
@@ -28,8 +28,9 @@ const columns = [
 const Admin = () => {
   return (
     <div className="admin">
-      <AdminSideBar />
-      <div className="content">
+    <div className="admin-sidebar"><AdminSideBar /></div>
+
+      <div className="admin-content">
         <AdminHeader />
         <h1 className="content__title">Trang quản lý</h1>
         <AdminFilter onSearch={handleSearch} buttonText="Thêm mới người dùng" />
