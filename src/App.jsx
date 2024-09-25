@@ -6,6 +6,7 @@ import Admin from "./pages/admin/index";
 import Layout from "./components/layout";
 import RegisterForm from "./pages/register/Register";
 import AboutPage from "./components/about";
+import ManageFish from "./pages/admin/manageFish";
 
 function App() {
   const router = createBrowserRouter([
@@ -40,6 +41,16 @@ function App() {
     {
       path: "/admin",
       element: <Admin />,
+      // children: [
+      //   {
+      //     path: "/manageFish",
+      //     element: <ManageFish />,
+      //   },
+      // ],
+    },
+    {
+      path: "/managefish",
+      element: <ManageFish/>,
     },
   ]);
   return <RouterProvider router={router} />;

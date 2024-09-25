@@ -9,10 +9,15 @@ AdminTable.propTypes = {
 };
 
 function AdminTable({ data, columns, title }) {
+  const handleOnClick = (rowData) => {
+    console.log("Dữ liệu hàng được chọn:", rowData);
+
+  };
+
   return (
-    <div className="table">
+    <div className="admin-table">
       <div>
-        <h3>{title}</h3>
+        <h3 className="admin-table__title">{title}</h3>
       </div>
       <table>
         <thead>
@@ -29,7 +34,7 @@ function AdminTable({ data, columns, title }) {
                 <td key={i}>{val}</td>
               ))}
               <td>
-                <Button type="primary">Chỉnh sửa</Button>
+                <Button onClick={() => handleOnClick(row)}>Chỉnh sửa</Button>
               </td>
             </tr>
           ))}
