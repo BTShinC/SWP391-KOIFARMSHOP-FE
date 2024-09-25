@@ -39,7 +39,7 @@
     transition: background-color 0.3s ease, color 0.3s ease;
     justify-content: flex-start;
     
-    a {
+    span {
       text-decoration: none;
       color: inherit;
       flex-grow: 1;
@@ -72,7 +72,7 @@
     text-align: center;
     transition: background-color 0.3s ease;
     
-    a {
+    span {
       text-decoration: none;
       color: #ffffff;
       font-weight: bold;

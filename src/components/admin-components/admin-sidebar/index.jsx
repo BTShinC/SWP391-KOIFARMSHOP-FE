@@ -27,7 +27,7 @@ function AdminSideBar() {
           onClick={() => handleNavigation("/admin")}
         >
           <span className="sidebar__icon">⌘</span>
-          Hồ sơ khách hàng
+            <span>Hồ sơ khách hàng</span>
         </div>
         <div
           className={`sidebar__item ${
@@ -36,7 +36,7 @@ function AdminSideBar() {
           onClick={() => handleNavigation("/managefish")}
         >
           <span className="sidebar__icon">⌘</span>
-          Quản lý giống cá
+          <span>Quản lý giống cá </span>
         </div>
         <div
           className={`sidebar__item ${
@@ -45,7 +45,7 @@ function AdminSideBar() {
           onClick={() => handleNavigation("/orders")}
         >
           <span className="sidebar__icon">⌘</span>
-          Quản lý đơn hàng
+          <span>Quản lý đơn hàng</span>
         </div>
         <div
           className={`sidebar__item ${
@@ -54,13 +54,14 @@ function AdminSideBar() {
           onClick={() => handleNavigation("/reports")}
         >
           <span className="sidebar__icon">⌘</span>
-          Báo cáo và thống kê
+          <span> Báo cáo và thống kê</span>
         </div>
+
         <div
           className="sidebar__logout"
           onClick={() => handleNavigation("/logout")}
         >
-          Đăng xuất
+          <span>Đăng xuất</span>
         </div>
       </div>
     </>
