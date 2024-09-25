@@ -2,13 +2,11 @@
 
 import logo from '/public/images/logo.svg'
 import "./index.scss";
-import Header from '../header';
-import Footer from '/src/components/footer/index'
+
 
 function AboutPage() {
     return (
         <div>
-            <Header />
             <div className="about">
                 <div className="banner-wraper">
                     <div className="banner-container">
@@ -30,7 +28,6 @@ function AboutPage() {
                 </p>
                 </div>
             </div>
-        <Footer/>
         </div>
     );
 }

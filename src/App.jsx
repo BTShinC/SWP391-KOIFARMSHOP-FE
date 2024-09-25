@@ -1,36 +1,45 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import HomePage from "./pages/home";
+import LoginPage from "./pages/login";
+import UserInfoPage from "./pages/userinfo";
+import Admin from "./pages/admin/index";
+import Layout from "./components/layout";
+import RegisterForm from "./pages/register/Register";
+import AboutPage from "./components/about";
 
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import RegisterForm from './pages/register/Register';
-import Admin from './pages/admin/index';
-import Home from './pages/home/index';
-import LoginPage from './pages/login/Login';
-import UserInfoPage from './pages/userinfo';
-import AboutPage from './components/about';
 function App() {
   const router = createBrowserRouter([
     {
-      path: "/",
-      element: <Home />,
+      path: "",
+      element: <Layout />,
+      children: [
+        {
+          path: "",
+          element: <HomePage />,
+        },
+        {
+          path: "/login",
+          element: <LoginPage />,
+        },
+        {
+          path: "/register",
+          element: <RegisterForm />,
+        },
+        {
+          path: "/about",
+          element: <AboutPage />,
+        },
+      ],
     },
+
     {
-      path: "/login",
-      element: <LoginPage />
+      path: "/userinfo",
+      element: <UserInfoPage />,
     },
-    {
-      path: "/userinfo", 
-      element: <UserInfoPage/>,
-    },
-    {
-      path: "/register",
-      element:<RegisterForm />
-    },
+
     {
       path: "/admin",
       element: <Admin />,
-    },
-    {
-      path: "/about",
-      element: <AboutPage />,
     },
   ]);
   return <RouterProvider router={router} />;
