@@ -5,6 +5,8 @@ import UserInfoPage from "./pages/userinfo";
 import AddFish from "./pages/admin/addfish";
 import Layout from "./components/layout";
 import RegisterForm from "./pages/register";
+import AboutPage from "./pages/about";
+import ContactPage from "./pages/contact";
 
 
 function App() {
@@ -37,6 +39,17 @@ function App() {
       path: "/addfish",
       element: <AddFish />,
     },
+
+    {
+      path: "/about",
+      element: <AboutPage />,
+    },
+
+    {
+      path: "/contact",
+      element: <ContactPage />,
+    },
+
   ]);
   return <RouterProvider router={router} />;
 }
