@@ -71,24 +71,23 @@ function LoginPage() {
 
   const loginGoogle = async () => {
     const googleProvider = new GoogleAuthProvider();
-  
+
     try {
       const response = await signInWithPopup(auth, googleProvider);
       const user = response.user;
-  
+
       console.log("User:", user.displayName);
       console.log("Email:", user.email);
-  
+
       // Lưu thông tin người dùng vào database
       await saveUserToDatabase(user);
-  
+
       // Điều hướng đến trang home
       navigate("/");
     } catch (error) {
       console.error("Error logging in with Google:", error);
     }
   };
-  
 
   return (
     <div className="login">
@@ -149,10 +148,11 @@ function LoginPage() {
 
           <div className="links">
             <li>
-              <Link to="/register">Đăng ký</Link>
+              <Link to="/register" className="register-link">
+                Đăng ký
+              </Link>
             </li>
             <li>
-              {" "}
               <Link to="/forgot-password">Quên mật khẩu</Link>
             </li>
           </div>

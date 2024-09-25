@@ -1,44 +1,44 @@
-
-
-
- 
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./pages/home";
 import LoginPage from "./pages/login";
 import UserInfoPage from "./pages/userinfo";
-import AddFish from "./pages/addfish";
-
-
+import AddFish from "./pages/admin/addfish";
+import Layout from "./components/layout";
+import RegisterForm from "./pages/register";
 
 
 function App() {
-    const router = createBrowserRouter([
+  const router = createBrowserRouter([
+    {
+      path: "",
+      element: <Layout/>,
+      children: [
         {
-          path: "/",
-          element: <HomePage/>,
+          path: "",
+          element: <HomePage />,
         },
-
         {
           path: "/login",
-          element: <LoginPage/>,
+          element: <LoginPage />,
         },
-
         {
-          path: "/userinfo", 
-          element: <UserInfoPage/>,
+          path: "/register",
+          element: <RegisterForm />,
         },
+      ]
+    },
 
-        {
-          path: "/addfish",
-          element: <AddFish/>,
-        },
-        
-    
-      ]);
-      return <RouterProvider router={router} />;
-    }
+    {
+      path: "/userinfo",
+      element: <UserInfoPage />,
+    },
 
-export default App
+    {
+      path: "/addfish",
+      element: <AddFish />,
+    },
+  ]);
+  return <RouterProvider router={router} />;
+}
 
-
+export default App;
