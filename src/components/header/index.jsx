@@ -45,7 +45,7 @@ function Header() {
             <Link to="/">Tin tức</Link>
           </li>
           <li>
-            <Link to="/">Liên hệ</Link>
+            <Link to="/contact">Liên hệ</Link>
           </li>
         </ul>
       </div>

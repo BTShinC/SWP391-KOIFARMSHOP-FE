@@ -7,7 +7,7 @@ import Layout from "./components/layout";
 import RegisterForm from "./pages/register/Register";
 import AboutPage from "./components/about";
 import ManageFish from "./pages/admin/manageFish";
-
+import ContactPage from "./pages/contact";
 function App() {
   const router = createBrowserRouter([
     {
@@ -30,6 +30,10 @@ function App() {
           path: "/about",
           element: <AboutPage />,
         },
+        {
+          path: "/contact",
+          element: <ContactPage />,
+        },
       ],
     },
 
@@ -50,7 +54,7 @@ function App() {
     },
     {
       path: "/managefish",
-      element: <ManageFish/>,
+      element: <ManageFish />,
     },
   ]);
   return <RouterProvider router={router} />;
