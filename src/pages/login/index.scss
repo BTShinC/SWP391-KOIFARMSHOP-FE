@@ -1,83 +1,142 @@
-.login-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 3rem;
-  background-color: red;
-  background-image: url('https://images.rawpixel.com/image_social_square/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvdjczMy10YW5nLTExYl8xLmpwZw.jpg');
-  background-size: auto;
-  border-radius: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 350px;
-  width: 350px;
-  height: auto;
-  min-height: 85vh;
+.login {
+  position: relative;
 
-  .logo {
-    display: flex;
-    width: 120px;
-  }
-  
-  .shop-name {
-    display: flex;
-    font-family: Poppins;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    font-size: 1.5rem;
-  }
-  
-  .login-form {
-    display: flex;
-    flex-direction: column;
+  .login__video {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    max-width: 350px;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
   }
-  
-  input {
+
+  .login-page {
     display: flex;
-    margin-bottom: 1.5rem;
-    padding: 0.75rem;
-    border: 1px solid #D4C8B2;
-    border-radius: 4px;
-    font-size: 1rem;
-  }
-  
-  .login-button,
-  .google-login-button {
-    background-color: #F9F1E7;
-    color: black;
-    border: 1px solid #D4C8B2;
-    padding: 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 1rem;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
-  .google-login-button {
-    margin-top: 1rem;
-  }
-  
-  .links {
-    margin-top: 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 350px;
-  }
-  
-  .links a {
-    font-size: small;
-    font-style: italic;
-    font-weight: bold;
-    color: #333;
-    text-decoration: none;
-    flex: 1;
-    text-align: center;
-    padding: 0 0.5rem;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+    z-index: 1;
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      background-color: rgba(255, 255, 255, 0.85);
+      border-radius: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 450px;
+
+      .logo {
+        width: 100px;
+        margin-bottom: 1rem;
+      }
+
+      .shop-name {
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+
+      // Styling for Ant Design Form
+      .ant-form {
+        width: 20vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .ant-form-item {
+          width: 100%;
+        }
+
+        .ant-form-item-label {
+          text-align: left;
+          font-weight: bold;
+        }
+
+        .ant-input {
+          padding: 0.75rem;
+          border: 1px solid #d4c8b2;
+          border-radius: 4px;
+          font-size: 1.1rem;
+        }
+
+        .ant-input-password {
+          input {
+            padding: 0.60rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            box-shadow: none;
+          }
+        }
+
+        .ant-btn-primary {
+          background-color: #f9f1e7;
+          color: black;
+          border: 1px solid #d4c8b2;
+          padding: 1.7rem;
+          font-weight: 600;
+          font-size: 1.1rem;
+          border-radius: 6px;
+          cursor: pointer;
+          width: 100%;
+          max-width: 300px;
+          margin-bottom: 1rem;
+          margin-top: 1rem;
+
+          &:hover {
+            background-color: #e9e1d7;
+          }
+        }
+      }
+
+      // Google login button styling
+      .google-login-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+        color: #555;
+        border: 1px solid #d4c8b2;
+        padding: 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 1.1rem;
+        width: 100%;
+        max-width: 300px;
+
+        &:hover {
+          background-color: #f9f1e7;
+        }
+
+        .google-logo {
+          width: 20px;
+          margin-right: 10px;
+        }
+      }
+
+      // Links for registration and forgot password
+      .links {
+        display: flex;
+        padding-top: 20px;
+        gap: 30px;
+        
+
+        li {
+          list-style: none;
+
+          a {
+            text-decoration: none;
+            color: #007bff;
+          }
+        }
+      }
+    }
   }
 }
