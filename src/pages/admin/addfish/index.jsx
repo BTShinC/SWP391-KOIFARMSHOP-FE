@@ -29,6 +29,7 @@ function AddFish() {
     // Handle form submission logic here
   };
 
+
   return (
     <div className="add-fish-page">
       <div className="add-fish-container">
@@ -152,6 +153,7 @@ function AddFish() {
       </div>
     </div>
   );
+
 }
 
 export default AddFish;

@@ -10,6 +10,7 @@ import ContactPage from "./pages/contact";
 
 
 
+
 function App() {
   const router = createBrowserRouter([
     {
@@ -34,8 +35,10 @@ function App() {
 
         },
         {
+
           path: "/contact",
           element: <ContactPage />,
+
         },
         {
           path: "/about",
