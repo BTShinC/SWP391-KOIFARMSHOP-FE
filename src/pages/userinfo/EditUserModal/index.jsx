@@ -1,110 +1,135 @@
-import { useState } from "react";
-import { Button, Modal } from "antd";
-import './index.scss'
-function ModalEditUser() {
+import { useState, useEffect } from "react";
+import { Button, Modal, Upload} from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import "./index.scss";
+import PropTypes from "prop-types";
+
+ModalEditUser.propTypes = {
+  title: PropTypes.string.isRequired,
+  userData: PropTypes.object.isRequired,
+  className: PropTypes.string,
+};
+
+function ModalEditUser({ title, userData, className = "" }) {
   const initFormValue = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    address: "",
-    image: null,
-    preview: null,
+    fullName: userData.fullName || "",
+    phoneNumber: userData.phoneNumber || "",
+    email: userData.email || "",
+    address: userData.address || "",
   };
 
   const [formValue, setFormValue] = useState(initFormValue);
+  const [open, setOpen] = useState(false);
+  const [fileList, setFileList] = useState([]);
+
+  useEffect(() => {
+    setFormValue({
+      fullName: userData.fullName || "",
+      phoneNumber: userData.phoneNumber || "",
+      email: userData.email || "",
+      address: userData.address || "",
+    });
+  }, [userData]);
 
   const handleChange = (event) => {
     const { value, name } = event.target;
-    let isValid = true;
-
-    if (name === "email") {
-      const emailPattern = /^[^\s@]+@gmail.com$/;
-      isValid = emailPattern.test(value);
-    }
-
-    if (isValid) {
-      setFormValue({
-        ...formValue,
-        [name]: value,
-      });
-    } else {
-      console.log("Giá trị không hợp lệ:", name);
-    }
+    setFormValue({
+      ...formValue,
+      [name]: value,
+    });
   };
 
-  const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
   };
+
   const handleOk = () => {
     console.log("Thông tin mới", formValue);
     setOpen(false);
   };
+
   const handleCancel = () => {
-    console.log("Đóng trang Edit");
     setOpen(false);
   };
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    setFormValue({
-      ...formValue,
-      image: file,
-      preview: URL.createObjectURL(file),
-    });
+
+  const handleUploadChange = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
   };
+
+  const handlePreview = async (file) => {
+    let src = file.url;
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj);
+        reader.onload = () => resolve(reader.result);
+      });
+    }
+    const imgWindow = window.open(src);
+    imgWindow.document.write(`<img src="${src}" style="width: 100%;" />`);
+  };
+
   return (
     <>
-      <Button type="primary" onClick={showModal}>
-        Thay đổi thông tin cá nhân
+      <Button
+        type={className.includes("modal-edit-user-button") ? "default" : "primary"}
+        onClick={showModal}
+        className={`modal-edit-user-button ${className}`}
+      >
+        {title}
       </Button>
+
       <Modal
         title="Cập nhật thông tin cá nhân"
         open={open}
         onOk={handleOk}
         onCancel={handleCancel}
         centered
-      > 
+      >
         <form>
           <div className="edit-user__modal">
             <h2>Thông tin cá nhân</h2>
             <div>
               <label className="form-label">Ảnh đại diện:</label>
-              {formValue.preview && (
-                <img
-                  src={formValue.preview}
-                  alt="Preview"
-                  style={{ width: "100px", height: "100px" }}
-                />
-              )}
-              <input
-                className="form-control user__img"
-                type="file"
-                name="image"
-                onChange={handleImageChange}
-              />
+              <Upload
+                name="avatar"
+                listType="picture-card"
+                className="avatar-uploader"
+                fileList={fileList}
+                onChange={handleUploadChange}
+                onPreview={handlePreview}
+                action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+              >
+                {fileList.length >= 1 ? null : (
+                  <div>
+                    <PlusOutlined />
+                    <div style={{ marginTop: 8 }}>Upload</div>
+                  </div>
+                )}
+              </Upload>
             </div>
             <div>
-              <label className="form-label">Họ:</label>
+              <label className="form-label">Họ và tên:</label>
               <input
                 className="form-control"
                 type="text"
-                name="firstName"
-                value={formValue.firstName}
+                name="fullName"
+                value={formValue.fullName}
                 onChange={handleChange}
               />
             </div>
             <div>
-              <label className="form-label">Tên:</label>
+              <label className="form-label">Số điện thoại:</label>
               <input
                 className="form-control"
                 type="text"
-                name="lastName"
-                value={formValue.lastName}
+                name="phoneNumber"
+                value={formValue.phoneNumber}
                 onChange={handleChange}
               />
-            </div>      
+            </div>
             <div>
-              <label className="form-label">Emai:</label>
+              <label className="form-label">Email:</label>
               <input
                 className="form-control"
                 type="text"
@@ -130,4 +155,5 @@ function ModalEditUser() {
     </>
   );
 }
+
 export default ModalEditUser;

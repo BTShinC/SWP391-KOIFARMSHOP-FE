@@ -23,7 +23,7 @@ const UserInfoPage = () => {
           </div>
           <div className="userinfo__details">
             <div className="userinfo__item">
-              <span className="userinfo__label">Tên:</span> {user.fullName}
+              <span className="userinfo__label">Họ và tên:</span> {user.fullName}
             </div>
             <div className="userinfo__item">
               <span className="userinfo__label">Địa chỉ:</span> {user.address}
@@ -37,7 +37,7 @@ const UserInfoPage = () => {
             <div className="userinfo__item">
               <span className="userinfo__label">Số dư:</span> ${user.accountBalance.toFixed(2)}
             </div>
-              <ModalEditUser />
+              <ModalEditUser userData={user} title = "Thay đổi thông tin cá nhân" />
           </div>
         </div>
       </Container>

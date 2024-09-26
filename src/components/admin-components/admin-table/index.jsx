@@ -1,6 +1,6 @@
-import { Button } from "antd";
 import PropTypes from "prop-types";
 import "./index.scss";
+import ModalEditUser from "/src/pages/userinfo/EditUserModal/index";
 
 AdminTable.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -9,11 +9,6 @@ AdminTable.propTypes = {
 };
 
 function AdminTable({ data, columns, title }) {
-  const handleOnClick = (rowData) => {
-    console.log("Dữ liệu hàng được chọn:", rowData);
-
-  };
-
   return (
     <div className="admin-table">
       <div>
@@ -30,11 +25,14 @@ function AdminTable({ data, columns, title }) {
         <tbody>
           {data.map((row, index) => (
             <tr key={index}>
-              {Object.values(row).map((val, i) => (
-                <td key={i}>{val}</td>
-              ))}
+              <td>{row.id}</td>
+              <td>{row.fullName}</td>
+              <td>{row.email}</td>
+              <td>{row.phoneNumber}</td>
+              <td>{row.address}</td>
+              <td>{row.balance}</td>
               <td>
-                <Button onClick={() => handleOnClick(row)}>Chỉnh sửa</Button>
+                <ModalEditUser userData={row} title="Chỉnh sửa" className = 'modal-edit-user-button' />
               </td>
             </tr>
           ))}

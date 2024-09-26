@@ -3,32 +3,31 @@ import AdminHeader from "../../components/admin-components/admin-headers";
 import AdminSideBar from "/src/components/admin-components/admin-sidebar";
 import AdminFilter from "../../components/admin-components/admin-filter";
 import AdminTable from "../../components/admin-components/admin-table";
-
 const handleSearch = (value) => {
   console.log(value);
 };
 const userData = [
   {
     id: "1",
-    name: "Francisco Chang",
+    fullName: "Francisco Chang",
     email: "chang@example.com",
-    phone: "123456789",
+    phoneNumber: "123456789",
     address: "Mexico",
     balance: "1000",
   },
   {
     id: "2",
-    name: "Maria Anders",
+    fullName: "Maria Anders",
     email: "maria.anders@example.com",
-    phone: "987654321",
+    phoneNumber: "987654321",
     address: "Germany",
     balance: "1500",
   },
   {
     id: "3",
-    name: "John Smith",
+    fullName: "John Smith",
     email: "john.smith@example.com",
-    phone: "555123456",
+    phoneNumber: "555123456",
     address: "USA",
     balance: "2000",
   },
