@@ -27,28 +27,31 @@ function App() {
           path: "/register",
           element: <RegisterForm />,
         },
+        {
+          path: "/userinfo",
+          element: <UserInfoPage />,
+        },
+        {
+          path: "/contact",
+          element: <ContactPage />,
+        },
+        {
+          path: "/about",
+          element: <AboutPage />,
+        },
       ]
     },
 
-    {
-      path: "/userinfo",
-      element: <UserInfoPage />,
-    },
 
     {
       path: "/addfish",
       element: <AddFish />,
     },
 
-    {
-      path: "/about",
-      element: <AboutPage />,
-    },
 
-    {
-      path: "/contact",
-      element: <ContactPage />,
-    },
+   
+
+    
 
   ]);
   return <RouterProvider router={router} />;

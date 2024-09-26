@@ -1,7 +1,5 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState } from "react";
 
-import Header from '../../components/header';
 import Footer from '../../components/footer';
 import logo from '/public/logo.svg'
 import { EnvironmentOutlined, PhoneOutlined, ClockCircleOutlined } from '@ant-design/icons';
@@ -35,7 +33,7 @@ function ContactPage() {
 
     return (
         <div>
-            <Header />
+
             <div className="banner-wraper">
                 <div className="banner-container">
                     <img src={logo} alt="Logo" className="logo" />

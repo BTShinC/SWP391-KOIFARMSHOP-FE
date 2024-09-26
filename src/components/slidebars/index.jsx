@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Link } from 'react-router-dom';
 import { Button} from 'antd'; // Nhập Button từ Ant Design
 import './index.scss';
@@ -14,6 +14,9 @@ const Sidebar = ({ isOpen, onClose }) => {
         </li>
         <li>
           <Link to="/register" onClick={onClose}>Đăng ký</Link>
+        </li>
+        <li>
+          <Link to="/userinfo" onClick={onClose}>Cập nhật thông tin</Link>
         </li>
         <li>
           <Link to="/logout" onClick={onClose}>Đăng xuất</Link>
