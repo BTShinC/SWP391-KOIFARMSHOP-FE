@@ -133,7 +133,7 @@ function RegisterForm() {
             label="Số điện thoại"
             rules={[
               { required: true, message: "Vui lòng nhập số điện thoại!" },
-              { len: 10, message: "Số điện thoại phải có 15 ký tự!" }, // Điều chỉnh độ dài nếu cần
+              { len: 10, message: "Số điện thoại phải có 10 ký tự!" }, // Điều chỉnh độ dài nếu cần
             ]}
           >
             <Input placeholder="Nhập số điện thoại" />
