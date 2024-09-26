@@ -1,36 +1,39 @@
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
-import {
-  SearchOutlined,
-  UserOutlined,
-  ShoppingCartOutlined,
-} from "@ant-design/icons";
+import { SearchOutlined, UserOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 
 import "./index.scss";
+import Sidebar from "../slidebars";
 
 function Header() {
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!isSidebarOpen);
+  };
+
+  const closeSidebar = () => {
+    setSidebarOpen(false);
+  };
+
   return (
     <header className="header">
-
       <div className="header__logo">
         <div className="logo">
-
-        <img src="/images/logo.svg" alt="Logo" />
+          <img src="/images/logo.svg" alt="Logo" />
         </div>
-
         <div className="name">
           <div className="shopname">Koifish</div>
         </div>
-       
       </div>
 
       <div className="header__nav">
         <ul>
           <li>
-            <Link to="/home">Trang chủ</Link>
+            <Link to="/">Trang chủ</Link>
           </li>
           <li>
-            <Link to="/">Giới thiệu</Link>
+            <Link to="/about">Giới thiệu</Link>
           </li>
           <li>
             <Link to="/">Cá Koi Nhật</Link>
@@ -42,7 +45,7 @@ function Header() {
             <Link to="/">Tin tức</Link>
           </li>
           <li>
-            <Link to="/">Liên hệ</Link>
+            <Link to="/contact">Liên hệ</Link>
           </li>
         </ul>
       </div>
@@ -50,7 +53,7 @@ function Header() {
       <div className="header__icon">
         <ul>
           <li>
-            <Link to="/login">
+            <Link to="#" onClick={toggleSidebar}>
               <UserOutlined />
             </Link>
           </li>
@@ -66,6 +69,8 @@ function Header() {
           </li>
         </ul>
       </div>
+
+      <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
     </header>
   );
 }

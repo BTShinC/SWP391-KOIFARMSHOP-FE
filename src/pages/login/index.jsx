@@ -1,13 +1,16 @@
 import PropTypes from "prop-types";
 import logo from "/public/images/logo.svg";
-import googleLogo from "/public/images/google.svg"; // Thêm logo Google
-import { useState } from "react";
+import googleLogo from "/public/images/google.svg"; 
 import { Link, useNavigate } from "react-router-dom";
 import "./index.scss";
 import axios from "axios";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import firebase from "firebase/compat/app";
 import { initializeApp } from "firebase/app";
+import { Button, Form, Input } from "antd";
+import api from "../../config/api";
+// import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDzdOryEzjKOSYu5q-EiTZyK5DcwwsUqms",
@@ -30,28 +33,44 @@ LoginPage.propTypes = {
   setUser: PropTypes.func,
 };
 
-const initFormValue = {
-  username: "",
-  password: "",
-};
+// const initFormValue = {
+//   username: "",
+//   password: "",
+// };
 
 function LoginPage() {
-  const [formValue, setFormValue] = useState(initFormValue);
-  const navigate = useNavigate(); // Sử dụng useNavigate để điều hướng
 
-  const handleChange = (event) => {
-    const { value, name } = event.target;
-    setFormValue({
-      ...formValue,
-      [name]: value,
-    });
-  };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("Login Values:", formValue);
-    // Call API login here
-    navigate("/home"); // Điều hướng đến trang home sau khi login thành công
+
+  // const [formValue, setFormValue] = useState(initFormValue);
+
+  // const handleChange = (event) => {
+  //   const { value, name } = event.target;
+  //   setFormValue({
+  //     ...formValue,
+  //     [name]: value,
+  //   });
+  // };
+
+  const navigate = useNavigate();
+  // const dispatch = useDispatch();
+
+
+  const handleLogin = async (values) => {
+    try {
+      await api.post("login", values);
+      console.log("Values sent to API:", values);
+      // chạy xuống đây => account này có tồn tại
+      toast.success("Login success!");
+      // chuyển đến trang chủ
+      navigate("/");
+
+      // lưu trữ thông tin của user
+      // dispatch action
+      // dispatch(login(reponse.data));
+    } catch (err) {
+      toast.error(err.response.data);
+    }
   };
 
   // Hàm lưu thông tin người dùng vào database qua API backend
@@ -71,24 +90,23 @@ function LoginPage() {
 
   const loginGoogle = async () => {
     const googleProvider = new GoogleAuthProvider();
-  
+
     try {
       const response = await signInWithPopup(auth, googleProvider);
       const user = response.user;
-  
+
       console.log("User:", user.displayName);
       console.log("Email:", user.email);
-  
+
       // Lưu thông tin người dùng vào database
       await saveUserToDatabase(user);
-  
+
       // Điều hướng đến trang home
       navigate("/");
     } catch (error) {
       console.error("Error logging in with Google:", error);
     }
   };
-  
 
   return (
     <div className="login">
@@ -106,35 +124,43 @@ function LoginPage() {
             <h2 className="shop-name">Koifish</h2>
           </div>
 
-          <form onSubmit={handleSubmit} className="form">
-            <div className="form">
-              <label className="form-label">Tên đăng nhập</label>
-              <input
-                className="form-control"
-                type="text"
-                name="username"
-                value={formValue.username}
-                placeholder="Nhập tên đăng nhập"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="form">
-              <label className="form-label">Mật khẩu</label>
-              <input
-                className="form-control"
-                type="password"
-                name="password"
-                value={formValue.password}
-                placeholder="Nhập mật khẩu"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <button type="submit" className="login-button">
+          <Form
+            labelCol={{
+              span: 24,
+            }}
+            onFinish={handleLogin} // Submit form handler
+            className="form"
+          >
+            <Form.Item
+              label="Tên đăng nhập"
+              name="userName"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your username!",
+                },
+              ]}
+            >
+              <Input placeholder="Nhập tên đăng nhập" />
+            </Form.Item>
+
+            <Form.Item
+              label="Mật khẩu"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your password!",
+                },
+              ]}
+            >
+              <Input.Password placeholder="Nhập mật khẩu" />
+            </Form.Item>
+
+            <Button type="primary" htmlType="submit" className="login-button">
               Đăng nhập
-            </button>
-          </form>
+            </Button>
+          </Form>
 
           <button
             className="google-login-button"
@@ -149,10 +175,11 @@ function LoginPage() {
 
           <div className="links">
             <li>
-              <Link to="/register">Đăng ký</Link>
+              <Link to="/register" className="register-link">
+                Đăng ký
+              </Link>
             </li>
             <li>
-              {" "}
               <Link to="/forgot-password">Quên mật khẩu</Link>
             </li>
           </div>

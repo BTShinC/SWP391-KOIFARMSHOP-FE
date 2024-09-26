@@ -117,7 +117,7 @@ function AddFish() {
             <select name="type" onChange={handleChange} required>
               <option value="">Phân loại</option>
               <option value="Ký gửi">Consignment</option>
-              <option value="Nông trại">Farm's</option>
+              <option value="Nông trại">Farm</option>
             </select>
             <input
               type="text"
