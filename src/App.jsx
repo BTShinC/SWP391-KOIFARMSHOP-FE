@@ -9,6 +9,7 @@ import AboutPage from "./pages/about";
 import ContactPage from "./pages/contact";
 
 
+
 function App() {
   const router = createBrowserRouter([
     {
@@ -30,6 +31,7 @@ function App() {
         {
           path: "/userinfo",
           element: <UserInfoPage />,
+
         },
         {
           path: "/contact",
