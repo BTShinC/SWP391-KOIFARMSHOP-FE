@@ -1,6 +1,5 @@
 
 import "./index.scss";
-import Header from "/src/components/header/index";
 import ModalEditUser from "./EditUserModal";
 import { Container } from "react-bootstrap";
 import logo from "/public/images/logo.svg";
@@ -16,7 +15,6 @@ const UserInfoPage = () => {
   };
   return (
     <div>
-      <Header />
       <Container>
         <div className="userinfo__container">
           <img src={logo} alt="ảnh đại diện" />

@@ -1,0 +1,47 @@
+
+
+.about{
+    justify-content: center;
+    align-items: center;
+}
+
+.banner-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url('public/images/banner.svg');
+    background-size: cover;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    padding-top: 3rem;
+    padding-bottom: 2rem;
+    height: auto;
+
+}
+
+.title{
+    padding-top: 50px;
+    display: flex;
+    
+    font-weight: bold;
+    padding-bottom: 30px;
+    
+    
+}
+
+.content{
+    display: flex;
+    align-items: center;
+    font-size: x-large;
+    width: 80%;
+    height: auto;
+}
+
+.page-content{
+    padding-left: 10vw;
+    p{
+        background-color: #ffff;
+    }
+}
