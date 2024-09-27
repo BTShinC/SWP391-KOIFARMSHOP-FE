@@ -1,6 +1,6 @@
-import { Button } from "antd";
 import PropTypes from "prop-types";
 import "./index.scss";
+import ModalEditUser from "/src/pages/userinfo/EditUserModal/index";
 
 AdminTable.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -10,9 +10,9 @@ AdminTable.propTypes = {
 
 function AdminTable({ data, columns, title }) {
   return (
-    <div className="table">
+    <div className="admin-table">
       <div>
-        <h3>{title}</h3>
+        <h3 className="admin-table__title">{title}</h3>
       </div>
       <table>
         <thead>
@@ -25,11 +25,14 @@ function AdminTable({ data, columns, title }) {
         <tbody>
           {data.map((row, index) => (
             <tr key={index}>
-              {Object.values(row).map((val, i) => (
-                <td key={i}>{val}</td>
-              ))}
+              <td>{row.id}</td>
+              <td>{row.fullName}</td>
+              <td>{row.email}</td>
+              <td>{row.phoneNumber}</td>
+              <td>{row.address}</td>
+              <td>{row.balance}</td>
               <td>
-                <Button type="primary">Chỉnh sửa</Button>
+                <ModalEditUser userData={row} title="Chỉnh sửa" className = 'modal-edit-user-button' />
               </td>
             </tr>
           ))}

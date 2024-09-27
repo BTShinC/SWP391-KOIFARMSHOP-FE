@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+
 import { Link } from "react-router-dom";
 import { SearchOutlined, UserOutlined, ShoppingCartOutlined } from "@ant-design/icons";
-
+import { useState } from "react";
 import "./index.scss";
 import Sidebar from "../slidebars";
 
