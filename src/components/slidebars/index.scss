@@ -5,6 +5,9 @@
     width: 250px;
     height: 100%;
     background-color: #fff;
+    background-image: url("https://e0.pxfuel.com/wallpapers/613/327/desktop-wallpaper-koi-fish-for-iphone-minimal-fish.jpg");
+    background-position-y: 60%;
+    background-position-x: 7%;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
     transition: right 0.3s ease;
     z-index: 1000; 
@@ -35,6 +38,7 @@
   
       li {
         margin: 15px 0;
+        padding-bottom: 5px;
   
         a {
           text-decoration: none;
