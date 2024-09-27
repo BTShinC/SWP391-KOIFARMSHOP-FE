@@ -1,4 +1,4 @@
-import Header from '../../components/header';
+
 import Footer from '../../components/footer';
 import logo from '/public/logo.svg'
 import "./index.scss";
@@ -7,7 +7,6 @@ import "./index.scss";
 function AboutPage() {
     return (
         <div>
-            <Header />
             <div className="about">
                 <div className="banner-wraper">
                     <div className="banner-container">
