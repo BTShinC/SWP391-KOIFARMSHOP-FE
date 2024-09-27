@@ -1,4 +1,4 @@
-import poster from "swp391-koifarmshop-fe/public/images/poster2.jpg";
+import poster from "swp391-koifarmshop-fe/public/images/poster.svg";
 
 import "./index.scss";
 import { Link } from "react-router-dom";
