@@ -28,7 +28,7 @@ function AboutPage() {
                 </p>
                 </div>
             </div>
-            <Footer />
+            
         </div>
     );
 }
