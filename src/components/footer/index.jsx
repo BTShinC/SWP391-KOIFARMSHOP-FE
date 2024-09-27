@@ -12,16 +12,16 @@ function Footer() {
         <div className="footer__nav">
         <ul>
           <li>
-            <Link to="/home">Trang chủ</Link>
+            <Link to="/">Trang chủ</Link>
           </li>
           <li>
-            <Link to="/">Giới thiệu</Link>
+            <Link to="/about">Giới thiệu</Link>
           </li>
           <li>
             <Link to="/">Tin tức</Link>
           </li>
           <li>
-            <Link to="/">Liên hệ</Link>
+            <Link to="/contact">Liên hệ</Link>
           </li>
         </ul>
         </div>

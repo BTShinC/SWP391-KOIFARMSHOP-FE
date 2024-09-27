@@ -1,13 +1,12 @@
 .admin {
   display: flex;
   height: 100vh;
-  font-family: "Poppins", sans-serif;
-}
-.content {
-  flex-grow: 1;
-  background-color: #f5f7fa;
-  padding: 20px;
-  &__title{
+  .admin-content {
+    flex-grow: 1;
+    background-color: #f5f7fa;
+    padding: 20px;
+  }
+  .content__title {
     color: #1d4ed8;
     margin-top: 1rem;
   }
