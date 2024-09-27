@@ -74,6 +74,7 @@ function RegisterForm() {
               name="fullName"
               value={formValue.fullName}
               placeholder="Nhập họ và tên"
+
               onChange={handleChange}
               required
             />
@@ -115,7 +116,9 @@ function RegisterForm() {
             />
           </div>
           <div>
+
             <label className="form-label">Email:</label>
+
             <input
               className="form-control"
               type="text"
@@ -138,13 +141,17 @@ function RegisterForm() {
               required
             />
           </div>
+
           <button type="submit" className="submit-button">
+
             Đăng ký
           </button>
         </form>
         <div className="back-to-login">
+
           <span>Bạn đã là thành viên?</span>
           <Link to="/login">Đăng nhập ngay</Link>
+
         </div>
       </div>
     </div>
