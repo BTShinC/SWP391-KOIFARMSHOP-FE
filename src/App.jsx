@@ -7,6 +7,7 @@ import Layout from "./components/layout";
 import RegisterForm from "./pages/register";
 import AboutPage from "./pages/about";
 import ContactPage from "./pages/contact";
+import Admin from "./pages/admin";
 
 
 
@@ -47,6 +48,10 @@ function App() {
       ]
     },
 
+    {
+      path: "/admin",
+      element: <Admin/>,
+    },
 
     {
       path: "/addfish",

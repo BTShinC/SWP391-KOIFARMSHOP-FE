@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+
 import { Link } from "react-router-dom";
 import { SearchOutlined, UserOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 
 import "./index.scss";
 import Sidebar from "../slidebars";
+import { useState } from "react";
 
 function Header() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);

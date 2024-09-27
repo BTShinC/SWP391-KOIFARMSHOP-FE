@@ -1,8 +1,11 @@
 import "./admin.scss";
-import AdminHeader from "../../components/admin-headers";
+
 import SideBar from "../../components/sidebar";
-import AdminFilter from "../../components/admin-filter";
-import AdminTable from "../../components/admin-table";
+
+
+import AdminHeader from "../../components/admin-components/admin-headers";
+import AdminFilter from "../../components/admin-components/admin-filter";
+import AdminTable from "../../components/admin-components/admin-table";
 
 const handleSearch = (value) => {
   console.log(value);
