@@ -8,7 +8,7 @@ import { ShoppingCartOutlined } from "@ant-design/icons";
 import "./index.scss";
 // import required modules
 import PropTypes from 'prop-types';
-import { Pagination } from "swiper/modules";
+import { Autoplay, Pagination } from "swiper/modules";
 import { Button, Card } from "antd";
 
 const { Meta } = Card;
@@ -30,8 +30,12 @@ export default function Carousel({ slidesPerView = 4, images = koiImage}) {
     <>
       <Swiper
         slidesPerView={slidesPerView}
+        autoplay={{
+          delay:3000,
+          disableOnInteraction: false,
+        }}
         spaceBetween={0}
-        modules={[Pagination]}
+        modules={[Pagination, Autoplay]}
         className="carousel"
       >
         {images.map((image) => (

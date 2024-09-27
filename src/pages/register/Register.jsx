@@ -1,23 +1,27 @@
+
 import PropTypes from "prop-types";
-import "./Register.scss";
+import logo from "/public/images/logo.svg";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import "./index.scss";
+
 RegisterForm.propTypes = {
   onSubmit: PropTypes.func,
 };
+
 const initFormValue = {
-  firstName: "",
-  lastName: "",
+  fullName: "",
   userName: "",
   password: "",
   confirmPassword: "",
   email: "",
   address: "",
 };
+
 function RegisterForm() {
   const navigate = useNavigate();
   const [formValue, setFormValue] = useState(initFormValue);
+
   const handleChange = (event) => {
     const { value, name } = event.target;
     let isValid = true;
@@ -31,50 +35,46 @@ function RegisterForm() {
         [name]: value,
       });
     } else {
-      console.log("Giá trị không hợp lệ:", name);
+      console.log("Invalid value:", name);
     }
   };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     if (formValue.password.length < 6) {
-      alert("Mật khẩu phải có ít nhất 6 ký tự!");
+      alert("Password must be at least 6 characters!");
       return;
     }
     if (formValue.password !== formValue.confirmPassword) {
-      alert("Password và Confirm Password không khớp!");
+      alert("Password and Confirm Password do not match!");
       return;
     }
+    // gọi api tạo người dùng
     console.log("Register Values:", formValue);
     navigate("/login");
   };
+
   return (
     <div className="register">
+      <video className="register__video" autoPlay loop muted>
+        <source src="/images/video.mp4" type="video/mp4" />
+      </video>
+
       <div className="register__form">
         <div className="register__form__title">
-          <img src="/public/images/logo.svg" />
+          <img src={logo} alt="Logo" />
           <h2>Đăng ký</h2>
         </div>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div>
-            <label className="form-label">Họ:</label>
+            <label className="form-label">Họ và tên:</label>
             <input
               className="form-control"
               type="text"
-              name="firstName"
-              value={formValue.firstName}
-              placeholder="Nhập họ"
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div>
-            <label className="form-label">Tên:</label>
-            <input
-              className="form-control"
-              type="text"
-              name="lastName"
-              placeholder="Nhập tên"
-              value={formValue.lastName}
+              name="fullName"
+              value={formValue.fullName}
+              placeholder="Nhập họ và tên"
+
               onChange={handleChange}
               required
             />
@@ -116,7 +116,9 @@ function RegisterForm() {
             />
           </div>
           <div>
-            <label className="form-label">Emai:</label>
+
+            <label className="form-label">Email:</label>
+
             <input
               className="form-control"
               type="text"
@@ -139,17 +141,17 @@ function RegisterForm() {
               required
             />
           </div>
-          <button
-            type="submit"
-            className="submit-button"
-            onClick={handleSubmit}
-          >
+
+          <button type="submit" className="submit-button">
+
             Đăng ký
           </button>
         </form>
         <div className="back-to-login">
-          <span>Bạn đã là thành viên ?</span>
-          <Link to="/Login">Đăng nhập ngay</Link>
+
+          <span>Bạn đã là thành viên?</span>
+          <Link to="/login">Đăng nhập ngay</Link>
+
         </div>
       </div>
     </div>

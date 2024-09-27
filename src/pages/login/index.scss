@@ -1,10 +1,14 @@
+.login{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 .login-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 3rem;
-  background-color: red;
   background-image: url('https://images.rawpixel.com/image_social_square/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvdjczMy10YW5nLTExYl8xLmpwZw.jpg');
   background-size: auto;
   border-radius: 20px;
@@ -14,6 +18,7 @@
   width: 350px;
   height: auto;
   min-height: 85vh;
+  margin-bottom: 1rem;
 
   .logo {
     display: flex;
@@ -22,7 +27,6 @@
   
   .shop-name {
     display: flex;
-    font-family: Poppins;
     margin-top: 10px;
     margin-bottom: 20px;
     font-size: 1.5rem;
@@ -81,4 +85,4 @@
     padding: 0 0.5rem;
   }
 }
-
+}
