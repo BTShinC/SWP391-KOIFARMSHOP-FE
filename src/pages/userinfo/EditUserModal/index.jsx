@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import { Button, Modal, Upload} from "antd";
+import { Button, Modal, Upload } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import "./index.scss";
 import PropTypes from "prop-types";
+import { storage } from "/src/firebase.js"; // Đảm bảo đường dẫn đúng đến file cấu hình Firebase
+import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
 ModalEditUser.propTypes = {
   title: PropTypes.string.isRequired,
@@ -16,11 +18,13 @@ function ModalEditUser({ title, userData, className = "" }) {
     phoneNumber: userData.phoneNumber || "",
     email: userData.email || "",
     address: userData.address || "",
+    imageUrl: userData.imageUrl || "", // Lưu URL của ảnh
   };
 
   const [formValue, setFormValue] = useState(initFormValue);
   const [open, setOpen] = useState(false);
   const [fileList, setFileList] = useState([]);
+  const [imageUrl, setImageUrl] = useState(userData.imageUrl || "");
 
   useEffect(() => {
     setFormValue({
@@ -28,6 +32,7 @@ function ModalEditUser({ title, userData, className = "" }) {
       phoneNumber: userData.phoneNumber || "",
       email: userData.email || "",
       address: userData.address || "",
+      imageUrl: userData.imageUrl || "",
     });
   }, [userData]);
 
@@ -42,18 +47,45 @@ function ModalEditUser({ title, userData, className = "" }) {
   const showModal = () => {
     setOpen(true);
   };
-
-  const handleOk = () => {
-    console.log("Thông tin mới", formValue);
-    setOpen(false);
-  };
-
   const handleCancel = () => {
     setOpen(false);
   };
 
   const handleUploadChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
+  
+    if (newFileList.length > 0) {
+      const file = newFileList[0].originFileObj; // Lấy file từ danh sách file
+      const storageRef = ref(storage, `uploads/${file.name}`); // Tạo reference đến Firebase Storage
+      // Tải tệp lên Firebase Storage
+      uploadBytes(storageRef, file)
+        .then(() => {
+          // Sau khi upload thành công, lấy URL của tệp đã tải lên
+          return getDownloadURL(storageRef);
+        })
+        .then((url) => {
+          console.log("File available at:", url); // Debug: Xác minh URL
+          setImageUrl(url); // Cập nhật URL ảnh trong state 
+          // Cập nhật formValue với URL mới
+          setFormValue((prevFormValue) => {
+            const updatedFormValue = {
+              ...prevFormValue,
+              imageUrl: url, // Lưu URL của ảnh vào formValue
+            };
+            // Kiểm tra formValue sau khi cập nhật
+            console.log("Form value sau khi cập nhật:", updatedFormValue);
+            return updatedFormValue;
+          });
+        })
+        .catch((error) => {
+          console.error("Error uploading file:", error); // Debug: Xác minh lỗi
+        });
+    }
+  };
+  
+
+  const handleOk = () => {
+    setOpen(false);
   };
 
   const handlePreview = async (file) => {
@@ -72,7 +104,9 @@ function ModalEditUser({ title, userData, className = "" }) {
   return (
     <>
       <Button
-        type={className.includes("modal-edit-user-button") ? "default" : "primary"}
+        type={
+          className.includes("modal-edit-user-button") ? "default" : "primary"
+        }
         onClick={showModal}
         className={`modal-edit-user-button ${className}`}
       >
@@ -98,7 +132,7 @@ function ModalEditUser({ title, userData, className = "" }) {
                 fileList={fileList}
                 onChange={handleUploadChange}
                 onPreview={handlePreview}
-                action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+                beforeUpload={() => false} // Tránh việc tự động upload file
               >
                 {fileList.length >= 1 ? null : (
                   <div>

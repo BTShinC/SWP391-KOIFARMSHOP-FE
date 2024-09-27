@@ -10,8 +10,7 @@ RegisterForm.propTypes = {
 };
 
 const initFormValue = {
-  firstName: "",
-  lastName: "",
+  fullName: "",
   userName: "",
   password: "",
   confirmPassword: "",
@@ -50,6 +49,7 @@ function RegisterForm() {
       alert("Password and Confirm Password do not match!");
       return;
     }
+    // gọi api tạo người dùng
     console.log("Register Values:", formValue);
     navigate("/login");
   };
@@ -67,25 +67,13 @@ function RegisterForm() {
         </div>
         <form onSubmit={handleSubmit}>
           <div>
-            <label className="form-label">Họ:</label>
+            <label className="form-label">Họ và tên:</label>
             <input
               className="form-control"
               type="text"
-              name="firstName"
-              value={formValue.firstName}
-              placeholder="Nhập họ"
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div>
-            <label className="form-label">Tên:</label>
-            <input
-              className="form-control"
-              type="text"
-              name="lastName"
-              placeholder="Nhập tên"
-              value={formValue.lastName}
+              name="fullName"
+              value={formValue.fullName}
+              placeholder="Nhập họ và tên"
               onChange={handleChange}
               required
             />
