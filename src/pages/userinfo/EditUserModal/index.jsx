@@ -24,7 +24,6 @@ function ModalEditUser({ title, userData, className = "" }) {
   const [formValue, setFormValue] = useState(initFormValue);
   const [open, setOpen] = useState(false);
   const [fileList, setFileList] = useState([]);
-  const [imageUrl, setImageUrl] = useState(userData.imageUrl || "");
 
   useEffect(() => {
     setFormValue({
@@ -65,7 +64,6 @@ function ModalEditUser({ title, userData, className = "" }) {
         })
         .then((url) => {
           console.log("File available at:", url); // Debug: Xác minh URL
-          setImageUrl(url); // Cập nhật URL ảnh trong state 
           // Cập nhật formValue với URL mới
           setFormValue((prevFormValue) => {
             const updatedFormValue = {
