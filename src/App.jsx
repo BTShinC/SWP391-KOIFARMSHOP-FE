@@ -8,7 +8,12 @@ import RegisterForm from "./pages/register/Register";
 import AboutPage from "./pages/about";
 import ManageFish from "./pages/admin/manageFish";
 import ContactPage from "./pages/contact";
+
 import ManageOrder from "./pages/admin/manageOrders";
+
+
+
+
 function App() {
   const router = createBrowserRouter([
     {
@@ -32,8 +37,10 @@ function App() {
           element: <AboutPage />,
         },
         {
+
           path: "/contact",
           element: <ContactPage />,
+
         },
       ],
     },
