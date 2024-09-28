@@ -2,7 +2,10 @@ import AdminFilter from "../../../components/admin-components/admin-filter";
 import AdminHeader from "../../../components/admin-components/admin-headers";
 import AdminSideBar from "../../../components/admin-components/admin-sidebar";
 import FishTable from "../../../components/admin-components/fish-table";
+import AddFishModal from "./addfish-modal";
+import { useState } from "react";
 import "./index.scss";
+
 const handleSearch = (value) => {
   console.log(value);
 };
@@ -55,8 +58,17 @@ const columns = [
   "Thao tác"
 ];
 
-
 function ManageFish() {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalVisible(false);
+  };
+
   return (
     <div className="manage-fish">
       <div className="admin-sidebar">
@@ -66,7 +78,9 @@ function ManageFish() {
         <AdminHeader />
         <h1 className="admin-content__title">Trang quản lý</h1>
         <AdminFilter onSearch={handleSearch} buttonText="Thêm cá Koi" />
-        <FishTable fishData={fishData} columns={columns} title="Quản lý giống cá"/>
+        <button onClick={showModal} className="add-fish-button">Thêm cá</button>
+        <FishTable fishData={fishData} columns={columns} title="Quản lý giống cá" />
+        <AddFishModal title="Thêm cá Koi" visible={isModalVisible} onClose={handleModalClose} />
       </div>
     </div>
   );
