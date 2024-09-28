@@ -11,6 +11,8 @@ import { Button, Form, Input } from "antd";
 import api from "../../config/api";
 // import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/userSlice";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDzdOryEzjKOSYu5q-EiTZyK5DcwwsUqms",
@@ -53,21 +55,24 @@ function LoginPage() {
   // };
 
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
 
   const handleLogin = async (values) => {
     try {
-      await api.post("login", values);
+      const response = await api.post("login", values);
       console.log("Values sent to API:", values);
+
+      // Save user data to Redux
+      dispatch(login(response.data));
       // chạy xuống đây => account này có tồn tại
-      toast.success("Login success!");
+      toast.success("Đăng nhập thành công");
       // chuyển đến trang chủ
       navigate("/");
 
       // lưu trữ thông tin của user
       // dispatch action
-      // dispatch(login(reponse.data));
+      
     } catch (err) {
       toast.error(err.response.data);
     }

@@ -76,11 +76,11 @@ function Body() {
         <div className="body__introduction__content">
           <h1>Giới thiệu về Koifish - Đam mê Koi Nhật</h1>
           <h5>
-            Chào mừng bạn đến với Koi69, nơi niềm đam mê với cá Koi Nhật Bản
+            Chào mừng bạn đến với Koifish nơi niềm đam mê với cá Koi Nhật Bản
             được kết hợp với sự chuyên nghiệp và tận tâm. Chúng tôi tự hào là
             một trong những địa chỉ uy tín hàng đầu cung cấp cá Koi chất lượng
             cao tại Việt Nam. Với tiêu chuẩn vượt trội và cam kết mang lại dịch
-            vụ hoàn hảo, Koi69 luôn nỗ lực để mỗi khách hàng đều hài lòng.
+            vụ hoàn hảo, Koifish luôn nỗ lực để mỗi khách hàng đều hài lòng.
           </h5>
           <button className="view-more-button">Xem thêm</button>
         </div>

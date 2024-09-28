@@ -1,6 +1,6 @@
 import "./index.scss";
 import { useState } from "react";
-function AddFish() {
+function AddFishPage() {
   const [formData, setFormData] = useState({
     breed: "",
     size: "",
@@ -117,7 +117,7 @@ function AddFish() {
             <select name="type" onChange={handleChange} required>
               <option value="">Phân loại</option>
               <option value="Ký gửi">Consignment</option>
-              <option value="Nông trại">Farm</option>
+              <option value="Nông trại">Farm's</option>
             </select>
             <input
               type="text"
@@ -156,4 +156,4 @@ function AddFish() {
 
 }
 
-export default AddFish;
+export default AddFishPage;

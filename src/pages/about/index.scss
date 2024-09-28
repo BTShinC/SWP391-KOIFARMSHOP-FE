@@ -1,10 +1,5 @@
 
 
-.about{
-    justify-content: center;
-    align-items: center;
-}
-
 .banner-container {
     display: flex;
     flex-direction: column;
@@ -21,10 +16,24 @@
 
 }
 
-.title{
+.page-content {
+    text-align: left;
+    padding-left: 10vw;
+    padding-bottom: 5vw;
+}
+
+.title-1{
     padding-top: 50px;
-    display: flex;
+    text-align: left;
+    font-weight: bold;
+    padding-bottom: 30px;
     
+    
+}
+
+.title-2 {
+    padding-top: 50px;
+    text-align: left;
     font-weight: bold;
     padding-bottom: 30px;
     
@@ -39,9 +48,3 @@
     height: auto;
 }
 
-.page-content{
-    padding-left: 10vw;
-    p{
-        background-color: #ffff;
-    }
-}

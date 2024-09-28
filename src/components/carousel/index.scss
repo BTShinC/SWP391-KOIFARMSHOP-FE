@@ -1,59 +1,53 @@
 .carousel {
-
-  width: 80%;
-  object-fit: cover;
-  .hover-card {
-    position: relative;
-  
-    .ant-card {
-      background-color: white;
-      transition: background-color 0.3s ease-in-out; 
-  
-      &:hover {
-        background-color: gray; 
-      }
-  
-      .hover-info {
-        position: absolute;
-        top: 150px;
-        left: 50%;
-        transform: translateX(-50%);
-        opacity: 0;
-        transition: opacity 0.3s ease-in-out;
-  
-        
-        .ant-btn-primary {
-          background-color: white;      
-          color: #B88E2F;               
-          border-color: #B88E2F;        
-          transition: all 0.3s ease-in-out;
-  
-          &:hover {
-            background-color: #B88E2F;  
-            color: white;               
-            border-color: #B88E2F;      
+    width: 80%;
+    object-fit: cover;
+    .hover-card {
+      position: relative;
+    
+      .ant-card {
+        background-color: white;
+        transition: background-color 0.3s ease-in-out; 
+    
+        &:hover {
+          background-color: gray; 
+        }
+    
+        .hover-info {
+          position: absolute;
+          top: 150px;
+          left: 50%;
+          transform: translateX(-50%);
+          opacity: 0;
+          transition: opacity 0.3s ease-in-out;
+    
+          
+          .ant-btn-primary {
+            background-color: white;      
+            color: #B88E2F;               
+            border-color: #B88E2F;        
+            transition: all 0.3s ease-in-out;
+    
+            &:hover {
+              background-color: #B88E2F;  
+              color: white;               
+              border-color: #B88E2F;      
+            }
           }
         }
+    
+        &:hover .hover-info {
+          opacity: 1; 
+        }
       }
-  
-      &:hover .hover-info {
-        opacity: 1; 
+    
+      .product-image {
+        width: 100%;
+        height: auto;
+        transition: filter 0.3s ease-in-out; 
+    
+        &:hover {
+          filter: grayscale(30%); 
+        }
       }
-    }
-  
-    .product-image {
-      width: 100%;
-      height: auto;
-      transition: filter 0.3s ease-in-out; 
-  
-      &:hover {
-        filter: grayscale(30%); 
-      }
-    }
+    } 
   }
-  
-  
-  
-  
-}
-
