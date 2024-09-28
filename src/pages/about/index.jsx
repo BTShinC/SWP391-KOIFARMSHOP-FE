@@ -1,5 +1,4 @@
 
-import Footer from '../../components/footer';
 import logo from '/public/logo.svg'
 import "./index.scss";
 

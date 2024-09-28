@@ -1,12 +1,18 @@
-
 import { Link } from "react-router-dom";
-import { SearchOutlined, UserOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import {
+  SearchOutlined,
+  UserOutlined,
+  ShoppingCartOutlined,
+} from "@ant-design/icons";
 import { useState } from "react";
 import "./index.scss";
 import Sidebar from "../slidebars";
+import { useSelector } from "react-redux";
 
 function Header() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const user = useSelector((state) => state.user);
+  console.log(user);
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
@@ -52,6 +58,12 @@ function Header() {
 
       <div className="header__icon">
         <ul>
+          {user && (
+            <li className="userName">
+                <span>{user.userName}</span>            
+                <div>{user.accountBalance} VND</div>         
+            </li>
+          )}
           <li>
             <Link to="#" onClick={toggleSidebar}>
               <UserOutlined />

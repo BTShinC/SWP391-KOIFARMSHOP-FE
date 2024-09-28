@@ -73,11 +73,26 @@
         justify-content: center;
         align-items: center;
         font-size: 20px ;
-        a{
-            text-decoration: none;
-            color: black;
+        a {
+          text-decoration: none;
+          color: black;
+          transition: color 0.3s, transform 0.3s; /* Thêm hiệu ứng chuyển tiếp */
+  
+          &:hover {
+            color: #1890ff; /* Màu sắc khi hover */
+            transform: scale(1.1); /* Phóng to khi hover */
+          }
         }
+        .userName {
+          padding-top: 5px;
+          font-size: 15px; 
+          color: black; 
         
+          div {
+            font-size: 12px; 
+            color: gray; 
+          }
+        }
     }
   }
 }
