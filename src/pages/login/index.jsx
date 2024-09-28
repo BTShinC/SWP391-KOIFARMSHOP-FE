@@ -66,7 +66,7 @@ function LoginPage() {
       // Save user data to Redux
       dispatch(login(response.data));
       // chạy xuống đây => account này có tồn tại
-      toast.success("Login success!");
+      toast.success("Đăng nhập thành công");
       // chuyển đến trang chủ
       navigate("/");
 
