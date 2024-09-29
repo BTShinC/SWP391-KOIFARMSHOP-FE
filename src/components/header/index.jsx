@@ -42,7 +42,7 @@ function Header() {
             <Link to="/about">Giới thiệu</Link>
           </li>
           <li>
-            <Link to="/">Cá Koi Nhật</Link>
+            <Link to="/product">Cá Koi Nhật</Link>
           </li>
           <li>
             <Link to="/">Ký gửi</Link>

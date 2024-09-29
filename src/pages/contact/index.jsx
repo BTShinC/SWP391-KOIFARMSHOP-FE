@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Footer from '../../components/footer';
 import logo from '/public/logo.svg'
 import { EnvironmentOutlined, PhoneOutlined, ClockCircleOutlined } from '@ant-design/icons';

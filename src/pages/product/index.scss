@@ -1,0 +1,109 @@
+.banner-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url('public/images/banner.svg');
+    background-size: cover;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    padding-top: 3rem;
+    padding-bottom: 2rem;
+    height: auto;
+
+}
+
+.search-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  border-radius: 10px;
+
+}
+
+.pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  border-radius: 10px;
+
+}
+
+
+.product-page {
+  width: 100%;
+  margin: 0 auto; // Căn giữa trang
+
+  .product-content {
+    .search-filter {
+      display: flex;
+      align-items: center; 
+      justify-content: center; 
+    
+
+      .filter-options {
+        display: flex;
+        align-items: center;
+
+        button {
+          margin-right: 10px; // Khoảng cách giữa các nút
+        }
+      }
+
+      .search-form {
+        display: flex;
+        align-items: center; 
+
+        .search-input {
+          width: 300px;
+          margin-left: 10px; 
+          border: 1px solid #d4c8b2;
+        }
+
+        .search-button {
+          margin-left: 5px; 
+          border: 1px solid #d4c8b2;
+        }
+      }
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-align: center; 
+      padding-top: 2rem;
+      padding-bottom: 1rem;
+    }
+
+    .product-list {
+      display: flex;
+      flex-wrap: wrap; 
+      justify-content: center; 
+
+      .ant-card {
+        margin: 16px;
+        width: calc(25% - 32px); 
+        transition: transform 0.3s ease-in-out;
+
+        &:hover {
+          transform: scale(1.05); 
+        }
+
+        .product-image {
+          width: 100%;
+          height: auto;
+          transition: filter 0.3s ease-in-out;
+
+          &:hover {
+            filter: grayscale(30%); 
+          }
+        }
+      }
+    }
+  }
+}

@@ -10,7 +10,7 @@ import ManageFish from "./pages/admin/manageFish";
 import ContactPage from "./pages/contact";
 
 import ManageOrder from "./pages/admin/manageOrders";
-
+import ProductPage from "./pages/product";
 
 
 
@@ -49,6 +49,14 @@ function App() {
       path: "/userinfo",
       element: <UserInfoPage />,
     },
+
+    {
+      path: "/product",
+      element: <ProductPage />,
+    },
+
+
+
 
     {
       path: "/admin",
