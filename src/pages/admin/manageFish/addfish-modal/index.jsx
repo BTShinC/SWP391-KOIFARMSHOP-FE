@@ -105,7 +105,7 @@ function AddFishModal({ title, visible, onClose }) {
       <form>
         <div className="add-fish__modal">
           <h2>Thông tin cá</h2>
-          <div>
+          <div className="prop-input">
             <label className="form-label">Mã sản phẩm:</label>
             <input
               className="form-control"
@@ -116,7 +116,7 @@ function AddFishModal({ title, visible, onClose }) {
               required
             />
           </div>
-          <div>
+          <div className="prop-input">
             <label className="form-label">Giống:</label>
             <input
               className="form-control"
@@ -126,7 +126,7 @@ function AddFishModal({ title, visible, onClose }) {
               onChange={handleChange}
             />
           </div>
-          <div>
+          <div className="prop-input">
             <label className="form-label">Kích thước:</label>
             <input
               className="form-control"
@@ -136,7 +136,7 @@ function AddFishModal({ title, visible, onClose }) {
               onChange={handleChange}
             />
           </div>
-          <div>
+          <div className="prop-input">
             <label className="form-label">Giới tính:</label>
             <input
               className="form-control"
@@ -146,7 +146,7 @@ function AddFishModal({ title, visible, onClose }) {
               onChange={handleChange}
             />
           </div>
-          <div>
+          <div className="prop-input">
             <label className="form-label">Tình trạng sức khỏe:</label>
             <input
               className="form-control"
@@ -156,7 +156,7 @@ function AddFishModal({ title, visible, onClose }) {
               onChange={handleChange}
             />
           </div>
-          <div>
+          <div className="prop-input">
             <label className="form-label">Đặc điểm tính cách:</label>
             <input
               className="form-control"
@@ -166,7 +166,7 @@ function AddFishModal({ title, visible, onClose }) {
               onChange={handleChange}
             />
           </div>
-          <div>
+          <div className="prop-input">
             <label className="form-label">Nguồn gốc:</label>
             <input
               className="form-control"
@@ -176,7 +176,7 @@ function AddFishModal({ title, visible, onClose }) {
               onChange={handleChange}
             />
           </div>
-          <div>
+          <div className="prop-input">
             <label className="form-label">Mô tả:</label>
             <textarea
               className="form-control"
@@ -185,7 +185,8 @@ function AddFishModal({ title, visible, onClose }) {
               onChange={handleChange}
             />
           </div>
-          <div>
+          <div className="uploader-container">
+          <div >
             <label className="form-label">Ảnh:</label>
             <Upload
               name="image"
@@ -231,7 +232,8 @@ function AddFishModal({ title, visible, onClose }) {
               )}
             </Upload>
           </div>
-          <div>
+          </div>
+          <div className="prop-input">
             <label className="form-label">Loại:</label>
             <input
               className="form-control"
@@ -241,7 +243,7 @@ function AddFishModal({ title, visible, onClose }) {
               onChange={handleChange}
             />
           </div>
-          <div>
+          <div className="prop-input">
             <label className="form-label">Số lượng:</label>
             <input
               className="form-control"
@@ -251,7 +253,7 @@ function AddFishModal({ title, visible, onClose }) {
               onChange={handleChange}
             />
           </div>
-          <div>
+          <div className="prop-input">
             <label className="form-label">Trạng thái:</label>
             <input
               className="form-control"
@@ -261,7 +263,7 @@ function AddFishModal({ title, visible, onClose }) {
               onChange={handleChange}
             />
           </div>
-          <div>
+          <div className="prop-input">
             <label className="form-label">Giá mong muốn:</label>
             <input
               className="form-control"
@@ -271,7 +273,7 @@ function AddFishModal({ title, visible, onClose }) {
               onChange={handleChange}
             />
           </div>
-          <div>
+          <div className="prop-input">
             <label className="form-label">Loại hình ký gửi:</label>
             <input
               className="form-control"
@@ -281,7 +283,7 @@ function AddFishModal({ title, visible, onClose }) {
               onChange={handleChange}
             />
           </div>
-          <div>
+          <div className="prop-input">
             <label className="form-label">ID gói chăm sóc:</label>
             <input
               className="form-control"

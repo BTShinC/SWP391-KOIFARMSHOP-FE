@@ -8,9 +8,12 @@ import RegisterForm from "./pages/register/Register";
 import AboutPage from "./pages/about";
 import ManageFish from "./pages/admin/manageFish";
 import ContactPage from "./pages/contact";
-
+import ComparePage from "./pages/compare";
 import ManageOrder from "./pages/admin/manageOrders";
 import ProductPage from "./pages/product";
+
+import PrivacyPolicy from "./components/footer/footerpage/privacy-policy";
+import OrderPolicy from "./components/footer/footerpage/order-policy";
 
 
 
@@ -55,6 +58,16 @@ function App() {
       element: <ProductPage />,
     },
 
+    {
+      path: "/privacy-policy",
+      element: <PrivacyPolicy />,
+    },
+
+    {
+      path: "/order-policy",
+      element: <OrderPolicy />,
+    },
+
 
 
 
@@ -68,6 +81,10 @@ function App() {
     },    {
       path: "/manageOrder",
       element: <ManageOrder />,
+    },
+    {
+      path: "/compare",
+      element: <ComparePage />,
     },
   ]);
   return <RouterProvider router={router} />;

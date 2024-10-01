@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom"
 import "./index.scss"
+import PrivacyPolicy from "./footerpage/privacy-policy"
+import OrderPolicy from "./footerpage/order-policy"
 
 function Footer() {
   return (
@@ -28,13 +30,13 @@ function Footer() {
         <div className="footer__help">
         <ul>
           <li>
-            <Link to="/">Chính sách bảo mật</Link>
+            <Link to="/privacy-policy">Chính sách bảo mật</Link>
           </li>
           <li>
             <Link to="/">Giúp đỡ</Link>
           </li>
           <li>
-            <Link to="/">Hướng dẫn mua hàng</Link>
+            <Link to="/order-policy">Hướng dẫn mua hàng</Link>
           </li>
           <li>
             <Link to="/">Chính sách đổi trả</Link>
