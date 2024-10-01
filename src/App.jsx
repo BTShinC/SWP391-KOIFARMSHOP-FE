@@ -4,7 +4,7 @@ import LoginPage from "./pages/login";
 import UserInfoPage from "./pages/userinfo";
 import Admin from "./pages/admin/index";
 import Layout from "./components/layout";
-import RegisterForm from "./pages/register/Register";
+import RegisterForm from "./pages/register";
 import AboutPage from "./pages/about";
 import ManageFish from "./pages/admin/manageFish";
 import ContactPage from "./pages/contact";
