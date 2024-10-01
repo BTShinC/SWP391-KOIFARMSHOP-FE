@@ -54,6 +54,12 @@ function App() {
           element: <ContactPage />,
 
         },
+        {
+
+          path: "/compare",
+          element: <ComparePage />,
+
+        },
       ],
     },
 

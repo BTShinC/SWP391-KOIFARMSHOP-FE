@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import logo from '/public/logo.svg';
+import { useState, useEffect } from 'react';
+
 import "./index.scss";
-import Header from '../../components/header';
+
 import Footer from '../../components/footer';
 import { Button } from 'antd';
 import SelectFishModal from './selecfish-modal';
@@ -51,13 +51,8 @@ function ComparePage() {
 
     return (
         <div className="compare-page">
-            <Header />
-            <div className="banner-wraper">
-                <div className="banner-container">
-                    <img src={logo} alt="Logo" className="logo" />
-                    <h2 className="shop-name">So sánh cá</h2>
-                </div>
-            </div>
+            
+            
             <div className="compare-content container">
                 <div className="row">
                     <div className="col-5">

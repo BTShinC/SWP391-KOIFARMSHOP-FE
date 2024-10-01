@@ -16,6 +16,8 @@ function LayoutTitle() {
     title = "Liên hệ";
   } else if (location.pathname === "/userinfo") {
     title = "Thông tin người dùng";
+  }else if (location.pathname === "/compare") {
+    title = "So sánh cá";
   }
 
   return (
