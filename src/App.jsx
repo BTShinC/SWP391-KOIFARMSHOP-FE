@@ -11,6 +11,7 @@ import ContactPage from "./pages/contact";
 
 import ManageOrder from "./pages/admin/manageOrders";
 import ProductPage from "./pages/product";
+import LayoutTitle from "./components/layout/title";
 
 
 
@@ -32,6 +33,14 @@ function App() {
           path: "/register",
           element: <RegisterForm />,
         },
+        
+      ],
+    },
+
+    {
+      path: "",
+      element: <LayoutTitle/>,
+      children: [
         {
           path: "/about",
           element: <AboutPage />,

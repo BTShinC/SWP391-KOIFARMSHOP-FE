@@ -1,5 +1,4 @@
 
-import logo from '/public/logo.svg'
 import "./index.scss";
 
 
@@ -7,12 +6,6 @@ function AboutPage() {
     return (
         <div>
             <div className="about">
-                <div className="banner-wraper">
-                    <div className="banner-container">
-                        <img src={logo} alt="Logo" className="logo" />
-                        <h2 className="shop-name">Giới thiệu</h2>
-                    </div>
-                </div>
                 <div className="page-content">
                 <h1 className="title-1">Lịch sử và mục tiêu phát triển</h1>
                 <p className="content">
