@@ -61,12 +61,6 @@ function App() {
     {
       path: "/admin",
       element: <Admin />,
-      // children: [
-      //   {
-      //     path: "/manageFish",
-      //     element: <ManageFish />,
-      //   },
-      // ],
     },
     {
       path: "/managefish",

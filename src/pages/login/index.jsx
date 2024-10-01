@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/userSlice";
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyDzdOryEzjKOSYu5q-EiTZyK5DcwwsUqms",
   authDomain: "koifarmshop-1f095.firebaseapp.com",
@@ -74,6 +75,7 @@ function LoginPage() {
       // dispatch action
       
     } catch (err) {
+      console.error("Error response from API:", err.response?.data);
       toast.error(err.response.data);
     }
   };
