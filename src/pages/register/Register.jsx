@@ -4,6 +4,8 @@ import logo from "/public/images/logo.svg";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./index.scss";
+import api from "../../config/api";
+import { toast } from "react-toastify";
 
 RegisterForm.propTypes = {
   onSubmit: PropTypes.func,
@@ -39,7 +41,7 @@ function RegisterForm() {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (formValue.password.length < 6) {
       alert("Password must be at least 6 characters!");
@@ -50,6 +52,12 @@ function RegisterForm() {
       return;
     }
     // gọi api tạo người dùng
+    try {
+      await api.post("register", event);
+      toast.success("Đăng ký thành công");
+    } catch (err) {
+      toast.error(err.response.data);
+    }
     console.log("Register Values:", formValue);
     navigate("/login");
   };
