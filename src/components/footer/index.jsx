@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import "./index.scss"
-import PrivacyPolicy from "./footerpage/privacy-policy"
-import OrderPolicy from "./footerpage/order-policy"
+// import PrivacyPolicy from "./footerpage/privacy-policy"
+// import OrderPolicy from "./footerpage/order-policy"
 
 function Footer() {
   return (
