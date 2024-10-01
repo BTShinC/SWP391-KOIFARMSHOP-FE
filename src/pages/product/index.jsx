@@ -5,7 +5,8 @@ import Footer from "../../components/footer";
 import { useState } from "react";
 import { Input, Button, Card, Pagination } from "antd";
 import Meta from "antd/es/card/Meta";
-import { FilterOutlined, SearchOutlined } from "@ant-design/icons";
+import { FilterOutlined, SearchOutlined, SwapOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom"; 
 
 const koiImage = [
     { id: 1, imgSrc: "/images/kohaku.svg", title: "Asagi" },
@@ -57,6 +58,9 @@ function ProductPage() {
                             <Button type="submit" icon={<SearchOutlined />} className="search-button">Tìm kiếm</Button>
                         </form>
                     </div>
+                    <Link to="/compare">
+                        <Button icon={<SwapOutlined />} className="compare-button">So sánh cá</Button>
+                    </Link>
                 </div>
                 <h2>Các sản phẩm</h2>
                 <div className="product-list">
@@ -72,8 +76,8 @@ function ProductPage() {
                     ))}
                 </div>
             </div>
-            <div className="pagination-wrapper">               
-                <Pagination align="center" defaultCurrent={1} total={50} />               
+            <div className="pagination-wrapper">
+                <Pagination align="center" defaultCurrent={1} total={50} />
             </div>
             <Footer />
         </div>
