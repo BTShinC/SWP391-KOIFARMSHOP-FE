@@ -8,11 +8,12 @@ import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import firebase from "firebase/compat/app";
 import { initializeApp } from "firebase/app";
 import { Button, Form, Input } from "antd";
-import api from "../../config/api";
+
 // import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/userSlice";
+import api from "../../config/api";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDzdOryEzjKOSYu5q-EiTZyK5DcwwsUqms",

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import Footer from '../../components/footer';
+
 import logo from '/public/logo.svg'
 import { EnvironmentOutlined, PhoneOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import './index.scss';
