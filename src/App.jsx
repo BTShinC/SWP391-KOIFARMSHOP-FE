@@ -14,6 +14,7 @@ import ProductPage from "./pages/product";
 import PrivacyPolicy from "./components/footer/footer page/privacy-policy";
 import SupportPolicy from "./components/footer/footer page/support-policy";
 import OrderPolicy from "./components/footer/footer page/order-policy";
+import RefundPolicy from "./components/footer/footer page/refund-policy";
 
 
 
@@ -76,12 +77,12 @@ function App() {
       element: <OrderPolicy />,
     },
 
+    {
+      path: "/refund-policy",
+      element: <RefundPolicy />,
+    },
+
    
-   
-
-
-
-
     {
       path: "/admin",
       element: <Admin />,

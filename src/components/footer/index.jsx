@@ -39,7 +39,7 @@ function Footer() {
             <Link to="/order-policy">Hướng dẫn mua hàng</Link>
           </li>
           <li>
-            <Link to="/">Chính sách đổi trả</Link>
+            <Link to="/refund-policy">Chính sách đổi trả</Link>
           </li>
         </ul>
         </div>
