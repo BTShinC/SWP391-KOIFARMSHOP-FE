@@ -13,9 +13,10 @@ import ManageOrder from "./pages/admin/manageOrders";
 import ProductPage from "./pages/product";
 import PrivacyPolicy from "./components/footer/footer page/privacy-policy";
 import SupportPolicy from "./components/footer/footer page/support-policy";
+import OrderPolicy from "./components/footer/footer page/order-policy";
 
 
-// import OrderPolicy from "./components/footer/footerpage/order-policy";
+
 
 
 
@@ -68,6 +69,11 @@ function App() {
     {
       path: "/support-policy",
       element: <SupportPolicy />,
+    },
+
+    {
+      path: "/order-policy",
+      element: <OrderPolicy />,
     },
 
    
