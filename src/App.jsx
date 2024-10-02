@@ -12,6 +12,7 @@ import ComparePage from "./pages/compare";
 import ManageOrder from "./pages/admin/manageOrders";
 import ProductPage from "./pages/product";
 import LayoutTitle from "./components/layout/title";
+import SinglepProduct from "./pages/single-product";
 
 // import PrivacyPolicy from "./components/footer/footerpage/privacy-policy";
 // import OrderPolicy from "./components/footer/footerpage/order-policy";
@@ -36,7 +37,10 @@ function App() {
           path: "/register",
           element: <RegisterForm />,
         },
-        
+        {
+          path: "/singleproduct",
+          element: <SinglepProduct/>,
+        },
       ],
     },
 
