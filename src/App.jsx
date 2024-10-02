@@ -12,6 +12,7 @@ import ComparePage from "./pages/compare";
 import ManageOrder from "./pages/admin/manageOrders";
 import ProductPage from "./pages/product";
 import PrivacyPolicy from "./components/footer/footer page/privacy-policy";
+import SupportPolicy from "./components/footer/footer page/support-policy";
 
 
 // import OrderPolicy from "./components/footer/footerpage/order-policy";
@@ -64,10 +65,13 @@ function App() {
       element: <PrivacyPolicy />,
     },
 
-    // {
-    //   path: "/order-policy",
-    //   element: <OrderPolicy />,
-    // },
+    {
+      path: "/support-policy",
+      element: <SupportPolicy />,
+    },
+
+   
+   
 
 
 
@@ -79,7 +83,7 @@ function App() {
     {
       path: "/managefish",
       element: <ManageFish />,
-    },    {
+    }, {
       path: "/manageOrder",
       element: <ManageOrder />,
     },

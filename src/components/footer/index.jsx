@@ -33,7 +33,7 @@ function Footer() {
             <Link to="/privacy-policy">Chính sách bảo mật</Link>
           </li>
           <li>
-            <Link to="/">Giúp đỡ</Link>
+            <Link to="/support-policy">Giúp đỡ</Link>
           </li>
           <li>
             <Link to="/order-policy">Hướng dẫn mua hàng</Link>
