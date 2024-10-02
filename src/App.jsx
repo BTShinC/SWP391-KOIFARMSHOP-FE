@@ -11,8 +11,9 @@ import ContactPage from "./pages/contact";
 import ComparePage from "./pages/compare";
 import ManageOrder from "./pages/admin/manageOrders";
 import ProductPage from "./pages/product";
+import PrivacyPolicy from "./components/footer/footer page/privacy-policy";
 
-// import PrivacyPolicy from "./components/footer/footerpage/privacy-policy";
+
 // import OrderPolicy from "./components/footer/footerpage/order-policy";
 
 
@@ -58,10 +59,10 @@ function App() {
       element: <ProductPage />,
     },
 
-    // {
-    //   path: "/privacy-policy",
-    //   element: <PrivacyPolicy />,
-    // },
+    {
+      path: "/privacy-policy",
+      element: <PrivacyPolicy />,
+    },
 
     // {
     //   path: "/order-policy",

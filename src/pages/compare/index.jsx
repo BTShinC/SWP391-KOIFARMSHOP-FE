@@ -103,8 +103,8 @@ function ComparePage() {
                         )}
                     </div>
                     <div className="col-2">
-                        <Button className="compare-button" onClick={() => window.history.back()}>Quay lại trang sản phẩm</Button>
-                        <Button className="compare-button" onClick={showModal}>Thêm sản phẩm</Button>
+                        <Button className="comparepage-button" onClick={() => window.history.back()}>Quay lại</Button>
+                        <Button className="comparepage-button" onClick={showModal}>Thêm sản phẩm</Button>
                     </div>
                 </div>
                 <SelectFishModal
