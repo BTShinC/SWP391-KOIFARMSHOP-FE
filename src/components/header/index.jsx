@@ -48,7 +48,7 @@ function Header() {
             <Link to="/">Ký gửi</Link>
           </li>
           <li>
-            <Link to="/">Tin tức</Link>
+            <Link to="/blog">Tin tức</Link>
           </li>
           <li>
             <Link to="/contact">Liên hệ</Link>

@@ -4,7 +4,7 @@ import LoginPage from "./pages/login";
 import UserInfoPage from "./pages/userinfo";
 import Admin from "./pages/admin/index";
 import Layout from "./components/layout";
-import RegisterForm from "./pages/register";
+import RegisterForm from "/src/pages/register/Register"
 import AboutPage from "./pages/about";
 import ManageFish from "./pages/admin/manageFish";
 import ContactPage from "./pages/contact";
@@ -13,7 +13,9 @@ import ManageOrder from "./pages/admin/manageOrders";
 import ProductPage from "./pages/product";
 import LayoutTitle from "./components/layout/title";
 import SinglepProduct from "./pages/single-product";
-
+import ForgotPassword from "./pages/forgot-password";
+import BlogList from "./pages/blogList";
+import RecoveryPassword from "./pages/forgot-password/recovery-password"; 
 // import PrivacyPolicy from "./components/footer/footerpage/privacy-policy";
 // import OrderPolicy from "./components/footer/footerpage/order-policy";
 
@@ -40,6 +42,18 @@ function App() {
         {
           path: "/singleproduct",
           element: <SinglepProduct/>,
+        },
+        {
+          path: "/forgotPassword",
+          element: <ForgotPassword />,
+        },
+        {
+          path: "/recoveryPassword",
+          element: <RecoveryPassword/>,
+        },
+        {
+          path: "/blog",
+          element: <BlogList/>,
         },
       ],
     },
