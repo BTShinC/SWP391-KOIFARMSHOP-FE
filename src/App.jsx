@@ -14,8 +14,6 @@ import ProductPage from "./pages/product";
 import LayoutTitle from "./components/layout/title";
 import SinglepProduct from "./pages/single-product";
 
-// import PrivacyPolicy from "./components/footer/footerpage/privacy-policy";
-// import OrderPolicy from "./components/footer/footerpage/order-policy";
 
 
 

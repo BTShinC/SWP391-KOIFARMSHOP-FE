@@ -85,22 +85,31 @@
       text-align: center;
       color: #3a3a3a;
     }
+    .more-button-container {
+      display: flex; /* Sử dụng flexbox */
+      justify-content: center; /* Căn giữa nút */
+      margin: 30px auto 0 auto; /* Căn giữa phần margin */
+    }
+    
     .more-button {
-      display: flex;
+      display: inline-flex; /* Thay đổi sang inline-flex để nút nhỏ hơn */
       margin: 30px auto 0 auto;
       background-color: white;
       color: #b88e2f;
       border: 2px solid #b88e2f;
-      padding: 20px 25px;
-      font-size: 16px;
+      padding: 15px 25px; /* Điều chỉnh padding để nút nhỏ lại */
+      font-size: 14px; /* Điều chỉnh font size */
+      text-decoration: none; /* Đảm bảo không có gạch chân */
+      border-radius: 8px; /* Thêm bo góc nếu muốn */
       transition: all 0.3s ease;
-
+      
       &:hover {
         background-color: #b88e2f;
         color: white;
       }
     }
   }
+  
 
   &__background {
     display: flex;
