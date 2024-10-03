@@ -1,5 +1,5 @@
 import "./index.scss";
-import logo from '/public/logo.svg';
+import logo from "/public/images/logo.svg";
 import Header from "../../components/header";
 import Footer from "../../components/footer";
 import { useState } from "react";
