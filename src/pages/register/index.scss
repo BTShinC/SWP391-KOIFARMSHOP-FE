@@ -1,24 +1,16 @@
 .register {
-  position: relative; 
-  height: 160vh; 
-
-  &__video {
+  position: relative;
+  min-height: 100vh; 
+  padding-bottom: 4rem; 
+  .register__video {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover; 
-    z-index: -1; 
+    object-fit: cover;
+    z-index: -1;
   }
-  .register__form__title{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-
 
   &__form {
     display: flex;
@@ -29,105 +21,103 @@
     background-color: rgba(255, 255, 255, 0.85);
     border-radius: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 600px;
-    position: absolute; 
-    top: 50px; 
-    left: 50%; 
-    transform: translateX(-50%); 
+    width: 90%; /* Đặt chiều rộng ban đầu */
+    max-width: 600px; /* Giới hạn chiều rộng tối đa */
+    margin: 0 auto; /* Canh giữa theo chiều ngang */
+    position: relative;
+    top: 50px;
     z-index: 1;
-    height: fit-content; 
-
+    min-height: 400px;
 
     &__title {
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
-  
+
       img {
         width: 100px;
         margin-bottom: 1rem;
       }
-  
+
       h2 {
         font-size: 1.8rem;
         font-weight: bold;
         margin-bottom: 2rem;
       }
-
     }
+  }
+
+  .form-control,
+  .submit-button,
+  .form-label {
+    width: 100%;
+    max-width: 500px;
   }
 
   .form-label {
+    margin-bottom: 8px;
     font-weight: bold;
-    margin-bottom: 7px;
     text-align: left;
   }
 
-  // Customize Ant Design Input
-  .ant-input,
-  .ant-input-password {
+  .form-control {
+    width: 100%;
+    margin-bottom: 1.5rem;
     padding: 0.75rem;
-    font-size: 1.1rem;
-    border-radius: 4px;
     border: 1px solid #d4c8b2;
-    margin-bottom: 1rem;
+    border-radius: 4px;
+    font-size: 1.1rem;
     box-sizing: border-box;
-    width: 25vw;
   }
 
-  .ant-input-password {
-    padding: 0px 10px;
-    input {
-      padding: 0px 5px;
-      margin-top: 8px;
-      
-    }
-  }
-
-  
-
-  // Customize Ant Design Form labels
-  .ant-form-item-label > label {
-    font-weight: bold;
-    color: black; 
-    font-size: 1rem;
-  }
-
-  // Customize Ant Design Button
-  .ant-btn-primary {
+  .submit-button {
     background-color: #f9f1e7;
     color: black;
     border: 1px solid #d4c8b2;
-    padding: 1.7rem;
+    padding: 1rem;
     font-weight: 600;
     font-size: 1.1rem;
     border-radius: 6px;
+    cursor: pointer;
     width: 100%;
+    margin-bottom: 1rem;
 
     &:hover {
       background-color: #e9e1d7;
-      border-color: #d4c8b2;
     }
   }
 
-
-
   .back-to-login {
     display: flex;
-    margin-top: 0.5rem;
+    margin-top: 1.5rem;
     gap: 2rem;
     justify-content: center;
 
     a {
       text-decoration: none;
       color: #007bff;
+      font-weight: bold;
       transition: color 0.3s ease;
 
       &:hover {
         color: #0056b3;
       }
+    }
+  }
+
+  @media screen and (width: 1920px) and (height: 1200px) {
+    &__form {
+      max-width: 800px; /* Điều chỉnh kích thước form */
+      padding: 2rem; /* Giảm padding để tránh form chiếm quá nhiều diện tích */
+    }
+
+    .form-control {
+      max-width: 700px; /* Điều chỉnh kích thước input */
+    }
+
+    .submit-button {
+      max-width: 700px; /* Điều chỉnh kích thước nút */
     }
   }
 }

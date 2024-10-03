@@ -6,9 +6,8 @@
     color: #0056b3;
     margin-top: 1rem;
   }
-  h3 {
+  h2 {
     text-align: center;
-    font-size: 1.5rem;
     margin-bottom: 1rem;
     color: #333333;
   }
@@ -63,12 +62,13 @@
           padding: 20px;
         }
 
-        p {
-          text-align: left;
-          margin: 5px 0;
-        }
+
       }
     }
+  }
+  p {
+    text-align: left;
+    margin: 5px 0;
   }
   .btn-container {
     display: flex;
@@ -76,7 +76,6 @@
     gap: 20px;
   }
   button {
-    background-color: #3b82f6;
     border: none;
     padding: 8px 12px;
     border-radius: 5px;

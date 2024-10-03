@@ -40,12 +40,30 @@ function AdminSideBar() {
         </div>
         <div
           className={`sidebar__item ${
+            location.pathname === "/manageConsignment" ? "active" : ""
+          }`}
+          onClick={() => handleNavigation("/manageConsignment")}
+        >
+          <span className="sidebar__icon">⌘</span>
+          <span> Quản lý ký gửi</span>
+        </div>
+        <div
+          className={`sidebar__item ${
             location.pathname === "/manageOrder" ? "active" : ""
           }`}
           onClick={() => handleNavigation("/manageOrder")}
         >
           <span className="sidebar__icon">⌘</span>
           <span>Quản lý đơn hàng</span> 
+        </div>
+        <div
+          className={`sidebar__item ${
+            location.pathname === "/adminMembers" ? "active" : ""
+          }`}
+          onClick={() => handleNavigation("/adminMembers")}
+        >
+          <span className="sidebar__icon">⌘</span>
+          <span>Thành viên</span> 
         </div>
         <div
           className={`sidebar__item ${
@@ -56,7 +74,6 @@ function AdminSideBar() {
           <span className="sidebar__icon">⌘</span>
           <span> Báo cáo và thống kê</span>
         </div>
-
         <div
           className="sidebar__logout"
           onClick={() => handleNavigation("/logout")}
