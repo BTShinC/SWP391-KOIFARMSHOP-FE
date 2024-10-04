@@ -37,9 +37,9 @@ const koiImage = [
     { id: 25, imgSrc: "/images/kohaku.svg", title: "Koi 15" },
     { id: 26, imgSrc: "/images/koi5.svg", title: "Koi 16" },
     { id: 27, imgSrc: "/images/koi6.svg", title: "Koi 17" },
-    // { id: 28, imgSrc: "/images/kohaku.svg", title: "Koi 18" },
-    // { id: 29, imgSrc: "/images/koi5.svg", title: "Koi 19" },
-    // { id: 30, imgSrc: "/images/koi6.svg", title: "Koi 20" },
+    { id: 28, imgSrc: "/images/kohaku.svg", title: "Koi 18" },
+    { id: 29, imgSrc: "/images/koi5.svg", title: "Koi 19" },
+    { id: 30, imgSrc: "/images/koi6.svg", title: "Koi 20" },
 ];
 
 
@@ -51,7 +51,7 @@ function ProductPage() {
     const [FIshdata, setFishData] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
+    const itemsPerPage = 12;
 
     const filteredProducts = koiImage.filter(product =>
         product.title.toLowerCase().includes(searchTerm.toLowerCase())

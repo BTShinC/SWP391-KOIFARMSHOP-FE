@@ -3,10 +3,13 @@
     flex-wrap: wrap;
     justify-content: center;
     padding: 2 rem;
+    column-gap: 3vw;
+    row-gap: 1vh;
     
 
     .ant-card {
         height: 70vh;
+       
     }
 }
 
@@ -16,3 +19,23 @@
 .button{
     justify-content: center;
 }
+
+.select-button{
+    background-color: #f9f1e7;
+    color: black;
+    border: 1px solid #d4c8b2;
+    padding: 1.5rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    width: 5vw;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+
+    &:hover {
+      background-color: #e9e1d7;
+    } 
+}
+

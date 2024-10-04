@@ -4,7 +4,6 @@
 
     .compare-content {
         margin-top: 20px;
-        padding-bottom: 3rem;
         padding-top: 3rem;
 
 
@@ -12,8 +11,13 @@
             margin: 0;
         }
 
+        .col-2{
+            height: 120vh;
+            
+        }
+
         .col-5{
-            height: 80vh; 
+            height: 120vh; 
         }
 
         .fish-card {
@@ -22,7 +26,7 @@
             border-radius: 5px;
             padding: 10px;
             background-color: #f9f9f9;
-            height: 85vh;
+            height: 105vh;
             
 
             .fish-image {
@@ -54,9 +58,14 @@
     width: 100%;
     width: 18vw;
     margin-bottom: 1rem;
-    margin-top: 1rem;
+    margin-top: 0rem;
 
     &:hover {
       background-color: #e9e1d7;
     }
+  }
+
+  .comparepage-button-wrapper{
+    padding-top: 0.5rem;
+
   }

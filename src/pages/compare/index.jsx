@@ -5,6 +5,8 @@ import Header from '../../components/header';
 import Footer from '../../components/footer';
 import { Button } from 'antd';
 import SelectFishModal from './selecfish-modal';
+import { PlusOutlined, DeleteOutlined, RollbackOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+
 
 // Sample fish data for testing
 const sampleFish = {
@@ -49,6 +51,11 @@ function ComparePage() {
         setSelectedFishes(newFishes);
     };
 
+    // New function to remove both fish
+    const removeAllFishes = () => {
+        setSelectedFishes([]);
+    };
+
     return (
         <div className="compare-page">
             <Header />
@@ -75,7 +82,10 @@ function ComparePage() {
                                 <p>Mô tả: {selectedFishes[0].description}</p>
                                 <p>Chứng nhận: {selectedFishes[0].certificateUrl}</p>
                                 <p>Giá: {selectedFishes[0].price} VND</p>
-                                <Button onClick={() => removeFish(0)}>Xóa</Button>
+                                <div className="comparepage-button-wrapper">
+                                    <Button className="comparepage-button" onClick={() => removeFish(0)}><DeleteOutlined />Xóa</Button>
+                                    <Button className="comparepage-button" ><ShoppingCartOutlined />Thêm vào giỏ hàng</Button>
+                                </div>
                             </div>
                         ) : (
                             <p>Chưa có sản phẩm nào được chọn để so sánh.</p>
@@ -96,15 +106,22 @@ function ComparePage() {
                                 <p>Mô tả: {selectedFishes[1].description}</p>
                                 <p>Chứng nhận: {selectedFishes[1].certificateUrl}</p>
                                 <p>Giá: {selectedFishes[1].price} VND</p>
-                                <Button onClick={() => removeFish(1)}>Xóa</Button>
+                                <div className="comparepage-button-wrapper">
+                                    <Button className="comparepage-button" onClick={() => removeFish(1)}><DeleteOutlined />Xóa</Button>
+                                    <Button className="comparepage-button" ><ShoppingCartOutlined />Thêm vào giỏ hàng</Button>
+                                </div>
                             </div>
                         ) : (
                             <p>Chưa có sản phẩm nào được chọn để so sánh.</p>
                         )}
                     </div>
                     <div className="col-2">
-                        <Button className="comparepage-button" onClick={() => window.history.back()}>Quay lại</Button>
-                        <Button className="comparepage-button" onClick={showModal}>Thêm sản phẩm</Button>
+                        <Button className="comparepage-button" onClick={() => window.history.back()}><RollbackOutlined />Quay lại</Button>
+                        <Button className="comparepage-button" onClick={showModal}><PlusOutlined />Thêm sản phẩm</Button>
+
+                        <Button className="comparepage-button" onClick={removeAllFishes} disabled={selectedFishes.length === 0}>
+                        <DeleteOutlined />Xóa tất cả
+                        </Button>
                     </div>
                 </div>
                 <SelectFishModal
