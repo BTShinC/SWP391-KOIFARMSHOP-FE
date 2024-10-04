@@ -1,25 +1,13 @@
+
 import { useState, useEffect } from 'react';
-
+import logo from '/public/logo.svg';
 import "./index.scss";
-
+import Header from '../../components/header';
 import Footer from '../../components/footer';
 import { Button } from 'antd';
 import SelectFishModal from './selecfish-modal';
+import { PlusOutlined, DeleteOutlined, RollbackOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 
-// Sample fish data for testing
-const sampleFish = {
-    productID: '001',
-    breed: 'Tancho Kohaku',
-    size: '80cm',
-    sex: 'Đực',
-    healthStatus: 'Tốt',
-    personalityTrait: 'Đặc biệt',
-    origin: 'Danchi Farm',
-    description: 'Mô tả cá 1',
-    certificateUrl: 'Chứng nhận 1',
-    price: '25000000 VND',
-    imgSrc: '/images/kohaku.svg', // Add image source
-};
 
 function ComparePage() {
     const [selectedFishes, setSelectedFishes] = useState([]);
@@ -49,10 +37,20 @@ function ComparePage() {
         setSelectedFishes(newFishes);
     };
 
+    // New function to remove both fish
+    const removeAllFishes = () => {
+        setSelectedFishes([]);
+    };
+
     return (
         <div className="compare-page">
-            
-            
+            <Header />
+            <div className="banner-wraper">
+                <div className="banner-container">
+                    <img src={logo} alt="Logo" className="logo" />
+                    <h2 className="shop-name">So sánh cá</h2>
+                </div>
+            </div>
             <div className="compare-content container">
                 <div className="row">
                     <div className="col-5">
@@ -70,7 +68,10 @@ function ComparePage() {
                                 <p>Mô tả: {selectedFishes[0].description}</p>
                                 <p>Chứng nhận: {selectedFishes[0].certificateUrl}</p>
                                 <p>Giá: {selectedFishes[0].price} VND</p>
-                                <Button onClick={() => removeFish(0)}>Xóa</Button>
+                                <div className="comparepage-button-wrapper">
+                                    <Button className="comparepage-button" onClick={() => removeFish(0)}><DeleteOutlined />Xóa</Button>
+                                    <Button className="comparepage-button" ><ShoppingCartOutlined />Thêm vào giỏ hàng</Button>
+                                </div>
                             </div>
                         ) : (
                             <p>Chưa có sản phẩm nào được chọn để so sánh.</p>
@@ -91,15 +92,22 @@ function ComparePage() {
                                 <p>Mô tả: {selectedFishes[1].description}</p>
                                 <p>Chứng nhận: {selectedFishes[1].certificateUrl}</p>
                                 <p>Giá: {selectedFishes[1].price} VND</p>
-                                <Button onClick={() => removeFish(1)}>Xóa</Button>
+                                <div className="comparepage-button-wrapper">
+                                    <Button className="comparepage-button" onClick={() => removeFish(1)}><DeleteOutlined />Xóa</Button>
+                                    <Button className="comparepage-button" ><ShoppingCartOutlined />Thêm vào giỏ hàng</Button>
+                                </div>
                             </div>
                         ) : (
                             <p>Chưa có sản phẩm nào được chọn để so sánh.</p>
                         )}
                     </div>
                     <div className="col-2">
-                        <Button className="compare-button" onClick={() => window.history.back()}>Quay lại trang sản phẩm</Button>
-                        <Button className="compare-button" onClick={showModal}>Thêm sản phẩm</Button>
+                        <Button className="comparepage-button" onClick={() => window.history.back()}><RollbackOutlined />Quay lại</Button>
+                        <Button className="comparepage-button" onClick={showModal}><PlusOutlined />Thêm sản phẩm</Button>
+
+                        <Button className="comparepage-button" onClick={removeAllFishes} disabled={selectedFishes.length === 0}>
+                        <DeleteOutlined />Xóa tất cả
+                        </Button>
                     </div>
                 </div>
                 <SelectFishModal
