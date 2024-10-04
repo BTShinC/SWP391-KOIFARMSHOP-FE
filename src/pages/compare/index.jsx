@@ -125,7 +125,6 @@ function ComparePage() {
                     onSelect={handleSelect}
                 />
             </div>
-            <Footer />
         </div>
     );
 };
