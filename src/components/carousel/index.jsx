@@ -10,6 +10,7 @@ import "./index.scss";
 import PropTypes from 'prop-types';
 import { Autoplay, Pagination } from "swiper/modules";
 import { Button, Card } from "antd";
+import { Link } from "react-router-dom";
 
 const { Meta } = Card;
 
@@ -40,16 +41,16 @@ export default function Carousel({ slidesPerView = 4, images = koiImage}) {
       >
         {images.map((image) => (
           <SwiperSlide key={image.id}>
-            <HoverCard imgSrc={image.imgSrc} title={image.title} />
+            <HoverCard imgSrc={image.imgSrc} title={image.title} id={image.id}/>
           </SwiperSlide>
         ))}
       </Swiper>
     </>
   );
 }
-const HoverCard = ({ imgSrc, title }) => {
+const HoverCard = ({ imgSrc, title, id }) => {
   return (
-    <div className="hover-card">
+    <Link to={`/singleproduct`} className="hover-card"> {/* Add Link here */}
       <Card
         hoverable
         style={{ width: 240 }}
@@ -68,9 +69,10 @@ const HoverCard = ({ imgSrc, title }) => {
           </Button>
         </div>
       </Card>
-    </div>
+    </Link>
   );
 };
+
 Carousel.propTypes = {
   slidesPerView: PropTypes.number,
   images: PropTypes.arrayOf(
@@ -88,4 +90,5 @@ Carousel.defaultProps = {
 HoverCard.propTypes = {
   imgSrc: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired, // Add id prop type
 };

@@ -4,7 +4,7 @@ import poster from "swp391-koifarmshop-fe/public/images/poster-upscaled.jpeg";
 import "./index.scss";
 import { Link } from "react-router-dom";
 
-import { Button, Card } from "antd";
+import { Card } from "antd";
 import Meta from "antd/es/card/Meta";
 
 import koi1 from "swp391-koifarmshop-fe/public/images/koi1.svg";
@@ -33,7 +33,9 @@ function Body() {
           <ul className="image-list">
             {koiImages.map((koi) => (
               <li key={koi.id}>
-                <Link to={`/koi/${koi.id}`}>
+                <Link to="/singleproduct">
+                  {" "}
+                  {/* Chỉnh sửa ở đây */}
                   <Card
                     hoverable
                     cover={<img src={koi.imgSrc} alt={koi.title} />}
@@ -50,13 +52,25 @@ function Body() {
       <div className="body__carousel le">
         <h2>Mua lẻ</h2>
         <Carousel />
-        <Button className="more-button">Xem thêm</Button>
+        <div className="more-button-container">
+          {" "}
+          {/* Thêm thẻ div này */}
+          <Link to="/product" className="more-button">
+            Xem thêm
+          </Link>
+        </div>
       </div>
 
       <div className="body__carousel lo">
         <h2>Mua lô</h2>
         <Carousel />
-        <Button className="more-button">Xem thêm</Button>
+        <div className="more-button-container">
+          {" "}
+          {/* Thêm thẻ div này */}
+          <Link to="/product" className="more-button">
+            Xem thêm
+          </Link>
+        </div>
       </div>
 
       <div className="body__background">
@@ -92,12 +106,8 @@ function Body() {
           <img src="/images/imtro.svg" alt="" />
         </div>
       </div>
-
-      
     </body>
   );
 }
 
-
 export default Body;
-

@@ -4,18 +4,20 @@ import LoginPage from "./pages/login";
 import UserInfoPage from "./pages/userinfo";
 import Admin from "./pages/admin/index";
 import Layout from "./components/layout";
-import RegisterForm from "./pages/register/Register";
+import RegisterForm from "./pages/register";
 import AboutPage from "./pages/about";
 import ManageFish from "./pages/admin/manageFish";
 import ContactPage from "./pages/contact";
 import ComparePage from "./pages/compare";
 import ManageOrder from "./pages/admin/manageOrders";
 import ProductPage from "./pages/product";
+
 import PrivacyPolicy from "./components/footer/footer page/privacy-policy";
 import SupportPolicy from "./components/footer/footer page/support-policy";
 import OrderPolicy from "./components/footer/footer page/order-policy";
 import RefundPolicy from "./components/footer/footer page/refund-policy";
-
+import LayoutTitle from "./components/layout/title";
+import SinglepProduct from "./pages/single-product";
 
 
 
@@ -40,6 +42,17 @@ function App() {
           element: <RegisterForm />,
         },
         {
+          path: "/singleproduct",
+          element: <SinglepProduct/>,
+        },
+      ],
+    },
+
+    {
+      path: "",
+      element: <LayoutTitle/>,
+      children: [
+        {
           path: "/about",
           element: <AboutPage />,
         },
@@ -47,6 +60,12 @@ function App() {
 
           path: "/contact",
           element: <ContactPage />,
+
+        },
+        {
+
+          path: "/compare",
+          element: <ComparePage />,
 
         },
       ],
