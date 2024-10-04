@@ -18,6 +18,7 @@ import BlogList from "./pages/blogList";
 import RecoveryPassword from "./pages/forgot-password/recovery-password"; 
 import AdminMembers from "./pages/admin/admin-members";
 import ManageConsignment from "./pages/admin/manageConsignment";
+import BlogDetail from "./pages/blogList/blogPost/blogDetail";
 // import PrivacyPolicy from "./components/footer/footerpage/privacy-policy";
 // import OrderPolicy from "./components/footer/footerpage/order-policy";
 
@@ -103,9 +104,6 @@ function App() {
     //   element: <OrderPolicy />,
     // },
 
-
-
-
     {
       path: "/admin",
       element: <Admin />,
@@ -130,6 +128,10 @@ function App() {
     {
       path: "/compare",
       element: <ComparePage />,
+    },
+    {
+      path :"/blog/:id" ,
+      element :<BlogDetail />
     },
   ]);
   return <RouterProvider router={router} />;

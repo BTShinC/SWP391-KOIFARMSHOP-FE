@@ -8,16 +8,22 @@ import {
   Button,
   Box,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 BlogPost.propTypes = {
   post: PropTypes.object.isRequired,
 };
 
 function BlogPost({ post }) {
+  const navigate = useNavigate();
   const truncatedContent =
     post.content.length > 100
       ? post.content.substring(0, 100) + "..."
       : post.content;
+  const handleClick = (postId) => {
+    // Điều hướng đến trang chi tiết của bài đăng
+    navigate(`/blog/${postId}`);
+  };
   return (
     <Box sx={{ mb: 4 }}>
       <Card
@@ -57,7 +63,12 @@ function BlogPost({ post }) {
           </Typography>
         </CardContent>
         <CardActions sx={{ backgroundColor: "#f5f5f5" }}>
-          <Button size="small" variant="contained" color="primary">
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={() => handleClick(post.id)}
+          >
             Xem chi tiết
           </Button>
         </CardActions>
