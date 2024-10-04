@@ -2,10 +2,25 @@ import "./index.scss";
 import { Link } from "react-router-dom";
 import { Button, Typography, Image, Divider } from "antd";
 import Carousel from "../../components/carousel";
+import { useState } from "react";
+import ShoppingCart from "../../components/shopping-cart";
 
 const { Title, Text } = Typography;
 
 function SinglepProduct() {
+  const [cartVisible, setCartVisible] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
+
+  const handleAddToCart = (product) => {
+    const existingItem = cartItems.find(item => item.title === product.title);
+    if (existingItem) {
+      existingItem.quantity += 1; // Increase quantity if already exists
+      setCartItems([...cartItems]);
+    } else {
+      setCartItems((prevItems) => [...prevItems, { ...product, quantity: 1 }]);
+    }
+    setCartVisible(true);
+  };
   return (
     <div className="single-product">
       <div className="breadcrumb-banner">
@@ -85,10 +100,18 @@ function SinglepProduct() {
           </div>
 
           <div className="action-buttons">
-            <Button type="default" className="buy-button">
+            <Button
+              type="default"
+              className="buy-button"
+              onClick={() => handleAddToCart({ image: "/images/kohaku1.svg", title: "Mua lẻ", price: 1000000 })}
+            >
               Mua lẻ
             </Button>
-            <Button type="default" className="buy-button">
+            <Button
+              type="default"
+              className="buy-button"
+              onClick={() => handleAddToCart({ image: "/images/kohaku1.svg", title: "Mua lô", price: 1000000 })}
+            >
               Mua lô
             </Button>
           </div>
@@ -155,6 +178,14 @@ function SinglepProduct() {
           </Button>
         </div>
       </div>
+
+      {/* Show ShoppingCart if visible */}
+      {cartVisible && (
+        <ShoppingCart
+          cartItems={cartItems}
+          onClose={() => setCartVisible(false)}
+        />
+      )}
     </div>
   );
 }

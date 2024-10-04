@@ -3,7 +3,7 @@ import poster from "swp391-koifarmshop-fe/public/images/poster.svg";
 import "./index.scss";
 import { Link } from "react-router-dom";
 
-import { Button, Card } from "antd";
+import { Card } from "antd";
 import Meta from "antd/es/card/Meta";
 
 import koi1 from "swp391-koifarmshop-fe/public/images/koi1.svg";
