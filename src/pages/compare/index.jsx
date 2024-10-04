@@ -1,9 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import logo from '/public/logo.svg';
 import "./index.scss";
-import Header from '../../components/header';
-import Footer from '../../components/footer';
 import { Button } from 'antd';
 import SelectFishModal from './selecfish-modal';
 import { PlusOutlined, DeleteOutlined, RollbackOutlined, ShoppingCartOutlined } from '@ant-design/icons';
@@ -44,13 +41,6 @@ function ComparePage() {
 
     return (
         <div className="compare-page">
-            <Header />
-            <div className="banner-wraper">
-                <div className="banner-container">
-                    <img src={logo} alt="Logo" className="logo" />
-                    <h2 className="shop-name">So sánh cá</h2>
-                </div>
-            </div>
             <div className="compare-content container">
                 <div className="row">
                     <div className="col-5">
@@ -116,7 +106,6 @@ function ComparePage() {
                     onSelect={handleSelect}
                 />
             </div>
-            <Footer />
         </div>
     );
 };
