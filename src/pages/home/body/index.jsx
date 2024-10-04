@@ -1,4 +1,5 @@
 import poster from "swp391-koifarmshop-fe/public/images/poster-upscaled.jpeg";
+//upscalled image
 
 import "./index.scss";
 import { Link } from "react-router-dom";
@@ -82,7 +83,9 @@ function Body() {
             cao tại Việt Nam. Với tiêu chuẩn vượt trội và cam kết mang lại dịch
             vụ hoàn hảo, Koifish luôn nỗ lực để mỗi khách hàng đều hài lòng.
           </h5>
+          
           <button className="view-more-button">Xem thêm</button>
+          
         </div>
 
         <div className="body__introduction__image">
