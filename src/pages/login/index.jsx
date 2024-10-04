@@ -12,7 +12,7 @@ import api from "../../config/api";
 // import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { login } from "../redux/userSlice";
+import { login } from "../redux/features/userSlice";
 
 
 const firebaseConfig = {
