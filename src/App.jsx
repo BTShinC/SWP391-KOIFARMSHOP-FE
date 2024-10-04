@@ -18,6 +18,7 @@ import OrderPolicy from "./components/footer/footer page/order-policy";
 import RefundPolicy from "./components/footer/footer page/refund-policy";
 import LayoutTitle from "./components/layout/title";
 import SinglepProduct from "./pages/single-product";
+import ShoppingCartPage from "./pages/shopping-cart";
 
 
 
@@ -68,6 +69,14 @@ function App() {
           element: <ComparePage />,
 
         },
+
+        {
+
+          path: "/shoppingcart",
+          element: <ShoppingCartPage />,
+
+        },
+
       ],
     },
 

@@ -75,7 +75,7 @@ function Header() {
             </Link>
           </li>
           <li>
-            <Link to="/">
+            <Link to="/shoppingcart">
               <ShoppingCartOutlined />
             </Link>
           </li>

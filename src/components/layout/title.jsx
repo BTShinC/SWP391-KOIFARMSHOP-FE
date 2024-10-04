@@ -18,6 +18,8 @@ function LayoutTitle() {
     title = "Thông tin người dùng";
   }else if (location.pathname === "/compare") {
     title = "So sánh cá";
+  }else if (location.pathname === "/shoppingcart") {
+    title = "Giỏ hàng";
   }
 
   return (
