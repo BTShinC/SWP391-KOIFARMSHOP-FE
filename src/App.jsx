@@ -16,6 +16,8 @@ import SinglepProduct from "./pages/single-product";
 import ForgotPassword from "./pages/forgot-password";
 import BlogList from "./pages/blogList";
 import RecoveryPassword from "./pages/forgot-password/recovery-password"; 
+import AdminMembers from "./pages/admin/admin-members";
+import ManageConsignment from "./pages/admin/manageConsignment";
 // import PrivacyPolicy from "./components/footer/footerpage/privacy-policy";
 // import OrderPolicy from "./components/footer/footerpage/order-policy";
 
@@ -111,10 +113,20 @@ function App() {
     {
       path: "/managefish",
       element: <ManageFish />,
-    },    {
+    }, 
+       {
       path: "/manageOrder",
       element: <ManageOrder />,
     },
+    {
+      path: "/members",
+      element: <AdminMembers/>,
+    },
+    {
+      path: "/manageConsignment",
+      element: <ManageConsignment/>,
+    },
+    
     {
       path: "/compare",
       element: <ComparePage />,

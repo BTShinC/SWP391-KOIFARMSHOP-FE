@@ -2,7 +2,7 @@ import api from "../config/api";
 
 const Register = async (data) => {
   try {
-    const response = await api.post("Register", data);
+    const response = await api.post("register", data);
     return response.data; // Trả về dữ liệu từ API nếu cần
   } catch (error) {
     console.error("Error registering:", error);
@@ -42,7 +42,7 @@ const fetchAllUser = async () => {
 
 const fetchAllProduct = async () => {
   try {
-    const response = await api.get("products");
+    const response = await api.get("product/getall");
     return response;
   } catch (error) {
     console.error(error);
@@ -52,7 +52,7 @@ const fetchAllProduct = async () => {
 
 const editFishInfo = async (data) => {
   try {
-    const response = await api.put(`products/${data.id}`, data);
+    const response = await api.put(`product/${data.id}`, data);
     return response;
   } catch (error) {
     console.error(error);
@@ -62,7 +62,7 @@ const editFishInfo = async (data) => {
 
 const addFish = async (data) => {
   try {
-    const response = await api.post(`products`, data);
+    const response = await api.post(`product/postall`, data);
     return response;
   } catch (error) {
     console.error(error);

@@ -58,9 +58,9 @@ function AdminSideBar() {
         </div>
         <div
           className={`sidebar__item ${
-            location.pathname === "/adminMembers" ? "active" : ""
+            location.pathname === "/members" ? "active" : ""
           }`}
-          onClick={() => handleNavigation("/adminMembers")}
+          onClick={() => handleNavigation("/members")}
         >
           <span className="sidebar__icon">⌘</span>
           <span>Thành viên</span> 
