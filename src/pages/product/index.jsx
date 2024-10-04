@@ -72,7 +72,7 @@ function ProductPage() {
     async function fetchFish() {
         try {
             const response = await axios.get(
-                "http://103.90.227.69:8080/api/product/getall"
+                "http://103.90.227.69:8080/api/productcombo/getall"
             );
             console.log(response.data);
             setFishData(response.data);
