@@ -2,11 +2,12 @@ import "./index.scss";
 import logo from '/public/logo.svg';
 import Header from "../../components/header";
 import Footer from "../../components/footer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input, Button, Card, Pagination } from "antd";
 import Meta from "antd/es/card/Meta";
 import { FilterOutlined, SearchOutlined, SwapOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 const koiImage = [
     { id: 1, imgSrc: "/images/kohaku.svg", title: "Asagi" },
@@ -41,10 +42,16 @@ const koiImage = [
     // { id: 30, imgSrc: "/images/koi6.svg", title: "Koi 20" },
 ];
 
+
+
+
+
+
 function ProductPage() {
+    const [FIshdata, setFishData] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10; 
+    const itemsPerPage = 10;
 
     const filteredProducts = koiImage.filter(product =>
         product.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -61,6 +68,24 @@ function ProductPage() {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     }
+
+    async function fetchFish() {
+        try {
+            const response = await axios.get(
+                "http://103.90.227.69:8080/api/product/getall"
+            );
+            console.log(response.data);
+            setFishData(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(()=>{
+        fetchFish();
+    },[]);
+
+    
 
     return (
         <div className="product-page">
