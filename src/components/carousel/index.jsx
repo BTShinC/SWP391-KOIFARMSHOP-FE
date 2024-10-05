@@ -53,7 +53,7 @@ const HoverCard = ({ imgSrc, title, id }) => {
     <Link to={`/singleproduct`} className="hover-card"> {/* Add Link here */}
       <Card
         hoverable
-        style={{ width: 240 }}
+        style={{ width: 240}}
         cover={
           <img
             alt={title}
