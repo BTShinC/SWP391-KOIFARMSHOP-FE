@@ -11,6 +11,7 @@ const UserInfoPage = () => {
     email: "john.doe@example.com",
     phoneNumber: "(555) 123-4567",
     accountBalance: 5000.0,
+    roleID:3
   };
 
   return (
