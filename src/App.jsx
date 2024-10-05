@@ -4,7 +4,7 @@ import LoginPage from "./pages/login";
 import UserInfoPage from "./pages/userinfo";
 import Admin from "./pages/admin/index";
 import Layout from "./components/layout";
-import RegisterForm from "/src/pages/register/Register"
+import RegisterForm from "./pages/register";
 import AboutPage from "./pages/about";
 import ManageFish from "./pages/admin/manageFish";
 import ContactPage from "./pages/contact";
@@ -18,16 +18,8 @@ import OrderPolicy from "./components/footer/footer page/order-policy";
 import RefundPolicy from "./components/footer/footer page/refund-policy";
 import LayoutTitle from "./components/layout/title";
 import SinglepProduct from "./pages/single-product";
-
-import BlogList from "./pages/blogList";
-import RecoveryPassword from "./pages/forgot-password/recovery-password"; 
-import AdminMembers from "./pages/admin/admin-members";
-import ManageConsignment from "./pages/admin/manageConsignment";
-import BlogDetail from "./pages/blogList/blogPost/blogDetail";
-// import PrivacyPolicy from "./components/footer/footerpage/privacy-policy";
-// import OrderPolicy from "./components/footer/footerpage/order-policy";
-
 import ShoppingCartPage from "./pages/shopping-cart";
+
 
 
 
@@ -53,14 +45,6 @@ function App() {
         {
           path: "/singleproduct",
           element: <SinglepProduct/>,
-        },
-        {
-          path: "/recoveryPassword",
-          element: <RecoveryPassword/>,
-        },
-        {
-          path: "/blog",
-          element: <BlogList/>,
         },
       ],
     },
@@ -111,7 +95,6 @@ function App() {
       element: <PrivacyPolicy />,
     },
 
-
     {
       path: "/support-policy",
       element: <SupportPolicy />,
@@ -128,7 +111,6 @@ function App() {
     },
 
    
-
     {
       path: "/admin",
       element: <Admin />,
@@ -136,29 +118,13 @@ function App() {
     {
       path: "/managefish",
       element: <ManageFish />,
-
-    }, 
-       {
-
+    }, {
       path: "/manageOrder",
       element: <ManageOrder />,
     },
     {
-      path: "/members",
-      element: <AdminMembers/>,
-    },
-    {
-      path: "/manageConsignment",
-      element: <ManageConsignment/>,
-    },
-    
-    {
       path: "/compare",
       element: <ComparePage />,
-    },
-    {
-      path :"/blog/:id" ,
-      element :<BlogDetail />
     },
   ]);
   return <RouterProvider router={router} />;

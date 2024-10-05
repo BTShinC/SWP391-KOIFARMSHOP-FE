@@ -1,11 +1,27 @@
-
 import { useState, useEffect } from 'react';
+
 import "./index.scss";
+
+import Footer from '../../components/footer';
 import { Button } from 'antd';
 import SelectFishModal from './selecfish-modal';
 import { PlusOutlined, DeleteOutlined, RollbackOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 
 
+// Sample fish data for testing
+const sampleFish = {
+    productID: '001',
+    breed: 'Tancho Kohaku',
+    size: '80cm',
+    sex: 'Đực',
+    healthStatus: 'Tốt',
+    personalityTrait: 'Đặc biệt',
+    origin: 'Danchi Farm',
+    description: 'Mô tả cá 1',
+    certificateUrl: 'Chứng nhận 1',
+    price: '25000000 VND',
+    imgSrc: '/images/kohaku.svg', // Add image source
+};
 
 function ComparePage() {
     const [selectedFishes, setSelectedFishes] = useState([]);
@@ -42,6 +58,8 @@ function ComparePage() {
 
     return (
         <div className="compare-page">
+            
+            
             <div className="compare-content container">
                 <div className="row">
                     <div className="col-5">
