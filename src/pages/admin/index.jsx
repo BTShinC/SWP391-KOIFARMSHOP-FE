@@ -12,6 +12,7 @@ const handleSearch = (value) => {
 
 const columns = [
   "Mã khách hàng",
+
   "Họ và tên",
   "Địa chỉ",
   "Email",

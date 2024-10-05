@@ -1,7 +1,20 @@
 import PropTypes from "prop-types";
 import "./index.scss";
+import { Pagination } from "@mui/material";
+import { useState } from "react";
+
 
 const AdminTable = ({ columns, data, title, ModalComponent }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+  const handleChangePage = (event, page) => {
+    setCurrentPage(page);
+  };
+  // Tính toán dữ liệu cần hiển thị
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+
   return (
     <div className="admin-table">
       <div>
@@ -16,7 +29,7 @@ const AdminTable = ({ columns, data, title, ModalComponent }) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((row, rowIndex) => (
+          {currentItems.map((row, rowIndex) => (
             <tr key={rowIndex}>
               <td>{row.accountID}</td>
               <td>{row.fullName}</td>
@@ -25,12 +38,31 @@ const AdminTable = ({ columns, data, title, ModalComponent }) => {
               <td>{row.phoneNumber}</td>
               <td>{row.accountBalance}</td>
               <td>
-                {ModalComponent && <ModalComponent userData={row} title="Chỉnh sửa" className = "modal-edit-user-button"/>}
+                {ModalComponent && (
+                  <ModalComponent
+                    userData={row}
+                    title="Chỉnh sửa"
+                    className="modal-edit-user-button"
+                  />
+                )}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <Pagination
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignContent: "center",
+          margin: "3rem 0", // Thêm margin
+        }}
+        count={Math.ceil(data.length / itemsPerPage)} // Tổng số trang
+        page={currentPage} // Trang hiện tại
+        onChange={handleChangePage} // Hàm xử lý khi thay đổi trang
+        color="primary" // Màu sắc của pagination (có thể tùy chỉnh)
+        shape="rounded" // Hình dạng của pagination
+      />
     </div>
   );
 };
