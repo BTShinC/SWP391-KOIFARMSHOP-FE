@@ -1,4 +1,4 @@
-import logo from "/public/logo.svg";
+import logo from "/public/images/logo.svg";
 import "./index.scss";
 
 function Banner({ title }) {

@@ -11,8 +11,14 @@ import ContactPage from "./pages/contact";
 import ComparePage from "./pages/compare";
 import ManageOrder from "./pages/admin/manageOrders";
 import ProductPage from "./pages/product";
+
+import PrivacyPolicy from "./components/footer/footer page/privacy-policy";
+import SupportPolicy from "./components/footer/footer page/support-policy";
+import OrderPolicy from "./components/footer/footer page/order-policy";
+import RefundPolicy from "./components/footer/footer page/refund-policy";
 import LayoutTitle from "./components/layout/title";
 import SinglepProduct from "./pages/single-product";
+
 import BlogList from "./pages/blogList";
 import RecoveryPassword from "./pages/forgot-password/recovery-password"; 
 import AdminMembers from "./pages/admin/admin-members";
@@ -20,6 +26,9 @@ import ManageConsignment from "./pages/admin/manageConsignment";
 import BlogDetail from "./pages/blogList/blogPost/blogDetail";
 // import PrivacyPolicy from "./components/footer/footerpage/privacy-policy";
 // import OrderPolicy from "./components/footer/footerpage/order-policy";
+
+import ShoppingCartPage from "./pages/shopping-cart";
+
 
 
 
@@ -76,6 +85,14 @@ function App() {
           element: <ComparePage />,
 
         },
+
+        {
+
+          path: "/shoppingcart",
+          element: <ShoppingCartPage />,
+
+        },
+
       ],
     },
 
@@ -89,15 +106,28 @@ function App() {
       element: <ProductPage />,
     },
 
-    // {
-    //   path: "/privacy-policy",
-    //   element: <PrivacyPolicy />,
-    // },
+    {
+      path: "/privacy-policy",
+      element: <PrivacyPolicy />,
+    },
 
-    // {
-    //   path: "/order-policy",
-    //   element: <OrderPolicy />,
-    // },
+
+    {
+      path: "/support-policy",
+      element: <SupportPolicy />,
+    },
+
+    {
+      path: "/order-policy",
+      element: <OrderPolicy />,
+    },
+
+    {
+      path: "/refund-policy",
+      element: <RefundPolicy />,
+    },
+
+   
 
     {
       path: "/admin",
@@ -106,8 +136,10 @@ function App() {
     {
       path: "/managefish",
       element: <ManageFish />,
+
     }, 
        {
+
       path: "/manageOrder",
       element: <ManageOrder />,
     },

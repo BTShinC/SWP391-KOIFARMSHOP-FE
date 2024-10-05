@@ -6,6 +6,7 @@ import SelectFishModal from './selecfish-modal';
 import { PlusOutlined, DeleteOutlined, RollbackOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 
 
+
 function ComparePage() {
     const [selectedFishes, setSelectedFishes] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);

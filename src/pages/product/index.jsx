@@ -1,12 +1,13 @@
 import "./index.scss";
-import logo from '/public/logo.svg';
+import logo from "/public/images/logo.svg";
 import Header from "../../components/header";
 import Footer from "../../components/footer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input, Button, Card, Pagination } from "antd";
 import Meta from "antd/es/card/Meta";
 import { FilterOutlined, SearchOutlined, SwapOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 const koiImage = [
     { id: 1, imgSrc: "/images/kohaku.svg", title: "Asagi" },
@@ -19,10 +20,38 @@ const koiImage = [
     { id: 8, imgSrc: "/images/kohaku.svg", title: "Benigoi" },
     { id: 9, imgSrc: "/images/koi5.svg", title: "Karashi" },
     { id: 10, imgSrc: "/images/kohaku.svg", title: "Asagi" },
+    { id: 11, imgSrc: "/images/koi5.svg", title: "Koi 1" },
+    { id: 12, imgSrc: "/images/koi6.svg", title: "Koi 2" },
+    { id: 13, imgSrc: "/images/kohaku.svg", title: "Koi 3" },
+    { id: 14, imgSrc: "/images/koi5.svg", title: "Koi 4" },
+    { id: 15, imgSrc: "/images/koi6.svg", title: "Koi 5" },
+    { id: 16, imgSrc: "/images/kohaku.svg", title: "Koi 6" },
+    { id: 17, imgSrc: "/images/koi5.svg", title: "Koi 7" },
+    { id: 18, imgSrc: "/images/koi6.svg", title: "Koi 8" },
+    { id: 19, imgSrc: "/images/kohaku.svg", title: "Koi 9" },
+    { id: 20, imgSrc: "/images/koi5.svg", title: "Koi 10" },
+    { id: 21, imgSrc: "/images/koi6.svg", title: "Koi 11" },
+    { id: 22, imgSrc: "/images/kohaku.svg", title: "Koi 12" },
+    { id: 23, imgSrc: "/images/koi5.svg", title: "Koi 13" },
+    { id: 24, imgSrc: "/images/koi6.svg", title: "Koi 14" },
+    { id: 25, imgSrc: "/images/kohaku.svg", title: "Koi 15" },
+    { id: 26, imgSrc: "/images/koi5.svg", title: "Koi 16" },
+    { id: 27, imgSrc: "/images/koi6.svg", title: "Koi 17" },
+    { id: 28, imgSrc: "/images/kohaku.svg", title: "Koi 18" },
+    { id: 29, imgSrc: "/images/koi5.svg", title: "Koi 19" },
+    { id: 30, imgSrc: "/images/koi6.svg", title: "Koi 20" },
 ];
 
+
+
+
+
+
 function ProductPage() {
+    const [FIshdata, setFishData] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 12;
 
     const filteredProducts = koiImage.filter(product =>
         product.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -32,6 +61,31 @@ function ProductPage() {
         event.preventDefault();
         // Logic for search can be added here if needed
     };
+    const indexOfLastProduct = currentPage * itemsPerPage;
+    const indexOfFirstProduct = indexOfLastProduct - itemsPerPage;
+    const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    }
+
+    async function fetchFish() {
+        try {
+            const response = await axios.get(
+                "http://103.90.227.69:8080/api/productcombo/getall"
+            );
+            console.log(response.data);
+            setFishData(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(()=>{
+        fetchFish();
+    },[]);
+
+    
 
     return (
         <div className="product-page">
@@ -64,12 +118,12 @@ function ProductPage() {
                 </div>
                 <h2>Các sản phẩm</h2>
                 <div className="product-list">
-                    {filteredProducts.map(product => (
+                    {currentProducts.map(product => (
                         <Card
                             key={product.id}
                             hoverable
                             cover={<img src={product.imgSrc} alt={product.title} />}
-                            style={{ width: 240, margin: '16px' }}
+                            style={{ width: 240, margin: '16px', display: 'inline-block' }} // Adjusted for inline-block
                         >
                             <Meta title={product.title} description="2.500k" />
                         </Card>
@@ -77,7 +131,13 @@ function ProductPage() {
                 </div>
             </div>
             <div className="pagination-wrapper">
-                <Pagination align="center" defaultCurrent={1} total={50} />
+                <Pagination className="pagination"
+                    current={currentPage}
+                    pageSize={itemsPerPage}
+                    total={filteredProducts.length}
+                    onChange={handlePageChange}
+                    style={{ marginTop: '20px', textAlign: 'center' }}
+                />
             </div>
             <Footer />
         </div>
