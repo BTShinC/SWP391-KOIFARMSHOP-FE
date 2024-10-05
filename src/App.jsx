@@ -13,7 +13,6 @@ import ManageOrder from "./pages/admin/manageOrders";
 import ProductPage from "./pages/product";
 import LayoutTitle from "./components/layout/title";
 import SinglepProduct from "./pages/single-product";
-import ForgotPassword from "./pages/forgot-password";
 import BlogList from "./pages/blogList";
 import RecoveryPassword from "./pages/forgot-password/recovery-password"; 
 import AdminMembers from "./pages/admin/admin-members";
@@ -45,10 +44,6 @@ function App() {
         {
           path: "/singleproduct",
           element: <SinglepProduct/>,
-        },
-        {
-          path: "/forgotPassword",
-          element: <ForgotPassword />,
         },
         {
           path: "/recoveryPassword",

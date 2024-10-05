@@ -27,6 +27,10 @@ function ForgotPassword() {
       }
     }
   };
+  const resetForm = () => {
+    setErrorMessage("");
+    setSuccessMessage("");
+  };
 
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -50,6 +54,7 @@ function ForgotPassword() {
                 type="primary"
                 htmlType="submit"
                 style={{ width: "100%" }}
+                onClick={resetForm}
               >
                 Nhập lại email
               </Button>

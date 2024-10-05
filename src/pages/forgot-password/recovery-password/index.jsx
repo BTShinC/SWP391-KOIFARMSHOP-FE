@@ -1,16 +1,20 @@
 import { Button, Form, Input, message } from "antd";
 import { ChangePassword } from "../../../service/userService";
-import { useParams } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
+import ForgotPassword from "..";
 
 function RecoveryPassword() {
-  const { token } = useParams(); // Sử dụng useParams bên ngoài hàm
+  const location = useLocation();
+
+  // Lấy token từ query parameter
+  const token = new URLSearchParams(location.search).get("token");
+
   const handleRecoveryPassword = async (value) => {
     console.log(value);
     console.log("Token nhận được:", token);
     const data = {
-      token: token,  // Thêm token vào data
-      // Thêm các giá trị cần thiết khác vào data (ví dụ: password mới)
-      newPassword: value.password
+      token: token,
+      newPassword: value.password,
     };
 
     try {
@@ -23,7 +27,7 @@ function RecoveryPassword() {
     }
   };
 
-  return (
+  return token ? (
     <div className="forgot-password">
       <div>
         <h2>Khôi phục mật khẩu</h2>
@@ -36,7 +40,7 @@ function RecoveryPassword() {
           labelCol={{
             span: 24,
           }}
-          onFinish={(value) => handleRecoveryPassword(value)} // Submit form handler
+          onFinish={(value) => handleRecoveryPassword(value)}
           className="form"
         >
           <Form.Item
@@ -79,6 +83,10 @@ function RecoveryPassword() {
           </Form.Item>
         </Form>
       </div>
+    </div>
+  ) : (
+    <div>
+      <ForgotPassword></ForgotPassword>
     </div>
   );
 }
