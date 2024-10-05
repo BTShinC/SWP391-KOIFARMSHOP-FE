@@ -1,11 +1,7 @@
-import AdminFilter from "../../../components/admin-components/admin-filter";
+
 import AdminHeader from "../../../components/admin-components/admin-headers";
 import AdminSideBar from "../../../components/admin-components/admin-sidebar";
-import AdminTable from "../../../components/admin-components/admin-table";
-import ChangeStatus from "../../../components/changeStatus";
-const handleSearch = (value) => {
-  console.log(value);
-};
+import OrderTable from "../../../components/admin-components/order-table";
 const orderData = [
   {
     orderId: "DH001",
@@ -85,7 +81,6 @@ const columns = [
   
 ];
 const ManageOrder = () => {
-  const renderActionButton = (row) => <ChangeStatus data={row} />;
   return (
     <div className="admin">
       <div className="admin-sidebar">
@@ -95,12 +90,10 @@ const ManageOrder = () => {
       <div className="admin-content">
         <AdminHeader />
         <h1 className="content__title">Trang quản lý</h1>
-        <AdminFilter onSearch={handleSearch} buttonText="Thêm mới đơn hàng" />
-        <AdminTable
-          data={orderData}
+        <OrderTable
+          orderData={orderData}
           columns={columns}
           title="Quản lý đơn hàng"
-          renderAction={renderActionButton}
           detailData={detailData}
         />
       </div>

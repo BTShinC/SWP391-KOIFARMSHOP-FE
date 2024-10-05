@@ -2,7 +2,7 @@ import api from "../config/api";
 
 const Register = async (data) => {
   try {
-    const response = await api.post("register", data);
+    const response = await api.post("Register", data);
     return response.data; // Trả về dữ liệu từ API nếu cần
   } catch (error) {
     console.error("Error registering:", error);

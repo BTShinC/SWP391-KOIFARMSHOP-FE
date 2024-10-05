@@ -52,7 +52,7 @@ function AdminFilter({ onSearch, ModalComponent, onChange }) {
 AdminFilter.propTypes = {
   onSearch: PropTypes.func.isRequired,
   ModalComponent: PropTypes.elementType,
-  onChange : PropTypes.func.isRequired,
+  onChange : PropTypes.func,
 };
 
 export default AdminFilter;

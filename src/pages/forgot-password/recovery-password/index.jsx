@@ -34,7 +34,7 @@ function RecoveryPassword() {
       </div>
       <div className="forgot-password__container">
         <div style={{ marginBottom: "1rem" }}>
-          <img src="/logo.svg" alt="Logo" style={{ maxWidth: "100px" }} />
+          <img src="/public/images/logo.svg" alt="Logo" style={{ maxWidth: "100px" }} />
         </div>
         <Form
           labelCol={{

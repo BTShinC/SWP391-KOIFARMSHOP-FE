@@ -13,9 +13,9 @@ const handleSearch = (value) => {
 const columns = [
   "Mã khách hàng",
   "Họ và tên",
+  "Địa chỉ",
   "Email",
   "Số điện thoại",
-  "Địa chỉ",
   "Số dư ví",
   "Thao tác",
 ];
