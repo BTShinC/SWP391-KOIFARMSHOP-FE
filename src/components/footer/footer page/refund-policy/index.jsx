@@ -1,20 +1,13 @@
-import logo from '/public/images/logo.svg'
+
 import "./index.scss";
-import Header from '../../../header';
-import Footer from '../..';
+
 
 
 function RefundPolicy() {
     return (
         <div>
             <div className="refund-policy-page">
-                <Header/>
-                <div className="banner-wraper">
-                    <div className="banner-container">
-                        <img src={logo} alt="Logo" className="logo" />
-                        <h2 className="shop-name">Chính sách đổi trả</h2>
-                    </div>
-                </div>
+                
                 <div className="page-content">
                     <p className="content">
                         Koifish luôn đảm bảo sự hài lòng của khách hàng với chính sách đổi trả linh hoạt và minh bạch.
@@ -36,7 +29,7 @@ function RefundPolicy() {
                         Chính sách này nhằm đảm bảo quyền lợi của bạn và cam kết mang đến những sản phẩm chất lượng tốt nhất từ Koifish.
                     </p>
                 </div>
-                <Footer/>
+                
             </div>
         </div>
     );

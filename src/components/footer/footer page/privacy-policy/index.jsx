@@ -1,20 +1,12 @@
-import logo from '/public/images/logo.svg'
+
 import "./index.scss";
-import Header from '../../../header';
-import Footer from '../..';
+
 
 
 function PrivacyPolicy() {
     return (
         <div>
             <div className="privacy-policy-page">
-                <Header/>
-                <div className="banner-wraper">
-                    <div className="banner-container">
-                        <img src={logo} alt="Logo" className="logo" />
-                        <h2 className="shop-name">Chính sách bảo mật</h2>
-                    </div>
-                </div>
                 <div className="page-content">
                     <p className="content">
                         Koifish cam kết bảo vệ thông tin cá nhân của quý khách hàng với mức độ bảo mật cao nhất.<br></br>
@@ -36,7 +28,6 @@ function PrivacyPolicy() {
                         Nếu có bất kỳ thắc mắc nào về chính sách bảo mật của chúng tôi, vui lòng liên hệ với bộ phận hỗ trợ khách hàng qua trang liên hệ
                     </p>
                 </div>
-                <Footer/>
             </div>
         </div>
     );

@@ -16,7 +16,6 @@ const UserInfoPage = () => {
 
   return (
     <div>
-      <Header />
       <Container>
         <div className="userinfo__container">
           <div className="userinfo__logo">
@@ -42,7 +41,6 @@ const UserInfoPage = () => {
           </div>
         </div>
       </Container>
-      <Footer/>
     </div>
   );
 };
