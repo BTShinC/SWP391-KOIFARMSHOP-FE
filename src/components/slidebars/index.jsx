@@ -24,6 +24,9 @@ const Sidebar = ({ isOpen, onClose }) => {
           </li>
         )}
         <li>
+          <Link to="/register" onClick={onClose}>Đăng ký</Link>
+        </li>
+        <li>
           <Link to="/userinfo" onClick={onClose}>
             Cập nhật thông tin
           </Link>
