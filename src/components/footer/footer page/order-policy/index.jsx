@@ -2,12 +2,11 @@
 import "./index.scss";
 
 
-
 function OrderPolicy() {
     return (
         <div>
             <div className="order-policy-page">
-
+                
                 <div className="page-content">
                     <p className="content">
                         Koifish mong muốn mang đến trải nghiệm mua sắm trực tuyến tiện lợi, nhanh chóng và an toàn nhất.
@@ -35,7 +34,7 @@ function OrderPolicy() {
                         Đội ngũ chăm sóc khách hàng của chúng tôi sẽ liên hệ để xác nhận và cập nhật về quá trình giao hàng.
                     </p>
                 </div>
-
+                
             </div>
         </div>
     );
