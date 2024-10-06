@@ -46,6 +46,7 @@ function App() {
           element: <RegisterForm />,
         },
         {
+
           path: "/singleproduct/:id",
           element: <SinglepProduct/>,
         },
@@ -66,7 +67,7 @@ function App() {
 
     {
       path: "",
-      element: <LayoutTitle/>,
+      element: <LayoutTitle />,
       children: [
         {
           path: "/about",
@@ -84,6 +85,7 @@ function App() {
           element: <ComparePage />,
 
         },
+
 
         {
 
@@ -122,6 +124,7 @@ function App() {
     
 
    
+
     {
       path: "/admin",
       element: <Admin />,
@@ -132,6 +135,7 @@ function App() {
     }, {
       path: "/manageOrder",
       element: <ManageOrder />,
+
     },
     {
       path: "/members",
@@ -153,6 +157,7 @@ function App() {
       path :"/blog/:id" ,
       element :<BlogDetail />
     },
+
   ]);
   return <RouterProvider router={router} />;
 }
