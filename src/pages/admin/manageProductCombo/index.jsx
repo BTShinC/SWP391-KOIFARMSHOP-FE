@@ -29,7 +29,6 @@ function ManageProductCombo() {
       console.log(error);
     }
   };
-
   const columns = [
     "Mã lô cá",
     "Các giống cá",
@@ -39,6 +38,9 @@ function ManageProductCombo() {
     "Trạng thái",
     "Thao tác",
   ];
+  // const onChange = () =>{
+  //   fetchAllProductCombo();
+  // }
 
   return (
     <div className="admin">
