@@ -49,6 +49,15 @@ const fetchAllProduct = async () => {
     throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
   }
 };
+const fetchAllProductCombo = async () => {
+  try {
+    const response = await api.get("productcombo/getall");
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+  }
+};
 
 const editFishInfo = async (data) => {
   try {
@@ -78,4 +87,5 @@ export {
   fetchAllProduct,
   editFishInfo,
   addFish,
+  fetchAllProductCombo,
 };

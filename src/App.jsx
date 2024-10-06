@@ -23,6 +23,7 @@ import RefundPolicy from "./components/footer/footer page/refund-policy";
 import LayoutTitle from "./components/layout/title";
 import SinglepProduct from "./pages/single-product";
 import ShoppingCartPage from "./pages/shopping-cart";
+import ManageProductCombo from "./pages/admin/manageProductCombo";
 function App() {
   const router = createBrowserRouter([
     {
@@ -136,6 +137,10 @@ function App() {
     {
       path: "/manageConsignment",
       element: <ManageConsignment/>,
+    },
+    {
+      path: "/manageProductCombo",
+      element: <ManageProductCombo/>,
     },
     {
       path: "/compare",
