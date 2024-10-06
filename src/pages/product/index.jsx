@@ -72,14 +72,14 @@ function ProductPage() {
                 </div>
                 <h2>Các sản phẩm</h2>
                 <div className="product-list">
-                    {currentProducts.map(product => (
-                        <Card
-                            key={product.id}
-                            hoverable
-                            cover={<img src={product.image} alt={product.productName} />}
-                            style={{ width: 240, margin: '16px', display: 'inline-block', height: '400px' }} // Adjusted height
-                        >
-                            <Meta 
+                {currentProducts.map(product => (
+                    <Card
+                        key={product.id}
+                        hoverable
+                        cover={<img src={product.image} alt={product.title} />}
+                        style={{ width: 240, margin: '16px', display: 'inline-block' }}
+                    >
+                        <Meta 
                                 title={<span className="product-name">{product.productName}</span>} 
                                 description={
                                     <div>
@@ -90,10 +90,14 @@ function ProductPage() {
                                     </div>
                                 } 
                             />
-                            
-                        </Card>
-                    ))}
-                </div>
+                        <div className="select-button-wrapper">
+                            <Button className="product-detail-button" style={{ marginTop: '10px' }}>
+                                Xem chi tiết
+                            </Button>
+                        </div>
+                    </Card>
+                ))}
+            </div>
             </div>
             <div className="pagination-wrapper">
                 <Pagination className="pagination"

@@ -12,26 +12,31 @@
         }
 
         .col-2{
-            height: 120vh;
+            height: 150vh;
             
         }
 
         .col-5{
-            height: 120vh; 
+            height: 150vh; 
+            
         }
 
         .fish-card {
+            display: flex; // Use flexbox for layout
+            flex-direction: column; // Stack elements vertically
+            justify-content: space-between; // Space out elements
             text-align: center;
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 10px;
             background-color: #f9f9f9;
-            height: 105vh;
+            height: 150vh;
+            
             
 
             .fish-image {
-                width: auto;
-                max-height:  30vh;
+                object-fit: contain;
+                max-height:  50vh;
                 border-radius: 5px;
             }
 
@@ -41,6 +46,12 @@
 
             p {
                 margin: 5px 0;
+                flex-grow: 1; // Allow paragraphs to grow and take available space
+            }
+
+            .comparepage-button-wrapper {
+                padding-top: 0.5rem;
+                margin-top: auto; // Push the button wrapper to the bottom
             }
         }
     }
