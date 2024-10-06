@@ -19,7 +19,6 @@ function ModalEditUser({ title, userData, className = "" }) {
     email: userData.email || "",
     address: userData.address || "",
     imageUrl: userData.imageUrl || "", // Lưu URL của ảnh
-    roleID: userData.roleID || "",
   };
 
   const [formValue, setFormValue] = useState(initFormValue);
@@ -33,7 +32,6 @@ function ModalEditUser({ title, userData, className = "" }) {
       email: userData.email || "",
       address: userData.address || "",
       imageUrl: userData.imageUrl || "",
-      roleID: userData.roleID || "",
     });
   }, [userData]);
 
@@ -54,7 +52,7 @@ function ModalEditUser({ title, userData, className = "" }) {
 
   const handleUploadChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
-
+  
     if (newFileList.length > 0) {
       const file = newFileList[0].originFileObj; // Lấy file từ danh sách file
       const storageRef = ref(storage, `uploads/${file.name}`); // Tạo reference đến Firebase Storage
@@ -82,11 +80,25 @@ function ModalEditUser({ title, userData, className = "" }) {
         });
     }
   };
+  
 
   const handleOk = () => {
     setOpen(false);
-    console.log(formValue)
   };
+
+  const handlePreview = async (file) => {
+    let src = file.url;
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj);
+        reader.onload = () => resolve(reader.result);
+      });
+    }
+    const imgWindow = window.open(src);
+    imgWindow.document.write(`<img src="${src}" style="width: 100%;" />`);
+  };
+
   return (
     <>
       <Button
@@ -109,26 +121,25 @@ function ModalEditUser({ title, userData, className = "" }) {
         <form>
           <div className="edit-user__modal">
             <h2>Thông tin cá nhân</h2>
-            {className !== "modal-edit-user-button" && (
-              <div>
-                <label className="form-label">Ảnh đại diện:</label>
-                <Upload
-                  name="avatar"
-                  listType="picture-card"
-                  className="avatar-uploader"
-                  fileList={fileList}
-                  onChange={handleUploadChange}
-                  beforeUpload={() => false} // Tránh việc tự động upload file
-                >
-                  {fileList.length >= 1 ? null : (
-                    <div>
-                      <PlusOutlined />
-                      <div style={{ marginTop: 8 }}>Upload</div>
-                    </div>
-                  )}
-                </Upload>
-              </div>
-            )}
+            <div>
+              <label className="form-label">Ảnh đại diện:</label>
+              <Upload
+                name="avatar"
+                listType="picture-card"
+                className="avatar-uploader"
+                fileList={fileList}
+                onChange={handleUploadChange}
+                onPreview={handlePreview}
+                beforeUpload={() => false} // Tránh việc tự động upload file
+              >
+                {fileList.length >= 1 ? null : (
+                  <div>
+                    <PlusOutlined />
+                    <div style={{ marginTop: 8 }}>Upload</div>
+                  </div>
+                )}
+              </Upload>
+            </div>
             <div>
               <label className="form-label">Họ và tên:</label>
               <input
@@ -170,23 +181,6 @@ function ModalEditUser({ title, userData, className = "" }) {
                 required
               />
             </div>
-            {className == "modal-edit-user-button" && (
-              <div>
-                <label className="form-label">Role:</label>
-                <select
-                  className="form-control"
-                  type="number"
-                  name="roleID"
-                  value={formValue.roleID}
-                  onChange={handleChange}
-                >
-                  <option value="">Chọn vai trò</option>{" "}
-                  {/* Giá trị mặc định */}
-                  <option value="1">Admin</option>
-                  <option value="2">Manager</option>
-                </select>
-              </div>
-            )}
           </div>
         </form>
       </Modal>

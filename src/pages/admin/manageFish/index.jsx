@@ -2,37 +2,50 @@ import AdminFilter from "../../../components/admin-components/admin-filter";
 import AdminHeader from "../../../components/admin-components/admin-headers";
 import AdminSideBar from "../../../components/admin-components/admin-sidebar";
 import FishTable from "../../../components/admin-components/fish-table";
-import EditFishModal from "./EditFishModal";
-import AddFishModal from "./AddFishModal"
+import AddFishModal from "./addfish-modal";
+import { useState } from "react";
 import "./index.scss";
-import { fetchAllProduct } from "../../../service/userService";
-import { useEffect, useState } from "react";
+
 const handleSearch = (value) => {
   console.log(value);
 };
 
-// const fishData1= [
-//   {
-//     productID: 2,
-//     imageUrl:"https://firebasestorage.googleapis.com/v0/b/fir-221c7.appspot.com/o/uploads%2Fcakoi1.webp?alt=media&token=7f22e22c-9fdc-4db6-b36e-2aeee3ee8b54",
-//     certificateUrl:"https://firebasestorage.googleapis.com/v0/b/fir-221c7.appspot.com/o/uploads%2Fcertificates%2Fcakoi2.webp?alt=media&token=427e2d66-8726-4292-95a5-ad0117ed69a0",
-//     breed: "Sanke",
-//     size: "40cm",
-//     sex: "Cái",
-//     healthStatus: "Khỏe mạnh",
-//     personalityTrait: "Năng động",
-//     origin: "Nhật Bản",
-//     description: "Màu đỏ, đen và trắng đặc trưng",
-//     image: "sanke.jpg",
-//     price: "2000",
-//     certificate: "Không",
-//     type: "Ký gửi",
-//     quality: "Trung bình",
-//     consignmentType: 'true',
-//     status: "Còn hàng",
-//     koiConsignmentID: 102,
-//   }
-// ];
+const fishData = [
+  {
+    productID: 1,
+    breed: "Kohaku",
+    size: "30cm",
+    sex: "Đực",
+    healthStatus: "Khỏe mạnh",
+    personalityTrait: "Hiền lành",
+    origin: "Nhật Bản",
+    description: "Màu đỏ tươi và trắng nổi bật",
+    image: "kohaku.jpg",
+    price: "1500",
+    certificate: "Có",
+    type: "Trang trại",
+    quality: "Cao",
+    status: "Hết hàng",
+    koiConsignmentID: 101,
+  },
+  {
+    productID: 2,
+    breed: "Sanke",
+    size: "40cm",
+    sex: "Cái",
+    healthStatus: "Khỏe mạnh",
+    personalityTrait: "Năng động",
+    origin: "Nhật Bản",
+    description: "Màu đỏ, đen và trắng đặc trưng",
+    image: "sanke.jpg",
+    price: "2000",
+    certificate: "Không",
+    type: "Ký gửi",
+    quality: "Trung bình",
+    status: "Còn hàng",
+    koiConsignmentID: 102,
+  }
+];
 
 const columns = [
   "Mã Sản Phẩm",
@@ -40,33 +53,21 @@ const columns = [
   "Kích Thước",
   "Giới Tính",
   "Giá",
+  "Chất Lượng",
   "Trạng thái",
   "Thao tác"
 ];
 
-
 function ManageFish() {
-  const [fishData, setFishData] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  useEffect (() => {
-    getAllProduct();
-  }, []);
-
-  const getAllProduct = async () => {
-    try {
-      let res = await fetchAllProduct();
-      if (res && res.data) {
-        console.log(res);
-        setFishData(res.data); // Cập nhật với dữ liệu từ phản hồi
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  const showModal = () => {
+    setIsModalVisible(true);
   };
 
-  const handleDataChange =() =>{
-    getAllProduct();
-  }
+  const handleModalClose = () => {
+    setIsModalVisible(false);
+  };
 
   return (
     <div className="manage-fish">
@@ -76,8 +77,10 @@ function ManageFish() {
       <div className="admin-content">
         <AdminHeader />
         <h1 className="admin-content__title">Trang quản lý</h1>
-        <AdminFilter onSearch={handleSearch} ModalComponent={AddFishModal} onChange={handleDataChange}  />
-        <FishTable fishData={fishData} columns={columns} title="Quản lý giống cá" ModalComponent={EditFishModal}  onChange={handleDataChange}/>
+        <AdminFilter onSearch={handleSearch} buttonText="Thêm cá Koi" />
+        <button onClick={showModal} className="add-fish-button">Thêm cá</button>
+        <FishTable fishData={fishData} columns={columns} title="Quản lý giống cá" />
+        <AddFishModal title="Thêm cá Koi" visible={isModalVisible} onClose={handleModalClose} />
       </div>
     </div>
   );

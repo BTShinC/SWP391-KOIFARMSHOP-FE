@@ -6,10 +6,20 @@
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  
-    div {
+
+    .uploader-container {
+      display: flex; 
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    .prop-input {
       margin-bottom: 16px; 
-  
+      display: flex;
+      flex-direction: column;
+    }
+
+      
       input,
       textarea {
         border: 1px solid #ccc;
@@ -34,8 +44,9 @@
       input.certificate-uploader {
         border: none; 
         padding: 0;
+       
       }
-    }
+    
   
     button {
       margin-top: 20px;
@@ -57,3 +68,5 @@
       }
     }
   }
+
+
