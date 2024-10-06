@@ -21,6 +21,7 @@ export default function Carousel({ slidesPerView = 4 }) {
     const loadProducts = async () => {
       try {
         const response = await fetchAllProduct();
+        console.log(response.data);
         setProducts(response.data); // Assuming response.data contains the product array
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -29,6 +30,8 @@ export default function Carousel({ slidesPerView = 4 }) {
 
     loadProducts();
   }, []);
+
+  
 
   return (
     <>
@@ -40,15 +43,15 @@ export default function Carousel({ slidesPerView = 4 }) {
         }}
         spaceBetween={0}
         modules={[Pagination, Autoplay]}
-        className="carousel"
+        className="carousel" 
       >
         {products.map((product) => (
-          <SwiperSlide key={product.id}>
+          <SwiperSlide key={product.productID}>
             <HoverCard
               imgSrc={product.image}
               title={product.productName}
               price={product.price}
-              id={product.id}
+              id={product.productID}
             />
           </SwiperSlide>
         ))}
@@ -57,7 +60,9 @@ export default function Carousel({ slidesPerView = 4 }) {
   );
 }
 
-const HoverCard = ({ imgSrc, title, price, id }) => {
+const HoverCard = ({ imgSrc, title, price, id}) => {
+  console.log("Product ID:", id);
+  
   return (
     <Link to={`/singleproduct/${id}`} className="hover-card">
       <Card
@@ -65,7 +70,6 @@ const HoverCard = ({ imgSrc, title, price, id }) => {
         style={{ width: 240 }}
         cover={<img alt={title} src={imgSrc} className="product-image" />}
       >
-        {/* Meta will display product name and price */}
         <Meta title={title} description={`${price} VND`} />
         <div className="hover-info">
           <Button type="primary" icon={<ShoppingCartOutlined />}>
@@ -77,6 +81,7 @@ const HoverCard = ({ imgSrc, title, price, id }) => {
   );
 };
 
+
 Carousel.propTypes = {
   slidesPerView: PropTypes.number,
 };
@@ -85,5 +90,5 @@ HoverCard.propTypes = {
   imgSrc: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired, // Assuming price is a number
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
 };

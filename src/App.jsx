@@ -21,7 +21,7 @@ import SupportPolicy from "./components/footer/footer page/support-policy";
 import OrderPolicy from "./components/footer/footer page/order-policy";
 import RefundPolicy from "./components/footer/footer page/refund-policy";
 import LayoutTitle from "./components/layout/title";
-import SinglepProduct from "./pages/single-product";
+import SinglepProduct from "./components/single-product";
 import ShoppingCartPage from "./pages/shopping-cart";
 import ManageProductCombo from "./pages/admin/manageProductCombo";
 
@@ -46,7 +46,7 @@ function App() {
           element: <RegisterForm />,
         },
         {
-          path: "/singleproduct",
+          path: "/singleproduct/:id",
           element: <SinglepProduct/>,
         },
         {
