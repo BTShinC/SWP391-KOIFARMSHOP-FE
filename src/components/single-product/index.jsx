@@ -113,14 +113,14 @@ function SinglepProduct() {
                   className="buy-button"
                   onClick={() => handleAddToCart({ image: product.image, title: "Mua lẻ", price: product.price })}
                 >
-                  Mua lẻ
+                  Mua ngay
                 </Button>
                 <Button
                   type="default"
                   className="buy-button"
                   onClick={() => handleAddToCart({ image: product.image, title: "Mua lô", price: product.price })}
                 >
-                  Mua lô
+                  Thêm vào giỏ hàng
                 </Button>
               </div>
               <div className="divider-wrapper">
