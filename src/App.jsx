@@ -43,6 +43,10 @@ function App() {
           element: <RegisterForm />,
         },
         {
+          path: "/userinfo",
+          element: <UserInfoPage />,
+        },
+        {
           path: "/singleproduct",
           element: <SinglepProduct/>,
         },
@@ -87,12 +91,6 @@ function App() {
 
       ],
     },
-
-    {
-      path: "/userinfo",
-      element: <UserInfoPage />,
-    },
-
     {
       path: "/product",
       element: <ProductPage />,

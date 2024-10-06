@@ -16,6 +16,7 @@ function EditFishModal({ fishData, onChange }) {
     productID: fishData.productID,
     breed: fishData.breed,
     size: fishData.size,
+    age: fishData.age,
     sex: fishData.sex,
     healthStatus: fishData.healthStatus,
     personalityTrait: fishData.personalityTrait,
@@ -133,6 +134,7 @@ function EditFishModal({ fishData, onChange }) {
       breed: formValue.breed,
       size: formValue.size,
       sex: formValue.sex,
+      age: formValue.age,
       healthStatus: formValue.healthStatus,
       personalityTrait: formValue.personalityTrait,
       origin: formValue.origin,
@@ -231,6 +233,18 @@ function EditFishModal({ fishData, onChange }) {
                 type="text"
                 name="size"
                 value={formValue.size}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label className="form-label">Tuổi:</label>
+              <input
+                className="form-control"
+                type="number"
+                name="age"
+                min={1}
+                value={formValue.age}
                 onChange={handleChange}
                 required
               />

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import logo from "/public/images/logo.svg";
-import googleLogo from "/public/images/google.svg";
+import googleLogo from "/public/images/google.svg"; 
 import { Link, useNavigate } from "react-router-dom";
 import "./index.scss";
 import axios from "axios";
@@ -13,6 +13,7 @@ import api from "../../config/api";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/features/userSlice";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyDzdOryEzjKOSYu5q-EiTZyK5DcwwsUqms",
@@ -41,6 +42,9 @@ LoginPage.propTypes = {
 // };
 
 function LoginPage() {
+
+
+
   // const [formValue, setFormValue] = useState(initFormValue);
 
   // const handleChange = (event) => {
@@ -53,6 +57,8 @@ function LoginPage() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+
   const handleLogin = async (values) => {
     try {
       const response = await api.post("login", values);
@@ -62,15 +68,12 @@ function LoginPage() {
       dispatch(login(response.data));
       // chạy xuống đây => account này có tồn tại
       toast.success("Đăng nhập thành công");
-      if (response.data.role == "admin") {
-        // Chuyển sang trang admin
-        navigate("/Admin");
-      }
       // chuyển đến trang chủ
       navigate("/");
 
       // lưu trữ thông tin của user
       // dispatch action
+      
     } catch (err) {
       console.error("Error response from API:", err.response?.data);
       toast.error(err.response.data);

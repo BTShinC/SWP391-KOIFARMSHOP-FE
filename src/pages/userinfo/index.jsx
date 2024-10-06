@@ -1,9 +1,7 @@
 import "./index.scss";
-import Header from "/src/components/header/index";
 import ModalEditUser from "./EditUserModal";
-import { Container } from "react-bootstrap";
 import logo from "/public/images/logo.svg";
-import Footer from '/src/components/footer/index';
+
 const UserInfoPage = () => {
   const user = {
     fullName: "John Doe",
@@ -15,9 +13,7 @@ const UserInfoPage = () => {
   };
 
   return (
-    <div>
-      <Header />
-      <Container>
+    <div className="user-info">
         <div className="userinfo__container">
           <div className="userinfo__logo">
             <img src={logo} alt="User Avatar" className="userinfo__avatar" />
@@ -41,9 +37,7 @@ const UserInfoPage = () => {
               <ModalEditUser userData={user} title = "Thay đổi thông tin cá nhân" />
           </div>
         </div>
-      </Container>
-      <Footer/>
-    </div>
+      </div>
   );
 };
 export default UserInfoPage;

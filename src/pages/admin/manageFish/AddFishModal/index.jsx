@@ -19,6 +19,7 @@ function AddFishModal({ title, visible, onClose,onChange }) {
     breed: "",
     size: "",
     sex: "",
+    age: 1,
     healthStatus: "",
     personalityTrait: "",
     origin: "",
@@ -213,6 +214,18 @@ function AddFishModal({ title, visible, onClose,onChange }) {
               required
             />
           </div>
+          <div>
+              <label className="form-label">Tuổi:</label>
+              <input
+                className="form-control"
+                type="number"
+                name="age"
+                min={1}
+                value={formValue.age}
+                onChange={handleChange}
+                required
+              />
+            </div>
           <div>
             <label className="form-label">Giới tính:</label>
             <select
