@@ -1,11 +1,16 @@
 import "./index.scss";
+
 import logo from "/public/images/logo.svg";
+
 import { useEffect, useState } from "react";
 import { Input, Button, Card, Pagination } from "antd";
 import Meta from "antd/es/card/Meta";
 import { FilterOutlined, SearchOutlined, SwapOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import axios from "axios";
+
+
+
 
 function ProductPage() {
     const [fishData, setFishData] = useState([]); // Renamed to fishData for clarity

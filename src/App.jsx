@@ -11,15 +11,19 @@ import ContactPage from "./pages/contact";
 import ComparePage from "./pages/compare";
 import ManageOrder from "./pages/admin/manageOrders";
 import ProductPage from "./pages/product";
-
+import BlogList from "./pages/blogList";
+import RecoveryPassword from "./pages/forgot-password/recovery-password"; 
+import AdminMembers from "./pages/admin/admin-members";
+import ManageConsignment from "./pages/admin/manageConsignment";
+import BlogDetail from "./pages/blogList/blogPost/blogDetail";
 import PrivacyPolicy from "./components/footer/footer page/privacy-policy";
 import SupportPolicy from "./components/footer/footer page/support-policy";
 import OrderPolicy from "./components/footer/footer page/order-policy";
 import RefundPolicy from "./components/footer/footer page/refund-policy";
 import LayoutTitle from "./components/layout/title";
-import SinglepProduct from "./pages/single-product";
-
-
+import SinglepProduct from "./components/single-product";
+import ShoppingCartPage from "./pages/shopping-cart";
+import ManageProductCombo from "./pages/admin/manageProductCombo";
 
 
 
@@ -42,8 +46,21 @@ function App() {
           element: <RegisterForm />,
         },
         {
-          path: "/singleproduct",
-          element: <SinglepProduct />,
+
+          path: "/singleproduct/:id",
+          element: <SinglepProduct/>,
+        },
+        {
+          path: "/recoveryPassword",
+          element: <RecoveryPassword/>,
+        },
+        {
+          path: "/blog",
+          element: <BlogList/>,
+        },
+        {
+          path: "/userinfo",
+          element: <UserInfoPage />,
         },
       ],
     },
@@ -68,11 +85,14 @@ function App() {
           element: <ComparePage />,
 
         },
-        {
-          path: "/userinfo",
-          element: <UserInfoPage />,
-        },
 
+
+        {
+
+          path: "/shoppingcart",
+          element: <ShoppingCartPage />,
+
+        },
         {
           path: "/product",
           element: <ProductPage />,
@@ -96,12 +116,14 @@ function App() {
         {
           path: "/refund-policy",
           element: <RefundPolicy />,
-        }
+        },
+
       ],
     },
 
+    
 
-
+   
 
     {
       path: "/admin",
@@ -113,7 +135,29 @@ function App() {
     }, {
       path: "/manageOrder",
       element: <ManageOrder />,
-    }
+
+    },
+    {
+      path: "/members",
+      element: <AdminMembers/>,
+    },
+    {
+      path: "/manageConsignment",
+      element: <ManageConsignment/>,
+    },
+    {
+      path: "/manageProductCombo",
+      element: <ManageProductCombo/>,
+    },
+    {
+      path: "/compare",
+      element: <ComparePage />,
+    },
+    {
+      path :"/blog/:id" ,
+      element :<BlogDetail />
+    },
+
   ]);
   return <RouterProvider router={router} />;
 }

@@ -101,7 +101,6 @@ function LoginPage() {
     try {
       const response = await signInWithPopup(auth, googleProvider);
       const user = response.user;
-
       console.log("User:", user.displayName);
       console.log("Email:", user.email);
 
@@ -187,7 +186,7 @@ function LoginPage() {
               </Link>
             </li>
             <li>
-              <Link to="/forgot-password">Quên mật khẩu</Link>
+              <Link to="/recoveryPassword">Quên mật khẩu</Link>
             </li>
           </div>
         </div>

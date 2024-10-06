@@ -1,9 +1,9 @@
 import "./index.scss";
-import Header from "/src/components/header/index";
 import ModalEditUser from "./EditUserModal";
 import { Container } from "react-bootstrap";
 import logo from "/public/images/logo.svg";
-import Footer from '/src/components/footer/index';
+
+
 const UserInfoPage = () => {
   const user = {
     fullName: "John Doe",
@@ -11,11 +11,11 @@ const UserInfoPage = () => {
     email: "john.doe@example.com",
     phoneNumber: "(555) 123-4567",
     accountBalance: 5000.0,
+    roleID:3
   };
 
   return (
     <div>
-      <Header />
       <Container>
         <div className="userinfo__container">
           <div className="userinfo__logo">
@@ -41,7 +41,6 @@ const UserInfoPage = () => {
           </div>
         </div>
       </Container>
-      <Footer/>
     </div>
   );
 };

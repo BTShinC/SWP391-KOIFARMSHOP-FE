@@ -1,0 +1,46 @@
+.blog-page {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  .blog-page__container {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    gap: 120px;
+    margin-bottom: 2rem;
+  }
+  .blog-page__post {
+    flex: 1 1 calc(50% - 20px); /* Chiều rộng mỗi bài đăng là 50% trừ đi khoảng cách giữa các bài */
+    max-width: calc(50% - 20px); /* Đặt chiều rộng tối đa cho mỗi bài */
+    overflow: hidden; // Ẩn phần nội dung vượt quá chiều cao
+  }
+  .blog-page__right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 2; // Dành 2 phần cho khu vực bài đăng
+
+  }
+
+  .blog-page__recommend {
+    flex: 1; // Dành 1 phần cho khu vực khuyến nghị
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    margin-top: 4rem;
+    border-radius: 8px;
+    height: 50vh;
+    a{
+        text-decoration: none;
+    }
+  }
+
+  .blog-page__content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+  }
+
+  .blog-page__title {
+    margin-bottom: 20px;
+  }
+}

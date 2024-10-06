@@ -6,9 +6,8 @@
     color: #0056b3;
     margin-top: 1rem;
   }
-  h3 {
+  h2 {
     text-align: center;
-    font-size: 1.5rem;
     margin-bottom: 1rem;
     color: #333333;
   }
@@ -24,7 +23,7 @@
     th,
     td {
       padding: 12px 15px;
-      text-align: center;
+      text-align: justify;
     }
 
     thead {
@@ -51,27 +50,18 @@
           font-size: 0.9rem;
           color: #333333;
         }
-
         .text-left {
           text-align: left;
         }
       }
-
-      .detail-row {
-        background-color: #d4c8b2; // Màu chính cho phần chi tiết
-        td {
-          padding: 20px;
-        }
-
-        p {
-          text-align: left;
-          margin: 5px 0;
-        }
-      }
     }
   }
+  .btn-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
   button {
-    background-color: #3b82f6;
     border: none;
     padding: 8px 12px;
     border-radius: 5px;

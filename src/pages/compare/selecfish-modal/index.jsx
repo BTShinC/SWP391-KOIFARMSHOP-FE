@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Modal, Input, Button, Card, Pagination } from 'antd';
 import PropTypes from 'prop-types';
 import Meta from 'antd/es/card/Meta';
