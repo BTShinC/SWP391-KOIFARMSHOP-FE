@@ -43,14 +43,14 @@ function App() {
         },
         {
           path: "/singleproduct",
-          element: <SinglepProduct/>,
+          element: <SinglepProduct />,
         },
       ],
     },
 
     {
       path: "",
-      element: <LayoutTitle/>,
+      element: <LayoutTitle />,
       children: [
         {
           path: "/about",
@@ -68,40 +68,41 @@ function App() {
           element: <ComparePage />,
 
         },
+        {
+          path: "/userinfo",
+          element: <UserInfoPage />,
+        },
+
+        {
+          path: "/product",
+          element: <ProductPage />,
+        },
+
+        {
+          path: "/privacy-policy",
+          element: <PrivacyPolicy />,
+        },
+
+        {
+          path: "/support-policy",
+          element: <SupportPolicy />,
+        },
+
+        {
+          path: "/order-policy",
+          element: <OrderPolicy />,
+        },
+
+        {
+          path: "/refund-policy",
+          element: <RefundPolicy />,
+        }
       ],
     },
 
-    {
-      path: "/userinfo",
-      element: <UserInfoPage />,
-    },
 
-    {
-      path: "/product",
-      element: <ProductPage />,
-    },
 
-    {
-      path: "/privacy-policy",
-      element: <PrivacyPolicy />,
-    },
 
-    {
-      path: "/support-policy",
-      element: <SupportPolicy />,
-    },
-
-    {
-      path: "/order-policy",
-      element: <OrderPolicy />,
-    },
-
-    {
-      path: "/refund-policy",
-      element: <RefundPolicy />,
-    },
-
-   
     {
       path: "/admin",
       element: <Admin />,
@@ -112,11 +113,7 @@ function App() {
     }, {
       path: "/manageOrder",
       element: <ManageOrder />,
-    },
-    {
-      path: "/compare",
-      element: <ComparePage />,
-    },
+    }
   ]);
   return <RouterProvider router={router} />;
 }

@@ -1,7 +1,5 @@
 import "./index.scss";
 import logo from "/public/images/logo.svg";
-import Header from "../../components/header";
-import Footer from "../../components/footer";
 import { useEffect, useState } from "react";
 import { Input, Button, Card, Pagination } from "antd";
 import Meta from "antd/es/card/Meta";
@@ -89,13 +87,6 @@ function ProductPage() {
 
     return (
         <div className="product-page">
-            <Header />
-            <div className="banner-wraper">
-                <div className="banner-container">
-                    <img src={logo} alt="Logo" className="logo" />
-                    <h2 className="shop-name">Cá Koi Nhật</h2>
-                </div>
-            </div>
             <div className="product-content">
                 <div className="search-wrapper">
                     <div className="search-filter">
@@ -139,7 +130,7 @@ function ProductPage() {
                     style={{ marginTop: '20px', textAlign: 'center' }}
                 />
             </div>
-            <Footer />
+            
         </div>
     );
 }
