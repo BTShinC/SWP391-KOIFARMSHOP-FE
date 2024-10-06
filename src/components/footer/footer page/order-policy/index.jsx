@@ -1,8 +1,6 @@
 
 import "./index.scss";
 
-
-
 function OrderPolicy() {
     return (
         <div>

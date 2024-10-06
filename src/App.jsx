@@ -86,7 +86,6 @@ function App() {
 
         },
 
-
         {
 
           path: "/shoppingcart",
@@ -148,10 +147,6 @@ function App() {
     {
       path: "/manageProductCombo",
       element: <ManageProductCombo/>,
-    },
-    {
-      path: "/compare",
-      element: <ComparePage />,
     },
     {
       path :"/blog/:id" ,

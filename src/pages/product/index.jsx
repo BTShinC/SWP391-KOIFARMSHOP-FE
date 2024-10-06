@@ -1,7 +1,4 @@
 import "./index.scss";
-
-import logo from "/public/images/logo.svg";
-
 import { useEffect, useState } from "react";
 import { Input, Button, Card, Pagination } from "antd";
 import Meta from "antd/es/card/Meta";
