@@ -7,28 +7,47 @@ import { Button } from 'antd';
 import SelectFishModal from './selecfish-modal';
 import { PlusOutlined, DeleteOutlined, RollbackOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 
-
-// Sample fish data for testing
-const sampleFish = {
-    productID: '001',
-    breed: 'Tancho Kohaku',
-    size: '80cm',
-    sex: 'Đực',
-    healthStatus: 'Tốt',
-    personalityTrait: 'Đặc biệt',
-    origin: 'Danchi Farm',
-    description: 'Mô tả cá 1',
-    certificateUrl: 'Chứng nhận 1',
-    price: '25000000 VND',
-    imgSrc: '/images/kohaku.svg', // Add image source
-};
+// Import the fish data from the modal file
+const fishData = [
+    {
+        id: 1,
+        imgSrc: "/images/kohaku.svg",
+        title: "Tancho Kohaku",
+        price: '25000000',
+        productID: '001',
+        breed: 'Tancho Kohaku',
+        size: '80cm',
+        sex: 'Đực',
+        healthStatus: 'Tốt',
+        personalityTrait: 'Đặc biệt',
+        origin: 'Danchi Farm',
+        description: 'Mô tả cá 1',
+        certificateUrl: 'Chứng nhận 1',
+    },
+    {
+        id: 2,
+        imgSrc: "/images/koi5.svg",
+        title: "Shiro Utsuri",
+        price: '22000000',
+        productID: '002',
+        breed: 'Shiro Utsuri',
+        size: '75cm',
+        sex: 'Cái',
+        healthStatus: 'Tốt',
+        personalityTrait: 'Hiền lành',
+        origin: 'Koi Farm',
+        description: 'Mô tả cá 2',
+        certificateUrl: 'Chứng nhận 2',
+    },
+];
 
 function ComparePage() {
     const [selectedFishes, setSelectedFishes] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
 
     useEffect(() => {
-        // setSelectedFishes([sampleFish]); // Set sample fish for testing
+        // Set initial selected fishes with the imported fish data
+        setSelectedFishes([fishData[0], fishData[1]]); // Automatically add the two fish
     }, []);
 
     const showModal = () => {
