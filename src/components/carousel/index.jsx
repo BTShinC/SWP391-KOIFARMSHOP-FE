@@ -9,25 +9,25 @@ import { Button, Card } from "antd";
 import { Link } from "react-router-dom";
 
 import PropTypes from "prop-types";
-import api from "../../config/api";
+import { fetchAllProduct } from "../../service/userService";
 
 const { Meta } = Card;
 
 export default function Carousel({ slidesPerView = 4 }) {
-  const [images, setImages] = useState([]);
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    
-    const fetchImages = async (values) => {
+    // Fetch products from API
+    const loadProducts = async () => {
       try {
-        const response = await api.get("product/getall",values);  
-        setImages(response.data);  
+        const response = await fetchAllProduct();
+        setProducts(response.data); // Assuming response.data contains the product array
       } catch (error) {
-        console.error("Error fetching images:", error);
+        console.error("Error fetching products:", error);
       }
     };
 
-    fetchImages();
+    loadProducts();
   }, []);
 
   return (
@@ -42,13 +42,13 @@ export default function Carousel({ slidesPerView = 4 }) {
         modules={[Pagination, Autoplay]}
         className="carousel"
       >
-        {images.map((image) => (
-          <SwiperSlide key={image.id}>
+        {products.map((product) => (
+          <SwiperSlide key={product.id}>
             <HoverCard
-              imgSrc={image.image}  
-              title={image.productName}  
-              price={image.price}  
-              id={image.id}
+              imgSrc={product.image}
+              title={product.productName}
+              price={product.price}
+              id={product.id}
             />
           </SwiperSlide>
         ))}
@@ -63,13 +63,7 @@ const HoverCard = ({ imgSrc, title, price, id }) => {
       <Card
         hoverable
         style={{ width: 240 }}
-        cover={
-          <img
-            alt={title}
-            src={imgSrc}
-            className="product-image"
-          />
-        }
+        cover={<img alt={title} src={imgSrc} className="product-image" />}
       >
         {/* Meta will display product name and price */}
         <Meta title={title} description={`${price} VND`} />
@@ -87,13 +81,9 @@ Carousel.propTypes = {
   slidesPerView: PropTypes.number,
 };
 
-Carousel.defaultProps = {
-  slidesPerView: 4,
-};
-
 HoverCard.propTypes = {
   imgSrc: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
+  price: PropTypes.number.isRequired, // Assuming price is a number
   id: PropTypes.number.isRequired,
 };
