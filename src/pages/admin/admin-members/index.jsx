@@ -22,7 +22,7 @@ const handleSearch = (value) => {
 function AdminMembers() {
   useEffect(() => {
     getUser();
-  });
+  },[]);
   const [userData, setUserData] = useState([]);
   const getUser = async () => {
     try {

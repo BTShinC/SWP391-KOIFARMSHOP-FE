@@ -19,7 +19,7 @@ function ModalEditUser({ title, userData, className = "" }) {
     email: userData.email || "",
     address: userData.address || "",
     imageUrl: userData.imageUrl || "", // Lưu URL của ảnh
-    roleID: userData.roleID || "",
+    role: userData.role || "",
   };
 
   const [formValue, setFormValue] = useState(initFormValue);
@@ -33,7 +33,7 @@ function ModalEditUser({ title, userData, className = "" }) {
       email: userData.email || "",
       address: userData.address || "",
       imageUrl: userData.imageUrl || "",
-      roleID: userData.roleID || "",
+      role: userData.role || "",
     });
   }, [userData]);
 
@@ -84,6 +84,7 @@ function ModalEditUser({ title, userData, className = "" }) {
   };
 
   const handleOk = () => {
+    
     setOpen(false);
     console.log(formValue)
   };
@@ -176,14 +177,14 @@ function ModalEditUser({ title, userData, className = "" }) {
                 <select
                   className="form-control"
                   type="number"
-                  name="roleID"
+                  name="role"
                   value={formValue.roleID}
                   onChange={handleChange}
                 >
                   <option value="">Chọn vai trò</option>{" "}
                   {/* Giá trị mặc định */}
-                  <option value="1">Admin</option>
-                  <option value="2">Manager</option>
+                  <option value="admin">Quản trị viên</option>
+                  <option value="customer">Khách hàng</option>
                 </select>
               </div>
             )}

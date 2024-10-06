@@ -91,7 +91,7 @@ function EditFishModal({ fishData, onChange }) {
         .then((url) => {
           setFormValue((prevFormValue) => ({
             ...prevFormValue,
-            imageUrl: url,
+            image: url,
           }));
         })
         .catch((error) => {
@@ -113,7 +113,7 @@ function EditFishModal({ fishData, onChange }) {
         .then((url) => {
           setFormValue((prevFormValue) => ({
             ...prevFormValue,
-            certificateUrl: url,
+            certificate: url,
           }));
         })
         .catch((error) => {
