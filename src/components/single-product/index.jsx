@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 import ShoppingCart from "../shopping-cart";
 import { fetchProductById } from "../../service/userService";
 
-
 const { Title, Text } = Typography;
 
 function SinglepProduct() {
@@ -17,7 +16,7 @@ function SinglepProduct() {
   const { id } = useParams();
 
   const handleAddToCart = (product) => {
-    const existingItem = cartItems.find(item => item.title === product.title);
+    const existingItem = cartItems.find((item) => item.title === product.title);
     if (existingItem) {
       existingItem.quantity += 1; // Increase quantity if already exists
       setCartItems([...cartItems]);
@@ -53,7 +52,9 @@ function SinglepProduct() {
             Shop
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
-          <span className="breadcrumb-current">{product ? product.productName : "Loading..."}</span>
+          <span className="breadcrumb-current">
+            {product ? product.productName : "Loading..."}
+          </span>
         </nav>
       </div>
 
@@ -102,23 +103,40 @@ function SinglepProduct() {
 
               <div className="color-selection">
                 <Text>Chọn màu sắc: </Text>
-                <Button className="color-option" style={{ backgroundColor: "white" }} />
-                <Button className="color-option" style={{ backgroundColor: "red" }} />
-                <Button className="color-option" style={{ backgroundColor: "black" }} />
+                <Button
+                  className="color-option"
+                  style={{ backgroundColor: "white" }}
+                />
+                <Button
+                  className="color-option"
+                  style={{ backgroundColor: "red" }}
+                />
+                <Button
+                  className="color-option"
+                  style={{ backgroundColor: "black" }}
+                />
               </div>
 
               <div className="action-buttons">
+                <Link to="/shoppingcart">
+                  <Button
+                    type="default"
+                    className="buy-button"
+                  >
+                    Mua ngay
+                  </Button>
+                </Link>
+
                 <Button
                   type="default"
                   className="buy-button"
-                  onClick={() => handleAddToCart({ image: product.image, title: "Mua lẻ", price: product.price })}
-                >
-                  Mua ngay
-                </Button>
-                <Button
-                  type="default"
-                  className="buy-button"
-                  onClick={() => handleAddToCart({ image: product.image, title: "Mua lô", price: product.price })}
+                  onClick={() =>
+                    handleAddToCart({
+                      image: product.image,
+                      title: product.productName,
+                      price: product.price,
+                    })
+                  }
                 >
                   Thêm vào giỏ hàng
                 </Button>
@@ -140,8 +158,16 @@ function SinglepProduct() {
           <p>{product ? product.description : "Loading description..."}</p>
         </div>
         <div className="image-section">
-          <img src={product ? product.image : "/images/kohaku1.svg"} alt="Sample" className="description-image" />
-          <img src={product ? product.image : "/images/kohaku1.svg"} alt="Sample" className="description-image" />
+          <img
+            src={product ? product.image : "/images/kohaku1.svg"}
+            alt="Sample"
+            className="description-image"
+          />
+          <img
+            src={product ? product.image : "/images/kohaku1.svg"}
+            alt="Sample"
+            className="description-image"
+          />
         </div>
       </div>
 
