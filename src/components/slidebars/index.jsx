@@ -17,15 +17,20 @@ const Sidebar = ({ isOpen, onClose }) => {
       />
       <ul>
         {!user && (
-          <li>
-            <Link to="/login" onClick={onClose}>
-              Đăng nhập
-            </Link>
-          </li>
+          <>
+            <li>
+              <Link to="/login" onClick={onClose}>
+                Đăng nhập
+              </Link>
+            </li>
+            <li>
+              <Link to="/register" onClick={onClose}>
+                Đăng ký
+              </Link>
+            </li>
+          </>
         )}
-        <li>
-          <Link to="/register" onClick={onClose}>Đăng ký</Link>
-        </li>
+
         <li>
           <Link to="/userinfo" onClick={onClose}>
             Cập nhật thông tin
