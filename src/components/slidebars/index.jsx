@@ -38,11 +38,27 @@ const Sidebar = ({ isOpen, onClose }) => {
           <Link to="/register" onClick={onClose}>Đăng ký</Link>
         </li>
         )}
-        <li>
-          <Link to="/userinfo" onClick={onClose}>
-            Cập nhật thông tin
-          </Link>
-        </li>
+        {user && ( // Show logout link only if user is logged in
+          <li>
+            <Link to="/userinfo" onClick={onClose}>
+              Cập nhật thông tin
+            </Link>
+          </li>
+        )}
+        {user && ( // Show logout link only if user is logged in
+          <li>
+            <Link to="/" onClick={onClose}>
+              Trạng thái đơn hàng
+            </Link>
+          </li>
+        )}
+        {user && ( // Show logout link only if user is logged in
+          <li>
+            <Link to="/" onClick={onClose}>
+              Trạng thái ký gửi
+            </Link>
+          </li>
+        )}
         {user && ( // Show logout link only if user is logged in
           <li>
             <Link to="/logout" onClick={onClose}>
