@@ -1,13 +1,11 @@
 import "./index.scss";
+import logo from "/public/images/logo.svg";
 import { useEffect, useState } from "react";
 import { Input, Button, Card, Pagination } from "antd";
 import Meta from "antd/es/card/Meta";
 import { FilterOutlined, SearchOutlined, SwapOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import axios from "axios";
-
-
-
 
 function ProductPage() {
     const [fishData, setFishData] = useState([]); // Renamed to fishData for clarity
@@ -74,14 +72,14 @@ function ProductPage() {
                 </div>
                 <h2>Các sản phẩm</h2>
                 <div className="product-list">
-                    {currentProducts.map(product => (
-                        <Card
-                            key={product.id}
-                            hoverable
-                            cover={<img src={product.image} alt={product.productName} />}
-                            style={{ width: 240, margin: '16px', display: 'inline-block', height: '400px' }} // Adjusted height
-                        >
-                            <Meta 
+                {currentProducts.map(product => (
+                    <Card
+                        key={product.id}
+                        hoverable
+                        cover={<img src={product.image} alt={product.title} />}
+                        style={{ width: 240, margin: '16px', display: 'inline-block' }}
+                    >
+                        <Meta 
                                 title={<span className="product-name">{product.productName}</span>} 
                                 description={
                                     <div>
@@ -92,10 +90,14 @@ function ProductPage() {
                                     </div>
                                 } 
                             />
-                            
-                        </Card>
-                    ))}
-                </div>
+                        <div className="select-button-wrapper">
+                            <Button className="product-detail-button" style={{ marginTop: '10px' }}>
+                                Xem chi tiết
+                            </Button>
+                        </div>
+                    </Card>
+                ))}
+            </div>
             </div>
             <div className="pagination-wrapper">
                 <Pagination className="pagination"

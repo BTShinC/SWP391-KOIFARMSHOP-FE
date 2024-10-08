@@ -131,7 +131,10 @@ function App() {
     {
       path: "/managefish",
       element: <ManageFish />,
-    }, {
+    },
+    
+    
+    {
       path: "/manageOrder",
       element: <ManageOrder />,
 

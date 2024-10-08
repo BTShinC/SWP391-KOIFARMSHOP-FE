@@ -40,6 +40,15 @@ function AdminSideBar() {
         </div>
         <div
           className={`sidebar__item ${
+            location.pathname === "/manageProductCombo" ? "active" : ""
+          }`}
+          onClick={() => handleNavigation("/manageProductCombo")}
+        >
+          <span className="sidebar__icon">⌘</span>
+          <span>Quản lý lô cá </span>
+        </div>
+        <div
+          className={`sidebar__item ${
             location.pathname === "/manageConsignment" ? "active" : ""
           }`}
           onClick={() => handleNavigation("/manageConsignment")}
