@@ -1,6 +1,8 @@
-import PropTypes from "prop-types";
 
-function ProductComboTable({ data = [], columns = [] }) {
+import PropTypes from "prop-types";
+import EditProductComboModal from "./editProductCombo";
+
+function ProductComboTable({ data = [], columns = [] , onChange}) {
   console.log(data);
 
   return (
@@ -25,6 +27,9 @@ function ProductComboTable({ data = [], columns = [] }) {
               <td>{item.healthStatus}</td>
               <td>{item.quantity}</td>
               <td>{item.status}</td>
+              <td className="btn-container">
+                <EditProductComboModal fishData={item} onChange={onChange}></EditProductComboModal>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -36,6 +41,7 @@ function ProductComboTable({ data = [], columns = [] }) {
 ProductComboTable.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object),
   columns: PropTypes.arrayOf(PropTypes.string),
+  onChange: PropTypes.func,
 };
 
 export default ProductComboTable;

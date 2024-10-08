@@ -4,33 +4,28 @@ import { PlusOutlined } from "@ant-design/icons";
 import PropTypes from "prop-types";
 import { storage } from "/src/firebase.js";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
-import { editFishInfo } from "../../../../service/userService";
+import { editComboInfo } from "../../../../service/userService";
 
-EditFishModal.propTypes = {
+EditProductComboModal.propTypes = {
   fishData: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 
-function EditFishModal({ fishData, onChange }) {
+function EditProductComboModal({ fishData, onChange }) {
   const initFormValue = {
-    productID: fishData.productID,
+    productComboID: fishData.productComboID,
+    comboName:fishData.comboName,
     breed: fishData.breed,
     size: fishData.size,
-    age: fishData.age,
-    sex: fishData.sex,
     healthStatus: fishData.healthStatus,
-    personalityTrait: fishData.personalityTrait,
-    origin: fishData.origin,
     description: fishData.description,
     image: fishData.image,
     price: fishData.price,
-    certificate: fishData.certificate,
     type: fishData.type,
-    quantity: 1,
-    status: "Còn hàng",
+    quantity: fishData.quantity,
+    status: fishData.status,
     desiredPrice: fishData.desiredPrice,
     consignmentType: fishData.consignmentType,
-    carePackageID: fishData.carePackageID,
   };
 
   const [formValue, setFormValue] = useState(initFormValue);
@@ -64,12 +59,11 @@ function EditFishModal({ fishData, onChange }) {
   const handleChange = (event) => {
     const { value, name } = event.target;
 
-    if (name === "type") {
+    if (name === "type" && value === "Ký gửi") {
       setFormValue((prevValue) => ({
         ...prevValue,
         [name]: value,
-        consignmentType:
-          value === "Ký gửi" ? "Ký gửi để bán" : "Trang trại đăng bán",
+        consignmentType: "Ký gửi để bán", // Đặt loại hình ký gửi thành "Ký gửi để bán"
       }));
     } else {
       setFormValue((prevValue) => ({
@@ -92,7 +86,7 @@ function EditFishModal({ fishData, onChange }) {
         .then((url) => {
           setFormValue((prevFormValue) => ({
             ...prevFormValue,
-            image: url,
+            imageUrl: url,
           }));
         })
         .catch((error) => {
@@ -114,7 +108,7 @@ function EditFishModal({ fishData, onChange }) {
         .then((url) => {
           setFormValue((prevFormValue) => ({
             ...prevFormValue,
-            certificate: url,
+            certificateUrl: url,
           }));
         })
         .catch((error) => {
@@ -127,32 +121,28 @@ function EditFishModal({ fishData, onChange }) {
     // Thêm `async` vào hàm
     // Xử lý lưu thông tin cá
     console.log("Form value:", formValue);
-
     const data = {
-      id: fishData.productID,
-      productName: fishData.productName,
+      id: formValue.productComboID,
+      comboName: fishData.comboName,
       breed: formValue.breed,
       size: formValue.size,
-      sex: formValue.sex,
-      age: formValue.age,
       healthStatus: formValue.healthStatus,
-      personalityTrait: formValue.personalityTrait,
-      origin: formValue.origin,
       description: formValue.description,
       image: formValue.image,
       price: formValue.price,
       certificate: formValue.certificate,
       type: formValue.type,
-      quantity: 1,
+      quantity: formValue.quantity,
       status: formValue.status,
       desiredPrice: formValue.price,
       consignmentType: formValue.consignmentType,
     };
+    console.log(fishData);
     console.log(data);
     try {
-      let res = await editFishInfo(data); // Sử dụng `await` để chờ kết quả
+      let res = await editComboInfo(data); // Sử dụng `await` để chờ kết quả
       if (res) {
-        onChange();
+    onChange();
         console.log("Thành công");
       }
     } catch (error) {
@@ -227,7 +217,7 @@ function EditFishModal({ fishData, onChange }) {
               />
             </div>
             <div>
-              <label className="form-label">Kích thước:</label>
+              <label className="form-label">Kích thước trung bình:</label>
               <input
                 className="form-control"
                 type="text"
@@ -237,32 +227,7 @@ function EditFishModal({ fishData, onChange }) {
                 required
               />
             </div>
-            <div>
-              <label className="form-label">Tuổi:</label>
-              <input
-                className="form-control"
-                type="number"
-                name="age"
-                min={1}
-                value={formValue.age}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label className="form-label">Giới tính:</label>
-              <select
-                className="form-control"
-                name="sex"
-                value={formValue.sex}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Chọn giới tính</option>
-                <option value="Đực">Đực</option>
-                <option value="Cái">Cái</option>
-              </select>
-            </div>
+
             <div>
               <label className="form-label">Tình trạng sức khỏe:</label>
               <input
@@ -307,29 +272,27 @@ function EditFishModal({ fishData, onChange }) {
             </div>
             <div>
               <label className="form-label">Loại:</label>
-              <select
+              <input
                 className="form-control"
                 type="text"
                 name="type"
                 value={formValue.type}
                 onChange={handleChange}
                 required
-              >
-                <option value="Trang trại">Trang trại</option>
-                <option value="Ký gửi">Ký gửi</option>
-              </select>
+              />
             </div>
-            <div>
-              <label className="form-label">Loại hình ký gửi:</label>
-              <input
-                className="form-control"
-                name="consignmentType"
-                value={formValue.consignmentType}
-                onChange={handleChange}
-                required
-                readOnly
-              ></input>
-            </div>
+            {formValue.type === "Ký gửi" && (
+              <div>
+                <label className="form-label">Loại hình ký gửi:</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  name="consignmentType"
+                  value={formValue.consignmentType || "Ký gửi để bán"}
+                  readOnly
+                />
+              </div>
+            )}
             <div>
               <label className="form-label">Giá:</label>
               <input
@@ -349,4 +312,4 @@ function EditFishModal({ fishData, onChange }) {
   );
 }
 
-export default EditFishModal;
+export default EditProductComboModal;

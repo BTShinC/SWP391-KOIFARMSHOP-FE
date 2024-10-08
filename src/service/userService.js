@@ -40,6 +40,16 @@ const fetchAllUser = async () => {
   }
 };
 
+// const editUser = async () => {
+//   try {
+//     const response = await api.get("account");
+//     return response;
+//   } catch (error) {
+//     console.error(error);
+//     throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+//   }
+// };
+
 const fetchAllProduct = async () => {
   try {
     const response = await api.get("product/getall");
@@ -69,6 +79,15 @@ const editFishInfo = async (data) => {
   }
 };
 
+const editComboInfo = async (data) => {
+  try {
+    const response = await api.put(`productcombo/${data.id}`, data);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+  }
+};
 const addFish = async (data) => {
   try {
     const response = await api.post(`product/postall`, data);
@@ -97,6 +116,7 @@ export {
   fetchAllProduct,
   editFishInfo,
   addFish,
+  editComboInfo,
   fetchAllProductCombo,
   fetchProductById,
 };
