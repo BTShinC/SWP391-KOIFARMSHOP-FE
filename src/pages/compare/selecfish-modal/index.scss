@@ -8,10 +8,36 @@
     
 
     .ant-card {
-        height: 70vh;
+        height: 90vh;
+        text-align: center; // Center all properties
+          display: flex;
+          flex-direction: column; // Stack elements vertically
+          justify-content: space-between; // Space out elements
+
+          .ant-card-cover {
+            img {
+              
+              height: 50vh; // Set a fixed height for uniformity
+              
+              object-fit: contain; 
+              transition: filter 0.3s ease-in-out;
+  
+              &:hover {
+                filter: grayscale(30%);
+              }
+            }
+          }
+        
+
+        .price {
+            font-weight: bold; // Bold the price
+          }
+        
        
     }
 }
+
+
 
 .pagination{
     justify-content: center;
@@ -31,8 +57,9 @@
     cursor: pointer;
     width: 100%;
     width: 5vw;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
     margin-top: 1rem;
+
 
     &:hover {
       background-color: #e9e1d7;

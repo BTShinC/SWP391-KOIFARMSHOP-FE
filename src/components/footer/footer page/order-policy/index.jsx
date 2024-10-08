@@ -1,20 +1,11 @@
-import logo from '/public/images/logo.svg'
-import "./index.scss";
-import Header from '../../../header';
-import Footer from '../..';
 
+import "./index.scss";
 
 function OrderPolicy() {
     return (
         <div>
             <div className="order-policy-page">
-                <Header/>
-                <div className="banner-wraper">
-                    <div className="banner-container">
-                        <img src={logo} alt="Logo" className="logo" />
-                        <h2 className="shop-name">Hướng dẫn mua hàng</h2>
-                    </div>
-                </div>
+
                 <div className="page-content">
                     <p className="content">
                         Koifish mong muốn mang đến trải nghiệm mua sắm trực tuyến tiện lợi, nhanh chóng và an toàn nhất.
@@ -42,7 +33,7 @@ function OrderPolicy() {
                         Đội ngũ chăm sóc khách hàng của chúng tôi sẽ liên hệ để xác nhận và cập nhật về quá trình giao hàng.
                     </p>
                 </div>
-                <Footer/>
+
             </div>
         </div>
     );

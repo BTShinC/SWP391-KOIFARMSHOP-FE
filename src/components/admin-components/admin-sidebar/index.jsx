@@ -45,7 +45,8 @@ function AdminSideBar() {
           onClick={() => handleNavigation("/manageProductCombo")}
         >
           <span className="sidebar__icon">⌘</span>
-          <span>Quản lý lô cá</span>
+
+          <span>Quản lý lô cá </span>
         </div>
         <div
           className={`sidebar__item ${

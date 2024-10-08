@@ -20,6 +20,16 @@ function LayoutTitle() {
     title = "So sánh cá";
   }else if (location.pathname === "/shoppingcart") {
     title = "Giỏ hàng";
+  }else if (location.pathname === "/product") {
+    title = "Cá koi nhật";
+  }else if (location.pathname === "/privacy-policy") {
+    title = "Chính sách bảo mật";
+  }else if (location.pathname === "/support-policy") {
+    title = "Hỗ trợ";
+  }else if (location.pathname === "/order-policy") {
+    title = "Hỗ trợ mua hàng";
+  }else if (location.pathname === "/refund-policy") {
+    title = "Chính sách đổi trả";
   }
 
   return (

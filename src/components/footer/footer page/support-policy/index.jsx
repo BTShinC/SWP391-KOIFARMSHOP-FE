@@ -1,20 +1,14 @@
-import logo from '/public/images/logo.svg'
+
 import "./index.scss";
-import Header from '../../../header';
-import Footer from '../..';
+
 
 
 function SupportPolicy() {
     return (
         <div>
-            <div className="support-policy-page">
-                <Header/>
-                <div className="banner-wraper">
-                    <div className="banner-container">
-                        <img src={logo} alt="Logo" className="logo" />
-                        <h2 className="shop-name">Giúp đỡ</h2>
-                    </div>
-                </div>
+
+            <div className="support-policy-page">             
+
                 <div className="page-content">
                     <p className="content">
                         Koifish luôn sẵn sàng hỗ trợ bạn mọi lúc, mọi nơi để đảm bảo trải nghiệm mua sắm của bạn hoàn hảo.
@@ -31,7 +25,7 @@ function SupportPolicy() {
                         Bạn có thể truy cập trang liên hệ ngay trên website để trò chuyện với nhân viên hỗ trợ của chúng tôi. Họ sẽ cung cấp tư vấn chuyên sâu về mọi thắc mắc của quý khách, Đội ngũ của chúng tôi sẽ phản hồi trong vòng 24 giờ làm việc..
                     </p>
                 </div>
-                <Footer/>
+
             </div>
         </div>
     );

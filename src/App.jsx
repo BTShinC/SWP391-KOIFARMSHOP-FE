@@ -21,9 +21,12 @@ import SupportPolicy from "./components/footer/footer page/support-policy";
 import OrderPolicy from "./components/footer/footer page/order-policy";
 import RefundPolicy from "./components/footer/footer page/refund-policy";
 import LayoutTitle from "./components/layout/title";
-import SinglepProduct from "./pages/single-product";
+import SinglepProduct from "./components/single-product";
 import ShoppingCartPage from "./pages/shopping-cart";
 import ManageProductCombo from "./pages/admin/manageProductCombo";
+
+
+
 function App() {
   const router = createBrowserRouter([
     {
@@ -43,11 +46,7 @@ function App() {
           element: <RegisterForm />,
         },
         {
-          path: "/userinfo",
-          element: <UserInfoPage />,
-        },
-        {
-          path: "/singleproduct",
+          path: "/singleproduct/:id",
           element: <SinglepProduct/>,
         },
         {
@@ -58,12 +57,16 @@ function App() {
           path: "/blog",
           element: <BlogList/>,
         },
+        {
+          path: "/userinfo",
+          element: <UserInfoPage />,
+        },
       ],
     },
 
     {
       path: "",
-      element: <LayoutTitle/>,
+      element: <LayoutTitle />,
       children: [
         {
           path: "/about",
@@ -88,35 +91,40 @@ function App() {
           element: <ShoppingCartPage />,
 
         },
+        {
+          path: "/product",
+          element: <ProductPage />,
+        },
+
+
+        {
+          path: "/privacy-policy",
+          element: <PrivacyPolicy />,
+        },
+
+        {
+          path: "/support-policy",
+          element: <SupportPolicy />,
+        },
+
+
+        {
+          path: "/order-policy",
+          element: <OrderPolicy />,
+        },
+
+        {
+          path: "/refund-policy",
+          element: <RefundPolicy />,
+        },
 
       ],
     },
-    {
-      path: "/product",
-      element: <ProductPage />,
-    },
 
-    {
-      path: "/privacy-policy",
-      element: <PrivacyPolicy />,
-    },
-
-    {
-      path: "/support-policy",
-      element: <SupportPolicy />,
-    },
-
-    {
-      path: "/order-policy",
-      element: <OrderPolicy />,
-    },
-
-    {
-      path: "/refund-policy",
-      element: <RefundPolicy />,
-    },
+    
 
    
+
     {
       path: "/admin",
       element: <Admin />,
@@ -124,9 +132,13 @@ function App() {
     {
       path: "/managefish",
       element: <ManageFish />,
-    }, {
+    },
+    
+    
+    {
       path: "/manageOrder",
       element: <ManageOrder />,
+
     },
     {
       path: "/members",
@@ -141,13 +153,10 @@ function App() {
       element: <ManageProductCombo/>,
     },
     {
-      path: "/compare",
-      element: <ComparePage />,
-    },
-    {
       path :"/blog/:id" ,
       element :<BlogDetail />
     },
+
   ]);
   return <RouterProvider router={router} />;
 }

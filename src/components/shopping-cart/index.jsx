@@ -1,6 +1,7 @@
 import { Button, Divider, Modal, List } from "antd";
 import "./index.scss";
 import { CloseOutlined, ShoppingOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 
 const ShoppingCart = ({ cartItems, onClose }) => {
   const subtotal = cartItems.reduce(
@@ -61,8 +62,12 @@ const ShoppingCart = ({ cartItems, onClose }) => {
       <Divider />
 
       <div className="cart-buttons">
-        <Button type="default">Giỏ hàng</Button>
-        <Button type="default">Thanh toán</Button>
+        <Link to="/shoppingcart">
+          <Button type="default">Giỏ hàng</Button>
+        </Link>
+        <Link to="/">
+          <Button type="default">Thanh toán</Button>
+        </Link>
       </div>
     </Modal>
   );
