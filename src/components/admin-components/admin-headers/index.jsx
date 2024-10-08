@@ -9,13 +9,13 @@ function AdminHeader() {
         <h3>Xin chào {user ? user.userName : 'User'}!</h3> {/* Kiểm tra giá trị userName */}
         <span>Chào mừng trở lại</span>
       </div>
-      <div className="user-info">
-        <div className="user-info__avatar">
+      <div className="admin-info">
+        <div className="admin-info__avatar">
           <img className="avatar-placeholder" src="/images/logo.svg" alt="User Avatar" /> {/* Cập nhật đường dẫn hình ảnh */}
         </div>
         <div className="user-info__details">      
-          <span className="user-info__name">{user.userName}</span>
-          <span className="user-info__role">Admin</span>
+          <span className="admin-info__name">{user.userName}</span>
+          <span className="admin-info__role">Admin</span>
         </div>
         <div></div>
       </div>
