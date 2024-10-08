@@ -1,6 +1,5 @@
 import "./index.scss";
 import ModalEditUser from "./EditUserModal";
-import { Container } from "react-bootstrap";
 import logo from "/public/images/logo.svg";
 import { useSelector } from "react-redux";
 
@@ -11,8 +10,9 @@ const UserInfoPage = () => {
  
 
   return (
-    <div>
-      <Container>
+
+    <div className="user-info">
+
         <div className="userinfo__container">
           <div className="userinfo__logo">
             <img src={logo} alt="User Avatar" className="userinfo__avatar" />
@@ -36,8 +36,9 @@ const UserInfoPage = () => {
             <ModalEditUser userData={user} title="Thay đổi thông tin cá nhân" />
           </div>
         </div>
-      </Container>
-    </div>
+
+      </div>
+
   );
 };
 

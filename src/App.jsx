@@ -46,7 +46,6 @@ function App() {
           element: <RegisterForm />,
         },
         {
-
           path: "/singleproduct/:id",
           element: <SinglepProduct/>,
         },
@@ -97,6 +96,7 @@ function App() {
           element: <ProductPage />,
         },
 
+
         {
           path: "/privacy-policy",
           element: <PrivacyPolicy />,
@@ -106,6 +106,7 @@ function App() {
           path: "/support-policy",
           element: <SupportPolicy />,
         },
+
 
         {
           path: "/order-policy",
