@@ -58,12 +58,12 @@ function Header() {
 
       <div className="header__icon">
         <ul>
-          {user && (
+          {/* {user && (
             <li className="userName">
                 <span>{user.userName}</span>            
                 <div>{user.accountBalance} VND</div>         
             </li>
-          )}
+          )} */}
           <li>
             <Link to="#" onClick={toggleSidebar}>
               <UserOutlined />

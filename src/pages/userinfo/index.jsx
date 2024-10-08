@@ -2,17 +2,13 @@ import "./index.scss";
 import ModalEditUser from "./EditUserModal";
 import { Container } from "react-bootstrap";
 import logo from "/public/images/logo.svg";
-
+import { useSelector } from "react-redux";
 
 const UserInfoPage = () => {
-  const user = {
-    fullName: "John Doe",
-    address: "123 Main St, Anytown, USA",
-    email: "john.doe@example.com",
-    phoneNumber: "(555) 123-4567",
-    accountBalance: 5000.0,
-    roleID:3
-  };
+  const user = useSelector((state) => state.user);
+
+
+ 
 
   return (
     <div>
@@ -35,13 +31,14 @@ const UserInfoPage = () => {
               <span className="userinfo__label">Số điện thoại:</span> {user.phoneNumber}
             </div>
             <div className="userinfo__item">
-              <span className="userinfo__label">Số dư:</span> ${user.accountBalance.toFixed(2)}
+              <span className="userinfo__label">Số dư:</span> {user.accountBalance.toFixed(2)}
             </div>
-              <ModalEditUser userData={user} title = "Thay đổi thông tin cá nhân" />
+            <ModalEditUser userData={user} title="Thay đổi thông tin cá nhân" />
           </div>
         </div>
       </Container>
     </div>
   );
 };
+
 export default UserInfoPage;
