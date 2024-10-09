@@ -41,7 +41,7 @@ function Header() {
             <Link to="/product">Cá Koi Nhật</Link>
           </li>
           <li>
-            <Link to="/">Ký gửi</Link>
+            <Link to="/consignment">Ký gửi</Link>
           </li>
           <li>
             <Link to="/blog">Tin tức</Link>

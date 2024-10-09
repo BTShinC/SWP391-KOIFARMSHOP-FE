@@ -24,6 +24,7 @@ import LayoutTitle from "./components/layout/title";
 import SinglepProduct from "./components/single-product";
 import ShoppingCartPage from "./pages/shopping-cart";
 import ManageProductCombo from "./pages/admin/manageProductCombo";
+import Consignment from "./pages/consignment";
 
 
 
@@ -61,7 +62,12 @@ function App() {
           path: "/userinfo",
           element: <UserInfoPage />,
         },
+        {
+          path: "/consignment",
+          element: <Consignment/>,
+        },
       ],
+
     },
 
     {

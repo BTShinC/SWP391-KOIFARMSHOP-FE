@@ -1,0 +1,56 @@
+/* index.scss */
+
+.consignment-carousel-container {
+    position: relative;
+    width: 100%;
+  }
+  
+  .consignment-carousel {
+    height: 500px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    color: #fff;
+    text-align: center;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-size: 24px;
+    padding: 1rem;
+  }
+  
+  .carousel-button {
+    background-color: #ff7f50;
+    border-color: #ff7f50;
+    color: #fff;
+    padding: 24px 24px;
+    border-radius: 30px;
+    font-size: 18px;
+    margin: 3rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  
+    &:hover {
+      background-color: #ff4500;
+    }
+  }
+  
+  .carousel-nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    z-index: 1;
+  }
+  
+  .carousel-nav-prev {
+    left: 3rem;
+  }
+  
+  .carousel-nav-next {
+    right: 3rem;
+  }
