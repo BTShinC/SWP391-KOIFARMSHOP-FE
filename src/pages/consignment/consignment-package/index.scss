@@ -1,0 +1,9 @@
+.hover-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+    &:hover {
+      transform: scale(1.05); /* Phóng to 5% khi di chuột */
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); /* Đổ bóng mạnh hơn */
+    }
+  }
+  

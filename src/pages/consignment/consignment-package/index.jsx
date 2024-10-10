@@ -5,7 +5,9 @@ import {
   Card,
   CardContent,
   Button,
+  CardMedia,
 } from "@mui/material";
+import "./index.scss"; // Import file SCSS của bạn
 
 const koiCarePackages = [
   {
@@ -42,46 +44,58 @@ const koiCarePackages = [
 function ConsignmentPackageExample() {
   return (
     <>
-    <Grid container spacing={2} justifyContent="center">
-      {koiCarePackages.map((product) => (
-        <Grid item xs={12} sm={6} md={4} key={product.id}>
-          <Card>
-            <Box
-              component="img"
-              src={product.image}
-              alt={product.title}
-              sx={{ width: "100%", height: "auto", maxHeight: "400px",objectFit: "contain" }}
-            />
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                {product.title}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {product.specs}
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{ textDecoration: "line-through", color: "gray" }}
-              >
-                {product.oldPrice}
-              </Typography>
-              <Typography variant="h6" color="error">
-                {product.price}
-              </Typography>
-              <Typography variant="body2" color="green">
-                {product.discount}
-              </Typography>
-            </CardContent>
-            <Box sx={{ textAlign: "center", paddingBottom: "1rem" }}>
-              <Button variant="contained" color="primary">
-                Xem chi tiết
-              </Button>
-            </Box>
-          </Card>
-        </Grid>
-      ))}
-    </Grid>
-    <Button className="more-button">Xem thêm</Button>
+      <Grid container spacing={2} justifyContent="center" alignItems="stretch">
+        {koiCarePackages.map((product) => (
+          <Grid item xs={12} sm={6} md={4} key={product.id}>
+            <Card
+              className="hover-card"
+              sx={{
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+              }}
+            >
+              <CardMedia
+                component="img"
+                src={product.image}
+                alt={product.title}
+                sx={{ width: "100%", height: "200px", objectFit: "cover" }}
+              />
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  {product.title}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {product.description}
+                </Typography>
+                <ul>
+                  {product.services.map((service, index) => (
+                    <li key={index}>
+                      <Typography variant="body2" color="text.secondary">
+                        {service}
+                      </Typography>
+                    </li>
+                  ))}
+                </ul>
+                <Typography variant="h6" color="error">
+                  {product.price}
+                </Typography>
+              </CardContent>
+              <Box sx={{ textAlign: "center", paddingBottom: "1rem" }}>
+                <Button variant="contained" color="primary">
+                  Xem chi tiết
+                </Button>
+              </Box>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+      <Box sx={{ textAlign: "center", marginTop: "2rem" }}>
+        <Button className="more-button" variant="outlined" color="primary">
+          Xem thêm
+        </Button>
+      </Box>
     </>
   );
 }

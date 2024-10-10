@@ -1,0 +1,31 @@
+.sell-offline,.sell-online {
+    background-color: #d30010; /* Màu nền đỏ */
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white; /* Chữ màu trắng */
+    font-weight: bold;
+    font-size: 2rem; /* Tăng kích thước chữ */
+    text-transform: uppercase; /* Viết hoa toàn bộ chữ */
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    width: 100%; // Đảm bảo nút giãn ra hết chiều ngang
+    
+    /* Hiệu ứng đổ bóng dưới chữ */
+    text-shadow: 0px 4px 5px rgba(0, 0, 0, 0.3), 0px 1px 10px rgba(0, 0, 0, 0.1);
+  
+    /* Bo góc cho phần background nếu cần */
+    border-radius: 8px;
+  }
+  
+  .sell-offline:hover {
+    cursor: pointer; /* Hiệu ứng khi hover */
+  }
+  .card-button-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem; // Khoảng cách giữa nút và các thành phần khác
+  }
