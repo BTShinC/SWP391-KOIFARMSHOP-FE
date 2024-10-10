@@ -1,0 +1,40 @@
+.relative-img {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Tạo khoảng cách giữa các ảnh */
+    padding: 0.5rem;
+    
+    img {
+      width: 80px; /* Điều chỉnh chiều rộng của hình ảnh nhỏ */
+      height: 80px; /* Điều chỉnh chiều cao tương ứng */
+      object-fit: cover;
+      border-radius: 8px;
+    }
+  }
+  
+  .main-img {
+    margin: 0;
+    display: flex;
+    justify-content: center; /* Căn giữa hình ảnh chính */
+    
+    img {
+      width: 60%; /* Đặt chiều rộng nhỏ hơn cho hình ảnh chính */
+      height: auto;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+  }
+  
+  .global-box {
+    margin: 0; /* Xóa khoảng cách bên ngoài */
+    padding: 0.5rem; /* Điều chỉnh khoảng cách bên trong */
+  }
+  
+  .img-description {
+    margin: 0;
+    padding: 1rem;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  

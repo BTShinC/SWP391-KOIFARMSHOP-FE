@@ -20,6 +20,7 @@
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
     "firebase": "^10.13.2",
+    "material": "^0.9.16",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.4",
@@ -34,7 +35,8 @@
     "redux-persist": "^6.0.0",
     "sass": "^1.79.1",
     "swiper": "^11.1.14",
-    "swp391-koifarmshop-fe": "file:"
+    "swp391-koifarmshop-fe": "file:",
+    "ui": "^0.2.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

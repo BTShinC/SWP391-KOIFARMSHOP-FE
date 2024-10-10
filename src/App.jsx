@@ -12,7 +12,7 @@ import ComparePage from "./pages/compare";
 import ManageOrder from "./pages/admin/manageOrders";
 import ProductPage from "./pages/product";
 import BlogList from "./pages/blogList";
-import RecoveryPassword from "./pages/forgot-password/recovery-password"; 
+import RecoveryPassword from "./pages/forgot-password/recovery-password";
 import AdminMembers from "./pages/admin/admin-members";
 import ManageConsignment from "./pages/admin/manageConsignment";
 import BlogDetail from "./pages/blogList/blogPost/blogDetail";
@@ -25,8 +25,7 @@ import SinglepProduct from "./components/single-product";
 import ShoppingCartPage from "./pages/shopping-cart";
 import ManageProductCombo from "./pages/admin/manageProductCombo";
 import Consignment from "./pages/consignment";
-
-
+import CarePackageDetail from "./pages/consignment/carePackage-detail";
 
 function App() {
   const router = createBrowserRouter([
@@ -48,15 +47,19 @@ function App() {
         },
         {
           path: "/singleproduct/:id",
-          element: <SinglepProduct/>,
+          element: <SinglepProduct />,
         },
         {
           path: "/recoveryPassword",
-          element: <RecoveryPassword/>,
+          element: <RecoveryPassword />,
+        },
+        {
+          path: "/carepackagedetail/:id",
+          element: <CarePackageDetail />,
         },
         {
           path: "/blog",
-          element: <BlogList/>,
+          element: <BlogList />,
         },
         {
           path: "/userinfo",
@@ -64,10 +67,9 @@ function App() {
         },
         {
           path: "/consignment",
-          element: <Consignment/>,
+          element: <Consignment />,
         },
       ],
-
     },
 
     {
@@ -79,29 +81,22 @@ function App() {
           element: <AboutPage />,
         },
         {
-
           path: "/contact",
           element: <ContactPage />,
-
         },
         {
-
           path: "/compare",
           element: <ComparePage />,
-
         },
 
         {
-
           path: "/shoppingcart",
           element: <ShoppingCartPage />,
-
         },
         {
           path: "/product",
           element: <ProductPage />,
         },
-
 
         {
           path: "/privacy-policy",
@@ -113,7 +108,6 @@ function App() {
           element: <SupportPolicy />,
         },
 
-
         {
           path: "/order-policy",
           element: <OrderPolicy />,
@@ -123,13 +117,8 @@ function App() {
           path: "/refund-policy",
           element: <RefundPolicy />,
         },
-
       ],
     },
-
-    
-
-   
 
     {
       path: "/admin",
@@ -139,30 +128,27 @@ function App() {
       path: "/managefish",
       element: <ManageFish />,
     },
-    
-    
+
     {
       path: "/manageOrder",
       element: <ManageOrder />,
-
     },
     {
       path: "/members",
-      element: <AdminMembers/>,
+      element: <AdminMembers />,
     },
     {
       path: "/manageConsignment",
-      element: <ManageConsignment/>,
+      element: <ManageConsignment />,
     },
     {
       path: "/manageProductCombo",
-      element: <ManageProductCombo/>,
+      element: <ManageProductCombo />,
     },
     {
-      path :"/blog/:id" ,
-      element :<BlogDetail />
+      path: "/blog/:id",
+      element: <BlogDetail />,
     },
-
   ]);
   return <RouterProvider router={router} />;
 }

@@ -12,13 +12,13 @@ import "./index.scss"; // Import file SCSS của bạn
 const koiCarePackages = [
   {
     id: 1,
-    title: "Gói chăm sóc cá Koi tiêu chuẩn",
-    price: "1.500.000đ/tháng",
-    description: "Bao gồm kiểm tra sức khỏe định kỳ và tư vấn chăm sóc cá Koi.",
-    services: [
-      "Kiểm tra chất lượng nước",
-      "Kiểm tra sức khỏe cá",
-      "Tư vấn dinh dưỡng",
+      title: "Gói chăm sóc cá Koi tiêu chuẩn",
+      price: "1.500.000đ/tháng",
+      description: "Bao gồm kiểm tra sức khỏe định kỳ và tư vấn chăm sóc cá Koi.",
+      services: [
+        "Kiểm tra chất lượng nước",
+        "Kiểm tra sức khỏe cá",
+        "Tư vấn dinh dưỡng",
     ],
     image: "/public/images/cakoi2.webp",
   },
@@ -44,7 +44,7 @@ const koiCarePackages = [
 function ConsignmentPackageExample() {
   return (
     <>
-      <Grid container spacing={2} justifyContent="center" alignItems="stretch">
+      <Grid container spacing={1} justifyContent="center" alignItems="stretch">
         {koiCarePackages.map((product) => (
           <Grid item xs={12} sm={6} md={4} key={product.id}>
             <Card
