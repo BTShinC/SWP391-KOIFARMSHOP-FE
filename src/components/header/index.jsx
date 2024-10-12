@@ -56,8 +56,8 @@ function Header() {
         <ul>
           {user && (
             <li className="userName">
-              <span>{user.userName}</span>
-              <div>{user.accountBalance} VND</div>
+              <span>{user.account.fullName}</span>
+              <div>{user.account.accountBalance} VND</div>
             </li>
           )}
           <li>

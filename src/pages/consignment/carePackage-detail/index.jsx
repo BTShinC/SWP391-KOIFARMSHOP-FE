@@ -6,15 +6,15 @@ import {
   Typography,
   Button,
 } from "@mui/material";
-import PropTypes from "prop-types";
 import "./index.scss";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
-CarePackageDetail.propTypes = {
-  data: PropTypes.object.isRequired,
-};
+import { useNavigate } from "react-router-dom";
 
-function CarePackageDetail({ data }) {
-  console.log(data);
+function CarePackageDetail() {
+  const navigate = useNavigate();
+  const handleCareConsignmentFrom = () =>{
+    navigate('/consignmentFrom')
+  }
   return (
     <div>
       {/* Tạo một hàng chứa tất cả các phần tử */}
@@ -93,7 +93,7 @@ function CarePackageDetail({ data }) {
           {/* Căn giữa Button */}
           <Button
             className="careConsignment-btn"
-          >
+            onClick={handleCareConsignmentFrom()}>
             Ký gửi ngay
             <LocalFireDepartmentIcon /> {/* Icon ngọn lửa bên phải */}
           </Button>

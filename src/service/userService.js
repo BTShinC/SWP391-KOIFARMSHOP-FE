@@ -40,35 +40,25 @@ const fetchAllUser = async () => {
   }
 };
 
-// const editUser = async () => {
-//   try {
-//     const response = await api.get("account");
-//     return response;
-//   } catch (error) {
-//     console.error(error);
-//     throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
-//   }
-// };
-
-const fetchAllProduct = async () => {
+const editUser = async (data) => {
   try {
-    const response = await api.get("product/getall");
+    const response = await api.get("account/${data.id}", data);
     return response;
   } catch (error) {
     console.error(error);
     throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
   }
 };
-const fetchAllProductCombo = async () => {
+
+const fetchAllProduct = async () => {
   try {
-    const response = await api.get("productcombo/getall");
-    return response.data;
+    const response = await api.get("product");
+    return response;
   } catch (error) {
     console.error(error);
     throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
   }
 };
-
 const editFishInfo = async (data) => {
   try {
     const response = await api.put(`product/${data.id}`, data);
@@ -78,19 +68,9 @@ const editFishInfo = async (data) => {
     throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
   }
 };
-
-const editComboInfo = async (data) => {
-  try {
-    const response = await api.put(`productcombo/${data.id}`, data);
-    return response;
-  } catch (error) {
-    console.error(error);
-    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
-  }
-};
 const addFish = async (data) => {
   try {
-    const response = await api.post(`product/postall`, data);
+    const response = await api.post(`product    `, data);
     return response;
   } catch (error) {
     console.error(error);
@@ -107,7 +87,25 @@ const fetchProductById = async (id) => {
     throw error; // Throw error to handle it in the calling function
   }
 };
+const fetchAllProductCombo = async () => {
+  try {
+    const response = await api.get("productcombo");
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+  }
+};
 
+const editComboInfo = async (data) => {
+  try {
+    const response = await api.put(`productcombo/${data.id}`, data);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+  }
+};
 export {
   Register,
   ChangePassword,
@@ -119,4 +117,5 @@ export {
   editComboInfo,
   fetchAllProductCombo,
   fetchProductById,
+  editUser,
 };

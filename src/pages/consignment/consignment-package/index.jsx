@@ -8,17 +8,18 @@ import {
   CardMedia,
 } from "@mui/material";
 import "./index.scss"; // Import file SCSS của bạn
+import { useNavigate } from "react-router-dom";
 
 const koiCarePackages = [
   {
     id: 1,
-      title: "Gói chăm sóc cá Koi tiêu chuẩn",
-      price: "1.500.000đ/tháng",
-      description: "Bao gồm kiểm tra sức khỏe định kỳ và tư vấn chăm sóc cá Koi.",
-      services: [
-        "Kiểm tra chất lượng nước",
-        "Kiểm tra sức khỏe cá",
-        "Tư vấn dinh dưỡng",
+    title: "Gói chăm sóc cá Koi tiêu chuẩn",
+    price: "1.500.000đ/tháng",
+    description: "Bao gồm kiểm tra sức khỏe định kỳ và tư vấn chăm sóc cá Koi.",
+    services: [
+      "Kiểm tra chất lượng nước",
+      "Kiểm tra sức khỏe cá",
+      "Tư vấn dinh dưỡng",
     ],
     image: "/public/images/cakoi2.webp",
   },
@@ -42,6 +43,11 @@ const koiCarePackages = [
 ];
 
 function ConsignmentPackageExample() {
+  const navigate = useNavigate();
+  const handleCarePackageDetail = (id) => {
+    console.log(id); // Kiểm tra xem ID có chính xác không
+    navigate(`/carepackagedetail/${id}`); // Chuyển hướng đến URL với id
+  };
   return (
     <>
       <Grid container spacing={1} justifyContent="center" alignItems="stretch">
@@ -83,7 +89,13 @@ function ConsignmentPackageExample() {
                 </Typography>
               </CardContent>
               <Box sx={{ textAlign: "center", paddingBottom: "1rem" }}>
-                <Button variant="contained" color="primary">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    handleCarePackageDetail(product.id);
+                  }}
+                >
                   Xem chi tiết
                 </Button>
               </Box>

@@ -1,20 +1,21 @@
 import { Button, Carousel } from "antd";
 import { useRef } from "react";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import './index.scss'; // Import file index.scss
+import "./index.scss"; // Import file index.scss
 
 function ConsignmentCarousel() {
   const slides = [
     {
-      backgroundImage: "url('/public/ho-ca-koi-ngoai-troi-1024x640.jpg')", // Hình nền slide 1
+      backgroundImage:
+        "url('/public/images/ho-ca-koi-ngoai-troi-1024x640.jpg')", // Hình nền slide 1
       buttonLabel: "Ký gửi ngay",
     },
     {
-      backgroundImage: "url('/public/banner-JPD.jpg')", // Hình nền slide 2
+      backgroundImage: "url('/public/images/banner-JPD.jpg')", // Hình nền slide 2
       buttonLabel: "Ký gửi ngay",
     },
     {
-      backgroundImage: "url('/public/ho-ca-koi-ngoai-troi-1024x640.jpg')", // Thêm hình nền mới
+      backgroundImage: "url('/public/images/banner-SAKURA.jpg')", // Thêm hình nền mới
       buttonLabel: "Ký gửi ngay",
     },
   ];
@@ -39,10 +40,7 @@ function ConsignmentCarousel() {
               style={{ backgroundImage: slide.backgroundImage }}
             >
               <div style={{ flexGrow: 1 }}></div>
-              <Button
-                type="primary"
-                className="carousel-button"
-              >
+              <Button type="primary" className="carousel-button">
                 {slide.buttonLabel}
               </Button>
             </div>

@@ -26,6 +26,7 @@ import ShoppingCartPage from "./pages/shopping-cart";
 import ManageProductCombo from "./pages/admin/manageProductCombo";
 import Consignment from "./pages/consignment";
 import CarePackageDetail from "./pages/consignment/carePackage-detail";
+import ConsignmentForm from "./pages/consignment-form";
 
 function App() {
   const router = createBrowserRouter([
@@ -102,7 +103,10 @@ function App() {
           path: "/privacy-policy",
           element: <PrivacyPolicy />,
         },
-
+        {
+          path: "/consignmentFrom",
+          element: <ConsignmentForm/>,
+        },
         {
           path: "/support-policy",
           element: <SupportPolicy />,

@@ -41,7 +41,7 @@ function ForgotPassword() {
       </div>
       <div className="forgot-password__container">
         <div style={{ marginBottom: "1rem", textAlign: "center" }}>
-          <img src="/logo.svg" alt="Logo" style={{ maxWidth: "100px" }} />
+          <img src="/public/images/logo.svg" alt="Logo" style={{ maxWidth: "100px" }} />
         </div>
         {successMessage ? (
           <div className="alert alert-success">{successMessage}</div>
