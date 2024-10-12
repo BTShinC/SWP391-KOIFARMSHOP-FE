@@ -214,7 +214,7 @@ function AddFishModal({ title, visible, onClose,onChange }) {
               required
             />
           </div>
-          <div>
+          {/* <div>
               <label className="form-label">Tuổi:</label>
               <input
                 className="form-control"
@@ -225,7 +225,7 @@ function AddFishModal({ title, visible, onClose,onChange }) {
                 onChange={handleChange}
                 required
               />
-            </div>
+            </div> */}
           <div>
             <label className="form-label">Giới tính:</label>
             <select

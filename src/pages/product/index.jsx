@@ -6,6 +6,7 @@ import Meta from "antd/es/card/Meta";
 import { FilterOutlined, SearchOutlined, SwapOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { fetchAllProduct } from "../../service/userService";
 
 function ProductPage() {
     const [fishData, setFishData] = useState([]); // Renamed to fishData for clarity

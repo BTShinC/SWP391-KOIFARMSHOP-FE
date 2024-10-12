@@ -52,7 +52,7 @@ const fetchAllUser = async () => {
 
 const fetchAllProduct = async () => {
   try {
-    const response = await api.get("product/getall");
+    const response = await api.get("product");
     return response;
   } catch (error) {
     console.error(error);

@@ -104,7 +104,7 @@ function Header() {
             </Link>
           </li>
           <li>
-            <Link to="/">
+            <Link to="/admin">
               <SearchOutlined />
             </Link>
           </li>
