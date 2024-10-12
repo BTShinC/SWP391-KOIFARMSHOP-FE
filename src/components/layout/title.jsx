@@ -30,7 +30,8 @@ function LayoutTitle() {
     title = "Hỗ trợ mua hàng";
   }else if (location.pathname === "/refund-policy") {
     title = "Chính sách đổi trả";
-  }
+  }else if (location.pathname === "/blog") {
+    title = "Tin tức";}
 
   return (
     <>

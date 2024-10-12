@@ -1,40 +1,76 @@
 .relative-img {
-    display: flex;
-    flex-direction: column;
-    gap: 10px; /* Tạo khoảng cách giữa các ảnh */
-    padding: 0.5rem;
-    
-    img {
-      width: 80px; /* Điều chỉnh chiều rộng của hình ảnh nhỏ */
-      height: 80px; /* Điều chỉnh chiều cao tương ứng */
-      object-fit: cover;
-      border-radius: 8px;
-    }
-  }
-  
-  .main-img {
-    margin: 0;
-    display: flex;
-    justify-content: center; /* Căn giữa hình ảnh chính */
-    
-    img {
-      width: 60%; /* Đặt chiều rộng nhỏ hơn cho hình ảnh chính */
-      height: auto;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-  }
-  
-  .global-box {
-    margin: 0; /* Xóa khoảng cách bên ngoài */
-    padding: 0.5rem; /* Điều chỉnh khoảng cách bên trong */
-  }
-  
-  .img-description {
-    margin: 0;
-    padding: 1rem;
-    background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* Khoảng cách giữa các hình ảnh */
+  padding: 1rem;
+
+  img {
+    width: 80px; /* Giữ nguyên kích thước ảnh nhỏ */
+    height: 80px;
+    object-fit: cover;
     border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease; /* Thêm hiệu ứng khi hover */
+
+    &:hover {
+      transform: scale(1.1); /* Phóng to khi hover */
+    }
   }
-  
+}
+
+.main-img {
+  margin: 1rem 0;
+  display: flex;
+  justify-content: center; /* Căn giữa hình ảnh chính */
+
+  img {
+    width: 70%; /* Tăng chiều rộng của ảnh chính cho cân đối */
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1); /* Thêm bóng cho hình ảnh */
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05); /* Tăng kích thước ảnh chính khi hover */
+    }
+  }
+}
+
+.global-box {
+  margin: 0;
+  padding: 1.5rem; /* Tăng padding để khoảng cách nội dung thoáng hơn */
+}
+
+.img-description {
+  margin-top: 1.5rem;
+  padding: 2rem;
+  background-color: #fafafa; /* Đổi màu nền sáng hơn cho dễ nhìn */
+  border-radius: 12px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1); /* Thêm bóng mềm mại */
+}
+
+.careConsignment-btn {
+  display: inline-flex; /* Thay đổi sang inline-flex để nút nhỏ gọn hơn */
+  margin: 30px auto 0 auto; /* Căn giữa nút giống .more-button */
+  background-color: white;
+  color: #b88e2f !important; /* Màu chữ vàng đồng */
+  border: 2px solid #b88e2f !important ; /* Đường viền vàng đồng */
+  padding: 15px 25px; /* Điều chỉnh padding giống .more-button */
+  font-size: 14px; /* Điều chỉnh font size giống .more-button */
+  text-decoration: none; /* Đảm bảo không có gạch chân */
+  border-radius: 8px; /* Thêm bo góc cho nút */
+  transition: all 0.3s ease; /* Thêm hiệu ứng chuyển đổi mượt mà */
+
+  &:hover {
+    background-color: #b88e2f; /* Màu nền vàng đồng khi hover */
+    color: white !important; /* Chuyển màu chữ sang trắng khi hover */
+  }
+
+  svg {
+    color: #b88e2f; /* Màu của icon ngọn lửa là đỏ */
+  }
+
+  &:hover svg {
+    color: white; /* Màu của icon chuyển thành trắng khi hover */
+  }
+}

@@ -58,10 +58,6 @@ function App() {
           element: <CarePackageDetail />,
         },
         {
-          path: "/blog",
-          element: <BlogList />,
-        },
-        {
           path: "/userinfo",
           element: <UserInfoPage />,
         },
@@ -79,6 +75,10 @@ function App() {
         {
           path: "/about",
           element: <AboutPage />,
+        },
+        {
+          path: "/blog",
+          element: <BlogList />,
         },
         {
           path: "/contact",

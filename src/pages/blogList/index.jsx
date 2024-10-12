@@ -52,7 +52,7 @@ function BlogList() {
         {/* Phần bên trái: danh sách bài đăng */}
         <div className="blog-page__right">
           <div className="blog-page__title">
-            <h1>Blog Cá Koi</h1>
+            <h1>Các bài viết mới nhất</h1>
           </div>
           <div className="blog-page__content">
             {samplePosts.map((post, index) => (

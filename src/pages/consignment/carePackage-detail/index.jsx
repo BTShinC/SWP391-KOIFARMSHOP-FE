@@ -1,79 +1,103 @@
-import { Box, Card, CardContent, Grid } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Grid,
+  Typography,
+  Button,
+} from "@mui/material";
 import PropTypes from "prop-types";
 import "./index.scss";
-import { Typography } from "antd";
-
+import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 CarePackageDetail.propTypes = {
   data: PropTypes.object.isRequired,
 };
 
 function CarePackageDetail({ data }) {
-    console.log(data)
+  console.log(data);
   return (
     <div>
       {/* Tạo một hàng chứa tất cả các phần tử */}
-      <Grid container spacing={2} alignItems="center" justifyContent="center">
+      <Grid
+        container
+        alignItems="center"
+        justifyContent="left"
+        marginLeft="5rem"
+        marginTop="3rem"
+        marginBottom="3rem"
+      >
         {/* Hình ảnh nhỏ liên quan */}
-        <Grid item md={2}>
-          <Box
-            className="relative-img"
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "10px",
-              alignItems: "center",
-            }}
-          >
-            <img
-              src="/public/images/cakoi1.webp"
-              alt="Cá Koi 1"
-              style={{ width: "80px", borderRadius: "8px" }}
-            />
-            <img
-              src="/public/images/cakoi1.webp"
-              alt="Cá Koi 2"
-              style={{ width: "80px", borderRadius: "8px" }}
-            />
-            <img
-              src="/public/images/cakoi1.webp"
-              alt="Cá Koi 3"
-              style={{ width: "80px", borderRadius: "8px" }}
-            />
-          </Box>
-        </Grid>
-
-        {/* Hình ảnh chính */}
-        <Grid item md={6}>
-          <Box className="main-img" sx={{ textAlign: "center" }}>
-            <img
-              src="/public/images/cakoi1.webp"
-              alt="Cá Koi chính"
-              style={{ width: "300px", borderRadius: "8px" }}
-            />
-          </Box>
-        </Grid>
-
+        <Box
+          className="relative-img"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+            alignItems: "center",
+          }}
+        >
+          <img
+            src="/public/images/cakoi1.webp"
+            alt="Cá Koi 1"
+            style={{ width: "80px", borderRadius: "8px" }}
+          />
+          <img
+            src="/public/images/cakoi1.webp"
+            alt="Cá Koi 2"
+            style={{ width: "80px", borderRadius: "8px" }}
+          />
+          <img
+            src="/public/images/cakoi1.webp"
+            alt="Cá Koi 3"
+            style={{ width: "80px", borderRadius: "8px" }}
+          />
+        </Box>
+        <Box className="main-img" sx={{ textAlign: "center" }}>
+          <img
+            src="/public/images/cakoi1.webp"
+            alt="Cá Koi chính"
+            style={{ width: "300px", borderRadius: "8px" }}
+          />
+        </Box>
         {/* Phần mô tả */}
-        <Grid item md={4}>
-          <Card
-            className="img-description"
-            sx={{
-              padding: "0.5rem",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              maxWidth: "100%",
-            }}
+        <Card
+          className="img-description"
+          sx={{
+            padding: "3rem",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start", // Căn từ trên xuống dưới
+            alignItems: "center", // Căn giữa theo chiều ngang
+            maxWidth: "100%",
+            marginLeft: "2rem", // Thêm khoảng cách giữa hình ảnh chính và mô tả
+          }}
+        >
+          <CardContent>
+            <Typography variant="h4" fontWeight="bold">
+              Gói chăm sóc cá Koi tiêu chuẩn
+            </Typography>
+            <Typography variant="h6" color="primary">
+              Giá: 1.500.000đ/tháng
+            </Typography>
+            <Typography variant="body1">Bao gồm:</Typography>
+            <Typography
+              variant="body2"
+              component="ul"
+              sx={{ paddingLeft: "1.5rem" }}
+            >
+              <li>Kiểm tra sức khỏe định kỳ</li>
+              <li>Tư vấn chăm sóc cá Koi</li>
+            </Typography>
+          </CardContent>
+
+          {/* Căn giữa Button */}
+          <Button
+            className="careConsignment-btn"
           >
-            <CardContent>
-              <Typography variant="h5">Gói chăm sóc cá Koi tiêu chuẩn</Typography>
-              <Typography>Giá: 1.500.000đ/tháng</Typography>
-              <Typography>
-                Bao gồm kiểm tra sức khỏe định kỳ và tư vấn chăm sóc cá Koi.
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+            Ký gửi ngay
+            <LocalFireDepartmentIcon /> {/* Icon ngọn lửa bên phải */}
+          </Button>
+        </Card>
       </Grid>
     </div>
   );
