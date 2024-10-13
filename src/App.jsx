@@ -24,10 +24,12 @@ import LayoutTitle from "./components/layout/title";
 import SinglepProduct from "./components/single-product";
 import ShoppingCartPage from "./pages/shopping-cart";
 import ManageProductCombo from "./pages/admin/manageProductCombo";
+import WalletPage from "./pages/wallet";
 
 
 
 function App() {
+
   const router = createBrowserRouter([
     {
       path: "",
@@ -117,6 +119,11 @@ function App() {
           path: "/refund-policy",
           element: <RefundPolicy />,
         },
+
+        {
+          path  : "/wallet",
+          element : <WalletPage />
+        }
 
       ],
     },

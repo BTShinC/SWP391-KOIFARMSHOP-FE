@@ -6,7 +6,10 @@ import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 
 const Sidebar = ({ isOpen, onClose }) => {
-  const user = useSelector((state) => state.user); 
+  // Example of accessing user data
+const user = useSelector((state) => state.user);
+console.log("Current User:", user);
+
 
   return (
     <div className={`sidebar ${isOpen ? "open" : ""}`}>
@@ -27,9 +30,9 @@ const Sidebar = ({ isOpen, onClose }) => {
           <li>
             <div className="welcome-message">
               <p>Chào mừng, <br/>
-              {user.fullName}</p> {/* Display user's full name */}
+              {user.account.fullName}</p> {/* Display user's full name */}
               <p>Số dư tài khoản: <br/>
-              {user.accountBalance} VND</p> {/* Display account balance */}
+              {user.account.accountBalance} VND</p> {/* Display account balance */}
             </div>
           </li>
         )}
@@ -56,6 +59,13 @@ const Sidebar = ({ isOpen, onClose }) => {
           <li>
             <Link to="/" onClick={onClose}>
               Trạng thái ký gửi
+            </Link>
+          </li>
+        )}
+        {user && ( // Show logout link only if user is logged in
+          <li>
+            <Link to="/wallet" onClick={onClose}>
+              Nạp tiền
             </Link>
           </li>
         )}

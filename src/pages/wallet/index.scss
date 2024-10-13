@@ -1,0 +1,103 @@
+// src/pages/wallet/index.scss
+
+.wallet-page {
+    padding: 20px;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+    justify-content: center; 
+
+    h2 {
+        text-align: center;
+        padding-top: 5vh;
+        padding-bottom: 5vh;
+    }
+
+    .amount-selection {
+        display: flex; /* Use flexbox for button layout */
+        flex-direction: column; /* Stack buttons vertically */
+        align-items: center; /* Center buttons horizontally */
+        justify-content: center; /* Center buttons vertically if needed */
+        margin-bottom: 20px; /* Add some space below the button group */
+    }
+    .QR{
+        width: 30vw;
+        height: 80vh;
+        padding-bottom: 5vh;
+    }
+
+    .button-group {
+        display: flex; /* Use flexbox for button grouping */
+        justify-content: center; /* Center buttons in the group */
+        margin-bottom: 10px; /* Space between button groups */
+    }
+
+    .fixed-ammount-button {
+        background-color: #f9f1e7;
+        color: black;
+        border: 1px solid #d4c8b2;
+        font-weight: 600;
+        font-size: 1.1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        width: 20vw; /* Set width to 20% of the viewport width */
+        height: 20vh; /* Set height */
+        margin: 0 5px; /* Space between buttons */
+        transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition for hover and active states */
+
+        &:hover, &:focus, &.selected {
+            background-color: #e9e1d7; /* Change background on hover */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Add glow effect */
+        }
+    }
+
+    .confirm-button{
+        background-color: #f9f1e7;
+        color: black;
+        border: 1px solid #d4c8b2;
+        font-weight: 600;
+        font-size: 1.1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        width: 20vw; 
+        height: 10vh; /* Set height */
+        transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition for hover and active states */
+
+        &:hover {
+            background-color: #e9e1d7; /* Change background on hover */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Add glow effect */
+        }
+    }
+
+    input {
+        margin-top: 10px;
+        padding: 5px;
+        width: 40.5vw; /* Match the width of the buttons */
+        height: 10vh; /* Match the height of the buttons */
+        border: 1px solid #d4c8b2;
+        border-radius: 6px;
+        font-size: 1.1rem; /* Match font size with buttons */
+        transition: border-color 0.3s; /* Smooth transition for focus state */
+
+        &:focus {
+            border-color: #a68b6d; /* Change border color on focus */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Add glow effect */
+        }
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    }
+}
