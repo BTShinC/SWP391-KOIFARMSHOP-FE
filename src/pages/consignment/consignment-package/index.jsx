@@ -38,44 +38,53 @@ const koiCarePackages = [
     description:
       "Dịch vụ cao cấp bao gồm chăm sóc, điều trị, và tư vấn toàn diện.",
     services: ["Chăm sóc 24/7", "Tư vấn chuyên gia", "Bảo hiểm sức khỏe cá"],
-    image: "/public/ca-koi-chat-luong.webp",
+    image: "/public/images/ca-koi-chat-luong.webp",
+  },
+  {
+    id: 4,
+    title: "Gói lên màu cho cá Koi",
+    price: "3.500.000đ/tháng",
+    description:
+      "Dịch vụ chuyên nghiệp giúp tăng cường màu sắc cá Koi, cải thiện sức khỏe và ngoại hình.",
+    services: [
+      "Chăm sóc dinh dưỡng đặc biệt",
+      "Kiểm tra định kỳ tình trạng màu sắc",
+      "Tư vấn điều chỉnh chế độ chăm sóc",
+    ],
+    image: "/public/images/image 111.png",
   },
 ];
 
 function ConsignmentPackageExample() {
   const navigate = useNavigate();
   const handleCarePackageDetail = (id) => {
-    console.log(id); // Kiểm tra xem ID có chính xác không
-    navigate(`/carepackagedetail/${id}`); // Chuyển hướng đến URL với id
+    navigate(`/carepackagedetail/${id}`);
   };
   return (
     <>
-      <Grid container spacing={1} justifyContent="center" alignItems="stretch">
+      <Grid container spacing={3} justifyContent="center" alignItems="stretch">
         {koiCarePackages.map((product) => (
-          <Grid item xs={12} sm={6} md={4} key={product.id}>
-            <Card
-              className="hover-card"
-              sx={{
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-              }}
-            >
+          <Grid item xs={12} sm={6} key={product.id}>
+            <Card className="hover-card">
               <CardMedia
                 component="img"
                 src={product.image}
                 alt={product.title}
-                sx={{ width: "100%", height: "200px", objectFit: "cover" }}
+                className="card-media"
               />
               <CardContent>
                 <Typography variant="h6" gutterBottom>
                   {product.title}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                {/* Căn trái phần mô tả */}
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ textAlign: "left" }}
+                >
                   {product.description}
                 </Typography>
-                <ul>
+                <ul style={{ textAlign: "left" }}>
                   {product.services.map((service, index) => (
                     <li key={index}>
                       <Typography variant="body2" color="text.secondary">
@@ -90,11 +99,8 @@ function ConsignmentPackageExample() {
               </CardContent>
               <Box sx={{ textAlign: "center", paddingBottom: "1rem" }}>
                 <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => {
-                    handleCarePackageDetail(product.id);
-                  }}
+                  className="detail-care-package-btn"
+                  onClick={() => handleCarePackageDetail(product.id)}
                 >
                   Xem chi tiết
                 </Button>
@@ -104,7 +110,7 @@ function ConsignmentPackageExample() {
         ))}
       </Grid>
       <Box sx={{ textAlign: "center", marginTop: "2rem" }}>
-        <Button className="more-button" variant="outlined" color="primary">
+        <Button className="more-button" variant="outlined">
           Xem thêm
         </Button>
       </Box>

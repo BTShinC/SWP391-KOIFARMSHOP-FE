@@ -8,14 +8,15 @@ import {
 } from "@mui/material";
 import "./index.scss";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function CarePackageDetail() {
   const navigate = useNavigate();
-  const handleCareConsignmentFrom = () =>{
-    navigate('/consignmentFrom')
-  }
-  return (
+  const { id } = useParams();
+  const handleCareConsignmentFrom = () => {
+    navigate(`/consignmentFrom/${id}`);
+  };
+  return (  
     <div>
       {/* Tạo một hàng chứa tất cả các phần tử */}
       <Grid
@@ -93,7 +94,8 @@ function CarePackageDetail() {
           {/* Căn giữa Button */}
           <Button
             className="careConsignment-btn"
-            onClick={handleCareConsignmentFrom()}>
+            onClick={() => handleCareConsignmentFrom()}
+          >
             Ký gửi ngay
             <LocalFireDepartmentIcon /> {/* Icon ngọn lửa bên phải */}
           </Button>

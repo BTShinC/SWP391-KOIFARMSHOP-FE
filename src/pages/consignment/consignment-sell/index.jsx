@@ -1,21 +1,26 @@
-import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
-import { Button } from "antd";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Button,
+} from "@mui/material";
 import "./index.scss";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 function ConsignmentSell() {
   return (
-    <>
-      {/* Online Consignment Section */}
-      <Box className="online-consignment" sx={{ maxWidth: "45%" }}>
-        <Card sx={{height :"450px"}}>
+    <div className="form-of-sale">
+      <Box className="online-consignment">
+        <Card className="card">
           <CardMedia
             component="img"
             alt="Online Consignment"
             height="140"
-            image="public/online-image.png" // Path to your online consignment image
+            image="/public/images/a.jpg"
           />
-          <CardContent>
+          <CardContent className="card-content">
             <Button
               className="sell-online"
               onClick={() => console.log("Clicked on 'Ký gửi Online'")}
@@ -23,31 +28,34 @@ function ConsignmentSell() {
               Ký gửi Online
               <ArrowForwardIcon sx={{ marginLeft: "0.5rem" }} />
             </Button>
-            <Typography sx={{ textAlign: "justify" }}>
+            <Typography className="text-content">
               Với hình thức ký gửi online, bạn có thể dễ dàng ký gửi cá Koi của
               mình thông qua nền tảng trực tuyến của chúng tôi. Chúng tôi sẽ
               giúp bạn tiếp cận hàng ngàn khách hàng tiềm năng từ khắp nơi.
             </Typography>
-            <Typography sx={{ marginTop: "1rem", textAlign: "justify" }}>
+            <Typography className="text-content">
               Phù hợp cho người muốn tiện lợi và không cần di chuyển nhiều.
             </Typography>
-            <Button type="primary" sx={{ marginTop: "1rem" }}>
-              <b>Tìm hiểu thêm</b>
+            <Button
+              className="button-outline"
+              onClick={() => console.log("Clicked on 'Tìm hiểu thêm Online'")}
+            >
+              Tìm hiểu thêm
             </Button>
           </CardContent>
         </Card>
       </Box>
 
       {/* Offline Consignment Section */}
-      <Box className="offline-consignment" sx={{ maxWidth: "45%" }}>
-        <Card sx={{height:"450px"}} >
+      <Box className="offline-consignment">
+        <Card className="card">
           <CardMedia
             component="img"
             alt="Offline Consignment"
             height="140"
-            image="public/image.png" // Path to your offline consignment image
+            image="/public/images/a.jpg"
           />
-          <CardContent>
+          <CardContent className="card-content">
             <Button
               className="sell-offline"
               onClick={() => console.log("Clicked on 'Ký gửi Offline'")}
@@ -55,22 +63,25 @@ function ConsignmentSell() {
               Ký gửi Offline
               <ArrowForwardIcon sx={{ marginLeft: "0.5rem" }} />
             </Button>
-            <Typography sx={{ textAlign: "justify" }}>
+            <Typography className="text-content">
               Ký gửi offline giúp bạn mang cá Koi đến cửa hàng đối tác để trưng
               bày và bán. Đội ngũ chuyên gia sẽ chăm sóc và đảm bảo cá luôn
               trong tình trạng tốt nhất.
             </Typography>
-            <Typography sx={{ marginTop: "1rem", textAlign: "justify" }}>
+            <Typography className="text-content">
               Phù hợp cho người nuôi cá muốn bán nhanh và tiếp cận khách hàng
               trực tiếp.
             </Typography>
-            <Button type="primary" sx={{ marginTop: "1rem" }}>
-              <b>Tìm hiểu thêm</b>
+            <Button
+              className="button-outline"
+              onClick={() => console.log("Clicked on 'Tìm hiểu thêm Offline'")}
+            >
+              Tìm hiểu thêm
             </Button>
           </CardContent>
         </Card>
       </Box>
-    </>
+    </div>
   );
 }
 

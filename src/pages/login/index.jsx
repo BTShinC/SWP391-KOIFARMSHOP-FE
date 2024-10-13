@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import logo from "/public/images/logo.svg";
-import googleLogo from "/public/images/google.svg"; 
+import googleLogo from "/public/images/google.svg";
 import { Link, useNavigate } from "react-router-dom";
 import "./index.scss";
 import axios from "axios";
@@ -9,22 +9,29 @@ import firebase from "firebase/compat/app";
 import { initializeApp } from "firebase/app";
 import { Button, Form, Input } from "antd";
 import api from "../../config/api";
-// import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/features/userSlice";
 
-
+// const firebaseConfig = {
+//   apiKey: "AIzaSyDzdOryEzjKOSYu5q-EiTZyK5DcwwsUqms",
+//   authDomain: "koifarmshop-1f095.firebaseapp.com",
+//   projectId: "koifarmshop-1f095",
+//   storageBucket: "koifarmshop-1f095.appspot.com",
+//   messagingSenderId: "73945260552",
+//   appId: "1:73945260552:web:164c3f6496f53250b327bd",
+//   measurementId: "G-SNF9TGJ1Z6",
+// };
 const firebaseConfig = {
-  apiKey: "AIzaSyDzdOryEzjKOSYu5q-EiTZyK5DcwwsUqms",
-  authDomain: "koifarmshop-1f095.firebaseapp.com",
-  projectId: "koifarmshop-1f095",
-  storageBucket: "koifarmshop-1f095.appspot.com",
-  messagingSenderId: "73945260552",
-  appId: "1:73945260552:web:164c3f6496f53250b327bd",
-  measurementId: "G-SNF9TGJ1Z6",
+  apiKey: "AIzaSyC1FR1taMA2LB903p9pwrgKCuTxRa00unc",
+  authDomain: "fir-221c7.firebaseapp.com",
+  databaseURL: "https://fir-221c7-default-rtdb.firebaseio.com",
+  projectId: "fir-221c7",
+  storageBucket: "fir-221c7.appspot.com",
+  messagingSenderId: "349816085765",
+  appId: "1:349816085765:web:9eaa29856e4fc38507eb6c",
+  measurementId: "G-HVKNT20XLN",
 };
-
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
@@ -42,9 +49,6 @@ LoginPage.propTypes = {
 // };
 
 function LoginPage() {
-
-
-
   // const [formValue, setFormValue] = useState(initFormValue);
 
   // const handleChange = (event) => {
@@ -57,7 +61,6 @@ function LoginPage() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
 
   const handleLogin = async (values) => {
     try {
@@ -73,7 +76,6 @@ function LoginPage() {
 
       // lưu trữ thông tin của user
       // dispatch action
-      
     } catch (err) {
       console.error("Error response from API:", err.response?.data);
       toast.error(err.response.data);

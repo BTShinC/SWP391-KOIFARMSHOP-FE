@@ -1,4 +1,5 @@
 .consignment-page {
+  background-color: #fcf8f3;
   .consignment-page__intro {
     display: flex;
     justify-content: center;
@@ -60,15 +61,8 @@
     height: 530px;
     margin-top: 1rem;
     margin-bottom: 2rem;
-    background-position: center;
-    background-size: contain;
-    background-image: url(https://onkoi.vn/wp-content/uploads/2020/04/trang-chu_05.jpg);
   }
 
-  .consignment-package {
-    gap: 2rem;
-    background-color:#fcf8f3 ;
-  }
   .package-title {
     font-weight: 700;
     color: #ff5733;

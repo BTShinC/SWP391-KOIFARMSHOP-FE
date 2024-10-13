@@ -104,8 +104,8 @@ function App() {
           element: <PrivacyPolicy />,
         },
         {
-          path: "/consignmentFrom",
-          element: <ConsignmentForm/>,
+          path: "/consignmentFrom/:id",
+          element: <ConsignmentForm />,
         },
         {
           path: "/support-policy",

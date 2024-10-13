@@ -52,7 +52,7 @@ const editUser = async (data) => {
 
 const fetchAllProduct = async () => {
   try {
-    const response = await api.get("product");
+    const response = await api.get("product/getall");
     return response;
   } catch (error) {
     console.error(error);
@@ -70,7 +70,7 @@ const editFishInfo = async (data) => {
 };
 const addFish = async (data) => {
   try {
-    const response = await api.post(`product    `, data);
+    const response = await api.post(`product/possall`, data);
     return response;
   } catch (error) {
     console.error(error);
