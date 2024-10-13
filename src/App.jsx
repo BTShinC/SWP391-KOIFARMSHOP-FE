@@ -27,6 +27,7 @@ import ManageProductCombo from "./pages/admin/manageProductCombo";
 import Consignment from "./pages/consignment";
 import CarePackageDetail from "./pages/consignment/carePackage-detail";
 import ConsignmentForm from "./pages/consignment-form";
+import CarePackageList from "./pages/consignment/carePackage-list";
 
 function App() {
   const router = createBrowserRouter([
@@ -61,6 +62,10 @@ function App() {
         {
           path: "/userinfo",
           element: <UserInfoPage />,
+        },
+        {
+          path: "/carePackageList",
+          element: <CarePackageList />,
         },
         {
           path: "/consignment",

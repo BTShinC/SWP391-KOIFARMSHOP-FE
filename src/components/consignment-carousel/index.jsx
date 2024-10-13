@@ -2,8 +2,10 @@ import { Button, Carousel } from "antd";
 import { useRef } from "react";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import "./index.scss"; // Import file index.scss
+import { useNavigate } from "react-router-dom";
 
 function ConsignmentCarousel() {
+  const navigate = useNavigate()
   const slides = [
     {
       backgroundImage:
@@ -40,7 +42,7 @@ function ConsignmentCarousel() {
               style={{ backgroundImage: slide.backgroundImage }}
             >
               <div style={{ flexGrow: 1 }}></div>
-              <Button type="primary" className="carousel-button">
+              <Button type="primary" className="carousel-button" onClick={() => navigate('/carePackageList')}>
                 {slide.buttonLabel}
               </Button>
             </div>

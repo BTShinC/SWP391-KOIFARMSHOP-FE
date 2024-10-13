@@ -84,9 +84,8 @@ function ModalEditUser({ title, userData, className = "" }) {
   };
 
   const handleOk = () => {
-    
     setOpen(false);
-    console.log(formValue)
+    console.log(formValue);
   };
   return (
     <>
@@ -110,7 +109,7 @@ function ModalEditUser({ title, userData, className = "" }) {
         <form>
           <div className="edit-user__modal">
             <h2>Thông tin cá nhân</h2>
-            {className !== "modal-edit-user-button" && (
+            {className !== "modal-edit-user-button" ? (
               <div>
                 <label className="form-label">Ảnh đại diện:</label>
                 <Upload
@@ -128,65 +127,105 @@ function ModalEditUser({ title, userData, className = "" }) {
                     </div>
                   )}
                 </Upload>
+                <div>
+                  <label className="form-label">Họ và tên:</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="fullName"
+                    value={formValue.fullName}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div>
+                  <label className="form-label">Số điện thoại:</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="phoneNumber"
+                    value={formValue.phoneNumber}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div>
+                  <label className="form-label">Email:</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="email"
+                    value={formValue.email}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div>
+                  <label className="form-label">Địa chỉ:</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="address"
+                    value={formValue.address}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
               </div>
-            )}
-            <div>
-              <label className="form-label">Họ và tên:</label>
-              <input
-                className="form-control"
-                type="text"
-                name="fullName"
-                value={formValue.fullName}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label className="form-label">Số điện thoại:</label>
-              <input
-                className="form-control"
-                type="text"
-                name="phoneNumber"
-                value={formValue.phoneNumber}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label className="form-label">Email:</label>
-              <input
-                className="form-control"
-                type="text"
-                name="email"
-                value={formValue.email}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label className="form-label">Địa chỉ:</label>
-              <input
-                className="form-control"
-                type="text"
-                name="address"
-                value={formValue.address}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            {className == "modal-edit-user-button" && (
-              <div>
-                <label className="form-label">Role:</label>
-                <select
-                  className="form-control"
-                  type="number"
-                  name="role"
-                  value={formValue.roleID}
-                  onChange={handleChange}
-                >
-                  <option value="">Chọn vai trò</option>{" "}
-                  {/* Giá trị mặc định */}
-                  <option value="Admin">Quản trị viên</option>
-                  <option value="Customer">Khách hàng</option>
-                </select>
-              </div>
+            ) : (
+              className == "modal-edit-user-button" && (
+                <div>
+                  <div>
+                    <label className="form-label">Họ và tên:</label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      name="fullName"
+                      value={formValue.fullName}
+                      disabled
+                    />
+                  </div>
+                  <div>
+                    <label className="form-label">Số điện thoại:</label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      name="phoneNumber"
+                      value={formValue.phoneNumber}
+                      disabled
+                    />
+                  </div>
+                  <div>
+                    <label className="form-label">Email:</label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      name="email"
+                      value={formValue.email}
+                      disabled
+                    />
+                  </div>
+                  <div>
+                    <label className="form-label">Địa chỉ:</label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      name="address"
+                      value={formValue.address}
+                      disabled
+                    />
+                  </div>
+                  <label className="form-label">Vai trò:</label>
+                  <select
+                    className="form-control"
+                    type="number"
+                    name="role"
+                    value={formValue.roleID}
+                  >
+                    <option value="">Chọn vai trò</option>{" "}
+                    {/* Giá trị mặc định */}
+                    <option value="Admin">Quản trị viên</option>
+                    <option value="Customer">Khách hàng</option>
+                  </select>
+                </div>
+              )
             )}
           </div>
         </form>
@@ -194,5 +233,4 @@ function ModalEditUser({ title, userData, className = "" }) {
     </>
   );
 }
-
 export default ModalEditUser;

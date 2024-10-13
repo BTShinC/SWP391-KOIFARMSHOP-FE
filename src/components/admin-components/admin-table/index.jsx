@@ -42,7 +42,7 @@ const AdminTable = ({ columns, data, title, ModalComponent }) => {
                 {ModalComponent && (
                   <ModalComponent
                     userData={row}
-                    title="Chỉnh sửa"
+                    title="Chỉnh sửa vai trò"
                     className="modal-edit-user-button"
                   />
                 )}
