@@ -13,24 +13,14 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/features/userSlice";
 
-// const firebaseConfig = {
-//   apiKey: "AIzaSyDzdOryEzjKOSYu5q-EiTZyK5DcwwsUqms",
-//   authDomain: "koifarmshop-1f095.firebaseapp.com",
-//   projectId: "koifarmshop-1f095",
-//   storageBucket: "koifarmshop-1f095.appspot.com",
-//   messagingSenderId: "73945260552",
-//   appId: "1:73945260552:web:164c3f6496f53250b327bd",
-//   measurementId: "G-SNF9TGJ1Z6",
-// };
 const firebaseConfig = {
-  apiKey: "AIzaSyC1FR1taMA2LB903p9pwrgKCuTxRa00unc",
-  authDomain: "fir-221c7.firebaseapp.com",
-  databaseURL: "https://fir-221c7-default-rtdb.firebaseio.com",
-  projectId: "fir-221c7",
-  storageBucket: "fir-221c7.appspot.com",
-  messagingSenderId: "349816085765",
-  appId: "1:349816085765:web:9eaa29856e4fc38507eb6c",
-  measurementId: "G-HVKNT20XLN",
+  apiKey: "AIzaSyDzdOryEzjKOSYu5q-EiTZyK5DcwwsUqms",
+  authDomain: "koifarmshop-1f095.firebaseapp.com",
+  projectId: "koifarmshop-1f095",
+  storageBucket: "koifarmshop-1f095.appspot.com",
+  messagingSenderId: "73945260552",
+  appId: "1:73945260552:web:164c3f6496f53250b327bd",
+  measurementId: "G-SNF9TGJ1Z6",
 };
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
