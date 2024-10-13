@@ -136,6 +136,7 @@
         text-transform: uppercase;
         font-weight: bold;
         transition: background-color 0.3s ease;
+        z-index: 100; /* Đảm bảo nút được đặt trên các thành phần khác */
         &:hover {
           background-color: #8c6b42;
         }

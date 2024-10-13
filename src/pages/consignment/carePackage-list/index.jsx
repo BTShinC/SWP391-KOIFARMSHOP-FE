@@ -4,7 +4,6 @@ import "./index.scss";
 
 function CarePackageList() {
   const navigate = useNavigate(); // Khởi tạo useNavigate
-
   const koiCarePackages = [
     {
       id: 1,
@@ -32,16 +31,16 @@ function CarePackageList() {
   ];
 
   return (
-    <div className="care-package-list">  
+    <div className="care-package-list">
       <div className="care-package-container">
-            {/* Nút Trở lại */}
-            <Button
-        variant="contained"
-        className="back-button"
-        onClick={() => navigate(-1)} // Xử lý quay lại
-      >
-        Trở lại
-      </Button>
+        {/* Nút Trở lại */}
+        <Button
+          variant="contained"
+          className="back-button"
+          onClick={() => navigate(-1)} // Xử lý quay lại
+        >
+          Trở lại
+        </Button>
         <Typography variant="h3" className="package-title">
           Các gói chăm sóc
         </Typography>

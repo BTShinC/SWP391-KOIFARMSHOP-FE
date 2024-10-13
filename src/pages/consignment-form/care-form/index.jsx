@@ -15,6 +15,7 @@ import { storage } from "../../../firebase"; // Đảm bảo bạn đã cấu h�
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"; // Firebase storage functions
 import { useForm } from "react-hook-form";
 import "./index.scss";
+
 function CareForm() {
   const {
     register,
@@ -29,6 +30,7 @@ function CareForm() {
   const [fileList, setFileList] = useState([]);
   const [certFileList, setCertFileList] = useState([]); // Thêm state cho chứng nhận
   const [previewCertImage, setPreviewCertImage] = useState(""); // Preview chứng nhận
+
   // Preview ảnh khi chọn
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -118,179 +120,171 @@ function CareForm() {
     <div className="care-form" style={{ padding: "2rem" }}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={4}>
-          {/* Cột bên trái: Thông tin cá KOI */}
-          <Grid item xs={12} md={6}>
-            <h2 style={{ textAlign: "center", marginBottom: "2rem" }}>
-              Thông tin cá KOI
-            </h2>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Typography>Ảnh cá</Typography>
-                <Upload
-                  listType="picture-card"
-                  fileList={fileList}
-                  onPreview={handlePreview}
-                  onChange={handleChange}
-                  beforeUpload={() => false} // Tắt tự động upload
-                >
-                  {fileList.length >= 8 ? null : uploadButton}
-                </Upload>
-                {previewImage && (
-                  <Image
-                    wrapperStyle={{ display: "none" }}
-                    preview={{
-                      visible: previewOpen,
-                      onVisibleChange: (visible) => setPreviewOpen(visible),
-                    }}
-                    src={previewImage}
-                  />
-                )}
-              </Grid>
-              <Grid item xs={12}>
-                <Typography>Ảnh chứng nhận</Typography>
-                <Upload
-                  listType="picture-card"
-                  fileList={certFileList}
-                  onPreview={handleCertPreview}
-                  onChange={handleCertChange}
-                  beforeUpload={() => false}
-                >
-                  {certFileList.length >= 3 ? null : uploadButton}{" "}
-                  {/* Giới hạn số lượng file */}
-                </Upload>
-                {previewCertImage && (
-                  <Image
-                    wrapperStyle={{ display: "none" }}
-                    preview={{
-                      visible: previewOpen,
-                      onVisibleChange: (visible) => setPreviewOpen(visible),
-                    }}
-                    src={previewCertImage}
-                  />
-                )}
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  {...register("breed", { required: "Vui lòng nhập giống cá" })}
-                  label="Giống cá"
-                  fullWidth
-                  error={!!errors.breed}
-                  helperText={errors.breed?.message}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  {...register("origin", {
-                    required: "Vui lòng nhập nguồn gốc",
-                  })}
-                  label="Nguồn gốc"
-                  fullWidth
-                  error={!!errors.origin}
-                  helperText={errors.origin?.message}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControl fullWidth>
-                  <FormLabel id="demo-radio-buttons-group-label">
-                    Giới tính
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-radio-buttons-group-label"
-                    defaultValue="Đực"
-                    onChange={(event) => setValue("gender", event.target.value)}
-                  >
-                    <FormControlLabel
-                      value="Đực"
-                      control={<Radio />}
-                      label="Đực"
-                      {...register("gender")}
-                    />
-                    <FormControlLabel
-                      value="Cái"
-                      control={<Radio />}
-                      label="Cái"
-                      {...register("gender")}
-                    />
-                  </RadioGroup>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  {...register("healthStatus", {
-                    required: "Vui lòng nhập tình trạng sức khỏe cá",
-                  })}
-                  label="Tình trạng sức khỏe"
-                  fullWidth
-                  error={!!errors.healthStatus}
-                  helperText={errors.healthStatus?.message}
-                />
-              </Grid>
-            </Grid>
+          <Grid item xs={6}>
+            <Typography>Ảnh cá</Typography>
+            <Upload
+              listType="picture-card"
+              fileList={fileList}
+              onPreview={handlePreview}
+              onChange={handleChange}
+              beforeUpload={() => false} // Tắt tự động upload
+            >
+              {fileList.length >= 4 ? null : uploadButton}
+            </Upload>
+            {previewImage && (
+              <Image
+                wrapperStyle={{ display: "none" }}
+                preview={{
+                  visible: previewOpen,
+                  onVisibleChange: (visible) => setPreviewOpen(visible),
+                }}
+                src={previewImage}
+              />
+            )}
           </Grid>
 
-          {/* Cột bên phải: Thông tin khách hàng */}
-          <Grid item xs={12} md={6}>
-            <h2 style={{ textAlign: "center", marginBottom: "2rem" }}>
-              Thông tin khách hàng
-            </h2>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  {...register("fullName", {
-                    required: "Vui lòng nhập họ và tên",
-                  })}
-                  label="Họ và tên"
-                  fullWidth
-                  error={!!errors.fullName}
-                  helperText={errors.fullName?.message}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  {...register("email", { required: "Vui lòng nhập email" })}
-                  label="Email"
-                  fullWidth
-                  error={!!errors.email}
-                  helperText={errors.email?.message}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  {...register("phoneNumber", {
-                    required: "Vui lòng nhập số điện thoại",
-                  })}
-                  label="Số điện thoại"
-                  fullWidth
-                  error={!!errors.phoneNumber}
-                  helperText={errors.phoneNumber?.message}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  label="Gói chăm sóc"
-                  fullWidth
-                  value="GÓI CHĂM SÓC ĐẶC BIỆT" // Giá trị cố định
-                  disabled // Trường bị disable
-                  className="highlighted-textfield" // Áp dụng SCSS
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                <TextField
-                  {...register("description")}
-                  label="Ghi chú"
-                  fullWidth
-                  error={!!errors.description}
-                  helperText={errors.description?.message}
-                />
-              </Grid>
-            </Grid>
+          <Grid item xs={6}>
+            <Typography>Ảnh chứng nhận</Typography>
+            <Upload
+              listType="picture-card"
+              fileList={certFileList}
+              onPreview={handleCertPreview}
+              onChange={handleCertChange}
+              beforeUpload={() => false}
+            >
+              {certFileList.length >= 1 ? null : uploadButton}
+            </Upload>
+            {previewCertImage && (
+              <Image
+                wrapperStyle={{ display: "none" }}
+                preview={{
+                  visible: previewOpen,
+                  onVisibleChange: (visible) => setPreviewOpen(visible),
+                }}
+                src={previewCertImage}
+              />
+            )}
           </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              {...register("breed", { required: "Vui lòng nhập giống cá" })}
+              label="Giống cá"
+              fullWidth
+              error={!!errors.breed}
+              helperText={errors.breed?.message}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              {...register("origin", {
+                required: "Vui lòng nhập nguồn gốc",
+              })}
+              label="Nguồn gốc"
+              fullWidth
+              error={!!errors.origin}
+              helperText={errors.origin?.message}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <FormControl fullWidth>
+              <FormLabel id="demo-radio-buttons-group-label">
+                Giới tính
+              </FormLabel>
+              <RadioGroup
+                row
+                aria-labelledby="demo-radio-buttons-group-label"
+                defaultValue="Đực"
+                onChange={(event) => setValue("gender", event.target.value)}
+              >
+                <FormControlLabel
+                  value="Đực"
+                  control={<Radio />}
+                  label="Đực"
+                  {...register("gender")}
+                />
+                <FormControlLabel
+                  value="Cái"
+                  control={<Radio />}
+                  label="Cái"
+                  {...register("gender")}
+                />
+              </RadioGroup>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              {...register("healthStatus", {
+                required: "Vui lòng nhập tình trạng sức khỏe cá",
+              })}
+              label="Tình trạng sức khỏe"
+              fullWidth
+              error={!!errors.healthStatus}
+              helperText={errors.healthStatus?.message}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              {...register("fullName", {
+                required: "Vui lòng nhập họ và tên",
+              })}
+              label="Họ và tên"
+              fullWidth
+              error={!!errors.fullName}
+              helperText={errors.fullName?.message}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              {...register("email", { required: "Vui lòng nhập email" })}
+              label="Email"
+              fullWidth
+              error={!!errors.email}
+              helperText={errors.email?.message}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              {...register("phoneNumber", {
+                required: "Vui lòng nhập số điện thoại",
+              })}
+              label="Số điện thoại"
+              fullWidth
+              error={!!errors.phoneNumber}
+              helperText={errors.phoneNumber?.message}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              label="Gói chăm sóc"
+              fullWidth
+              value="GÓI CHĂM SÓC ĐẶC BIỆT" // Giá trị cố định
+              disabled // Trường bị disable
+              className="highlighted-textfield" // Áp dụng SCSS
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              {...register("description")}
+              label="Ghi chú"
+              fullWidth
+              error={!!errors.description}
+              helperText={errors.description?.message}
+            />
+          </Grid>
+
           {/* Nút Submit */}
           <Grid item xs={12} style={{ textAlign: "center", marginTop: "2rem" }}>
             <Button type="submit" className="submit-form-btn">
-              Submit
+              Xác nhận thông tin
             </Button>
           </Grid>
         </Grid>

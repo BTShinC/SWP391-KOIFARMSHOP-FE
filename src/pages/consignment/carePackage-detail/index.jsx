@@ -6,19 +6,32 @@ import {
   Typography,
   Button,
 } from "@mui/material";
-import "./index.scss";
+import { useState } from "react"; // Thêm useState để quản lý trạng thái hình ảnh
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import { useNavigate, useParams } from "react-router-dom";
+import "./index.scss";
 
 function CarePackageDetail() {
   const navigate = useNavigate();
   const { id } = useParams();
+
+  // Danh sách các hình ảnh nhỏ
+  const images = [
+    "/public/images/cakoi1.webp",
+    "/public/images/cakoi2.webp",
+    "/public/images/banner-JPD.jpg",
+  ];
+
+  // State để lưu hình ảnh chính
+  const [mainImage, setMainImage] = useState(images[0]);
+
+  // Hàm điều hướng đến trang ký gửi
   const handleCareConsignmentFrom = () => {
     navigate(`/consignmentFrom/${id}`);
   };
-  return (  
+
+  return (
     <div>
-      {/* Tạo một hàng chứa tất cả các phần tử */}
       <Grid
         container
         alignItems="center"
@@ -37,29 +50,26 @@ function CarePackageDetail() {
             alignItems: "center",
           }}
         >
-          <img
-            src="/public/images/cakoi1.webp"
-            alt="Cá Koi 1"
-            style={{ width: "80px", borderRadius: "8px" }}
-          />
-          <img
-            src="/public/images/cakoi1.webp"
-            alt="Cá Koi 2"
-            style={{ width: "80px", borderRadius: "8px" }}
-          />
-          <img
-            src="/public/images/cakoi1.webp"
-            alt="Cá Koi 3"
-            style={{ width: "80px", borderRadius: "8px" }}
-          />
+          {images.map((img, index) => (
+            <img
+              key={index}
+              src={img}
+              alt={`Cá Koi ${index + 1}`}
+              style={{ width: "80px", borderRadius: "8px" }}
+              onMouseEnter={() => setMainImage(img)} // Cập nhật hình ảnh chính khi hover
+            />
+          ))}
         </Box>
+
+        {/* Hình ảnh chính */}
         <Box className="main-img" sx={{ textAlign: "center" }}>
           <img
-            src="/public/images/cakoi1.webp"
+            src={mainImage} // Hiển thị hình ảnh chính từ state
             alt="Cá Koi chính"
             style={{ width: "300px", borderRadius: "8px" }}
           />
         </Box>
+
         {/* Phần mô tả */}
         <Card
           className="img-description"
@@ -67,10 +77,10 @@ function CarePackageDetail() {
             padding: "3rem",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "flex-start", // Căn từ trên xuống dưới
-            alignItems: "center", // Căn giữa theo chiều ngang
+            justifyContent: "flex-start",
+            alignItems: "center",
             maxWidth: "100%",
-            marginLeft: "2rem", // Thêm khoảng cách giữa hình ảnh chính và mô tả
+            marginLeft: "2rem",
           }}
         >
           <CardContent>
@@ -91,13 +101,13 @@ function CarePackageDetail() {
             </Typography>
           </CardContent>
 
-          {/* Căn giữa Button */}
+          {/* Nút ký gửi */}
           <Button
             className="careConsignment-btn"
             onClick={() => handleCareConsignmentFrom()}
           >
             Ký gửi ngay
-            <LocalFireDepartmentIcon /> {/* Icon ngọn lửa bên phải */}
+            <LocalFireDepartmentIcon />
           </Button>
         </Card>
       </Grid>

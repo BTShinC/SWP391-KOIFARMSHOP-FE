@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import "./index.scss"; // Import file SCSS của bạn
 import { useNavigate } from "react-router-dom";
-
+import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment"; // Import icon ngọn lửa
 const koiCarePackages = [
   {
     id: 1,
@@ -93,8 +93,10 @@ function ConsignmentPackageExample() {
                     </li>
                   ))}
                 </ul>
-                <Typography variant="h6" color="error">
+                {/* Cập nhật màu và kích thước giá */}
+                <Typography className="price-text">
                   {product.price}
+                  <LocalFireDepartmentIcon className="fire-icon" />
                 </Typography>
               </CardContent>
               <Box sx={{ textAlign: "center", paddingBottom: "1rem" }}>
@@ -110,7 +112,13 @@ function ConsignmentPackageExample() {
         ))}
       </Grid>
       <Box sx={{ textAlign: "center", marginTop: "2rem" }}>
-        <Button className="more-button" variant="outlined">
+        <Button
+          className="more-button"
+          variant="outlined"
+          onClick={() => {
+            navigate("/carePackageList");
+          }}
+        >
           Xem thêm
         </Button>
       </Box>
