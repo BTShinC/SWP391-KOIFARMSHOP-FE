@@ -52,7 +52,7 @@ const fetchAllUser = async () => {
 
 const fetchAllProduct = async () => {
   try {
-    const response = await api.get("product");
+    const response = await api.get("product/getall");
     return response;
   } catch (error) {
     console.error(error);
@@ -108,6 +108,24 @@ const fetchProductById = async (id) => {
   }
 };
 
+const addToCartAPI = async (data) => {
+  try {
+    const response = await api.post("shop-cart/add", data); // Endpoint API để thêm vào giỏ hàng
+    return response.data;
+  } catch (error) {
+    console.error("Error adding to cart:", error);
+    throw error;
+  }
+};
+const fetchUser = async () => {
+  try {
+    const response = await api.get("account"); // Điều chỉnh endpoint nếu cần
+    return response.data; // Trả về dữ liệu người dùng
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    throw error; // Ném lỗi để xử lý trong hàm gọi
+  }
+};
 export {
   Register,
   ChangePassword,
@@ -119,4 +137,6 @@ export {
   editComboInfo,
   fetchAllProductCombo,
   fetchProductById,
+  addToCartAPI,
+  fetchUser
 };

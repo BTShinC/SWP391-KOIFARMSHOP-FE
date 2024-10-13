@@ -4,57 +4,83 @@ import { Button, Typography, Image, Divider } from "antd";
 import Carousel from "../carousel";
 import { useState, useEffect } from "react";
 import ShoppingCart from "../shopping-cart";
-import { fetchProductById } from "../../service/userService";
+import { addToCartAPI, fetchProductById, fetchUser } from "../../service/userService";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../../pages/redux/features/userSlice";
+
 
 const { Title, Text } = Typography;
 
 function SinglepProduct() {
   const [cartVisible, setCartVisible] = useState(false);
   const [cartItems, setCartItems] = useState([]);
-  const [product, setProduct] = useState(null); // State to hold product details
-  // const productId = "1"; // Replace with the actual product ID
-  const { id } = useParams();
+  const { id } = useParams(); // Lấy productId từ URL
+  const [product, setProduct] = useState(null); // State để lưu thông tin sản phẩm
+  const dispatch = useDispatch(); // Khởi tạo dispatch
+  const accountId = useSelector((state) => state.user.accountId); // Lấy accountId từ Redux
 
-  const handleAddToCart = (product) => {
-    const existingItem = cartItems.find((item) => item.title === product.title);
-    if (existingItem) {
-      existingItem.quantity += 1; // Increase quantity if already exists
-      setCartItems([...cartItems]);
-    } else {
-      setCartItems((prevItems) => [...prevItems, { ...product, quantity: 1 }]);
-    }
-    setCartVisible(true);
-  };
-
+  // Fetch thông tin người dùng khi component mount
   useEffect(() => {
-    // Fetch product details by ID when the component mounts
+    const fetchUserData = async () => {
+      try {
+        const response = await fetchUser(); // Gọi API để lấy thông tin người dùng
+        dispatch(setUser({ accountId: response.accountId })); // Lưu accountId vào Redux
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+  
+    fetchUserData();
+  }, [dispatch]);
+
+
+  // Fetch sản phẩm từ backend khi component mount
+  useEffect(() => {
     const loadProduct = async () => {
       try {
         const response = await fetchProductById(id);
-        setProduct(response); // Set the product data in state
+        console.log("Fetched product:", response); // Kiểm tra giá trị sản phẩm
+        setProduct(response);
       } catch (error) {
         console.error("Error fetching product:", error);
       }
     };
-
+  
     loadProduct();
   }, [id]);
+  
+  const handleAddToCart = async (product) => {
+    // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+    const existingItem = cartItems.find((item) => item.title === product.title);
+
+    if (existingItem) {
+      existingItem.quantity += 1;
+      setCartItems([...cartItems]);
+    } else {
+      setCartItems((prevItems) => [...prevItems, { ...product, quantity: 1 }]);
+    }
+
+    // Gọi API để lưu vào database
+    try {
+      await addToCartAPI({
+        accountId: accountId, // Lấy accountId từ Redux
+        productId: product.productId, // Lấy productId từ đối tượng product
+      });
+      setCartVisible(true); // Hiển thị giỏ hàng
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    }
+  };
 
   return (
     <div className="single-product">
       <div className="breadcrumb-banner">
         <nav className="breadcrumb">
-          <Link to="/" className="breadcrumb-link faded">
-            HomePage
-          </Link>
+          <Link to="/" className="breadcrumb-link faded">HomePage</Link>
           <span className="breadcrumb-separator"> &gt; </span>
-          <Link to="/shop" className="breadcrumb-link faded">
-            Shop
-          </Link>
+          <Link to="/shop" className="breadcrumb-link faded">Shop</Link>
           <span className="breadcrumb-separator"> &gt; </span>
-          <span className="breadcrumb-current">
-            {product ? product.productName : "Loading..."}
-          </span>
+          <span className="breadcrumb-current">{product ? product.productName : "Loading..."}</span>
         </nav>
       </div>
 
@@ -63,84 +89,37 @@ function SinglepProduct() {
           <>
             <div className="image-gallery">
               <div className="thumbnail-container">
-                <Image
-                  src={product.image} // Replace with your thumbnail image path
-                  alt="Thumbnail 1"
-                  className="thumbnail"
-                />
-                <Image
-                  src={product.image} // Replace with your thumbnail image path
-                  alt="Thumbnail 2"
-                  className="thumbnail"
-                />
-                <Image
-                  src={product.image} // Replace with your thumbnail image path
-                  alt="Thumbnail 3"
-                  className="thumbnail"
-                />
+                <Image src={product.image} alt="Thumbnail 1" className="thumbnail" />
+                <Image src={product.image} alt="Thumbnail 2" className="thumbnail" />
+                <Image src={product.image} alt="Thumbnail 3" className="thumbnail" />
               </div>
-              <Image
-                src={product.image} // Replace with your main image path
-                alt="Main Product"
-                width={400}
-                height={400}
-                className="main-image"
-              />
+              <Image src={product.image} alt="Main Product" width={400} height={400} className="main-image" />
             </div>
 
             <div className="product-details">
               <Title level={6}>{product.productName}</Title>
-              <Text className="price" style={{ color: "#9F9F9F" }}>
-                Giá: {product.price} VNĐ
-              </Text>
-
+              <Text className="price" style={{ color: "#9F9F9F" }}>Giá: {product.price} VNĐ</Text>
               <Text>Tuổi: {product.size} tháng tuổi</Text>
               <Text>Giới tính: {product.sex}</Text>
-              <Text>Năm sinh: {product.origin}</Text>
               <Text>Kích thước: {product.size} cm</Text>
               <Text>Giống: {product.breed}</Text>
               <Text>Nguồn gốc: {product.origin}</Text>
 
-              <div className="color-selection">
-                <Text>Chọn màu sắc: </Text>
-                <Button
-                  className="color-option"
-                  style={{ backgroundColor: "white" }}
-                />
-                <Button
-                  className="color-option"
-                  style={{ backgroundColor: "red" }}
-                />
-                <Button
-                  className="color-option"
-                  style={{ backgroundColor: "black" }}
-                />
-              </div>
-
               <div className="action-buttons">
                 <Link to="/shoppingcart">
-                  <Button
-                    type="default"
-                    className="buy-button"
-                  >
-                    Mua ngay
-                  </Button>
+                  <Button type="default" className="buy-button">Mua ngay</Button>
                 </Link>
 
-                <Button
-                  type="default"
-                  className="buy-button"
-                  onClick={() =>
-                    handleAddToCart({
-                      image: product.image,
-                      title: product.productName,
-                      price: product.price,
-                    })
-                  }
-                >
+                <Button onClick={() => handleAddToCart({ 
+                  productId: product.productId, 
+                  title: product.productName, 
+                  price: product.price, 
+                  image: product.image 
+                })}>
                   Thêm vào giỏ hàng
                 </Button>
               </div>
+
               <div className="divider-wrapper">
                 <Divider />
               </div>
@@ -157,18 +136,6 @@ function SinglepProduct() {
           <Title level={2}>Mô tả</Title>
           <p>{product ? product.description : "Loading description..."}</p>
         </div>
-        <div className="image-section">
-          <img
-            src={product ? product.image : "/images/kohaku1.svg"}
-            alt="Sample"
-            className="description-image"
-          />
-          <img
-            src={product ? product.image : "/images/kohaku1.svg"}
-            alt="Sample"
-            className="description-image"
-          />
-        </div>
       </div>
 
       <div className="carousel-container">
@@ -177,16 +144,7 @@ function SinglepProduct() {
         </div>
         <Carousel slidesPerView={4} />
         <div className="button">
-          <Button
-            className="color-option"
-            style={{
-              backgroundColor: "white",
-              color: "#B88E2F",
-              marginTop: 70,
-              width: 150,
-              height: 50,
-            }}
-          >
+          <Button className="color-option" style={{ backgroundColor: "white", color: "#B88E2F", marginTop: 70, width: 150, height: 50 }}>
             Xem thêm
           </Button>
         </div>
@@ -194,10 +152,7 @@ function SinglepProduct() {
 
       {/* Show ShoppingCart if visible */}
       {cartVisible && (
-        <ShoppingCart
-          cartItems={cartItems}
-          onClose={() => setCartVisible(false)}
-        />
+        <ShoppingCart cartItems={cartItems} onClose={() => setCartVisible(false)} />
       )}
     </div>
   );

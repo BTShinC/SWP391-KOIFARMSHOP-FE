@@ -1,13 +1,22 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "antd"; // Nhập Button từ Ant Design
 import "./index.scss";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../pages/redux/features/userSlice";
 
 const Sidebar = ({ isOpen, onClose }) => {
   const user = useSelector((state) => state.user); 
+  const dispatch = useDispatch(); // Khai báo useDispatch để sử dụng action
+  const navigate = useNavigate(); // Sử dụng useNavigate để điều hướng
 
+
+  const handleLogout = () => {
+    dispatch(logout()); // Xóa trạng thái người dùng trong Redux
+    localStorage.removeItem("token"); // Xóa token khỏi localStorage
+    navigate("/"); // Điều hướng về trang chủ sau khi đăng xuất
+  };
   return (
     <div className={`sidebar ${isOpen ? "open" : ""}`}>
       <Button
@@ -45,9 +54,9 @@ const Sidebar = ({ isOpen, onClose }) => {
         </li>
         {user && ( // Show logout link only if user is logged in
           <li>
-            <Link to="/logout" onClick={onClose}>
+            <Button onClick={handleLogout} type="link" onClick={onClose}>
               Đăng xuất
-            </Link>
+            </Button>
           </li>
         )}
       </ul>

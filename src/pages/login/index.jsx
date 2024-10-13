@@ -63,17 +63,16 @@ function LoginPage() {
     try {
       const response = await api.post("login", values);
       console.log("Values sent to API:", values);
-
-      // Save user data to Redux
-      dispatch(login(response.data));
-      // chạy xuống đây => account này có tồn tại
+  
+      // Giả sử response.data chứa { accountId, token }
+      const { accountId, token } = response.data;
+  
+      // Lưu thông tin người dùng vào Redux
+      dispatch(login({ accountId, token }));
+  
       toast.success("Đăng nhập thành công");
-      // chuyển đến trang chủ
       navigate("/");
-
-      // lưu trữ thông tin của user
-      // dispatch action
-      
+  
     } catch (err) {
       console.error("Error response from API:", err.response?.data);
       toast.error(err.response.data);
