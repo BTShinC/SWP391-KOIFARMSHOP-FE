@@ -73,7 +73,7 @@
       position: relative;
 
       &:before {
-        content: '✔';
+        content: "✔";
         position: absolute;
         left: -2rem; /* Đẩy dấu check ra xa hơn */
         color: #a47c48;
@@ -81,7 +81,24 @@
     }
   }
 }
-
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 0.8rem 2rem;
+  background-color: #a47c48 !important;
+  color: #fff;
+  font-size: 1rem;
+  border-radius: 12px; // Giữ cho nút trở lại có độ cong tương tự các thành phần khác
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  z-index: 100; /* Đảm bảo nút được đặt trên các thành phần khác */
+  &:hover {
+    background-color: #8c6b42;
+  }
+}
 .careConsignment-btn {
   display: inline-flex; /* Đảm bảo nút giữ kích thước nhỏ gọn */
   margin: 40px auto 0 auto; /* Tăng khoảng cách trên nút */
@@ -108,4 +125,3 @@
     color: white; /* Màu của icon chuyển thành trắng khi hover */
   }
 }
-  

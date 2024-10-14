@@ -1,37 +1,20 @@
-import {
-  Button,
-  TextField,
-  Grid,
-  FormControlLabel,
-  RadioGroup,
-  FormControl,
-  FormLabel,
-  Radio,
-  Box,
-  Typography
-} from "@mui/material";
+import { Button, TextField, Grid, Box, Typography } from "@mui/material";
 import { Upload, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { storage } from "../../../firebase"; // Đảm bảo bạn đã cấu hình đúng Firebase
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"; // Firebase storage functions
 import { useForm } from "react-hook-form";
-import "./index.scss";
-
-function CareForm() {
+function SellFormCombo() {
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm();
 
-  // State để kiểm soát file upload
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState([]);
-  const [certFileList, setCertFileList] = useState([]); // Thêm state cho chứng nhận
-  const [previewCertImage, setPreviewCertImage] = useState(""); // Preview chứng nhận
 
   // Preview ảnh khi chọn
   const handlePreview = async (file) => {
@@ -42,23 +25,9 @@ function CareForm() {
     setPreviewOpen(true);
   };
 
-  // Preview ảnh khi chọn (Chứng nhận)
-  const handleCertPreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = URL.createObjectURL(file.originFileObj);
-    }
-    setPreviewCertImage(file.url || file.preview);
-    setPreviewOpen(true);
-  };
-
   // Xử lý thay đổi file list
   const handleChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
-  };
-
-  // Xử lý thay đổi chứng nhận
-  const handleCertChange = ({ fileList: newCertFileList }) => {
-    setCertFileList(newCertFileList); // Xử lý file chứng nhận
   };
 
   // Upload ảnh và chứng nhận lên Firebase
@@ -86,18 +55,16 @@ function CareForm() {
       return [];
     }
   };
-
   // Xử lý submit form
   const onSubmit = async (data) => {
     const uploadedImages = await uploadFilesToFirebase(fileList); // Upload file hình ảnh cá KOI
-    const uploadedCerts = await uploadFilesToFirebase(certFileList); // Upload file chứng nhận
-
     const finalData = {
       ...data,
       images: uploadedImages, // Thêm URL ảnh đã upload vào dữ liệu form
-      certifications: uploadedCerts, // Thêm URL chứng nhận vào dữ liệu form
+      type:"Ký gửi",
+      consignmentType: "Ký gửi để bán",
+      price:1,
     };
-
     console.log(
       "Form data with uploaded images and certifications:",
       finalData
@@ -123,12 +90,12 @@ function CareForm() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box>
           <Typography variant="h2" className="title-typography">
-            Ký gửi cá thể
+            Ký gửi theo lô
           </Typography>
         </Box>
         <Grid container spacing={4}>
           <Grid item xs={6}>
-            <Typography>Ảnh cá</Typography>
+            <Typography>Ảnh lô cá</Typography>
             <Upload
               listType="picture-card"
               fileList={fileList}
@@ -149,30 +116,6 @@ function CareForm() {
               />
             )}
           </Grid>
-
-          <Grid item xs={6}>
-            <Typography>Ảnh chứng nhận</Typography>
-            <Upload
-              listType="picture-card"
-              fileList={certFileList}
-              onPreview={handleCertPreview}
-              onChange={handleCertChange}
-              beforeUpload={() => false}
-            >
-              {certFileList.length >= 1 ? null : uploadButton}
-            </Upload>
-            {previewCertImage && (
-              <Image
-                wrapperStyle={{ display: "none" }}
-                preview={{
-                  visible: previewOpen,
-                  onVisibleChange: (visible) => setPreviewOpen(visible),
-                }}
-                src={previewCertImage}
-              />
-            )}
-          </Grid>
-
           <Grid item xs={12}>
             <TextField
               {...register("breed", { required: "Vui lòng nhập giống cá" })}
@@ -182,7 +125,44 @@ function CareForm() {
               helperText={errors.breed?.message}
             />
           </Grid>
-
+          <Grid item xs={12}>
+            <TextField
+              {...register("size", {
+                required: "Vui lòng kích thước trung bình",
+              })}
+              label="Kích thước trung bình"
+              fullWidth
+              error={!!errors.size}
+              helperText={errors.size?.message}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              {...register("quantity", {
+                required: "Vui lòng nhập số lượng",
+              })}
+              label="Số lượng"
+              fullWidth
+              type="number"
+              inputProps={{ min: 7 }}
+              error={!!errors.quantity}
+              helperText={errors.quantity?.message}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="Giá bán mong đợi"
+              {...register("desiredPrice", {
+                required: "Vui lòng nhập giá bạn mong muốn",
+              })}
+              fullWidth
+              type="number"
+              inputProps={{ min: 1 }}
+              error={!!errors.desiredPrice}
+              helperText={errors.desiredPrice?.message}
+              className="highlighted-textfield" // Áp dụng SCSS
+            />
+          </Grid>
           <Grid item xs={12}>
             <TextField
               {...register("origin", {
@@ -194,34 +174,6 @@ function CareForm() {
               helperText={errors.origin?.message}
             />
           </Grid>
-
-          <Grid item xs={12}>
-            <FormControl fullWidth>
-              <FormLabel id="demo-radio-buttons-group-label">
-                Giới tính
-              </FormLabel>
-              <RadioGroup
-                row
-                aria-labelledby="demo-radio-buttons-group-label"
-                defaultValue="Đực"
-                onChange={(event) => setValue("gender", event.target.value)}
-              >
-                <FormControlLabel
-                  value="Đực"
-                  control={<Radio />}
-                  label="Đực"
-                  {...register("gender")}
-                />
-                <FormControlLabel
-                  value="Cái"
-                  control={<Radio />}
-                  label="Cái"
-                  {...register("gender")}
-                />
-              </RadioGroup>
-            </FormControl>
-          </Grid>
-
           <Grid item xs={12}>
             <TextField
               {...register("healthStatus", {
@@ -233,7 +185,11 @@ function CareForm() {
               helperText={errors.healthStatus?.message}
             />
           </Grid>
-
+          <Grid item xs={12}>
+            <Box>
+              <Typography variant="h5">Thông tin khách hàng</Typography>
+            </Box>
+          </Grid>
           <Grid item xs={12}>
             <TextField
               {...register("fullName", {
@@ -267,17 +223,6 @@ function CareForm() {
               helperText={errors.phoneNumber?.message}
             />
           </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              label="Gói chăm sóc"
-              fullWidth
-              value="GÓI CHĂM SÓC ĐẶC BIỆT" // Giá trị cố định
-              disabled // Trường bị disable
-              className="highlighted-textfield" // Áp dụng SCSS
-            />
-          </Grid>
-
           <Grid item xs={12}>
             <TextField
               {...register("description")}
@@ -300,4 +245,4 @@ function CareForm() {
   );
 }
 
-export default CareForm;
+export default SellFormCombo;

@@ -28,7 +28,14 @@
       outline: none;
     }
   }
-
+  .title-typography {
+    color: #967d26; // Màu chữ
+    text-align: center; // Căn giữa
+    margin-top: 1rem; // Khoảng cách trên
+    margin-bottom: 1rem; 
+    font-weight: bold; // Chữ đậm
+    text-transform: uppercase; // Chuyển thành chữ hoa
+  }
   .highlighted-textfield {
     background-color: #fff8dc; /* Màu nền vàng nhạt */
     .MuiInputBase-input {

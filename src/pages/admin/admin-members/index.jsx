@@ -4,6 +4,7 @@ import AdminHeader from "../../../components/admin-components/admin-headers";
 import AdminSideBar from "../../../components/admin-components/admin-sidebar";
 import AdminTable from "/src/components/admin-components/admin-table/index";
 import { fetchAllUser } from "../../../service/userService";
+import ModalEditUser from "/src/pages/userinfo/EditUserModal/index";
 AdminMembers.propTypes = {};
 
 const columns = [
@@ -13,7 +14,7 @@ const columns = [
   "Số điện thoại",
   "Địa chỉ",
   "Số dư ví",
-  "Vai trò",
+  "Thao tác",
 ];
 const handleSearch = (value) => {
   console.log(value);
@@ -22,7 +23,7 @@ const handleSearch = (value) => {
 function AdminMembers() {
   useEffect(() => {
     getUser();
-  },[]);
+  }, []);
   const [userData, setUserData] = useState([]);
   const getUser = async () => {
     try {
@@ -35,8 +36,7 @@ function AdminMembers() {
       console.log(error);
     }
   };
-  const adminUsers = userData
-    .filter((user) => user.role === "admin")
+  const adminUsers = userData.filter((user) => user.roleName === "Admin");
 
   return (
     <div className="admin">
@@ -47,7 +47,12 @@ function AdminMembers() {
         <AdminHeader />
         <h1 className="content__title">Trang quản lý</h1>
         <AdminFilter onSearch={handleSearch} />
-        <AdminTable columns={columns} data={adminUsers} title="Thành viên" />
+        <AdminTable
+          columns={columns}
+          data={adminUsers}
+          title="Thành viên"
+          ModalComponent={ModalEditUser}
+        />
       </div>
     </div>
   );

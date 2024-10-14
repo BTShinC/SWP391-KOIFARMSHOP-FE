@@ -109,7 +109,7 @@ function App() {
           element: <PrivacyPolicy />,
         },
         {
-          path: "/consignmentFrom/:id",
+          path: "/consignmentFrom",
           element: <ConsignmentForm />,
         },
         {

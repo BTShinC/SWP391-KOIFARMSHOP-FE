@@ -39,6 +39,8 @@ const Admin = () => {
     }
   };
   
+  const users = userData.filter((user)=>user.roleName === "Customer")
+
   console.log(userData);
   return (
     <div className="admin">
@@ -51,7 +53,7 @@ const Admin = () => {
         <h1 className="content__title">Trang quản lý</h1>
         <AdminFilter onSearch={handleSearch} buttonText="Thêm mới người dùng" />
         <AdminTable
-          data={userData}
+          data={users}
           columns={columns}
           title="Hồ sơ khách hàng"
           ModalComponent={ModalEditUser} // Truyền ModalEditUser vào đây

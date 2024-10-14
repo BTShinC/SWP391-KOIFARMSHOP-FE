@@ -8,7 +8,7 @@ import {
   FormLabel,
   Radio,
   Box,
-  Typography
+  Typography,
 } from "@mui/material";
 import { Upload, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
@@ -16,9 +16,9 @@ import { useState } from "react";
 import { storage } from "../../../firebase"; // Đảm bảo bạn đã cấu hình đúng Firebase
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"; // Firebase storage functions
 import { useForm } from "react-hook-form";
-import "./index.scss";
-
-function CareForm() {
+import './index.scss'
+import SellFormCombo from "../sell-form-combo";
+function SellForm() {
   const {
     register,
     handleSubmit,
@@ -32,6 +32,12 @@ function CareForm() {
   const [fileList, setFileList] = useState([]);
   const [certFileList, setCertFileList] = useState([]); // Thêm state cho chứng nhận
   const [previewCertImage, setPreviewCertImage] = useState(""); // Preview chứng nhận
+  const [isBatchSell, setIsBatchSell] = useState(false); // State để theo dõi loại form
+
+  // Nếu người dùng chọn ký gửi bán lô thì render component khác
+  if (isBatchSell) {
+    return <SellFormCombo/>;
+  }
 
   // Preview ảnh khi chọn
   const handlePreview = async (file) => {
@@ -86,7 +92,7 @@ function CareForm() {
       return [];
     }
   };
-
+ 
   // Xử lý submit form
   const onSubmit = async (data) => {
     const uploadedImages = await uploadFilesToFirebase(fileList); // Upload file hình ảnh cá KOI
@@ -94,8 +100,12 @@ function CareForm() {
 
     const finalData = {
       ...data,
-      images: uploadedImages, // Thêm URL ảnh đã upload vào dữ liệu form
-      certifications: uploadedCerts, // Thêm URL chứng nhận vào dữ liệu form
+      images: uploadedImages,
+      certifications: uploadedCerts,
+      Status: "Còn hàng",
+      Type: "Ký gửi",
+      consignmentType: "Ký gửi để bán",
+      price: 1,
     };
 
     console.log(
@@ -121,11 +131,34 @@ function CareForm() {
   return (
     <div className="care-form" style={{ padding: "2rem" }}>
       <form onSubmit={handleSubmit(onSubmit)}>
+        <Grid item xs={12} className="button-container">
+          {/* Nút Quay lại */}
+          <Button
+            onClick={() => {
+              console.log("Quay lại");
+              // Quay lại trang trước hoặc trang chủ
+              window.history.back();
+            }}
+            className="back-button"
+          >
+            Quay lại
+          </Button>
+          <Button
+            onClick={() => {
+              setIsBatchSell(true)
+              // Chuyển sang form ký gửi bán lô - có thể điều hướng hoặc setState
+            }}
+            className="batch-sell-button"
+          >
+            Chuyển sang ký gửi bán lô
+          </Button>
+        </Grid>
         <Box>
           <Typography variant="h2" className="title-typography">
-            Ký gửi cá thể
+            Ký gửi bán cá thể
           </Typography>
         </Box>
+
         <Grid container spacing={4}>
           <Grid item xs={6}>
             <Typography>Ảnh cá</Typography>
@@ -182,7 +215,19 @@ function CareForm() {
               helperText={errors.breed?.message}
             />
           </Grid>
-
+          <Grid item xs={12}>
+            <TextField
+              {...register("size", {
+                required: "Vui lòng nhập kích thước",
+              })}
+              label="Kích thước ( cm ) "
+              fullWidth
+              type="number"
+              inputProps={{ min: 1 }}
+              error={!!errors.size}
+              helperText={errors.size?.message}
+            />
+          </Grid>
           <Grid item xs={12}>
             <TextField
               {...register("origin", {
@@ -233,8 +278,21 @@ function CareForm() {
               helperText={errors.healthStatus?.message}
             />
           </Grid>
-
           <Grid item xs={12}>
+            <TextField
+              {...register("personalityTrait", {
+                required: "Vui lòng nhập tính cách cá",
+              })}
+              label="Tính cách"
+              fullWidth
+              error={!!errors.personalityTrait}
+              helperText={errors.personalityTrait?.message}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Box>
+              <Typography variant="h5">Thông tin khách hàng</Typography>
+            </Box>
             <TextField
               {...register("fullName", {
                 required: "Vui lòng nhập họ và tên",
@@ -270,11 +328,16 @@ function CareForm() {
 
           <Grid item xs={12}>
             <TextField
-              label="Gói chăm sóc"
+              {...register("desiredPrice", {
+                required: "Vui lòng nhập giá bạn mong muốn",
+              })}
+              label="Giá mong muốn"
               fullWidth
-              value="GÓI CHĂM SÓC ĐẶC BIỆT" // Giá trị cố định
-              disabled // Trường bị disable
-              className="highlighted-textfield" // Áp dụng SCSS
+              type="number"
+              inputProps={{ min: 1 }}
+              error={!!errors.desiredPrice}
+              helperText={errors.desiredPrice?.message}
+              className="highlighted-textfield"
             />
           </Grid>
 
@@ -300,4 +363,4 @@ function CareForm() {
   );
 }
 
-export default CareForm;
+export default SellForm;
