@@ -1,74 +1,81 @@
-import { Button, Divider, Modal, List } from "antd";
+import { Button, Divider, Modal, List, message, Spin } from "antd";
 import "./index.scss";
 import { CloseOutlined, ShoppingOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { addToCart } from "../../pages/redux/features/createSlice";
+import { setCartItems, removeFromCart, updateQuantity } from "../../pages/redux/features/createSlice";
 import { useEffect, useState } from "react";
-
+import { fetchCartItems } from "../../service/userService";
 
 const ShoppingCart = ({ onClose }) => {
   const cartItems = useSelector(state => state.cart.items);
+  const account = useSelector((state) => state.user.account);
   const dispatch = useDispatch();
-  const [modalItems, setModalItems] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setModalItems(cartItems);
-  }, [cartItems]);
+    console.log("Current account:", account);
+    const loadCartItems = async () => {
+      if (account && account.accountID) {
+        try {
+          setLoading(true);
+          const items = await fetchCartItems(account.accountID);
+          dispatch(setCartItems(items));
+        } catch (error) {
+          console.error("Failed to load cart items:", error);
+          message.error("Không thể tải giỏ hàng");
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        console.log("No account ID available");
+        setLoading(false);
+      }
+    };
 
-  const subtotal = modalItems.reduce(
+    loadCartItems();
+  }, [account, dispatch]);
+
+  const subtotal = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
 
-  const handleAddToCart = (item) => {
-    // Dispatch to Redux store
-    dispatch(addToCart({ ...item, quantity: 1 }));
-
-    // Add to modal items
-    setModalItems(prevItems => {
-      const existingItemIndex = prevItems.findIndex(i => i.id === item.id);
-      if (existingItemIndex !== -1) {
-        // If item exists, create a new array with updated quantity
-        return prevItems.map((i, index) => 
-          index === existingItemIndex ? { ...i, quantity: i.quantity + 1 } : i
-        );
-      } else {
-        // If item doesn't exist, add it to the array
-        return [...prevItems, { ...item, quantity: 1 }];
-      }
-    });
-
-    // Save to database
-    saveOrderToDatabase({ ...item, quantity: 1 });
-  };
-
-  const saveOrderToDatabase = async (item) => {
+  const handleUpdateQuantity = async (itemId, newQuantity) => {
     try {
-      const response = await fetch('/api/orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(item),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to save order');
+      if (newQuantity > 0) {
+        dispatch(updateQuantity({ id: itemId, quantity: newQuantity }));
+      } else {
+        dispatch(removeFromCart(itemId));
       }
-      console.log('Order saved successfully');
     } catch (error) {
-      console.error('Error saving order:', error);
+      console.error("Error updating cart:", error);
+      message.error("Không thể cập nhật giỏ hàng");
     }
   };
 
+  const handleRemoveFromCart = async (itemId) => {
+    try {
+      dispatch(removeFromCart(itemId));
+      message.success("Đã xóa sản phẩm khỏi giỏ hàng");
+    } catch (error) {
+      console.error("Error removing item from cart:", error);
+      message.error("Không thể xóa sản phẩm khỏi giỏ hàng");
+    }
+  };
+
+  if (loading) {
+    return <Spin size="large" />;
+  }
+
   return (
     <Modal
-      visible={true}
+      open={true}
       footer={null}
       closable={false}
       width={417}
       style={{ top: 20, right: 20, position: "fixed" }}
-      bodyStyle={{ padding: "20px", position: "relative" }}
+      styles={{ body: { padding: "20px", position: "relative" } }}
     >
       <Button
         className="close-button"
@@ -83,33 +90,39 @@ const ShoppingCart = ({ onClose }) => {
       <Divider style={{ backgroundColor: "#D9D9D9" }} />
       <List
         itemLayout="horizontal"
-        dataSource={modalItems}
+        dataSource={cartItems}
         renderItem={(item) => (
           <List.Item>
             <List.Item.Meta
               avatar={
                 <img
                   src={item.image}
-                  alt={item.name}
+                  alt={item.productName}
                   style={{ width: 50, height: 50 }}
                 />
               }
-              title={item.name}
+              title={item.productName}
               description={
                 <>
-                  SL: {item.quantity} x
-                  <span style={{ color: "#B88E2F" }}> {item.price.toLocaleString("vi-VN")}VNĐ</span>
+                  <div>
+                    <strong>Giống:</strong> {item.breed} <br />
+                    <strong>Số lượng:</strong> {item.quantity} <br />
+                    <strong>Giá:</strong> {item.price.toLocaleString("vi-VN")} VNĐ
+                  </div>
+                  <Button onClick={() => handleUpdateQuantity(item.productID, item.quantity - 1)}>-</Button>
+                  {item.quantity}
+                  <Button onClick={() => handleUpdateQuantity(item.productID, item.quantity + 1)}>+</Button>
                 </>
               }
             />
-            <Button onClick={() => handleAddToCart(item)}>Thêm vào giỏ hàng</Button>
+            <Button onClick={() => handleRemoveFromCart(item.productID)}>Xóa</Button>
           </List.Item>
         )}
       />
       <br />
       <h5>
         Tổng:{" "}
-        <span style={{ color: "#B88E2F", paddingLeft: 60 }}>{subtotal.toLocaleString("vi-VN")}VNĐ</span>
+        <span style={{ color: "#B88E2F", paddingLeft: 60 }}>{subtotal.toLocaleString("vi-VN")} VNĐ</span>
       </h5>
 
       <Divider />
@@ -118,8 +131,8 @@ const ShoppingCart = ({ onClose }) => {
         <Link to="/shoppingcart">
           <Button type="default">Giỏ hàng</Button>
         </Link>
-        <Link to="/">
-          <Button type="default">Thanh toán</Button>
+        <Link to="/checkout">
+          <Button type="primary">Thanh toán</Button>
         </Link>
       </div>
     </Modal>

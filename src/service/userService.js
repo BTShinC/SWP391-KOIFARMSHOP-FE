@@ -110,22 +110,31 @@ const fetchProductById = async (id) => {
 
 const addToCartAPI = async (data) => {
   try {
-    const response = await api.post("shop-cart/add", data); // Endpoint API để thêm vào giỏ hàng
+    console.log("Data being sent to API:", data);
+    const response = await api.post("shop-cart/add", {
+      accountId: data.accountId,
+      productId: data.productId
+    });
+    console.log("API response:", response.data);
     return response.data;
   } catch (error) {
-    console.error("Error adding to cart:", error);
+    console.error("Error adding to cart:", error.response?.data || error.message);
     throw error;
   }
 };
-const fetchUser = async () => {
+
+const fetchCartItems = async (accountId) => {
   try {
-    const response = await api.get("account"); // Điều chỉnh endpoint nếu cần
-    return response.data; // Trả về dữ liệu người dùng
+    console.log("Fetching cart items for account:", accountId);
+    const response = await api.get(`shop-cart/account/${accountId}`);
+    console.log("Cart items response:", response.data);
+    return response.data;
   } catch (error) {
-    console.error("Error fetching user data:", error);
-    throw error; // Ném lỗi để xử lý trong hàm gọi
+    console.error("Error fetching cart items:", error);
+    throw error;
   }
 };
+
 export {
   Register,
   ChangePassword,
@@ -138,5 +147,5 @@ export {
   fetchAllProductCombo,
   fetchProductById,
   addToCartAPI,
-  fetchUser
+  fetchCartItems,
 };

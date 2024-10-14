@@ -19,7 +19,7 @@ function AddFishModal({ title, visible, onClose,onChange }) {
     breed: "",
     size: "",
     sex: "",
-    age: 1,
+    // age: 1,
     healthStatus: "",
     personalityTrait: "",
     origin: "",
