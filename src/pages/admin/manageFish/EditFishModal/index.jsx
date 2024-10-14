@@ -145,7 +145,7 @@ function EditFishModal({ fishData, onChange }) {
       type: formValue.type,
       quantity: 1,
       status: formValue.status,
-      desiredPrice: formValue.price,
+      desiredPrice: formValue.desiredPrice,
       consignmentType: formValue.consignmentType,
     };
     console.log(data);
@@ -330,18 +330,50 @@ function EditFishModal({ fishData, onChange }) {
                 readOnly
               ></input>
             </div>
-            <div>
-              <label className="form-label">Giá:</label>
-              <input
-                className="form-control"
-                type="number"
-                name="price"
-                min={1}
-                value={formValue.price}
-                onChange={handleChange}
-                required
-              />
-            </div>
+            {formValue.consignmentType === "Ký gửi để bán" ? (
+              <>
+                {" "}
+                <div>
+                  <label className="form-label">Giá đăng bán:</label>
+                  <input
+                    className="form-control"
+                    type="number"
+                    name="price"
+                    min={1}
+                    value={formValue.price}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="form-label">
+                    Giá khách hàng mong muốn:
+                  </label>
+                  <input
+                    className="form-control"
+                    type="number"
+                    name="desiredPrice"
+                    min={1}
+                    value={formValue.desiredPrice}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </>
+            ) : (
+              <div>
+                <label className="form-label">Giá đăng bán:</label>
+                <input
+                  className="form-control"
+                  type="number"
+                  name="price"
+                  min={1}
+                  value={formValue.price}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            )}
           </div>
         </form>
       </Modal>

@@ -70,7 +70,7 @@ const editFishInfo = async (data) => {
 };
 const addFish = async (data) => {
   try {
-    const response = await api.post(`product/possall`, data);
+    const response = await api.post(`product/postall`, data);
     return response;
   } catch (error) {
     console.error(error);
