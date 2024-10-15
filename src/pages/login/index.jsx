@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import logo from "/public/images/logo.svg";
-import googleLogo from "/public/images/google.svg"; 
+import googleLogo from "/public/images/google.svg";
 import { Link, useNavigate } from "react-router-dom";
 import "./index.scss";
 import axios from "axios";
@@ -13,6 +13,8 @@ import api from "../../config/api";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/features/userSlice";
+
+
 
 
 const firebaseConfig = {
@@ -63,12 +65,16 @@ function LoginPage() {
     try {
       const response = await api.post("login", values);
       console.log("Values sent to API:", values);
+      console.log("Response from API:", response.data);
+      // Log the roleName to the console
+      console.log("User Role Name:", response.data.account.roleName); // Log the roleName
+
 
       // Save user data to Redux
       dispatch(login(response.data));
 
       // Check user role and navigate accordingly
-      if (response.data.role === "Admin") {
+      if (response.data.account.roleName === "Admin") {
         navigate("/admin"); // Navigate to admin page if role is Admin
       } else {
         navigate("/"); // Navigate to homepage for other roles
@@ -80,7 +86,7 @@ function LoginPage() {
 
       // lưu trữ thông tin của user
       // dispatch action
-      
+
     } catch (err) {
       console.error("Error response from API:", err.response?.data);
       toast.error(err.response.data);

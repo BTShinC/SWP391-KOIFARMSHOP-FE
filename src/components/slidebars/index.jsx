@@ -84,6 +84,13 @@ console.log("Current User:", user);
             </Link>
           </li>
         )}
+        {/* {user && user.account.roleName === "Admin" && ( // Show admin button if user is an admin
+          <li>
+            <Link to="/admin" onClick={onClose}>
+              <Button type="primary">Quản lý Admin</Button>
+            </Link>
+          </li>
+        )} */}
       </ul>
     </div>
   );

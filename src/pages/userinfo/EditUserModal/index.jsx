@@ -183,8 +183,8 @@ function ModalEditUser({ title, userData, className = "" }) {
                 >
                   <option value="">Chọn vai trò</option>{" "}
                   {/* Giá trị mặc định */}
-                  <option value="admin">Quản trị viên</option>
-                  <option value="customer">Khách hàng</option>
+                  <option value="Admin">Quản trị viên</option>
+                  <option value="Customer">Khách hàng</option>
                 </select>
               </div>
             )}
