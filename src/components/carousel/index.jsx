@@ -16,6 +16,7 @@ const { Meta } = Card;
 export default function Carousel({ slidesPerView = 4 }) {
   const [products, setProducts] = useState([]);
 
+
   useEffect(() => {
     // Fetch products from API
     const loadProducts = async () => {
@@ -30,6 +31,7 @@ export default function Carousel({ slidesPerView = 4 }) {
 
     loadProducts();
   }, []);
+
 
   
 

@@ -48,6 +48,13 @@ function ProductPage() {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     }
+    const formatCurrency = (amount) => {
+        return new Intl.NumberFormat('vi-VN', {
+          style: 'decimal',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).format(amount);
+      };
 
     useEffect(() => {
         // Fetch products from API
@@ -105,7 +112,7 @@ function ProductPage() {
                                         <p>Giống: {product.breed}</p>
                                         <p>Kích thước: {product.size}</p>
                                         <p>Giới tính: {product.sex}</p>
-                                        <p className="price">Giá: {product.price} VND</p>
+                                        <p className="price">{formatCurrency(product.price)} VND</p>
 
                                         <div className="select-button-wrapper">
 

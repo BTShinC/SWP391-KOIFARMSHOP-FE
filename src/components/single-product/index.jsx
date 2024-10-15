@@ -14,6 +14,13 @@ function SinglepProduct() {
   const [product, setProduct] = useState(null); // State to hold product details
   // const productId = "1"; // Replace with the actual product ID
   const { id } = useParams();
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'decimal',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
 
   const handleAddToCart = (product) => {
     const existingItem = cartItems.find((item) => item.title === product.title);
@@ -45,11 +52,11 @@ function SinglepProduct() {
       <div className="breadcrumb-banner">
         <nav className="breadcrumb">
           <Link to="/" className="breadcrumb-link faded">
-            HomePage
+            Trang chủ
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
-          <Link to="/shop" className="breadcrumb-link faded">
-            Shop
+          <Link to="/product" className="breadcrumb-link faded">
+            Cá Koi Nhật
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
           <span className="breadcrumb-current">
@@ -91,7 +98,7 @@ function SinglepProduct() {
             <div className="product-details">
               <Title level={6}>{product.productName}</Title>
               <Text className="price" style={{ color: "#9F9F9F" }}>
-                Giá: {product.price} VNĐ
+                Giá: {formatCurrency(product.price)} VNĐ
               </Text>
 
               <Text>Tuổi: {product.size} tháng tuổi</Text>
@@ -102,7 +109,7 @@ function SinglepProduct() {
               <Text>Nguồn gốc: {product.origin}</Text>
 
               <div className="color-selection">
-                <Text>Chọn màu sắc: </Text>
+                <Text>Màu sắc: </Text>
                 <Button
                   className="color-option"
                   style={{ backgroundColor: "white" }}
