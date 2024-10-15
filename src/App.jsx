@@ -24,6 +24,7 @@ import LayoutTitle from "./components/layout/title";
 import SinglepProduct from "./components/single-product";
 import ShoppingCartPage from "./pages/shopping-cart";
 import ManageProductCombo from "./pages/admin/manageProductCombo";
+import ManageTransactions from "./pages/admin/manageTransactions";
 import WalletPage from "./pages/wallet";
 
 
@@ -158,6 +159,10 @@ function App() {
     {
       path: "/manageProductCombo",
       element: <ManageProductCombo/>,
+    },
+    {
+      path: "/manageTransaction",
+      element: <ManageTransactions/>,
     },
     {
       path :"/blog/:id" ,

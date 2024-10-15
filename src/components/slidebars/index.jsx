@@ -10,6 +10,14 @@ const Sidebar = ({ isOpen, onClose }) => {
 const user = useSelector((state) => state.user);
 console.log("Current User:", user);
 
+  // Function to format the account balance
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'decimal',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
 
   return (
     <div className={`sidebar ${isOpen ? "open" : ""}`}>
@@ -32,7 +40,7 @@ console.log("Current User:", user);
               <p>Chào mừng, <br/>
               {user.account.fullName}</p> {/* Display user's full name */}
               <p>Số dư tài khoản: <br/>
-              {user.account.accountBalance} VND</p> {/* Display account balance */}
+              {formatCurrency(user.account.accountBalance)} VND{/* Display formatted account balance */}</p>
             </div>
           </li>
         )}
@@ -82,8 +90,8 @@ console.log("Current User:", user);
 };
 
 Sidebar.propTypes = {
-  isOpen: PropTypes.func,
-  onClose: PropTypes.func,
+  isOpen: PropTypes.bool.isRequired, // Change to bool
+  onClose: PropTypes.func.isRequired,
 };
 
 export default Sidebar;

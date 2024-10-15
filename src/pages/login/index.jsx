@@ -66,7 +66,14 @@ function LoginPage() {
 
       // Save user data to Redux
       dispatch(login(response.data));
-      // chạy xuống đây => account này có tồn tại
+
+      // Check user role and navigate accordingly
+      if (response.data.role === "Admin") {
+        navigate("/admin"); // Navigate to admin page if role is Admin
+      } else {
+        navigate("/"); // Navigate to homepage for other roles
+      }
+
       toast.success("Đăng nhập thành công");
       // chuyển đến trang chủ
       navigate("/");
@@ -109,6 +116,7 @@ function LoginPage() {
 
       // Điều hướng đến trang home
       navigate("/");
+
     } catch (error) {
       console.error("Error logging in with Google:", error);
     }
