@@ -27,7 +27,7 @@ function EditFishModal({ fishData, onChange }) {
     certificate: fishData.certificate,
     type: fishData.type,
     quantity: 1,
-    status: "Còn hàng",
+    status: fishData.status,
     desiredPrice: fishData.desiredPrice,
     consignmentType: fishData.consignmentType,
     carePackageID: fishData.carePackageID,
@@ -129,7 +129,7 @@ function EditFishModal({ fishData, onChange }) {
     console.log("Form value:", formValue);
 
     const data = {
-      id: fishData.productID,
+      productID: fishData.productID,
       productName: fishData.productName,
       breed: formValue.breed,
       size: formValue.size,
@@ -144,7 +144,7 @@ function EditFishModal({ fishData, onChange }) {
       certificate: formValue.certificate,
       type: formValue.type,
       quantity: 1,
-      status: formValue.status,
+      status: fishData.status,
       desiredPrice: formValue.desiredPrice,
       consignmentType: formValue.consignmentType,
     };

@@ -61,7 +61,7 @@ const fetchAllProduct = async () => {
 };
 const editFishInfo = async (data) => {
   try {
-    const response = await api.put(`product/${data.id}`, data);
+    const response = await api.put(`product/${data.productID}`, data);
     return response;
   } catch (error) {
     console.error(error);
