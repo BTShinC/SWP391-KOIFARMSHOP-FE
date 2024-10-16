@@ -16,7 +16,7 @@ import { useState } from "react";
 import { storage } from "../../../firebase"; // Đảm bảo bạn đã cấu hình đúng Firebase
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"; // Firebase storage functions
 import { useForm } from "react-hook-form";
-import './index.scss'
+import "./index.scss";
 import SellFormCombo from "../sell-form-combo";
 function SellForm() {
   const {
@@ -36,7 +36,7 @@ function SellForm() {
 
   // Nếu người dùng chọn ký gửi bán lô thì render component khác
   if (isBatchSell) {
-    return <SellFormCombo/>;
+    return <SellFormCombo />;
   }
 
   // Preview ảnh khi chọn
@@ -92,7 +92,7 @@ function SellForm() {
       return [];
     }
   };
- 
+
   // Xử lý submit form
   const onSubmit = async (data) => {
     const uploadedImages = await uploadFilesToFirebase(fileList); // Upload file hình ảnh cá KOI
@@ -136,7 +136,6 @@ function SellForm() {
           <Button
             onClick={() => {
               console.log("Quay lại");
-              // Quay lại trang trước hoặc trang chủ
               window.history.back();
             }}
             className="back-button"
@@ -145,8 +144,7 @@ function SellForm() {
           </Button>
           <Button
             onClick={() => {
-              setIsBatchSell(true)
-              // Chuyển sang form ký gửi bán lô - có thể điều hướng hoặc setState
+              setIsBatchSell(true);
             }}
             className="batch-sell-button"
           >
@@ -226,6 +224,34 @@ function SellForm() {
               inputProps={{ min: 1 }}
               error={!!errors.size}
               helperText={errors.size?.message}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="Giá bán mong đợi"
+              {...register("desiredPrice", {
+                required: "Vui lòng nhập giá bạn mong muốn",
+              })}
+              fullWidth
+              type="number"
+              inputProps={{ min: 1 }}
+              error={!!errors.desiredPrice}
+              helperText={errors.desiredPrice?.message}
+              className="highlighted-textfield"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="Số ngày dự định ký gửi"
+              {...register("day", {
+                required: "Vui lòng nhập số ngày dự định ký gửi",
+              })}
+              fullWidth
+              type="number"
+              inputProps={{ min: 1 }}
+              error={!!errors.day}
+              helperText={errors.day?.message}
+              className="highlighted-textfield"
             />
           </Grid>
           <Grid item xs={12}>
@@ -325,22 +351,6 @@ function SellForm() {
               helperText={errors.phoneNumber?.message}
             />
           </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              {...register("desiredPrice", {
-                required: "Vui lòng nhập giá bạn mong muốn",
-              })}
-              label="Giá mong muốn"
-              fullWidth
-              type="number"
-              inputProps={{ min: 1 }}
-              error={!!errors.desiredPrice}
-              helperText={errors.desiredPrice?.message}
-              className="highlighted-textfield"
-            />
-          </Grid>
-
           <Grid item xs={12}>
             <TextField
               {...register("description")}

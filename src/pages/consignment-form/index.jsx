@@ -3,6 +3,7 @@ import CareForm from "./care-form";
 import CareFormCombo from "./care-form-combo";
 import SellForm from "./sell-form";
 import { useSelector } from "react-redux";
+import SellOffline from "./sell-offlline-form";
 function ConsignmentForm() {
   const location = useLocation();
   const { id, type } = location.state || {};
@@ -24,8 +25,12 @@ function ConsignmentForm() {
   ) : type === "Online" ? (
     <div>
       <SellForm />
+    </div> 
+  ) : type == "Offline"?(
+    <div>
+      <SellOffline/>
     </div>
-  ) : (
+  ) :(
     <div>Không tìm thấy loại ký gửi phù hợp</div> // Trường hợp không khớp với bất kỳ điều kiện nào
   );
 }

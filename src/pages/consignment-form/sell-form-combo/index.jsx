@@ -61,9 +61,9 @@ function SellFormCombo() {
     const finalData = {
       ...data,
       images: uploadedImages, // Thêm URL ảnh đã upload vào dữ liệu form
-      type:"Ký gửi",
+      type: "Ký gửi",
       consignmentType: "Ký gửi để bán",
-      price:1,
+      price: 1,
     };
     console.log(
       "Form data with uploaded images and certifications:",
@@ -88,6 +88,17 @@ function SellFormCombo() {
   return (
     <div className="care-form" style={{ padding: "2rem" }}>
       <form onSubmit={handleSubmit(onSubmit)}>
+        <Grid item xs={12} className="button-container">
+          <Button
+            onClick={() => {
+              console.log("Quay lại");
+              window.history.back();
+            }}
+            className="back-button"
+          >
+            Quay lại
+          </Button>
+        </Grid>
         <Box>
           <Typography variant="h2" className="title-typography">
             Ký gửi theo lô
@@ -160,7 +171,21 @@ function SellFormCombo() {
               inputProps={{ min: 1 }}
               error={!!errors.desiredPrice}
               helperText={errors.desiredPrice?.message}
-              className="highlighted-textfield" // Áp dụng SCSS
+              className="highlighted-textfield"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="Số ngày dự định ký gửi"
+              {...register("day", {
+                required: "Vui lòng nhập số ngày dự định ký gửi",
+              })}
+              fullWidth
+              type="number"
+              inputProps={{ min: 1 }}
+              error={!!errors.day}
+              helperText={errors.day?.message}
+              className="highlighted-textfield"
             />
           </Grid>
           <Grid item xs={12}>

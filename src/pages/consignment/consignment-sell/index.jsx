@@ -11,7 +11,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate } from "react-router-dom";
 
 function ConsignmentSell() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleTypeSelection = (type) => {
     // Truyền type (ví dụ: Online/Offline) thông qua state
     navigate(`/consignmentFrom`, { state: { type } });
@@ -64,7 +64,7 @@ function ConsignmentSell() {
           <CardContent className="card-content">
             <Button
               className="sell-offline"
-              onClick={() => console.log("Clicked on 'Ký gửi Offline'")}
+              onClick={() => handleTypeSelection("Offline")}
             >
               Ký gửi Offline
               <ArrowForwardIcon sx={{ marginLeft: "0.5rem" }} />
