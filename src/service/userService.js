@@ -170,7 +170,7 @@ export {
   editComboInfo,
   fetchAllProductCombo,
   fetchProductById,
-  fetchAllTransactions
+  fetchAllTransactions,
   editUser,
   addToCartAPI,
   fetchCartItems,
