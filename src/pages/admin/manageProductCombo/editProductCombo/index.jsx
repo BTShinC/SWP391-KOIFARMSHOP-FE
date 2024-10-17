@@ -88,7 +88,7 @@ function EditProductComboModal({ fishData, onChange }) {
       status: formValue.status,
       desiredPrice: parseFloat(formValue.desiredPrice),
       consignmentType: formValue.consignmentType,
-      age:formValue.age
+      age: formValue.age,
     };
     try {
       let res = await editComboInfo(data);
@@ -99,6 +99,7 @@ function EditProductComboModal({ fishData, onChange }) {
     } catch (error) {
       console.error("Error:", error);
     }
+    setOpen(false);
   };
 
   const showModal = () => {

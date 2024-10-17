@@ -19,7 +19,7 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
     size: "",
     breed: "",
     healthStatus: "",
-    quantity: 1,
+    quantity: 0,
     description: "",
     image: "",
     price: 1,
@@ -39,13 +39,9 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
     setFormValue((prevValue) => {
       let updatedValue = { ...prevValue, [name]: value };
 
-      // Kiểm tra nếu đang thay đổi `desiredPrice`
-      if (name === "desiredPrice") {
-        updatedValue.price = value; // Gán `price` bằng với `desiredPrice`
-      }
-      // Kiểm tra nếu đang thay đổi `price`
-      if (name === "price") {
-        updatedValue.desiredPrice = value; // Gán `desiredPrice` bằng với `price`
+      // Nếu loại là "Trang trại", gán giá trị price cho desiredPrice
+      if (updatedValue.type === "Trang trại") {
+        updatedValue.desiredPrice = updatedValue.price;
       }
 
       return updatedValue;
@@ -53,6 +49,7 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
   };
 
   useEffect(() => {
+    // Cập nhật consignmentType dựa trên loại
     if (formValue.type === "Ký gửi") {
       setFormValue((prevValue) => ({
         ...prevValue,
@@ -87,9 +84,9 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
         });
     }
   };
+
   const handleOk = async () => {
-    // Xử lý lưu thông tin cá
-    console.log("Form value:", formValue);
+    // Xử lý lưu thông tin
     try {
       let res = await AddFishCombo(formValue);
       if (res) {
@@ -100,7 +97,7 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
       console.log(error);
     }
 
-    onClose(); // Gọi hàm onClose để đóng modal
+    onClose(); // Đóng modal sau khi cập nhật
   };
 
   return (
@@ -215,34 +212,39 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
               <option value="Trang trại">Trang trại</option>
             </select>
           </div>
+
+          {/* Hiển thị cả hai input khi type là Ký gửi */}
           {formValue.type === "Ký gửi" && (
-            <div>
-              <label className="form-label">Loại hình ký gửi:</label>
-              <input
-                className="form-control"
-                name="consignmentType"
-                value={formValue.consignmentType}
-                onChange={handleChange}
-                readOnly
-                required
-              />
-            </div>
+            <>
+              <div>
+                <label className="form-label">Giá mong muốn:</label>
+                <input
+                  className="form-control"
+                  type="number"
+                  min={1}
+                  name="desiredPrice"
+                  value={formValue.desiredPrice}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label className="form-label">Giá đăng bán:</label>
+                <input
+                  className="form-control"
+                  type="number"
+                  name="price"
+                  min={1}
+                  value={formValue.price}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </>
           )}
-          {formValue.consignmentType === "Ký gửi để bán" && (
-            <div>
-              <label className="form-label">Giá mong muốn:</label>
-              <input
-                className="form-control"
-                type="number"
-                min={1}
-                name="desiredPrice"
-                value={formValue.desiredPrice}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          )}
-          {formValue.consignmentType != "Ký gửi để bán" && (
+
+          {/* Chỉ hiển thị giá nếu loại là Trang trại */}
+          {formValue.type === "Trang trại" && (
             <div>
               <label className="form-label">Giá:</label>
               <input
