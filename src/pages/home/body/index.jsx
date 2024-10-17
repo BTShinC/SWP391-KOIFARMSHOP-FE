@@ -1,9 +1,10 @@
-import poster from "swp391-koifarmshop-fe/public/images/poster.svg";
+import poster from "swp391-koifarmshop-fe/public/images/poster-upscaled.jpeg";
+//upscalled image
 
 import "./index.scss";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
-import { Button, Card } from "antd";
+import { Card } from "antd";
 import Meta from "antd/es/card/Meta";
 
 import koi1 from "swp391-koifarmshop-fe/public/images/koi1.svg";
@@ -32,7 +33,9 @@ function Body() {
           <ul className="image-list">
             {koiImages.map((koi) => (
               <li key={koi.id}>
-                <Link to={`/koi/${koi.id}`}>
+                <Link to="/singleproduct">
+                  {" "}
+                  {/* Chỉnh sửa ở đây */}
                   <Card
                     hoverable
                     cover={<img src={koi.imgSrc} alt={koi.title} />}
@@ -49,13 +52,25 @@ function Body() {
       <div className="body__carousel le">
         <h2>Mua lẻ</h2>
         <Carousel />
-        <Button className="more-button">Xem thêm</Button>
+        <div className="more-button-container">
+          {" "}
+          {/* Thêm thẻ div này */}
+          <Link to="/product" className="more-button">
+            Xem thêm
+          </Link>
+        </div>
       </div>
 
       <div className="body__carousel lo">
         <h2>Mua lô</h2>
         <Carousel />
-        <Button className="more-button">Xem thêm</Button>
+        <div className="more-button-container">
+          {" "}
+          {/* Thêm thẻ div này */}
+          <Link to="/product" className="more-button">
+            Xem thêm
+          </Link>
+        </div>
       </div>
 
       <div className="body__background">
@@ -65,7 +80,9 @@ function Body() {
             Cá Koi không chỉ làm không gian thêm sinh động mà còn giúp giảm căng
             thẳng và mệt mỏi.
           </h5>
+          <Link to="/product">
           <button className="view-more-button">Xem thêm</button>
+          </Link>
         </div>
         <div className="body__background__carousel">
           <Carousel slidesPerView={2} />
@@ -82,19 +99,18 @@ function Body() {
             cao tại Việt Nam. Với tiêu chuẩn vượt trội và cam kết mang lại dịch
             vụ hoàn hảo, Koifish luôn nỗ lực để mỗi khách hàng đều hài lòng.
           </h5>
+          <Link to="/about">
           <button className="view-more-button">Xem thêm</button>
+          </Link>
+          
         </div>
 
         <div className="body__introduction__image">
           <img src="/images/imtro.svg" alt="" />
         </div>
       </div>
-
-      
     </body>
   );
 }
 
-
 export default Body;
-

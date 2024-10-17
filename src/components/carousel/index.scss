@@ -3,6 +3,7 @@
     object-fit: cover;
     .hover-card {
       position: relative;
+      text-decoration: none;
     
       .ant-card {
         background-color: white;
@@ -42,8 +43,9 @@
     
       .product-image {
         width: 100%;
-        height: auto;
-        transition: filter 0.3s ease-in-out; 
+        height: 50vh;
+        transition: filter 0.3s; 
+        object-fit: contain;
     
         &:hover {
           filter: grayscale(30%); 

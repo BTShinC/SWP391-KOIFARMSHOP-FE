@@ -1,22 +1,18 @@
 import "./index.scss";
-import Header from "/src/components/header/index";
 import ModalEditUser from "./EditUserModal";
-import { Container } from "react-bootstrap";
 import logo from "/public/images/logo.svg";
-import Footer from '/src/components/footer/index';
+import { useSelector } from "react-redux";
+
 const UserInfoPage = () => {
-  const user = {
-    fullName: "John Doe",
-    address: "123 Main St, Anytown, USA",
-    email: "john.doe@example.com",
-    phoneNumber: "(555) 123-4567",
-    accountBalance: 5000.0,
-  };
+  const user = useSelector((state) => state.user);
+
+
+ 
 
   return (
-    <div>
-      <Header />
-      <Container>
+
+    <div className="user-info">
+
         <div className="userinfo__container">
           <div className="userinfo__logo">
             <img src={logo} alt="User Avatar" className="userinfo__avatar" />
@@ -35,14 +31,15 @@ const UserInfoPage = () => {
               <span className="userinfo__label">Số điện thoại:</span> {user.phoneNumber}
             </div>
             <div className="userinfo__item">
-              <span className="userinfo__label">Số dư:</span> ${user.accountBalance.toFixed(2)}
+              <span className="userinfo__label">Số dư:</span> {user.accountBalance.toFixed(2)}
             </div>
-              <ModalEditUser userData={user} title = "Thay đổi thông tin cá nhân" />
+            <ModalEditUser userData={user} title="Thay đổi thông tin cá nhân" />
           </div>
         </div>
-      </Container>
-      <Footer/>
-    </div>
+
+      </div>
+
   );
 };
+
 export default UserInfoPage;

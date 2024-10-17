@@ -12,8 +12,9 @@ import { Button, Form, Input } from "antd";
 // import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { login } from "../redux/userSlice";
-import api from "../../config/api";
+import { login } from "../redux/features/userSlice";
+
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyDzdOryEzjKOSYu5q-EiTZyK5DcwwsUqms",
@@ -64,6 +65,9 @@ function LoginPage() {
       const response = await api.post("login", values);
       console.log("Values sent to API:", values);
 
+      localStorage.setItem("token", response.data.account.token); 
+      console.log("Response from API:", response.data.account);
+
       // Save user data to Redux
       dispatch(login(response.data));
       // chạy xuống đây => account này có tồn tại
@@ -75,6 +79,7 @@ function LoginPage() {
       // dispatch action
       
     } catch (err) {
+      console.error("Error response from API:", err.response?.data);
       toast.error(err.response.data);
     }
   };
@@ -100,7 +105,6 @@ function LoginPage() {
     try {
       const response = await signInWithPopup(auth, googleProvider);
       const user = response.user;
-
       console.log("User:", user.displayName);
       console.log("Email:", user.email);
 
@@ -186,7 +190,7 @@ function LoginPage() {
               </Link>
             </li>
             <li>
-              <Link to="/forgot-password">Quên mật khẩu</Link>
+              <Link to="/recoveryPassword">Quên mật khẩu</Link>
             </li>
           </div>
         </div>

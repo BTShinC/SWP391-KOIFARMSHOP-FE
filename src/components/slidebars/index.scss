@@ -1,21 +1,32 @@
 .sidebar {
     position: fixed;
     top: 0;
-    right: -300px; 
-    width: 250px;
-    height: 100%;
+    right: -23vw; 
+    width: 22.8vw;
+    height: 75.5vh;
     background-color: #fff;
-    background-image: url("https://e0.pxfuel.com/wallpapers/613/327/desktop-wallpaper-koi-fish-for-iphone-minimal-fish.jpg");
-    background-position-y: 60%;
-    background-position-x: 7%;
+    // background-image: url("https://e0.pxfuel.com/wallpapers/613/327/desktop-wallpaper-koi-fish-for-iphone-minimal-fish.jpg");
+    background-image: url("https://i.pinimg.com/736x/b8/75/bf/b875bfb674db468073469271cbc940a3.jpg");
+    // background-position-y: 58%;
+    // background-position-x: 10%;
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-size: contain;
+
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
     transition: right 0.3s ease;
     z-index: 1000; 
-  
+    border-radius: 1rem;
+    padding: 2rem;
+    text-align: center;
     &.open {
       right: 0; 
     }
-  
+
+    
+    
+
+    
     .sidebar__close {
       background: none;
       border: none;
@@ -34,8 +45,7 @@
   
     ul {
       list-style: none;
-      padding: 40px;
-  
+      padding: 40px;  
       li {
         margin: 15px 0;
         padding-bottom: 5px;
@@ -44,6 +54,7 @@
           text-decoration: none;
           color: #000;
           font-size: 18px;
+          
   
           &:hover {
             color: #007bff; 

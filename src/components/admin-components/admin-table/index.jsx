@@ -1,18 +1,24 @@
 import PropTypes from "prop-types";
 import "./index.scss";
-import ModalEditUser from "/src/pages/userinfo/EditUserModal/index";
+import { Pagination } from "@mui/material";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
-AdminTable.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  columns: PropTypes.arrayOf(PropTypes.string).isRequired,
-  title: PropTypes.string.isRequired,
-};
-
-function AdminTable({ data, columns, title }) {
+const AdminTable = ({ columns, data, title, ModalComponent }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+  const handleChangePage = (event, page) => {
+    setCurrentPage(page);
+  };
+  // Tính toán dữ liệu cần hiển thị
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  const location = useLocation();
   return (
     <div className="admin-table">
       <div>
-        <h3 className="admin-table__title">{title}</h3>
+        <h2 className="admin-table__title">{title}</h2>
       </div>
       <table>
         <thead>
@@ -23,23 +29,50 @@ function AdminTable({ data, columns, title }) {
           </tr>
         </thead>
         <tbody>
-          {data.map((row, index) => (
-            <tr key={index}>
-              <td>{row.id}</td>
+          {currentItems.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              <td>{row.accountID}</td>
               <td>{row.fullName}</td>
+              <td>{row.address}</td>
               <td>{row.email}</td>
               <td>{row.phoneNumber}</td>
-              <td>{row.address}</td>
-              <td>{row.balance}</td>
+              <td>{row.accountBalance}</td>
+              {location.pathname === "/members" && <td>{row.role}</td>}
               <td>
-                <ModalEditUser userData={row} title="Chỉnh sửa" className = 'modal-edit-user-button' />
+                {ModalComponent && (
+                  <ModalComponent
+                    userData={row}
+                    title="Chỉnh sửa"
+                    className="modal-edit-user-button"
+                  />
+                )}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <Pagination
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignContent: "center",
+          margin: "3rem 0", // Thêm margin
+        }}
+        count={Math.ceil(data.length / itemsPerPage)} // Tổng số trang
+        page={currentPage} // Trang hiện tại
+        onChange={handleChangePage} // Hàm xử lý khi thay đổi trang
+        color="primary" // Màu sắc của pagination (có thể tùy chỉnh)
+        shape="rounded" // Hình dạng của pagination
+      />
     </div>
   );
-}
+};
+
+AdminTable.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  columns: PropTypes.arrayOf(PropTypes.string).isRequired,
+  title: PropTypes.string.isRequired,
+  ModalComponent: PropTypes.elementType,
+};
 
 export default AdminTable;

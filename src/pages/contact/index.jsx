@@ -1,7 +1,6 @@
 import { useState } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-
-import logo from '/public/logo.svg'
 import { EnvironmentOutlined, PhoneOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import './index.scss';
 
@@ -33,13 +32,6 @@ function ContactPage() {
 
     return (
         <div>
-
-            <div className="banner-wraper">
-                <div className="banner-container">
-                    <img src={logo} alt="Logo" className="logo" />
-                    <h2 className="shop-name">Liên hệ</h2>
-                </div>
-            </div>
 
             <div className='title'>
                 <h2>Liên hệ trực tiếp với chúng tôi</h2><br></br>
