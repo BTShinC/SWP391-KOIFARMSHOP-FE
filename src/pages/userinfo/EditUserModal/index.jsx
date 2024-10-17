@@ -5,6 +5,7 @@ import "./index.scss";
 import PropTypes from "prop-types";
 import { storage } from "/src/firebase.js"; // Đảm bảo đường dẫn đúng đến file cấu hình Firebase
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
+import { editUser } from "../../../service/userService";
 
 ModalEditUser.propTypes = {
   title: PropTypes.string.isRequired,
@@ -14,12 +15,13 @@ ModalEditUser.propTypes = {
 
 function ModalEditUser({ title, userData, className = "" }) {
   const initFormValue = {
+    accountID : userData.accountID,
     fullName: userData.fullName || "",
     phoneNumber: userData.phoneNumber || "",
     email: userData.email || "",
     address: userData.address || "",
     imageUrl: userData.imageUrl || "", // Lưu URL của ảnh
-    role: userData.role || "",
+    roleName: userData.roleName || "",
   };
 
   const [formValue, setFormValue] = useState(initFormValue);
@@ -28,12 +30,13 @@ function ModalEditUser({ title, userData, className = "" }) {
 
   useEffect(() => {
     setFormValue({
+      accountID : userData.accountID,
       fullName: userData.fullName || "",
       phoneNumber: userData.phoneNumber || "",
       email: userData.email || "",
       address: userData.address || "",
       imageUrl: userData.imageUrl || "",
-      role: userData.role || "",
+      roleName: userData.roleName || "",
     });
   }, [userData]);
 
@@ -83,9 +86,18 @@ function ModalEditUser({ title, userData, className = "" }) {
     }
   };
 
-  const handleOk = () => {
-    setOpen(false);
+  const handleOk = async () => {
     console.log(formValue);
+    try {
+      let res = await editUser(formValue);
+      if (res) {
+        console.log("Thành Công");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    setOpen(false);
   };
   return (
     <>
@@ -103,7 +115,9 @@ function ModalEditUser({ title, userData, className = "" }) {
         title="Cập nhật thông tin cá nhân"
         open={open}
         onOk={handleOk}
+        okText="Thay đổi"
         onCancel={handleCancel}
+        cancelText="Hủy bỏ"
         centered
       >
         <form>
@@ -169,7 +183,6 @@ function ModalEditUser({ title, userData, className = "" }) {
                   />
                 </div>
               </div>
-
             ) : (
               className == "modal-edit-user-button" && (
                 <div>
@@ -217,8 +230,8 @@ function ModalEditUser({ title, userData, className = "" }) {
                   <select
                     className="form-control"
                     type="number"
-                    name="role"
-                    value={formValue.roleID}
+                    name="roleName"
+                    value={formValue.roleName}
                   >
                     <option value="">Chọn vai trò</option>{" "}
                     {/* Giá trị mặc định */}
@@ -227,7 +240,6 @@ function ModalEditUser({ title, userData, className = "" }) {
                   </select>
                 </div>
               )
-
             )}
           </div>
         </form>

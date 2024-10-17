@@ -36,17 +36,17 @@ const fetchAllUser = async () => {
     return response;
   } catch (error) {
     console.error(error);
-    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+    throw error;
   }
 };
 
 const editUser = async (data) => {
   try {
-    const response = await api.get("account/${data.id}", data);
+    const response = await api.put(`account/${data.accountID}`, data);
     return response;
   } catch (error) {
     console.error(error);
-    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+    throw error;
   }
 };
 
@@ -56,7 +56,7 @@ const fetchAllProduct = async () => {
     return response;
   } catch (error) {
     console.error(error);
-    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+    throw error;
   }
 };
 const editFishInfo = async (data) => {
@@ -96,11 +96,19 @@ const fetchAllProductCombo = async () => {
     throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
   }
 };
-
+const AddFishCombo = async (data) => {
+  try {
+    const response = await api.post(`productcombo`, data);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+  }
+};
 
 const editComboInfo = async (data) => {
   try {
-    const response = await api.put(`productcombo/${data.id}`, data);
+    const response = await api.put(`productcombo/${data.productComboID}`, data);
     return response;
   } catch (error) {
     console.error(error);
@@ -113,16 +121,18 @@ const addToCartAPI = async (data) => {
     console.log("Data being sent to API:", data);
     const response = await api.post("shop-cart/add", {
       accountId: data.accountId,
-      productId: data.productId
+      productId: data.productId,
     });
     console.log("API response:", response.data);
     return response.data;
   } catch (error) {
-    console.error("Error adding to cart:", error.response?.data || error.message);
+    console.error(
+      "Error adding to cart:",
+      error.response?.data || error.message
+    );
     throw error;
   }
 };
-
 
 const fetchAllTransactions = async () => {
   try {
@@ -133,7 +143,6 @@ const fetchAllTransactions = async () => {
     throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
   }
 };
-
 
 const fetchCartItems = async (accountId) => {
   try {
@@ -152,12 +161,13 @@ const deleteCartItem = async (cartItemId) => {
     const response = await api.delete(`shop-cart/delete/${cartItemId}`); // Giả sử API của bạn có endpoint như vậy
     return response.data; // Trả về dữ liệu từ response nếu cần
   } catch (error) {
-    console.error("Error deleting cart item:", error.response?.data || error.message);
+    console.error(
+      "Error deleting cart item:",
+      error.response?.data || error.message
+    );
     throw error; // Ném lỗi ra ngoài để xử lý ở nơi gọi hàm
   }
 };
-
-
 
 export {
   Register,
@@ -175,5 +185,5 @@ export {
   addToCartAPI,
   fetchCartItems,
   deleteCartItem,
-
+  AddFishCombo,
 };

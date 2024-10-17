@@ -4,38 +4,35 @@ import { PlusOutlined } from "@ant-design/icons";
 import PropTypes from "prop-types";
 import { storage } from "/src/firebase.js";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
-import { addFish } from "../../../../service/userService";
+import { AddFishCombo } from "../../../../service/userService";
 
-AddFishModal.propTypes = {
+AddFishComboModal.propTypes = {
   title: PropTypes.string.isRequired,
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onChange:PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
-function AddFishComboModal({ title, visible, onClose,onChange }) {
+function AddFishComboModal({ title, visible, onClose, onChange }) {
   const initFormValue = {
-    productName: "",
-    breed: "",
+    comboName: "",
     size: "",
-    sex: "",
+    breed: "",
     healthStatus: "",
-    personalityTrait: "",
-    origin: "",
+    quantity: 1,
     description: "",
     image: "",
     price: 1,
-    certificate: "",
-    type: "",
-    quantity: 1,
-    status: "Còn hàng",
-    desiredPrice: 1,
     consignmentType: "",
+    desiredPrice: 1,
+    type: "",
+    status: "Còn hàng",
+    age: 1,
+    sex: "Đực",
   };
 
   const [formValue, setFormValue] = useState(initFormValue);
   const [fileList, setFileList] = useState([]);
-  const [certificateList, setCertificateList] = useState([]);
 
   const handleChange = (event) => {
     const { value, name } = event.target;
@@ -62,7 +59,7 @@ function AddFishComboModal({ title, visible, onClose,onChange }) {
         consignmentType: "Ký gửi để bán",
       }));
     } else {
-      setFormValue((prevValue) => ({  
+      setFormValue((prevValue) => ({
         ...prevValue,
         consignmentType: "Trang trại đăng bán",
       }));
@@ -90,34 +87,11 @@ function AddFishComboModal({ title, visible, onClose,onChange }) {
         });
     }
   };
-
-  const handleCertificateChange = ({ fileList: newFileList }) => {
-    setCertificateList(newFileList);
-
-    if (newFileList.length > 0) {
-      const file = newFileList[0].originFileObj;
-      const storageRef = ref(storage, `uploads/certificates/${file.name}`);
-      uploadBytes(storageRef, file)
-        .then(() => {
-          return getDownloadURL(storageRef);
-        })
-        .then((url) => {
-          setFormValue((prevFormValue) => ({
-            ...prevFormValue,
-            certificate: url,
-          }));
-        })
-        .catch((error) => {
-          console.error("Error uploading certificate:", error);
-        });
-    }
-  };
-
   const handleOk = async () => {
     // Xử lý lưu thông tin cá
     console.log("Form value:", formValue);
     try {
-      let res = await addFish(formValue);
+      let res = await AddFishCombo(formValue);
       if (res) {
         onChange();
         console.log("Thành công");
@@ -160,39 +134,20 @@ function AddFishComboModal({ title, visible, onClose,onChange }) {
                 )}
               </Upload>
             </div>
-            <div>
-              <label className="form-label">Chứng nhận:</label>
-              <Upload
-                name="certificate"
-                listType="picture-card"
-                className="certificate-uploader"
-                fileList={certificateList}
-                onChange={handleCertificateChange}
-                beforeUpload={() => false}
-                required
-              >
-                {certificateList.length >= 1 ? null : (
-                  <div>
-                    <PlusOutlined />
-                    <div style={{ marginTop: 8 }}>Upload</div>
-                  </div>
-                )}
-              </Upload>
-            </div>
           </div>
           <div>
-            <label className="form-label">Tên gọi cá:</label>
+            <label className="form-label">Tên lô cá:</label>
             <input
               className="form-control"
               type="text"
-              name="productName"
-              value={formValue.productName}
+              name="comboName"
+              value={formValue.comboName}
               onChange={handleChange}
               required
             />
           </div>
           <div>
-            <label className="form-label">Giống:</label>
+            <label className="form-label">Các giống:</label>
             <input
               className="form-control"
               type="text"
@@ -203,7 +158,19 @@ function AddFishComboModal({ title, visible, onClose,onChange }) {
             />
           </div>
           <div>
-            <label className="form-label">Kích thước:</label>
+            <label className="form-label">Số lượng:</label>
+            <input
+              className="form-control"
+              type="number"
+              name="quantity"
+              min={1}
+              value={formValue.quantity}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <label className="form-label">Kích thước trung bình:</label>
             <input
               className="form-control"
               type="text"
@@ -212,20 +179,6 @@ function AddFishComboModal({ title, visible, onClose,onChange }) {
               onChange={handleChange}
               required
             />
-          </div>
-          <div>
-            <label className="form-label">Giới tính:</label>
-            <select
-              className="form-control"
-              name="sex"
-              value={formValue.sex}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Chọn giới tính</option>
-              <option value="Đực">Đực</option>
-              <option value="Cái">Cái</option>
-            </select>
           </div>
           <div>
             <label className="form-label">Tình trạng sức khỏe:</label>
@@ -238,28 +191,7 @@ function AddFishComboModal({ title, visible, onClose,onChange }) {
               required
             />
           </div>
-          <div>
-            <label className="form-label">Đặc điểm tính cách:</label>
-            <input
-              className="form-control"
-              type="text"
-              name="personalityTrait"
-              value={formValue.personalityTrait}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div>
-            <label className="form-label">Nguồn gốc:</label>
-            <input
-              className="form-control"
-              type="text"
-              name="origin"
-              value={formValue.origin}
-              onChange={handleChange}
-              required
-            />
-          </div>
+
           <div>
             <label className="form-label">Mô tả:</label>
             <textarea
