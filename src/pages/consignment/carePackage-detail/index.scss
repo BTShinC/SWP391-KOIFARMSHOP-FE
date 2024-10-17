@@ -1,0 +1,127 @@
+.relative-img {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Tăng khoảng cách giữa các hình ảnh */
+  padding: 1.5rem;
+
+  img {
+    width: 100px; /* Tăng kích thước ảnh nhỏ */
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.3s ease; /* Thêm hiệu ứng khi hover */
+
+    &:hover {
+      transform: scale(1.15); /* Phóng to hơn khi hover */
+    }
+  }
+}
+
+.main-img {
+  margin: 2rem 0; /* Tăng khoảng cách giữa các phần */
+  display: flex;
+  justify-content: center; /* Căn giữa hình ảnh chính */
+
+  img {
+    width: 80%; /* Tăng chiều rộng của ảnh chính để cân đối */
+    height: auto;
+    object-fit: cover;
+    border-radius: 12px; /* Tăng bo tròn góc */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15); /* Tăng bóng cho hình ảnh */
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.1); /* Phóng to hơn khi hover */
+    }
+  }
+}
+
+.global-box {
+  margin: 0;
+  padding: 2rem; /* Tăng padding để tạo khoảng cách lớn hơn */
+}
+
+.img-description {
+  margin-top: 2rem; /* Tăng khoảng cách trên */
+  padding: 2.5rem; /* Tăng padding để tạo khoảng cách bên trong */
+  background-color: #f9f9f9; /* Đổi màu nền sáng hơn cho dễ nhìn */
+  border-radius: 16px; /* Tăng bo góc */
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15); /* Tăng bóng mềm mại hơn */
+  font-size: 1.2rem; /* Tăng kích thước font chữ cho dễ đọc hơn */
+
+  h4 {
+    font-size: 2rem; /* Tăng kích thước tiêu đề */
+    color: #b07d62;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+  }
+
+  h6 {
+    font-size: 1.8rem; /* Tăng kích thước chữ của giá */
+    color: #8c6b42;
+    margin-bottom: 1.5rem;
+  }
+
+  ul {
+    padding-left: 2rem; /* Tăng khoảng cách bên trái cho danh sách */
+    li {
+      font-size: 1.2rem; /* Tăng kích thước chữ cho danh sách */
+      color: #6e655b;
+      font-weight: bold;
+      margin-bottom: 0.8rem;
+      position: relative;
+
+      &:before {
+        content: "✔";
+        position: absolute;
+        left: -2rem; /* Đẩy dấu check ra xa hơn */
+        color: #a47c48;
+      }
+    }
+  }
+}
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 0.8rem 2rem;
+  background-color: #a47c48 !important;
+  color: #fff;
+  font-size: 1rem;
+  border-radius: 12px; // Giữ cho nút trở lại có độ cong tương tự các thành phần khác
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  z-index: 100; /* Đảm bảo nút được đặt trên các thành phần khác */
+  &:hover {
+    background-color: #8c6b42;
+  }
+}
+.careConsignment-btn {
+  display: inline-flex; /* Đảm bảo nút giữ kích thước nhỏ gọn */
+  margin: 40px auto 0 auto; /* Tăng khoảng cách trên nút */
+  background-color: white;
+  color: #b88e2f !important; /* Màu chữ vàng đồng */
+  border: 2px solid #b88e2f !important; /* Đường viền vàng đồng */
+  padding: 20px 35px; /* Tăng padding để nút lớn hơn */
+  font-size: 16px; /* Tăng kích thước chữ */
+  text-decoration: none; /* Đảm bảo không có gạch chân */
+  border-radius: 10px; /* Tăng bo góc cho nút */
+  transition: all 0.3s ease; /* Thêm hiệu ứng chuyển đổi mượt mà */
+
+  &:hover {
+    background-color: #b88e2f; /* Màu nền vàng đồng khi hover */
+    color: white !important; /* Chuyển màu chữ sang trắng khi hover */
+  }
+
+  svg {
+    color: #b88e2f; /* Màu của icon ngọn lửa là vàng đồng */
+    font-size: 1.5rem; /* Tăng kích thước icon */
+  }
+
+  &:hover svg {
+    color: white; /* Màu của icon chuyển thành trắng khi hover */
+  }
+}

@@ -1,14 +1,58 @@
 .manage-fish {
-    display: flex;
-    height: 100vh;
+  display: flex;
+  height: 100vh;
   .admin-content {
     flex-grow: 1;
     background-color: #f5f7fa;
     padding: 20px;
-    &__title{
+    &__title {
       color: #1d4ed8;
       margin-top: 1rem;
     }
   }
-
+  .button-active {
+    background-color: #b8860b; /* Màu vàng đồng */
+    color: white;
+    border: 1px solid #b8860b;
+    font-weight: bold;
+    padding: 8px 16px;
+    text-transform: uppercase;
+    font-size: 16px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  
+    &:hover,
+    &:focus {
+      background-color: #daa520; /* Màu vàng đồng đậm hơn khi hover */
+      border-color: #daa520;
+    }
+  
+    &:active {
+      background-color: #a67c00; /* Màu vàng đồng tối hơn khi active */
+      border-color: #a67c00;
+    }
   }
+
+  .button-inactive {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #dcdcdc;
+    font-weight: bold;
+    padding: 8px 16px;
+    text-transform: uppercase;
+    font-size: 16px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  
+    &:hover,
+    &:focus {
+      background-color: #b8860b; /* Màu vàng đồng khi hover */
+      color: white;
+      border-color: #b8860b;
+    }
+  
+    &:active {
+      background-color: #a67c00; /* Màu vàng đồng tối hơn khi active */
+      border-color: #a67c00;
+    }
+  }
+  
+}

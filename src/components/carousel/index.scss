@@ -4,6 +4,7 @@
     .hover-card {
       position: relative;
       text-decoration: none;
+      width: 10vw;
     
       .ant-card {
         background-color: white;
@@ -43,7 +44,7 @@
     
       .product-image {
         width: 100%;
-        height: 50vh;
+        height: 40vh;
         transition: filter 0.3s; 
         object-fit: contain;
     

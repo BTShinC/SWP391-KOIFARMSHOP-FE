@@ -6,9 +6,9 @@ import {
   Typography,
   CardActions,
   Button,
-  Box,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import "./index.scss";
 
 BlogPost.propTypes = {
   post: PropTypes.object.isRequired,
@@ -20,60 +20,44 @@ function BlogPost({ post }) {
     post.content.length > 100
       ? post.content.substring(0, 100) + "..."
       : post.content;
+
   const handleClick = (postId) => {
-    // Điều hướng đến trang chi tiết của bài đăng
     navigate(`/blog/${postId}`);
   };
+
   return (
-    <Box sx={{ mb: 4 }}>
-      <Card
-        sx={{
-          maxWidth: 345,
-          boxShadow: 3,
-          "&:hover": {
-            boxShadow: 6,
-          },
-          borderRadius: 2,
-          overflow: "hidden",
-        }}
-      >
-        <CardMedia
-          component="img"
-          alt={post.title}
-          height="180"
-          image="https://plus.unsplash.com/premium_photo-1723672584706-42c474c77fd1?q=80&w=1998&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" // Sử dụng hình ảnh từ URL động
-        />
-        <CardContent sx={{ backgroundColor: "#f5f5f5" }}>
-          <Typography
-            gutterBottom
-            variant="h5"
-            component="div"
-            sx={{ color: "#333" }}
-          >
-            {post.title}
-          </Typography>
-          <Typography variant="body2" sx={{ color: "#666", mb: 1.5 }}>
-            {truncatedContent}
-          </Typography>
-          <Typography variant="body2" sx={{ color: "#888" }}>
-            Ngày đăng:{post.date}
-          </Typography>
-          <Typography variant="body2" sx={{ color: "#888", mt: 1 }}>
-            Tác giả:{post.author}
-          </Typography>
-        </CardContent>
-        <CardActions sx={{ backgroundColor: "#f5f5f5" }}>
-          <Button
-            size="small"
-            variant="contained"
-            color="primary"
-            onClick={() => handleClick(post.id)}
-          >
-            Xem chi tiết
-          </Button>
-        </CardActions>
-      </Card>
-    </Box>
+    <Card className="blog-post__card">
+      <CardMedia
+        component="img"
+        alt={post.title}
+        className="blog-post__image"
+        image={post.image || "https://via.placeholder.com/360x200.png"}
+      />
+      <CardContent className="blog-post__content">
+        <Typography variant="h6" className="blog-post__title">
+          {post.title}
+        </Typography>
+        <Typography variant="body2" className="blog-post__description">
+          {truncatedContent}
+        </Typography>
+        <Typography variant="caption" className="blog-post__date">
+          Ngày đăng: {post.date}
+        </Typography>
+        <Typography variant="caption" className="blog-post__author">
+          Tác giả: {post.author}
+        </Typography>
+      </CardContent>
+      <CardActions className="blog-post__actions">
+        <Button
+          size="small"
+          variant="contained"
+          className="blog-post__button"
+          onClick={() => handleClick(post.id)}
+        >
+          Xem chi tiết
+        </Button>
+      </CardActions>
+    </Card>
   );
 }
 

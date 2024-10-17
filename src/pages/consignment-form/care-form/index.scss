@@ -1,0 +1,51 @@
+.care-form {
+  display: flex;
+  flex-direction: column;
+  background-color: #fcf8f3;
+  .submit-form-btn {
+    background-color: #b88e2f; /* Màu vàng đồng */
+    color: white; /* Màu trắng cho chữ */
+    padding: 16px 32px; /* Tăng độ rộng của nút */
+    font-size: 18px; /* Tăng kích thước chữ */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 200px; /* Tăng độ rộng của nút */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Hiệu ứng khi hover */
+
+    &:hover {
+      background-color: #d4af37; /* Màu vàng đồng sáng hơn khi hover */
+      color: white;
+      transform: scale(1.05); /* Tăng nhẹ kích thước khi hover */
+    }
+
+    &:active {
+      background-color: #967d26; /* Màu tối hơn khi nhấn */
+      transform: scale(1); /* Trở lại kích thước ban đầu */
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+  .title-typography {
+    color: #967d26; // Màu chữ
+    text-align: center; // Căn giữa
+    margin-top: 1rem; // Khoảng cách trên
+    margin-bottom: 1rem; 
+    font-weight: bold; // Chữ đậm
+    text-transform: uppercase; // Chuyển thành chữ hoa
+  }
+  .highlighted-textfield {
+    background-color: #fff8dc; /* Màu nền vàng nhạt */
+    .MuiInputBase-input {
+      color: #daa520; /* Màu chữ vàng đồng */
+    }
+    .MuiInputBase-input.Mui-disabled {
+      -webkit-text-fill-color: #daa520; /* Màu chữ vàng đồng khi disabled */
+    }
+    .MuiFormLabel-root {
+      color: #daa520; /* Màu của label */
+    }
+  }
+}

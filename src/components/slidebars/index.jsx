@@ -1,14 +1,13 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "antd"; // Nhập Button từ Ant Design
 import "./index.scss";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../pages/redux/features/userSlice";
 
 const Sidebar = ({ isOpen, onClose }) => {
-  // Example of accessing user data
-const user = useSelector((state) => state.user);
-console.log("Current User:", user);
+
 
   // Function to format the account balance
   const formatCurrency = (amount) => {
@@ -19,6 +18,28 @@ console.log("Current User:", user);
     }).format(amount);
   };
 
+  const user = useSelector((state) => state.user); 
+  const dispatch = useDispatch(); // Khai báo useDispatch để sử dụng action
+  const navigate = useNavigate(); // Sử dụng useNavigate để điều hướng
+
+
+
+  const handleLogout = async () => {
+    try {
+      // Gọi API logout nếu backend yêu cầu
+      // await api.post('/logout'); // Thay đổi endpoint nếu cần
+
+      // Xóa trạng thái người dùng trong Redux
+      dispatch(logout()); 
+      // Xóa token khỏi localStorage
+      localStorage.data.removeItem("token"); 
+      // Điều hướng về trang chủ sau khi đăng xuất
+      navigate("/"); 
+    } catch (error) {
+      console.error("Logout failed:", error);
+      // Có thể hiển thị thông báo lỗi cho người dùng ở đây
+    }
+  };
   return (
     <div className={`sidebar ${isOpen ? "open" : ""}`}>
       <Button
@@ -79,9 +100,9 @@ console.log("Current User:", user);
         )}
         {user && ( // Show logout link only if user is logged in
           <li>
-            <Link to="/logout" onClick={onClose}>
+            <Button onClick={handleLogout} type="link" onClick={onClose}>
               Đăng xuất
-            </Link>
+            </Button>
           </li>
         )}
         {/* {user && user.account.roleName === "Admin" && ( // Show admin button if user is an admin

@@ -8,13 +8,12 @@ import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import firebase from "firebase/compat/app";
 import { initializeApp } from "firebase/app";
 import { Button, Form, Input } from "antd";
+
 import api from "../../config/api";
-// import { useDispatch } from "react-redux";
+
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/features/userSlice";
-
-
 
 
 const firebaseConfig = {
@@ -26,7 +25,6 @@ const firebaseConfig = {
   appId: "1:73945260552:web:164c3f6496f53250b327bd",
   measurementId: "G-SNF9TGJ1Z6",
 };
-
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
@@ -44,9 +42,6 @@ LoginPage.propTypes = {
 // };
 
 function LoginPage() {
-
-
-
   // const [formValue, setFormValue] = useState(initFormValue);
 
   // const handleChange = (event) => {
@@ -60,7 +55,6 @@ function LoginPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-
   const handleLogin = async (values) => {
     try {
       const response = await api.post("login", values);
@@ -69,6 +63,9 @@ function LoginPage() {
       // Log the roleName to the console
       console.log("User Role Name:", response.data.account.roleName); // Log the roleName
 
+
+      localStorage.setItem("token", response.data.account.token); 
+      console.log("Response from API:", response.data.account);
 
       // Save user data to Redux
       dispatch(login(response.data));

@@ -40,15 +40,15 @@ export default function Carousel({ slidesPerView = 4 }) {
       <Swiper
         slidesPerView={slidesPerView}
         autoplay={{
-          delay: 3000,
+          delay: 2000,
           disableOnInteraction: false,
         }}
-        spaceBetween={0}
+        spaceBetween={80}
         modules={[Pagination, Autoplay]}
         className="carousel" 
       >
         {products.map((product) => (
-          <SwiperSlide key={product.productID}>
+          <SwiperSlide key={product.productID} className="swipper">
             <HoverCard
               imgSrc={product.image}
               title={product.productName}
