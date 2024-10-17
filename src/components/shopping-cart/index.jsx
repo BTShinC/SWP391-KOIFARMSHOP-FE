@@ -3,9 +3,9 @@ import "./index.scss";
 import { CloseOutlined, ShoppingOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { setCartItems, removeFromCart, updateQuantity } from "../../pages/redux/features/createSlice";
+import { setCartItems, removeFromCart} from "../../pages/redux/features/createSlice";
 import { useEffect, useState } from "react";
-import { fetchCartItems } from "../../service/userService";
+import { deleteCartItem, fetchCartItems } from "../../service/userService";
 
 const ShoppingCart = ({ onClose }) => {
   const cartItems = useSelector(state => state.cart.items);
@@ -13,8 +13,8 @@ const ShoppingCart = ({ onClose }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    console.log("Current account:", account);
+  // useEffect(() => {
+  //   console.log("Current account:", account);
     const loadCartItems = async () => {
       if (account && account.accountID) {
         try {
@@ -33,7 +33,12 @@ const ShoppingCart = ({ onClose }) => {
       }
     };
 
-    loadCartItems();
+  //   loadCartItems();
+  // }, [account, dispatch]);
+
+  useEffect(() => {
+    console.log("Current account:", account);
+    loadCartItems(); // Gọi hàm loadCartItems khi component mount
   }, [account, dispatch]);
 
   const subtotal = cartItems.reduce(
@@ -41,23 +46,26 @@ const ShoppingCart = ({ onClose }) => {
     0
   );
 
-  const handleUpdateQuantity = async (itemId, newQuantity) => {
-    try {
-      if (newQuantity > 0) {
-        dispatch(updateQuantity({ id: itemId, quantity: newQuantity }));
-      } else {
-        dispatch(removeFromCart(itemId));
-      }
-    } catch (error) {
-      console.error("Error updating cart:", error);
-      message.error("Không thể cập nhật giỏ hàng");
-    }
-  };
+  // const handleUpdateQuantity = async (itemId, newQuantity) => {
+  //   try {
+  //     if (newQuantity > 0) {
+  //       dispatch(updateQuantity({ id: itemId, quantity: newQuantity }));
+  //     } else {
+  //       dispatch(removeFromCart(itemId));
+  //     }
+  //   } catch (error) {
+  //     console.error("Error updating cart:", error);
+  //     message.error("Không thể cập nhật giỏ hàng");
+  //   }
+  // };
 
-  const handleRemoveFromCart = async (itemId) => {
+  const handleRemoveFromCart = async (cartItemId) => {
     try {
-      dispatch(removeFromCart(itemId));
+      // Gọi API để xóa item
+      await deleteCartItem(cartItemId); // Gọi hàm deleteCartItem
+      dispatch(removeFromCart(cartItemId)); // Cập nhật Redux store
       message.success("Đã xóa sản phẩm khỏi giỏ hàng");
+      loadCartItems();
     } catch (error) {
       console.error("Error removing item from cart:", error);
       message.error("Không thể xóa sản phẩm khỏi giỏ hàng");
@@ -106,16 +114,13 @@ const ShoppingCart = ({ onClose }) => {
                 <>
                   <div>
                     <strong>Giống:</strong> {item.breed} <br />
-                    <strong>Số lượng:</strong> {item.quantity} <br />
+                    {/* <strong>Số lượng:</strong> {item.quantity} <br /> */}
                     <strong>Giá:</strong> {item.price.toLocaleString("vi-VN")} VNĐ
                   </div>
-                  <Button onClick={() => handleUpdateQuantity(item.productID, item.quantity - 1)}>-</Button>
-                  {item.quantity}
-                  <Button onClick={() => handleUpdateQuantity(item.productID, item.quantity + 1)}>+</Button>
                 </>
               }
             />
-            <Button onClick={() => handleRemoveFromCart(item.productID)}>Xóa</Button>
+            <Button onClick={() => handleRemoveFromCart(item.shopCartID)}>Xóa</Button>
           </List.Item>
         )}
       />

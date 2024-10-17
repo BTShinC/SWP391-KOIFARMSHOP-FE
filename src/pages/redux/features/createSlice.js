@@ -16,18 +16,13 @@ const cartSlice = createSlice({
     },
     removeFromCart: (state, action) => {
       state.items = state.items.filter(item => item.productID !== action.payload);
-    },
-    updateQuantity: (state, action) => {
-      const item = state.items.find(item => item.productID === action.payload.id);
-      if (item) {
-        item.quantity = action.payload.quantity;
-      }
-    },
+    },  
+
     setCartItems: (state, action) => {
-      state.items = action.payload; // Cập nhật danh sách sản phẩm trong giỏ hàng
+      state.items = action.payload; // Cập nhật giỏ hàng với thông tin mới
     },
   },
 });
 
-export const { addToCart, removeFromCart, updateQuantity, setCartItems } = cartSlice.actions;
+export const {addToCart, setCartItems, removeFromCart } = cartSlice.actions;
 export default cartSlice.reducer;

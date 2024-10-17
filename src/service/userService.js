@@ -135,6 +135,16 @@ const fetchCartItems = async (accountId) => {
   }
 };
 
+const deleteCartItem = async (cartItemId) => {
+  try {
+    const response = await api.delete(`shop-cart/delete/${cartItemId}`); // Giả sử API của bạn có endpoint như vậy
+    return response.data; // Trả về dữ liệu từ response nếu cần
+  } catch (error) {
+    console.error("Error deleting cart item:", error.response?.data || error.message);
+    throw error; // Ném lỗi ra ngoài để xử lý ở nơi gọi hàm
+  }
+};
+
 export {
   Register,
   ChangePassword,
@@ -148,4 +158,5 @@ export {
   fetchProductById,
   addToCartAPI,
   fetchCartItems,
+  deleteCartItem,
 };

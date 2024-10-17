@@ -5,7 +5,7 @@ import Carousel from "../carousel";
 import { useState, useEffect } from "react";
 import ShoppingCart from "../shopping-cart";
 import { addToCartAPI, fetchProductById } from "../../service/userService";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const { Title, Text } = Typography;
 
@@ -14,7 +14,7 @@ function SinglepProduct() {
   const [cartItems, setCartItems] = useState([]);
   const { id } = useParams(); // Lấy productId từ URL
   const [product, setProduct] = useState(null); // State để lưu thông tin sản phẩm
-  // const dispatch = useDispatch(); // Khởi tạo dispatch
+  const dispatch = useDispatch(); // Khởi tạo dispatch
   const account = useSelector((state) => state.user.account); // Lấy accountId từ Redux
 
   // Fetch thông tin người dùng khi component mount
@@ -44,7 +44,7 @@ function SinglepProduct() {
     };
 
     loadProduct();
-  }, [id]);
+  }, [id,dispatch]);
 
   useEffect(() => {
     console.log("Current account:", account);
@@ -72,16 +72,19 @@ function SinglepProduct() {
       });
       console.log("Added to cart successfully:", response);
 
+      // Fetch product details
+    const productDetails = await fetchProductById(product.productID);
+    console.log("Fetched product details:", productDetails);
+
       // Cập nhật cartItems để hiển thị thông tin sản phẩm
       setCartItems((prevItems) => [
         ...prevItems,
         {
           productID: product.productID,
-          productName: product.productName,
-          price: product.price,
-          quantity: 1, // Hoặc giá trị mặc định bạn muốn
-          image: product.image,
-          breed: product.breed,
+          productName: productDetails.productName,
+          price: productDetails.price,
+          image: productDetails.image,
+          breed: productDetails.breed,
         },
       ]);
 
@@ -157,7 +160,7 @@ function SinglepProduct() {
                   </Button>
                 </Link>
 
-                <Button onClick={handleAddToCart}>
+                <Button onClick={handleAddToCart} className="buy-button">
                   Thêm vào giỏ hàng
                 </Button>
               </div>

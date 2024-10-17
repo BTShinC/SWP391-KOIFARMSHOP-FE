@@ -1,25 +1,51 @@
 import "./index.scss";
-import { Button, InputNumber } from "antd";
+import { Button, InputNumber, message } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from 'react-redux';
-import { removeFromCart, updateQuantity } from "../redux/features/createSlice";
+import { deleteCartItem, fetchCartItems } from "../../service/userService";
+import { removeFromCart, setCartItems } from "../redux/features/createSlice";
+
 
 
 function ShoppingCartPage() {
   const cartItems = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
+  const account = useSelector(state => state.user.account); // Lấy thông tin tài khoản từ Redux
+  
 
   const subtotal = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
 
-  const handleQuantityChange = (id, value) => {
-    dispatch(updateQuantity({ id, quantity: value }));
+
+  const loadCartItems = async () => {
+    if (account && account.accountID) {
+      try {
+        const items = await fetchCartItems(account.accountID);
+        dispatch(setCartItems(items)); // Cập nhật Redux store với giỏ hàng mới
+      } catch (error) {
+        console.error("Failed to load cart items:", error);
+        message.error("Không thể tải giỏ hàng");
+      }
+    } else {
+      console.log("No account ID available");
+    }
   };
 
-  const handleRemoveItem = (id) => {
-    dispatch(removeFromCart(id));
+  const handleRemoveFromCart = async (cartItemId) => {
+    try {
+      // Gọi API để xóa item
+      await deleteCartItem(cartItemId); // Gọi hàm deleteCartItem
+      dispatch(removeFromCart(cartItemId)); // Cập nhật Redux store
+      message.success("Đã xóa sản phẩm khỏi giỏ hàng");
+
+      // Reload lại giỏ hàng
+      loadCartItems(); // Gọi lại hàm loadCartItems để cập nhật giỏ hàng
+    } catch (error) {
+      console.error("Error removing item from cart:", error);
+      message.error("Không thể xóa sản phẩm khỏi giỏ hàng");
+    }
   };
 
   return (
@@ -48,14 +74,14 @@ function ShoppingCartPage() {
               <div className="item-price">
                 <span>{item.price.toLocaleString("vi-VN")} VNĐ</span>
               </div>
-              <div className="item-quantity">
+              {/* <div className="item-quantity">
                 <InputNumber
                   min={1}
                   max={100}
                   value={item.quantity}
                   onChange={(value) => handleQuantityChange(item.id, value)}
                 />
-              </div>
+              </div> */}
               <div className="item-content">
                 <span>{item.content}</span>
               </div>
@@ -64,7 +90,7 @@ function ShoppingCartPage() {
               <Button
                 type="text"
                 icon={<DeleteOutlined style={{ color: "#B88E2F" }} />}
-                onClick={() => handleRemoveItem(item.id)}
+                onClick={() => handleRemoveFromCart(item.shopCartID)}
               />
             </div>
           </div>

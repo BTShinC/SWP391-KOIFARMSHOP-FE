@@ -12,10 +12,21 @@ const Sidebar = ({ isOpen, onClose }) => {
   const navigate = useNavigate(); // Sử dụng useNavigate để điều hướng
 
 
-  const handleLogout = () => {
-    dispatch(logout()); // Xóa trạng thái người dùng trong Redux
-    localStorage.removeItem("token"); // Xóa token khỏi localStorage
-    navigate("/"); // Điều hướng về trang chủ sau khi đăng xuất
+  const handleLogout = async () => {
+    try {
+      // Gọi API logout nếu backend yêu cầu
+      // await api.post('/logout'); // Thay đổi endpoint nếu cần
+
+      // Xóa trạng thái người dùng trong Redux
+      dispatch(logout()); 
+      // Xóa token khỏi localStorage
+      localStorage.data.removeItem("token"); 
+      // Điều hướng về trang chủ sau khi đăng xuất
+      navigate("/"); 
+    } catch (error) {
+      console.error("Logout failed:", error);
+      // Có thể hiển thị thông báo lỗi cho người dùng ở đây
+    }
   };
   return (
     <div className={`sidebar ${isOpen ? "open" : ""}`}>

@@ -64,6 +64,9 @@ function LoginPage() {
       const response = await api.post("login", values);
       console.log("Values sent to API:", values);
 
+      localStorage.setItem("token", response.data.account.token); 
+      console.log("Response from API:", response.data.account);
+
       // Save user data to Redux
       dispatch(login(response.data));
       // chạy xuống đây => account này có tồn tại
