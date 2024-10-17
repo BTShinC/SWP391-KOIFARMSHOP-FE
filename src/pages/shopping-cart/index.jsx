@@ -19,6 +19,7 @@ function ShoppingCartPage() {
   );
 
 
+
   const loadCartItems = async () => {
     if (account && account.accountID) {
       try {
