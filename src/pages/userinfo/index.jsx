@@ -10,6 +10,7 @@ const UserInfoPage = () => {
   const navigate = useNavigate(); // Khởi tạo useNavigate
 
 
+
   useEffect(() => {
     if (!user || !user.account) {
       // Kiểm tra nếu chưa đăng nhập, điều hướng đến trang đăng nhập
@@ -42,19 +43,19 @@ const UserInfoPage = () => {
 
           <div className="userinfo__details">
             <div className="userinfo__item">
-              <span className="userinfo__label">Họ và tên:</span> {user.fullName}
+              <span className="userinfo__label">Họ và tên:</span> {user.account.fullName}
             </div>
             <div className="userinfo__item">
-              <span className="userinfo__label">Địa chỉ:</span> {user.address}
+              <span className="userinfo__label">Địa chỉ:</span> {user.account.address}
             </div>
             <div className="userinfo__item">
-              <span className="userinfo__label">Email:</span> {user.email}
+              <span className="userinfo__label">Email:</span> {user.account.email}
             </div>
             <div className="userinfo__item">
-              <span className="userinfo__label">Số điện thoại:</span> {user.phoneNumber}
+              <span className="userinfo__label">Số điện thoại:</span> {user.account.phoneNumber}
             </div>
             <div className="userinfo__item">
-              <span className="userinfo__label">Số dư:</span> {user.accountBalance.toFixed(2)}
+              <span className="userinfo__label">Số dư:</span> {user.account.accountBalance.toFixed(2)}
             </div>
             <ModalEditUser userData={user} title="Thay đổi thông tin cá nhân" />
 

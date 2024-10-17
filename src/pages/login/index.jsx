@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/features/userSlice";
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyDzdOryEzjKOSYu5q-EiTZyK5DcwwsUqms",
   authDomain: "koifarmshop-1f095.firebaseapp.com",
@@ -58,19 +59,31 @@ function LoginPage() {
     try {
       const response = await api.post("login", values);
       console.log("Values sent to API:", values);
+      console.log("Response from API:", response.data);
+      // Log the roleName to the console
+      console.log("User Role Name:", response.data.account.roleName); // Log the roleName
+
 
       localStorage.setItem("token", response.data.account.token); 
       console.log("Response from API:", response.data.account);
 
       // Save user data to Redux
       dispatch(login(response.data));
-      // chạy xuống đây => account này có tồn tại
+
+      // Check user role and navigate accordingly
+      if (response.data.account.roleName === "Admin") {
+        navigate("/admin"); // Navigate to admin page if role is Admin
+      } else {
+        navigate("/"); // Navigate to homepage for other roles
+      }
+
       toast.success("Đăng nhập thành công");
       // chuyển đến trang chủ
       navigate("/");
 
       // lưu trữ thông tin của user
       // dispatch action
+
     } catch (err) {
       console.error("Error response from API:", err.response?.data);
       toast.error(err.response.data);
@@ -106,6 +119,7 @@ function LoginPage() {
 
       // Điều hướng đến trang home
       navigate("/");
+
     } catch (error) {
       console.error("Error logging in with Google:", error);
     }

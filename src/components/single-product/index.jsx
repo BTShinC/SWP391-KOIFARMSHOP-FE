@@ -12,6 +12,17 @@ const { Title, Text } = Typography;
 function SinglepProduct() {
   const [cartVisible, setCartVisible] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+
+  
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'decimal',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
+
+
   const { id } = useParams(); // Lấy productId từ URL
   const [product, setProduct] = useState(null); // State để lưu thông tin sản phẩm
   const dispatch = useDispatch(); // Khởi tạo dispatch
@@ -32,6 +43,7 @@ function SinglepProduct() {
   // }, [dispatch]);
 
   // Fetch sản phẩm từ backend khi component mount
+
   useEffect(() => {
     const loadProduct = async () => {
       try {
@@ -99,11 +111,11 @@ function SinglepProduct() {
       <div className="breadcrumb-banner">
         <nav className="breadcrumb">
           <Link to="/" className="breadcrumb-link faded">
-            HomePage
+            Trang chủ
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
-          <Link to="/shop" className="breadcrumb-link faded">
-            Shop
+          <Link to="/product" className="breadcrumb-link faded">
+            Cá Koi Nhật
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
           <span className="breadcrumb-current">
@@ -145,14 +157,13 @@ function SinglepProduct() {
             <div className="product-details">
               <Title level={6}>{product.productName}</Title>
               <Text className="price" style={{ color: "#9F9F9F" }}>
-                Giá: {product.price} VNĐ
+                Giá: {formatCurrency(product.price)} VNĐ
               </Text>
               <Text>Tuổi: {product.size} tháng tuổi</Text>
               <Text>Giới tính: {product.sex}</Text>
               <Text>Kích thước: {product.size} cm</Text>
               <Text>Giống: {product.breed}</Text>
               <Text>Nguồn gốc: {product.origin}</Text>
-
               <div className="action-buttons">
                 <Link to="/shoppingcart">
                   <Button type="default" className="buy-button">

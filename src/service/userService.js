@@ -123,6 +123,18 @@ const addToCartAPI = async (data) => {
   }
 };
 
+
+const fetchAllTransactions = async () => {
+  try {
+    const response = await api.get("transactions/all"); // Fetch all transactions
+    return response.data; // Return the transaction data
+  } catch (error) {
+    console.error("Error fetching all transactions:", error);
+    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+  }
+};
+
+
 const fetchCartItems = async (accountId) => {
   try {
     console.log("Fetching cart items for account:", accountId);
@@ -146,6 +158,7 @@ const deleteCartItem = async (cartItemId) => {
 };
 
 
+
 export {
   Register,
   ChangePassword,
@@ -157,10 +170,10 @@ export {
   editComboInfo,
   fetchAllProductCombo,
   fetchProductById,
-
+  fetchAllTransactions
   editUser,
-
   addToCartAPI,
   fetchCartItems,
   deleteCartItem,
+
 };

@@ -21,7 +21,7 @@ function LayoutTitle() {
   }else if (location.pathname === "/shoppingcart") {
     title = "Giỏ hàng";
   }else if (location.pathname === "/product") {
-    title = "Cá koi nhật";
+    title = "Cá koi Nhật";
   }else if (location.pathname === "/privacy-policy") {
     title = "Chính sách bảo mật";
   }else if (location.pathname === "/support-policy") {

@@ -24,12 +24,16 @@ import LayoutTitle from "./components/layout/title";
 import SinglepProduct from "./components/single-product";
 import ShoppingCartPage from "./pages/shopping-cart";
 import ManageProductCombo from "./pages/admin/manageProductCombo";
+import ManageTransactions from "./pages/admin/manageTransactions";
+import WalletPage from "./pages/wallet";
 import Consignment from "./pages/consignment";
 import CarePackageDetail from "./pages/consignment/carePackage-detail";
 import ConsignmentForm from "./pages/consignment-form";
 import CarePackageList from "./pages/consignment/carePackage-list";
 
+
 function App() {
+
   const router = createBrowserRouter([
     {
       path: "",
@@ -126,6 +130,14 @@ function App() {
           path: "/refund-policy",
           element: <RefundPolicy />,
         },
+
+
+        {
+          path  : "/wallet",
+          element : <WalletPage />
+        }
+
+
       ],
     },
 
@@ -155,8 +167,14 @@ function App() {
       element: <ManageProductCombo />,
     },
     {
-      path: "/blog/:id",
-      element: <BlogDetail />,
+
+      path: "/manageTransaction",
+      element: <ManageTransactions/>,
+    },
+    {
+      path :"/blog/:id" ,
+      element :<BlogDetail />
+
     },
   ]);
   return <RouterProvider router={router} />;

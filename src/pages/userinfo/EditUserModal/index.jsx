@@ -169,6 +169,7 @@ function ModalEditUser({ title, userData, className = "" }) {
                   />
                 </div>
               </div>
+
             ) : (
               className == "modal-edit-user-button" && (
                 <div>
@@ -226,6 +227,7 @@ function ModalEditUser({ title, userData, className = "" }) {
                   </select>
                 </div>
               )
+
             )}
           </div>
         </form>

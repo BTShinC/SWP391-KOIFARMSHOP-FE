@@ -10,10 +10,10 @@ import { PlusOutlined, DeleteOutlined, RollbackOutlined, ShoppingCartOutlined } 
 // Import the fish data from the modal file
 const fishData = [
     {
-        id: 1,
+        id: "DK001",
         image: "/images/kohaku.svg", // Ensure this image path is correct
         title: "Kohaku",
-        price: '1500000',
+        price: '1.500.000',
         productID: '1',
         breed: 'Kohaku',
         size: '84cm',
@@ -25,10 +25,10 @@ const fishData = [
         certificateUrl: '', // Add certificate URL if available
     },
     {
-        id: 2,
+        id: "DK002",
         image: "/images/koi5.svg", // Ensure this image path is correct
         title: "Showa",
-        price: '2300000',
+        price: '2.300.000',
         productID: '2',
         breed: 'Showa',
         size: '100cm',
@@ -40,6 +40,13 @@ const fishData = [
         certificateUrl: '', // Add certificate URL if available
     },
 ];
+const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'decimal',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
 
 function ComparePage() {
     const [selectedFishes, setSelectedFishes] = useState([]);

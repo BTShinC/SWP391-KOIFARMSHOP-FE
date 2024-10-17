@@ -7,9 +7,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../pages/redux/features/userSlice";
 
 const Sidebar = ({ isOpen, onClose }) => {
+
+
+  // Function to format the account balance
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'decimal',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
+
   const user = useSelector((state) => state.user); 
   const dispatch = useDispatch(); // Khai báo useDispatch để sử dụng action
   const navigate = useNavigate(); // Sử dụng useNavigate để điều hướng
+
 
 
   const handleLogout = async () => {
@@ -47,9 +59,9 @@ const Sidebar = ({ isOpen, onClose }) => {
           <li>
             <div className="welcome-message">
               <p>Chào mừng, <br/>
-              {user.fullName}</p> {/* Display user's full name */}
+              {user.account.fullName}</p> {/* Display user's full name */}
               <p>Số dư tài khoản: <br/>
-              {user.accountBalance} VND</p> {/* Display account balance */}
+              {formatCurrency(user.account.accountBalance)} VND{/* Display formatted account balance */}</p>
             </div>
           </li>
         )}
@@ -58,11 +70,34 @@ const Sidebar = ({ isOpen, onClose }) => {
           <Link to="/register" onClick={onClose}>Đăng ký</Link>
         </li>
         )}
-        <li>
-          <Link to="/userinfo" onClick={onClose}>
-            Cập nhật thông tin
-          </Link>
-        </li>
+        {user && ( // Show logout link only if user is logged in
+          <li>
+            <Link to="/userinfo" onClick={onClose}>
+              Cập nhật thông tin
+            </Link>
+          </li>
+        )}
+        {user && ( // Show logout link only if user is logged in
+          <li>
+            <Link to="/" onClick={onClose}>
+              Trạng thái đơn hàng
+            </Link>
+          </li>
+        )}
+        {user && ( // Show logout link only if user is logged in
+          <li>
+            <Link to="/" onClick={onClose}>
+              Trạng thái ký gửi
+            </Link>
+          </li>
+        )}
+        {user && ( // Show logout link only if user is logged in
+          <li>
+            <Link to="/wallet" onClick={onClose}>
+              Nạp tiền
+            </Link>
+          </li>
+        )}
         {user && ( // Show logout link only if user is logged in
           <li>
             <Button onClick={handleLogout} type="link" onClick={onClose}>
@@ -70,14 +105,21 @@ const Sidebar = ({ isOpen, onClose }) => {
             </Button>
           </li>
         )}
+        {/* {user && user.account.roleName === "Admin" && ( // Show admin button if user is an admin
+          <li>
+            <Link to="/admin" onClick={onClose}>
+              <Button type="primary">Quản lý Admin</Button>
+            </Link>
+          </li>
+        )} */}
       </ul>
     </div>
   );
 };
 
 Sidebar.propTypes = {
-  isOpen: PropTypes.func,
-  onClose: PropTypes.func,
+  isOpen: PropTypes.bool.isRequired, // Change to bool
+  onClose: PropTypes.func.isRequired,
 };
 
 export default Sidebar;
