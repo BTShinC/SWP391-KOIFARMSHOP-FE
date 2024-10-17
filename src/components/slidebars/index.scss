@@ -42,12 +42,23 @@
         color: #ff4d4f; 
       }
     }
+    .adminpage-button{
+      background-color: #f9f1e7;
+      color: black;
+      border: 1px solid #d4c8b2;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 6vw;
+      &:hover {
+        background-color: #e9e1d7;
+      }
+    }
   
     ul {
       list-style: none;
       padding: 40px;  
       li {
-        margin: 15px 0;
+        margin: 10px 0;
         padding-bottom: 5px;
   
         a {

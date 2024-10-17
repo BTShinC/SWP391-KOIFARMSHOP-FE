@@ -1,10 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "antd"; // Nhập Button từ Ant Design
 import "./index.scss";
-import { CloseCircleOutlined } from "@ant-design/icons";
+import { CloseCircleOutlined, ToolOutlined} from "@ant-design/icons";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../pages/redux/features/userSlice";
+
 
 const Sidebar = ({ isOpen, onClose }) => {
 
@@ -42,9 +43,9 @@ const Sidebar = ({ isOpen, onClose }) => {
   };
   return (
 
-    
-      <div className={`sidebar ${isOpen ? "open" : ""}`}>
-        <div className="sidebar-wrapper">
+
+    <div className={`sidebar ${isOpen ? "open" : ""}`}>
+      <div className="sidebar-wrapper">
         <Button
           className="sidebar__close"
           onClick={onClose}
@@ -65,6 +66,12 @@ const Sidebar = ({ isOpen, onClose }) => {
                   {user.account.fullName}</p> {/* Display user's full name */}
                 <p>Số dư tài khoản: <br />
                   {formatCurrency(user.account.accountBalance)} VND{/* Display formatted account balance */}</p>
+                {user && user.account.roleName === "Admin" && ( // Show admin button if user is an admin
+                    <Link to="/admin" onClick={onClose}>
+                      <Button className="adminpage-button"><ToolOutlined />Quản lý</Button>
+                    </Link>
+                )}
+
               </div>
             </li>
           )}
@@ -108,13 +115,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               </Button>
             </li>
           )}
-          {/* {user && user.account.roleName === "Admin" && ( // Show admin button if user is an admin
-          <li>
-            <Link to="/admin" onClick={onClose}>
-              <Button type="primary">Quản lý Admin</Button>
-            </Link>
-          </li>
-        )} */}
+
         </ul>
       </div>
     </div>

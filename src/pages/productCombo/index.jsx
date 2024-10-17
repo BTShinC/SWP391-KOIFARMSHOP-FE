@@ -83,8 +83,8 @@ function ProductComboPage() {
                             description={
                                 <div>
                                     <p>Giống: {combo.breed}</p>
-                                    <p>Kích thước trung bình: {combo.size}</p>
-                                    <p>Số lượng: {combo.quantity}</p>
+                                    <p>Kích cỡ trung bình: {combo.size}cm</p>
+                                    <p>Số lượng: {combo.quantity} con</p>
                                     <p className="price">{combo.price} VND</p>
                                     <div className="select-button-wrapper">
                                         <Link to={`/singleproductcombo/${combo.productComboID}`}>
