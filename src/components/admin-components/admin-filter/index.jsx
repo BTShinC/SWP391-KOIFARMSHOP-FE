@@ -21,7 +21,7 @@ function AdminFilter({ onSearch, ModalComponent, onChange }) {
     <div className="content__filter">
       <Space direction="vertical">
         <Search
-          placeholder="Nhập từ khóa tìm kiếm"
+          placeholder="Nhập ID cần tìm kiếm"
           onSearch={onSearch}
           style={{ width: 400 }}
           enterButton

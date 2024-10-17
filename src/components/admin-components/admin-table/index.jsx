@@ -2,8 +2,6 @@ import PropTypes from "prop-types";
 import "./index.scss";
 import { Pagination } from "@mui/material";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
-
 const AdminTable = ({ columns, data, title, ModalComponent }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
@@ -14,7 +12,6 @@ const AdminTable = ({ columns, data, title, ModalComponent }) => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-  const location = useLocation();
   return (
     <div className="admin-table">
       <div>
@@ -37,12 +34,11 @@ const AdminTable = ({ columns, data, title, ModalComponent }) => {
               <td>{row.email}</td>
               <td>{row.phoneNumber}</td>
               <td>{row.accountBalance}</td>
-              {location.pathname === "/members" && <td>{row.role}</td>}
               <td>
                 {ModalComponent && (
                   <ModalComponent
                     userData={row}
-                    title="Chỉnh sửa"
+                    title="Chỉnh sửa vai trò"
                     className="modal-edit-user-button"
                   />
                 )}

@@ -40,15 +40,15 @@ const fetchAllUser = async () => {
   }
 };
 
-// const editUser = async () => {
-//   try {
-//     const response = await api.get("account");
-//     return response;
-//   } catch (error) {
-//     console.error(error);
-//     throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
-//   }
-// };
+const editUser = async (data) => {
+  try {
+    const response = await api.get("account/${data.id}", data);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+  }
+};
 
 const fetchAllProduct = async () => {
   try {
@@ -59,29 +59,9 @@ const fetchAllProduct = async () => {
     throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
   }
 };
-const fetchAllProductCombo = async () => {
-  try {
-    const response = await api.get("productcombo/getall");
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
-  }
-};
-
 const editFishInfo = async (data) => {
   try {
-    const response = await api.put(`product/${data.id}`, data);
-    return response;
-  } catch (error) {
-    console.error(error);
-    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
-  }
-};
-
-const editComboInfo = async (data) => {
-  try {
-    const response = await api.put(`productcombo/${data.id}`, data);
+    const response = await api.put(`product/${data.productID}`, data);
     return response;
   } catch (error) {
     console.error(error);
@@ -105,6 +85,26 @@ const fetchProductById = async (id) => {
   } catch (error) {
     console.error("Error fetching product by ID:", error);
     throw error; // Throw error to handle it in the calling function
+  }
+};
+const fetchAllProductCombo = async () => {
+  try {
+    const response = await api.get("productcombo");
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+  }
+};
+
+
+const editComboInfo = async (data) => {
+  try {
+    const response = await api.put(`productcombo/${data.id}`, data);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
   }
 };
 
@@ -145,6 +145,7 @@ const deleteCartItem = async (cartItemId) => {
   }
 };
 
+
 export {
   Register,
   ChangePassword,
@@ -156,6 +157,9 @@ export {
   editComboInfo,
   fetchAllProductCombo,
   fetchProductById,
+
+  editUser,
+
   addToCartAPI,
   fetchCartItems,
   deleteCartItem,

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import logo from "/public/images/logo.svg";
-import googleLogo from "/public/images/google.svg"; 
+import googleLogo from "/public/images/google.svg";
 import { Link, useNavigate } from "react-router-dom";
 import "./index.scss";
 import axios from "axios";
@@ -9,12 +9,11 @@ import firebase from "firebase/compat/app";
 import { initializeApp } from "firebase/app";
 import { Button, Form, Input } from "antd";
 
-// import { useDispatch } from "react-redux";
+import api from "../../config/api";
+
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/features/userSlice";
-
-
 
 const firebaseConfig = {
   apiKey: "AIzaSyDzdOryEzjKOSYu5q-EiTZyK5DcwwsUqms",
@@ -25,7 +24,6 @@ const firebaseConfig = {
   appId: "1:73945260552:web:164c3f6496f53250b327bd",
   measurementId: "G-SNF9TGJ1Z6",
 };
-
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
@@ -43,9 +41,6 @@ LoginPage.propTypes = {
 // };
 
 function LoginPage() {
-
-
-
   // const [formValue, setFormValue] = useState(initFormValue);
 
   // const handleChange = (event) => {
@@ -58,7 +53,6 @@ function LoginPage() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
 
   const handleLogin = async (values) => {
     try {
@@ -77,7 +71,6 @@ function LoginPage() {
 
       // lưu trữ thông tin của user
       // dispatch action
-      
     } catch (err) {
       console.error("Error response from API:", err.response?.data);
       toast.error(err.response.data);

@@ -4,6 +4,7 @@ import AdminHeader from "../../../components/admin-components/admin-headers";
 import AdminSideBar from "../../../components/admin-components/admin-sidebar";
 import AdminTable from "/src/components/admin-components/admin-table/index";
 import { fetchAllUser } from "../../../service/userService";
+import ModalEditUser from "/src/pages/userinfo/EditUserModal/index";
 AdminMembers.propTypes = {};
 
 const columns = [
@@ -13,30 +14,39 @@ const columns = [
   "Số điện thoại",
   "Địa chỉ",
   "Số dư ví",
-  "Vai trò",
+  "Thao tác",
 ];
-const handleSearch = (value) => {
-  console.log(value);
-};
-
 function AdminMembers() {
   useEffect(() => {
-    getUser();
-  },[]);
+    getAllUser();
+  }, []);
   const [userData, setUserData] = useState([]);
-  const getUser = async () => {
+  const getAllUser = async () => {
     try {
       let res = await fetchAllUser();
-      console.log(res);
-      if (res) {
-        setUserData(res.data);
+      if (res && res.data) {
+        console.log(res);
+        const customers = res.data.filter(
+          (user) => user.roleName === "Admin"
+        );
+        setUserData(customers);
       }
     } catch (error) {
       console.log(error);
     }
   };
-  const adminUsers = userData
-    .filter((user) => user.role === "admin")
+
+  const handleSearch = (value) => {
+    if (value.trim() === "") {
+      getAllUser();
+    } else {
+      // Lọc người dùng dựa trên tên
+      const filtered = userData.filter((user) =>
+        user.fullName.toLowerCase().includes(value.toLowerCase())
+      );
+      setUserData(filtered);
+    }
+  };
 
   return (
     <div className="admin">
@@ -47,7 +57,12 @@ function AdminMembers() {
         <AdminHeader />
         <h1 className="content__title">Trang quản lý</h1>
         <AdminFilter onSearch={handleSearch} />
-        <AdminTable columns={columns} data={adminUsers} title="Thành viên" />
+        <AdminTable
+          columns={columns}
+          data={userData}
+          title="Thành viên"
+          ModalComponent={ModalEditUser}
+        />
       </div>
     </div>
   );

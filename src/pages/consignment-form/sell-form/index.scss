@@ -1,0 +1,44 @@
+.care-form {
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    .back-button {
+      padding: 0.8rem 2rem;
+      background-color: #a47c48;
+      color: #fff ;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      text-transform: uppercase;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+      z-index: 100;
+      &:hover {
+        background-color: #8c6b42;
+      }
+    }
+    .batch-sell-button {
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      transition: all 0.3s ease-in-out;
+      display: inline-block;
+      text-align: center;
+      cursor: pointer;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+    }
+    .batch-sell-button {
+      background-color: #8c6b42;
+      color: white;
+      border: none;
+
+      &:hover {
+        background-color: #a47c48;
+      }
+    }
+  }
+}

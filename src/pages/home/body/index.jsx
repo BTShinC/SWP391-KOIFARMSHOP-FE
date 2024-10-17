@@ -2,7 +2,7 @@ import poster from "swp391-koifarmshop-fe/public/images/poster-upscaled.jpeg";
 //upscalled image
 
 import "./index.scss";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { Card } from "antd";
 import Meta from "antd/es/card/Meta";

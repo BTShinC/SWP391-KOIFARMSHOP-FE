@@ -1,0 +1,219 @@
+.care-package-list {
+  position: relative;
+  background-color: #fcf8f3;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 0;
+
+  .care-package-container {
+    max-width: 1300px;
+    width: 100%;
+    padding: 0 1.5rem;
+    .type-filter-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+
+      .filter-button {
+        background-color: #e0e0e0;
+        color: #333;
+        padding: 0.6rem 1.2rem;
+        border-radius: 20px;
+        font-weight: bold;
+        cursor: pointer;
+
+        &.active {
+          background-color: #b07d62;
+          color: white;
+        }
+
+        &:hover {
+          background-color: #b07d62;
+        }
+      }
+    }
+    .sort-price-button {
+      background-color: #b07d62;
+      color: #fff;
+      font-weight: bold;
+      padding: 0.6rem 1.2rem;
+      margin-left: 1rem;
+      display: flex;
+      align-items: center;
+
+      &:hover {
+        background-color: #b07d62;
+      }
+
+      svg {
+        margin-left: 0.5rem;
+      }
+    }
+
+    .package-title {
+      font-weight: 700;
+      text-align: center;
+      color: #b07d62;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+      margin-bottom: 3rem;
+      font-size: 3.5rem;
+      position: relative;
+
+      &::after {
+        content: "";
+        position: absolute;
+        width: 50px;
+        height: 4px;
+        background-color: #b07d62;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 2px;
+      }
+    }
+
+    .filter-container {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+      .MuiTextField-root {
+        width: 60%;
+      }
+
+      .ant-select {
+        width: 30%;
+      }
+    }
+
+    .care-package-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 3rem;
+      padding: 2rem;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      background-color: #fff;
+
+      &:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        transform: scale(1.02);
+        transition: transform 0.3s ease;
+      }
+
+      .image-container {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        padding-right: 2rem;
+
+        img {
+          border-radius: 12px;
+          max-width: 100%;
+          height: auto;
+          transition: transform 0.3s ease;
+
+          &:hover {
+            transform: scale(1.05); // Hiệu ứng phóng to khi hover
+          }
+        }
+      }
+
+      .description-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        padding-left: 2rem;
+
+        .title-wrapper {
+          display: flex;
+          align-items: center;
+
+          h4 {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-right: 1rem;
+          }
+
+          .label-tag {
+            background-color: #ff5722;
+            color: white;
+            font-weight: bold;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            margin-left: 0.5rem;
+          }
+
+          .label-sale {
+            background-color: #4caf50;
+          }
+        }
+
+        h6 {
+          font-size: 1.5rem;
+          color: #8c7b6b;
+          margin-bottom: 1.5rem;
+        }
+
+        ul {
+          padding-left: 1.5rem;
+          margin-bottom: 1rem;
+          li {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #6e655b;
+
+            &:before {
+              content: "✔";
+              margin-right: 0.5rem;
+              color: #a47c48;
+            }
+          }
+        }
+
+        .view-detail-btn {
+          margin-top: 1.5rem;
+          padding: 0.8rem 2rem;
+          background-color: #a47c48;
+          color: #fff;
+          font-size: 1.1rem;
+
+          &:hover {
+            background-color: #8c6b42;
+          }
+        }
+      }
+    }
+
+    // Nút trở lại
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 0.8rem 2rem;
+      background-color: #a47c48;
+      color: #fff;
+      font-size: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      text-transform: uppercase;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+      z-index: 100;
+
+      &:hover {
+        background-color: #8c6b42;
+      }
+    }
+  }
+}
