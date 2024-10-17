@@ -1,3 +1,4 @@
+
 import PropTypes from "prop-types";
 import logo from "/public/images/logo.svg";
 import { useNavigate, Link } from "react-router-dom";
@@ -11,8 +12,10 @@ RegisterForm.propTypes = {
 };
 
 const initFormValue = {
+
   firstName: "",
   lastName: "",
+
   userName: "",
   password: "",
   confirmPassword: "",
@@ -45,6 +48,7 @@ function RegisterForm() {
           <img src={logo} alt="Logo" />
           <h2>Đăng ký</h2>
         </div>
+
 
         <Form
           name="registerForm"
@@ -138,6 +142,7 @@ function RegisterForm() {
         <div className="back-to-login">
           <span>Bạn đã là thành viên?</span>
           <Link to="/login">Đăng nhập ngay</Link>
+
         </div>
       </div>
     </div>

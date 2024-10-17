@@ -13,6 +13,7 @@ function AdminHeader() {
       </div>
       <div className="admin-info">
         <div className="admin-info__avatar">
+
           <UserAvatar></UserAvatar>
         </div>
         <div className="admin-info__details">
@@ -20,6 +21,7 @@ function AdminHeader() {
             {user ? user.fullName : "User"}
           </span>
           <span className="admin-info__role">Admin</span>
+
         </div>
       </div>
     </div>

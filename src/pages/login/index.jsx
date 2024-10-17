@@ -8,7 +8,9 @@ import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import firebase from "firebase/compat/app";
 import { initializeApp } from "firebase/app";
 import { Button, Form, Input } from "antd";
+
 import api from "../../config/api";
+
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/features/userSlice";
@@ -56,6 +58,9 @@ function LoginPage() {
     try {
       const response = await api.post("login", values);
       console.log("Values sent to API:", values);
+
+      localStorage.setItem("token", response.data.account.token); 
+      console.log("Response from API:", response.data.account);
 
       // Save user data to Redux
       dispatch(login(response.data));

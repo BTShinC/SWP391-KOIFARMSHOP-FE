@@ -6,6 +6,7 @@ import Meta from "antd/es/card/Meta";
 import { FilterOutlined, SearchOutlined, SwapOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { fetchAllProduct } from "../../service/userService";
 
 function ProductPage() {
     const [fishData, setFishData] = useState([]); // Renamed to fishData for clarity
@@ -43,10 +44,26 @@ function ProductPage() {
     const indexOfLastProduct = currentPage * itemsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - itemsPerPage;
     const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+    const [products, setProducts] = useState([]);
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
     }
+
+    useEffect(() => {
+        // Fetch products from API
+        const loadProducts = async () => {
+            try {
+                const response = await fetchAllProduct();
+                console.log(response.data);
+                setProducts(response.data); // Assuming response.data contains the product array
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            }
+        };
+
+        loadProducts();
+    }, []);
 
     return (
         <div className="product-page">
@@ -72,32 +89,43 @@ function ProductPage() {
                 </div>
                 <h2>Các sản phẩm</h2>
                 <div className="product-list">
-                {currentProducts.map(product => (
-                    <Card
-                        key={product.id}
-                        hoverable
-                        cover={<img src={product.image} alt={product.title} />}
-                        style={{ width: 240, margin: '16px', display: 'inline-block' }}
-                    >
-                        <Meta 
-                                title={<span className="product-name">{product.productName}</span>} 
+                    {currentProducts.map(product => (
+                        <Card
+                            key={product.productId}
+                            hoverable
+                            cover={<img src={product.image} alt={product.title} />}
+                            style={{ width: 240, margin: '16px', display: 'inline-block' }}
+                        >
+                            <Meta
+                                title={<span className="product-name">{product.productName}</span>}
                                 description={
+
                                     <div>
+                                        
+
                                         <p>Giống: {product.breed}</p>
                                         <p>Kích thước: {product.size}</p>
                                         <p>Giới tính: {product.sex}</p>
                                         <p className="price">Giá: {product.price} VND</p>
+
+                                        <div className="select-button-wrapper">
+
+                                            <Link to={`/singleproduct/${product.productID}`}>
+                                            <Button className="product-detail-button" style={{ marginTop: '10px' }}>
+
+                                                Xem chi tiết
+                                            </Button>
+                                            </Link>
+
+                                        </div>
                                     </div>
-                                } 
+
+                                }
                             />
-                        <div className="select-button-wrapper">
-                            <Button className="product-detail-button" style={{ marginTop: '10px' }}>
-                                Xem chi tiết
-                            </Button>
-                        </div>
-                    </Card>
-                ))}
-            </div>
+
+                        </Card>
+                    ))}
+                </div>
             </div>
             <div className="pagination-wrapper">
                 <Pagination className="pagination"

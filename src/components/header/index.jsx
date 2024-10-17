@@ -54,19 +54,19 @@ function Header() {
 
       <div className="header__icon">
         <ul>
-          {user && (
+          {/* {user && (
             <li className="userName">
               <span>{user.account.fullName}</span>
               <div>{user.account.accountBalance} VND</div>
             </li>
-          )}
+          )} */}
           <li>
             <Link to="#" onClick={toggleSidebar}>
             <UserAvatar></UserAvatar>
             </Link>
           </li>
           <li>
-            <Link to="/">
+            <Link to="/admin">
               <SearchOutlined />
             </Link>
           </li>

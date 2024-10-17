@@ -4,6 +4,7 @@ const api = axios.create({
     baseURL:"http://103.90.227.69:8080/api/"
 });
 
+
 api.interceptors.request.use(
     (config) => {
       const token = localStorage.getItem("token");
@@ -15,6 +16,8 @@ api.interceptors.request.use(
     (error) => {
       return Promise.reject(error);
     }
-  );
+);
 
 export default api;
+
+

@@ -1,5 +1,6 @@
 import "./index.scss";
 import ModalEditUser from "./EditUserModal";
+
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { useEffect } from "react"; // Import useEffect
@@ -7,6 +8,7 @@ import { useEffect } from "react"; // Import useEffect
 const UserInfoPage = () => {
   const user = useSelector((state) => state.user);
   const navigate = useNavigate(); // Khởi tạo useNavigate
+
 
   useEffect(() => {
     if (!user || !user.account) {
@@ -37,9 +39,25 @@ const UserInfoPage = () => {
           <div className="userinfo__item">
             <span className="userinfo__label">Email:</span> {user.account.email}
           </div>
-          <div className="userinfo__item">
-            <span className="userinfo__label">Số điện thoại:</span>{" "}
-            {user.account.phoneNumber}
+
+          <div className="userinfo__details">
+            <div className="userinfo__item">
+              <span className="userinfo__label">Họ và tên:</span> {user.fullName}
+            </div>
+            <div className="userinfo__item">
+              <span className="userinfo__label">Địa chỉ:</span> {user.address}
+            </div>
+            <div className="userinfo__item">
+              <span className="userinfo__label">Email:</span> {user.email}
+            </div>
+            <div className="userinfo__item">
+              <span className="userinfo__label">Số điện thoại:</span> {user.phoneNumber}
+            </div>
+            <div className="userinfo__item">
+              <span className="userinfo__label">Số dư:</span> {user.accountBalance.toFixed(2)}
+            </div>
+            <ModalEditUser userData={user} title="Thay đổi thông tin cá nhân" />
+
           </div>
           <div className="userinfo__item">
             <span className="userinfo__label">Số dư:</span> $
