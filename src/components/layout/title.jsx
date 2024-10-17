@@ -31,8 +31,14 @@ function LayoutTitle() {
   }else if (location.pathname === "/refund-policy") {
     title = "Chính sách đổi trả";
   }else if (location.pathname === "/blog") {
-    title = "Tin tức";}
-
+    title = "Tin tức";
+  }else if (location.pathname === "/wallet") {
+    title = "Ví tiền";
+  }else if (location.pathname === "/productcombo") {
+    title = "Lô cá Koi";
+  }else if (location.pathname === "/orderTracking") {
+    title = "Theo dõi đơn hàng";
+  }
   return (
     <>
       <Header />

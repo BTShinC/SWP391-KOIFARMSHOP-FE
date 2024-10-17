@@ -1,0 +1,130 @@
+/* src/components/single-product-combo/index.scss */
+.single-product-combo {
+    .breadcrumb-banner {
+      margin-bottom: 20px;
+      background-color: #f9f1e7;
+      height: 100px;
+      display: flex;
+  
+      .breadcrumb {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        padding-left: 100px;
+        margin-top: 10px;
+  
+        &-link {
+          color: #000;
+          text-decoration: none;
+  
+          &.faded {
+            opacity: 0.5;
+          }
+        }
+  
+        &-separator {
+          margin: 0 15px;
+        }
+  
+        &-current {
+          font-weight: bold;
+        }
+      }
+    }
+  
+    .product-container {
+      display: flex;
+      margin-top: 20px;
+      margin-left: 120px;
+  
+      .image-gallery {
+        display: flex;
+        align-items: flex-start;
+        margin-top: 50px;
+        margin-right: 120px;
+  
+        .main-image {
+          width: 400px;
+          height: 400px;
+          border-radius: 8px;
+          object-fit: cover;
+        }
+      }
+  
+      .product-details {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-top: 50px;
+  
+        .price {
+          font-size: 18px;
+          margin-top: 10px;
+          margin-bottom: 10px;
+          color: #9f9f9f;
+        }
+  
+        .action-buttons {
+          display: flex;
+          justify-content: center; /* Centering buttons */
+          align-items: center;
+          margin-top: 60px;
+  
+          .buy-button {
+            margin-right: 10px;
+            width: 150px; /* Set button width */
+            padding: 20px;
+          }
+        }
+  
+        .divider-wrapper {
+          width: 605.01px; /* Set the width here */
+          margin: 20px auto; /* Center the Divider */
+          border-color: #d9d9d9;
+        }
+      }
+    }
+  
+    .description-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+  
+      .description {
+        margin-bottom: 50px;
+        width: 70vw;
+  
+        h2 {
+          font-size: 24px;
+          margin-bottom: 50px;
+        }
+  
+        p {
+          font-size: 16px;
+          color: #555;
+          text-align: left;
+        }
+      }
+  
+      .divider-wrapper {
+        width: 100%; /* Set the width here */
+        margin: 20px auto; /* Center the Divider */
+        border-color: #d9d9d9;
+      }
+    }
+  
+    .carousel-container {
+      text-align: center;
+      margin-top: 100px;
+      background-color: #FAF3EA;
+      padding: 80px;
+  
+      .title {
+        padding-top: 0px;
+        padding-bottom: 30px;
+      }
+    }
+  }
