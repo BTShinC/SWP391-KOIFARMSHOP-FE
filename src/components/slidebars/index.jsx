@@ -7,22 +7,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../pages/redux/features/userSlice";
 
 const Sidebar = ({ isOpen, onClose }) => {
-
-
   // Function to format the account balance
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'decimal',
+    return new Intl.NumberFormat("vi-VN", {
+      style: "decimal",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount);
   };
 
-  const user = useSelector((state) => state.user); 
+  const user = useSelector((state) => state.user);
   const dispatch = useDispatch(); // Khai báo useDispatch để sử dụng action
   const navigate = useNavigate(); // Sử dụng useNavigate để điều hướng
-
-
 
   const handleLogout = async () => {
     try {
@@ -30,11 +26,11 @@ const Sidebar = ({ isOpen, onClose }) => {
       // await api.post('/logout'); // Thay đổi endpoint nếu cần
 
       // Xóa trạng thái người dùng trong Redux
-      dispatch(logout()); 
+      dispatch(logout());
       // Xóa token khỏi localStorage
-      localStorage.data.removeItem("token"); 
+      localStorage.data.removeItem("token");
       // Điều hướng về trang chủ sau khi đăng xuất
-      navigate("/"); 
+      navigate("/");
     } catch (error) {
       console.error("Logout failed:", error);
       // Có thể hiển thị thông báo lỗi cho người dùng ở đây
@@ -58,17 +54,25 @@ const Sidebar = ({ isOpen, onClose }) => {
         ) : (
           <li>
             <div className="welcome-message">
-              <p>Chào mừng, <br/>
-              {user.account.fullName}</p> {/* Display user's full name */}
-              <p>Số dư tài khoản: <br/>
-              {formatCurrency(user.account.accountBalance)} VND{/* Display formatted account balance */}</p>
+              <p>
+                Chào mừng, <br />
+                {user.account.fullName}
+              </p>{" "}
+              {/* Display user's full name */}
+              <p>
+                Số dư tài khoản: <br />
+                {formatCurrency(user.account.accountBalance)} VND
+                {/* Display formatted account balance */}
+              </p>
             </div>
           </li>
         )}
         {!user && (
-        <li>
-          <Link to="/register" onClick={onClose}>Đăng ký</Link>
-        </li>
+          <li>
+            <Link to="/register" onClick={onClose}>
+              Đăng ký
+            </Link>
+          </li>
         )}
         {user && ( // Show logout link only if user is logged in
           <li>
@@ -98,20 +102,20 @@ const Sidebar = ({ isOpen, onClose }) => {
             </Link>
           </li>
         )}
+        {user && user.account.roleName === "Admin" && (
+          <li>
+            <Button className="button-admin" onClick={() => navigate("/admin")}>
+              Quản lý
+            </Button>
+          </li>
+        )}
         {user && ( // Show logout link only if user is logged in
           <li>
-            <Button onClick={handleLogout} type="link" onClick={onClose}>
+            <Button onClick={handleLogout} type="link">
               Đăng xuất
             </Button>
           </li>
         )}
-        {/* {user && user.account.roleName === "Admin" && ( // Show admin button if user is an admin
-          <li>
-            <Link to="/admin" onClick={onClose}>
-              <Button type="primary">Quản lý Admin</Button>
-            </Link>
-          </li>
-        )} */}
       </ul>
     </div>
   );

@@ -21,7 +21,7 @@ const koiCarePackages = [
       "Kiểm tra sức khỏe cá",
       "Tư vấn dinh dưỡng",
     ],
-    image: "/public/images/cakoi2.webp",
+    image: "/images/cakoi2.webp",
   },
   {
     id: 2,
@@ -29,7 +29,7 @@ const koiCarePackages = [
     price: "3.000.000đ/tháng",
     description: "Dịch vụ chăm sóc chuyên sâu cho các giống cá Koi quý hiếm.",
     services: ["Kiểm tra chuyên sâu", "Điều trị bệnh cá", "Chăm sóc định kỳ"],
-    image: "/public/images/a.jpg",
+    image: "/images/a.jpg",
   },
   {
     id: 3,
@@ -38,7 +38,7 @@ const koiCarePackages = [
     description:
       "Dịch vụ cao cấp bao gồm chăm sóc, điều trị, và tư vấn toàn diện.",
     services: ["Chăm sóc 24/7", "Tư vấn chuyên gia", "Bảo hiểm sức khỏe cá"],
-    image: "/public/images/ca-koi-chat-luong.webp",
+    image: "/images/ca-koi-chat-luong.webp",
   },
   {
     id: 4,
@@ -51,7 +51,7 @@ const koiCarePackages = [
       "Kiểm tra định kỳ tình trạng màu sắc",
       "Tư vấn điều chỉnh chế độ chăm sóc",
     ],
-    image: "/public/images/image 111.png",
+    image: "/images/image 111.png",
   },
 ];
 

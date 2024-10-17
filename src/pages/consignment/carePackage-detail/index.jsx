@@ -42,15 +42,15 @@ function CarePackageDetail() {
       images: [
         {
           name: "Chăm sóc định kỳ",
-          url: "/public/images/cakoi1.webp",
+          url: "/images/cakoi1.webp",
         },
         {
           name: "Chăm sóc định kỳ",
-          url: "/public/images/cakoi2.webp",
+          url: "/images/cakoi2.webp",
         },
         {
           name: "Chăm sóc định kỳ",
-          url: "/public/images/cakoi1.webp",
+          url: "/images/cakoi1.webp",
         },
       ],
       tag: "HOT",
@@ -85,15 +85,15 @@ function CarePackageDetail() {
       images: [
         {
           name: "Chăm sóc định kỳ",
-          url: "/public/images/cakoi1.webp",
+          url: "/images/cakoi1.webp",
         },
         {
           name: "Chăm sóc định kỳ",
-          url: "/public/images/cakoi2.webp",
+          url: "/images/cakoi2.webp",
         },
         {
           name: "Chăm sóc định kỳ",
-          url: "/public/images/cakoi1.webp",
+          url: "/images/cakoi1.webp",
         },
       ],
       tag: "SALE",

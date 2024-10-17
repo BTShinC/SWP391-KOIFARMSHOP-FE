@@ -44,7 +44,27 @@
       li {
         margin: 15px 0;
         padding-bottom: 5px;
-  
+        .button-admin {
+          background-color: #b88e2f; /* Màu vàng đồng */
+          color: white;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 8px;
+          font-weight: bold;
+          font-size: 16px;
+          cursor: pointer;
+          transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        
+          &:hover {
+            background-color: #a67b23; /* Tối hơn chút khi hover */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+          }
+        
+          &:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(184, 142, 47, 0.5); /* Viền mờ khi focus */
+          }
+        }
         a {
           text-decoration: none;
           color: #000;

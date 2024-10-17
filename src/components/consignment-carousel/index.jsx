@@ -3,21 +3,18 @@ import { useRef } from "react";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import "./index.scss"; // Import file index.scss
 import { useNavigate } from "react-router-dom";
-
 function ConsignmentCarousel() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const slides = [
     {
-      backgroundImage:
-        "url('/public/images/ho-ca-koi-ngoai-troi-1024x640.jpg')", // Hình nền slide 1
+      imageSrc: "/images/ho-ca-koi-ngoai-troi-1024x640.jpg", 
       buttonLabel: "Ký gửi ngay",
     },
     {
-      backgroundImage: "url('/public/images/banner-JPD.jpg')", // Hình nền slide 2
-      buttonLabel: "Ký gửi ngay",
+      imageSrc: "/images/banner-JPD.jpg", 
     },
     {
-      backgroundImage: "url('/public/images/banner-SAKURA.jpg')", // Thêm hình nền mới
+      imageSrc: "/images/banner-SAKURA.jpg",
       buttonLabel: "Ký gửi ngay",
     },
   ];
@@ -37,14 +34,22 @@ function ConsignmentCarousel() {
       <Carousel autoplay ref={carouselRef}>
         {slides.map((slide, index) => (
           <div key={index}>
-            <div
-              className="consignment-carousel"
-              style={{ backgroundImage: slide.backgroundImage }}
-            >
-              <div style={{ flexGrow: 1 }}></div>
-              <Button type="primary" className="carousel-button" onClick={() => navigate('/carePackageList')}>
-                {slide.buttonLabel}
-              </Button>
+            <div className="consignment-carousel">
+              {/* Sử dụng img thay vì background-image */}
+              <img
+                src={slide.imageSrc}
+                alt={`Slide ${index + 1}`}
+                className="carousel-image"
+              />
+              <div className="carousel-content">
+                <Button
+                  type="primary"
+                  className="carousel-button"
+                  onClick={() => navigate("/carePackageList")}
+                >
+                  {slide.buttonLabel}
+                </Button>
+              </div>
             </div>
           </div>
         ))}
