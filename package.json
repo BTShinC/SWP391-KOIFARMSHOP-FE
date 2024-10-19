@@ -20,6 +20,7 @@
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
     "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
     "firebase": "^10.13.2",
     "material": "^0.9.16",
     "prop-types": "^15.8.1",

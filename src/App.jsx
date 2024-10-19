@@ -30,6 +30,7 @@ import Consignment from "./pages/consignment";
 import CarePackageDetail from "./pages/consignment/carePackage-detail";
 import ConsignmentForm from "./pages/consignment-form";
 import CarePackageList from "./pages/consignment/carePackage-list";
+import PaymentPage from "./pages/consignment-form/payment";
 
 
 function App() {
@@ -129,6 +130,10 @@ function App() {
         {
           path: "/refund-policy",
           element: <RefundPolicy />,
+        },
+        {
+          path: "/consignmentPayment",
+          element: <PaymentPage />,
         },
 
 

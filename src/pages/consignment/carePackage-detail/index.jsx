@@ -120,7 +120,7 @@ function CarePackageDetail() {
       <Button
         variant="contained"
         className="back-button"
-        onClick={() => navigate(-1)} // Xử lý quay lại
+        onClick={() => navigate(-1)}
       >
         Trở lại
       </Button>
@@ -132,7 +132,6 @@ function CarePackageDetail() {
         marginTop="3rem"
         marginBottom="3rem"
       >
-        {/* Hình ảnh nhỏ liên quan */}
         <Box
           className="relative-img"
           sx={{
@@ -148,21 +147,19 @@ function CarePackageDetail() {
               src={img.url}
               alt={`Cá Koi ${index + 1}`}
               style={{ width: "80px", borderRadius: "8px" }}
-              onMouseEnter={() => setMainImage(img.url)} // Cập nhật hình ảnh chính khi hover
+              onMouseEnter={() => setMainImage(img.url)}
             />
           ))}
         </Box>
 
-        {/* Hình ảnh chính */}
         <Box className="main-img" sx={{ textAlign: "center" }}>
           <img
-            src={mainImage} // Hiển thị hình ảnh chính từ state
+            src={mainImage}
             alt="Cá Koi chính"
-            style={{ width: "300px", borderRadius: "8px" }}
+            style={{ width: "250px", borderRadius: "8px" }}
           />
         </Box>
 
-        {/* Phần mô tả */}
         <Card
           className="img-description"
           sx={{
@@ -171,7 +168,8 @@ function CarePackageDetail() {
             flexDirection: "column",
             justifyContent: "flex-start",
             alignItems: "center",
-            maxWidth: "100%",
+            maxWidth: "700px",
+            width: "100%",
             marginLeft: "2rem",
           }}
         >
@@ -198,8 +196,6 @@ function CarePackageDetail() {
               ))}
             </ul>
           </CardContent>
-
-          {/* Nút ký gửi */}
           <Button
             className="careConsignment-btn"
             onClick={() => handleCareConsignmentFrom(data.id, data.type)}
