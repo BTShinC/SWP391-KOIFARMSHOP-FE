@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Provider } from "react-redux";
 import store from "./pages/redux/store.js";
-import { CartProvider } from "./components/shopping-cart/cartContext.jsx";
+// import { CartProvider } from "./components/shopping-cart/cartContext.jsx";
 import useAuth from "./hooks/useAuth.js";
 
 const Main = () => {
@@ -17,9 +17,9 @@ const Main = () => {
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
-      <CartProvider>
+      {/* <CartProvider> */}
         <Main />
-      </CartProvider>
+      {/* </CartProvider> */}
     </Provider>
     <ToastContainer />
   </React.StrictMode>

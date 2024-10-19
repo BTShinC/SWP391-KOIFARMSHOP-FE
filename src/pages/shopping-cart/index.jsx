@@ -1,9 +1,10 @@
 import "./index.scss";
-import { Button, InputNumber, message } from "antd";
+import { Button, message } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteCartItem, fetchCartItems } from "../../service/userService";
 import { removeFromCart, setCartItems } from "../redux/features/createSlice";
+import { useEffect } from "react";
 
 
 
@@ -14,9 +15,11 @@ function ShoppingCartPage() {
   
 
   const subtotal = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
+    (total, item) => total + item.price,
     0
   );
+
+  
 
 
 
@@ -34,20 +37,23 @@ function ShoppingCartPage() {
     }
   };
 
+  useEffect(() => {
+    loadCartItems();
+  }, [account, dispatch]);
+
   const handleRemoveFromCart = async (cartItemId) => {
     try {
       // Gọi API để xóa item
       await deleteCartItem(cartItemId); // Gọi hàm deleteCartItem
       dispatch(removeFromCart(cartItemId)); // Cập nhật Redux store
       message.success("Đã xóa sản phẩm khỏi giỏ hàng");
-
-      // Reload lại giỏ hàng
       loadCartItems(); // Gọi lại hàm loadCartItems để cập nhật giỏ hàng
     } catch (error) {
       console.error("Error removing item from cart:", error);
       message.error("Không thể xóa sản phẩm khỏi giỏ hàng");
     }
   };
+  
 
   return (
     <div className="shopping-cart-page">

@@ -37,9 +37,8 @@
     "sass": "^1.79.1",
     "swiper": "^11.1.14",
     "swp391-koifarmshop-fe": "file:",
-    "vn-num2words": "^1.0.4",
-    "ui": "^0.2.4"
-
+    "ui": "^0.2.4",
+    "vn-num2words": "^1.0.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
