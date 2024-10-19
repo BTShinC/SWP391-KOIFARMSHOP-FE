@@ -46,6 +46,7 @@ function SinglepProduct() {
 
   useEffect(() => {
     const loadProduct = async () => {
+      
       try {
         const response = await fetchProductById(id);
         console.log("Fetched product:", response);
