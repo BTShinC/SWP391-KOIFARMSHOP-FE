@@ -42,22 +42,10 @@ const ShoppingCart = ({ onClose }) => {
   }, [account, dispatch]);
 
   const subtotal = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
+    (total, item) => total + item.price,
     0
   );
 
-  // const handleUpdateQuantity = async (itemId, newQuantity) => {
-  //   try {
-  //     if (newQuantity > 0) {
-  //       dispatch(updateQuantity({ id: itemId, quantity: newQuantity }));
-  //     } else {
-  //       dispatch(removeFromCart(itemId));
-  //     }
-  //   } catch (error) {
-  //     console.error("Error updating cart:", error);
-  //     message.error("Không thể cập nhật giỏ hàng");
-  //   }
-  // };
 
   const handleRemoveFromCart = async (cartItemId) => {
     try {
@@ -105,7 +93,7 @@ const ShoppingCart = ({ onClose }) => {
               avatar={
                 <img
                   src={item.image}
-                  alt={item.productName}
+                  alt={item.name}
                   style={{ width: 50, height: 50 }}
                 />
               }
@@ -113,7 +101,7 @@ const ShoppingCart = ({ onClose }) => {
               description={
                 <>
                   <div>
-                    <strong>Giống:</strong> {item.breed} <br />
+                    <strong>Tên:</strong> {item.name} <br />
                     {/* <strong>Số lượng:</strong> {item.quantity} <br /> */}
                     <strong>Giá:</strong> {item.price.toLocaleString("vi-VN")} VNĐ
                   </div>
