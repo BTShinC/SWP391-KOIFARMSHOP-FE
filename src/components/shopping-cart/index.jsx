@@ -46,18 +46,6 @@ const ShoppingCart = ({ onClose }) => {
     0
   );
 
-  // const handleUpdateQuantity = async (itemId, newQuantity) => {
-  //   try {
-  //     if (newQuantity > 0) {
-  //       dispatch(updateQuantity({ id: itemId, quantity: newQuantity }));
-  //     } else {
-  //       dispatch(removeFromCart(itemId));
-  //     }
-  //   } catch (error) {
-  //     console.error("Error updating cart:", error);
-  //     message.error("Không thể cập nhật giỏ hàng");
-  //   }
-  // };
 
   const handleRemoveFromCart = async (cartItemId) => {
     try {

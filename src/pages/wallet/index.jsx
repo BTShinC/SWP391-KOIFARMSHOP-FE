@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import axios from 'axios'; // Import axios
 import './index.scss'; // Import styles
 import vnNum2Words from 'vn-num2words'; // Import the vn-num2words library
@@ -66,11 +66,26 @@ function WalletPage() {
                 date: currentDate,     // Add current date
                 status: "Chờ xác nhận", // Default status
             });
+            
+            // Redirect to VNPAY link
+            const vnpayLink = response.data; // Assuming response.data contains the VNPAY link
+            const transactionId = response.data.vnp_TxnRef; // Get transaction ID from response
+            window.location.href = vnpayLink; // Redirect to VNPAY link
+
             toast.success("Đã xác nhận giao dịch! Vui lòng chờ cập nhật."); // Notify success
-            console.log("Response from API:", response.data); // Log the response data
+            console.log("Response from API:", vnpayLink); // Log the response data
 
             // Fetch the updated transaction history
             fetchTransactionHistory(); // Refresh the transaction history
+
+            // Post transaction response to the API after successful payment
+            const transactionResponse = {
+                vnp_TxnRef: transactionId, // Use the actual transaction ID from the response
+                vnp_ResponseCode: "00", // Replace with actual response code
+                vnp_Amount: totalAmount.toString() // Convert amount to string
+            };
+
+            await axios.post(`http://103.90.227.69:8080/api/transactions/vnpay/response`, transactionResponse);
 
         } catch (error) {
             console.error("Error adding transaction:", error);
@@ -106,12 +121,12 @@ function WalletPage() {
                 />
                 {amount && <p>{vnNum2Words(amount)} VND</p>} {/* Display amount in words using vn-num2words */}
             </div>
-            {amount || selectedLevel ? (
+            {/* {amount || selectedLevel ? (
                 <img className='QR'
                     src="/public/images/QR_Koi_bank.jpg" // Replace with the path to your static image
                     alt="QR" 
                 />
-            ) : null}
+            ) : null} */}
             <button className="confirm-button" onClick={handleTransactionConfirm}>Xác nhận</button>
 
             {/* Transaction History Table */}
