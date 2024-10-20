@@ -38,6 +38,8 @@ function LayoutTitle() {
     title = "Cá Koi Nhật";
   }else if (location.pathname === "/orderTracking") {
     title = "Theo dõi đơn hàng";
+  }else if (location.pathname === "/checkout") {
+    title = "Thanh toán";
   }
   return (
     <>

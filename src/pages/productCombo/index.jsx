@@ -12,6 +12,14 @@ function ProductComboPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 12;
+    const formatCurrency = (amount) => {
+        return new Intl.NumberFormat('vi-VN', {
+          style: 'decimal',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).format(amount);
+      };
+    
 
     // Fetch product combo data from the API
     async function fetchComboData() {
@@ -85,7 +93,7 @@ function ProductComboPage() {
                                     <p>Giống: {combo.breed}</p>
                                     <p>Kích cỡ trung bình: {combo.size}cm</p>
                                     <p>Số lượng: {combo.quantity} con</p>
-                                    <p className="price">{combo.price} VND</p>
+                                    <p className="price">{formatCurrency(combo.price)} VND</p>
                                     <div className="select-button-wrapper">
                                         <Link to={`/singleproductcombo/${combo.productComboID}`}>
                                             <Button className="product-detail-button" style={{ marginTop: '10px' }}>
