@@ -150,12 +150,14 @@ function CareForm({ id }) {
 
     const finalData = {
       ...data,
-      images: uploadedImages,
+      image: uploadedImages[0].url,
+      image1: uploadedImages[1].url,
+      image2: uploadedImages[2].url,
       certifications: uploadedCerts,
     };
 
     console.log(
-      "Form data with uploaded images and certifications:",
+      "Form data with uploaded images and certifications cá thể:",
       finalData
     );
     localStorage.setItem("careForm", JSON.stringify(finalData));
@@ -228,7 +230,7 @@ function CareForm({ id }) {
                 onChange={handleChange}
                 beforeUpload={() => false}
               >
-                {fileList.length >= 4 ? null : uploadButton}
+                {fileList.length >= 3 ? null : uploadButton}
               </Upload>
               {previewImage && (
                 <Image
@@ -241,6 +243,7 @@ function CareForm({ id }) {
                 />
               )}
             </Grid>
+            
             <Grid item xs={12} sx={{ marginBottom: 2 }}>
               <Typography>Ảnh chứng nhận</Typography>
               <Upload

@@ -12,12 +12,14 @@ import {
 } from "@mui/material";
 import { Upload, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { storage } from "../../../firebase"; // Đảm bảo bạn đã cấu hình đúng Firebase
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"; // Firebase storage functions
 import { useForm } from "react-hook-form";
 import "./index.scss";
 import SellFormCombo from "../sell-form-combo";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 function SellForm() {
   const {
     register,
@@ -26,6 +28,21 @@ function SellForm() {
     formState: { errors },
   } = useForm();
 
+  useEffect(() => {
+    // Lấy dữ liệu từ localStorage khi trang tải lại
+    const savedFormValue = localStorage.getItem("sellForm");
+    if (savedFormValue) {
+      const parsedFormValue = JSON.parse(savedFormValue);
+      Object.keys(parsedFormValue).forEach((key) =>
+        setValue(key, parsedFormValue[key])
+      );
+      console.log(
+        "Form values loaded from localStorage cá thể:",
+        parsedFormValue
+      );
+    }
+  }, [setValue]);
+
   // State để kiểm soát file upload
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -33,7 +50,8 @@ function SellForm() {
   const [certFileList, setCertFileList] = useState([]); // Thêm state cho chứng nhận
   const [previewCertImage, setPreviewCertImage] = useState(""); // Preview chứng nhận
   const [isBatchSell, setIsBatchSell] = useState(false); // State để theo dõi loại form
-
+  const user = useSelector((state) => state?.user?.account);
+  const navigation = useNavigate();
   // Nếu người dùng chọn ký gửi bán lô thì render component khác
   if (isBatchSell) {
     return <SellFormCombo />;
@@ -100,7 +118,9 @@ function SellForm() {
 
     const finalData = {
       ...data,
-      images: uploadedImages,
+      image: uploadedImages[0]?.url,
+      image1: uploadedImages[1]?.url,
+      image2: uploadedImages[2]?.url,
       certifications: uploadedCerts,
       Status: "Còn hàng",
       Type: "Ký gửi",
@@ -111,7 +131,9 @@ function SellForm() {
     console.log(
       "Form data with uploaded images and certifications:",
       finalData
-    ); // Xem dữ liệu và URL
+    );
+    localStorage.setItem("sellForm", JSON.stringify(finalData));
+    navigation("/consignmentSellPayment", { state: finalData });
   };
 
   // Nút upload ảnh và chứng nhận
@@ -153,7 +175,7 @@ function SellForm() {
         </Grid>
         <Box>
           <Typography variant="h2" className="title-typography">
-            Ký gửi bán cá thể
+            Ký gửi bán cá thể ONLINE
           </Typography>
         </Box>
 
@@ -167,7 +189,7 @@ function SellForm() {
               onChange={handleChange}
               beforeUpload={() => false} // Tắt tự động upload
             >
-              {fileList.length >= 4 ? null : uploadButton}
+              {fileList.length >= 3 ? null : uploadButton}
             </Upload>
             {previewImage && (
               <Image
@@ -316,14 +338,12 @@ function SellForm() {
             />
           </Grid>
           <Grid item xs={12}>
-            <Box>
+            <Box marginBottom={2}>
               <Typography variant="h5">Thông tin khách hàng</Typography>
             </Box>
             <TextField
-              {...register("fullName", {
-                required: "Vui lòng nhập họ và tên",
-              })}
               label="Họ và tên"
+              defaultValue={user?.fullName}
               fullWidth
               error={!!errors.fullName}
               helperText={errors.fullName?.message}
@@ -332,8 +352,8 @@ function SellForm() {
 
           <Grid item xs={12}>
             <TextField
-              {...register("email", { required: "Vui lòng nhập email" })}
               label="Email"
+              defaultValue={user?.email}
               fullWidth
               error={!!errors.email}
               helperText={errors.email?.message}
@@ -342,10 +362,8 @@ function SellForm() {
 
           <Grid item xs={12}>
             <TextField
-              {...register("phoneNumber", {
-                required: "Vui lòng nhập số điện thoại",
-              })}
               label="Số điện thoại"
+              defaultValue={user?.phoneNumber}
               fullWidth
               error={!!errors.phoneNumber}
               helperText={errors.phoneNumber?.message}

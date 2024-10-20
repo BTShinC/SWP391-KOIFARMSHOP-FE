@@ -1,21 +1,39 @@
 import { Button, TextField, Grid, Box, Typography } from "@mui/material";
 import { Upload, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { storage } from "../../../firebase"; // Đảm bảo bạn đã cấu hình đúng Firebase
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"; // Firebase storage functions
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 function SellFormCombo() {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm();
+
+  useEffect(() => {
+    // Lấy dữ liệu từ localStorage khi trang tải lại
+    const savedFormValue = localStorage.getItem("sellFormCombo");
+    if (savedFormValue) {
+      const parsedFormValue = JSON.parse(savedFormValue);
+      Object.keys(parsedFormValue).forEach((key) =>
+        setValue(key, parsedFormValue[key])
+      );
+      console.log(
+        "Form values loaded from localStorage cá thể:",
+        parsedFormValue
+      );
+    }
+  }, [setValue]);
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState([]);
-
+  const user = useSelector((state) => state.user.account);
   // Preview ảnh khi chọn
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -60,7 +78,9 @@ function SellFormCombo() {
     const uploadedImages = await uploadFilesToFirebase(fileList); // Upload file hình ảnh cá KOI
     const finalData = {
       ...data,
-      images: uploadedImages, // Thêm URL ảnh đã upload vào dữ liệu form
+      image: uploadedImages[0]?.url,
+      image1: uploadedImages[1]?.url,
+      image2: uploadedImages[2]?.url,
       type: "Ký gửi",
       consignmentType: "Ký gửi để bán",
       price: 1,
@@ -68,7 +88,9 @@ function SellFormCombo() {
     console.log(
       "Form data with uploaded images and certifications:",
       finalData
-    ); // Xem dữ liệu và URL
+    );
+    localStorage.setItem("sellFormCombo", JSON.stringify(finalData));
+    navigation("/consignmentSellPayment", { state: finalData });
   };
 
   // Nút upload ảnh và chứng nhận
@@ -84,7 +106,7 @@ function SellFormCombo() {
       <div style={{ marginTop: 8 }}>Upload</div>
     </button>
   );
-
+  const navigation = useNavigate();
   return (
     <div className="care-form" style={{ padding: "2rem" }}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -92,7 +114,7 @@ function SellFormCombo() {
           <Button
             onClick={() => {
               console.log("Quay lại");
-              window.history.back();
+              navigation(-1);
             }}
             className="back-button"
           >
@@ -101,7 +123,7 @@ function SellFormCombo() {
         </Grid>
         <Box>
           <Typography variant="h2" className="title-typography">
-            Ký gửi theo lô
+            Ký gửi theo lô ONLINE
           </Typography>
         </Box>
         <Grid container spacing={4}>
@@ -217,11 +239,9 @@ function SellFormCombo() {
           </Grid>
           <Grid item xs={12}>
             <TextField
-              {...register("fullName", {
-                required: "Vui lòng nhập họ và tên",
-              })}
               label="Họ và tên"
               fullWidth
+              defaultValue={user?.fullName}
               error={!!errors.fullName}
               helperText={errors.fullName?.message}
             />
@@ -229,8 +249,8 @@ function SellFormCombo() {
 
           <Grid item xs={12}>
             <TextField
-              {...register("email", { required: "Vui lòng nhập email" })}
               label="Email"
+              defaultValue={user?.email}
               fullWidth
               error={!!errors.email}
               helperText={errors.email?.message}
@@ -239,11 +259,9 @@ function SellFormCombo() {
 
           <Grid item xs={12}>
             <TextField
-              {...register("phoneNumber", {
-                required: "Vui lòng nhập số điện thoại",
-              })}
               label="Số điện thoại"
               fullWidth
+              defaultValue={user?.phoneNumber}
               error={!!errors.phoneNumber}
               helperText={errors.phoneNumber?.message}
             />
@@ -257,7 +275,7 @@ function SellFormCombo() {
               helperText={errors.description?.message}
             />
           </Grid>
-
+          <input type="hidden" value={user.accountID} name="accountID"></input>
           {/* Nút Submit */}
           <Grid item xs={12} style={{ textAlign: "center", marginTop: "2rem" }}>
             <Button type="submit" className="submit-form-btn">

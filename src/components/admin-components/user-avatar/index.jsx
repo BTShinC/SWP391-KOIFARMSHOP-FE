@@ -1,5 +1,6 @@
 import { Avatar, Badge } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { useSelector } from "react-redux";
 
 
 UserAvatar.propTypes = {};
@@ -35,6 +36,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
       },
     },
   }));
+  const user = useSelector((state) => state?.user?.account)
   return (
     <>
       <StyledBadge
@@ -42,7 +44,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         variant="dot" // Đây là phần quan trọng để hiển thị dot
       >
-        <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
+        <Avatar alt="Travis Howard" src={user?.image}/>
       </StyledBadge>
     </>
   );

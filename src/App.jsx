@@ -31,6 +31,7 @@ import CarePackageDetail from "./pages/consignment/carePackage-detail";
 import ConsignmentForm from "./pages/consignment-form";
 import CarePackageList from "./pages/consignment/carePackage-list";
 import PaymentPage from "./pages/consignment-form/payment";
+import SellPayment from "./pages/consignment-form/payment/sell-payment";
 
 
 function App() {
@@ -135,7 +136,10 @@ function App() {
           path: "/consignmentPayment",
           element: <PaymentPage />,
         },
-
+        {
+          path: "/consignmentSellPayment",
+          element: <SellPayment />,
+        },
 
         {
           path  : "/wallet",

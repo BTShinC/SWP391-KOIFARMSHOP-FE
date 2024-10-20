@@ -26,7 +26,7 @@ function SinglepProduct() {
   const { id } = useParams(); // Lấy productId từ URL
   const [product, setProduct] = useState(null); // State để lưu thông tin sản phẩm
   const dispatch = useDispatch(); // Khởi tạo dispatch
-  const account = useSelector((state) => state.user.account); // Lấy accountId từ Redux
+  const account = useSelector((state) => state?.user?.account); // Lấy accountId từ Redux
 
   // Fetch thông tin người dùng khi component mount
   // useEffect(() => {

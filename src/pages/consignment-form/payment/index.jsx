@@ -21,7 +21,7 @@ PaymentPage.propTypes = {};
 function PaymentPage() {
   const [paymentMethod, setPaymentMethod] = useState("Ví cửa hàng");
   const location = useLocation();
-  const paymentData = location.state;
+  const paymentData = location?.state;
   console.log("Payment data received:", paymentData);
   const id = paymentData.carePackageID;
   const user = useSelector((state) => state.user.account);
@@ -79,7 +79,7 @@ function PaymentPage() {
     setPaymentMethod(event.target.value);
   };
   const handlePayment = () => {
-    if (paymentMethod === "Ví cửa hàng")
+    if (paymentMethod === "Ví cửa hàng") {
       if (user.accountBalance >= carePackage.price) {
         // Trừ phí và cập nhật số dư tài khoản
         const newBalance = user.accountBalance - carePackage.price;
@@ -88,15 +88,30 @@ function PaymentPage() {
           accountBalance: newBalance,
         };
         console.log("Updated user balance:", updatedUser);
+
+        // Kiểm tra và xóa careForm nếu có
+        if (localStorage.getItem("careForm")) {
+          localStorage.removeItem("careForm");
+          console.log("careForm đã bị xóa");
+        }
+
+        // Kiểm tra và xóa careFormCombo nếu có
+        if (localStorage.getItem("careFormCombo")) {
+          localStorage.removeItem("careFormCombo");
+          console.log("careFormCombo đã bị xóa");
+        }
+
         toast.success("Thanh toán thành công");
+      } else {
+        console.log("Không đủ tiền");
       }
-    console.log("Không đủ tiền");
+    }
   };
   const navigation = useNavigate();
   return (
     <div className="consignment-payment">
       <Card className="pay-form-container">
-        <Box sx={{marginBottom:"3rem"}}>
+        <Box sx={{ marginBottom: "3rem" }}>
           <Button
             variant="contained"
             className="back-button"
@@ -123,19 +138,19 @@ function PaymentPage() {
               <Box>
                 <Typography variant="h4">Chi phí thành phần</Typography>
                 <Typography variant="body1">
-                  {new Intl.NumberFormat("vi-VN").format(carePackage?.price)}{" "}
+                  {new Intl.NumberFormat("vi-VN").format(carePackage?.price)}
                   VNĐ
                 </Typography>
               </Box>
               <Box>
                 <Typography variant="body1">
-                  {new Intl.NumberFormat("vi-VN").format(carePackage?.price)}{" "}
+                  {new Intl.NumberFormat("vi-VN").format(carePackage?.price)}
                   VNĐ
                 </Typography>
               </Box>
               <Box>
                 <Typography variant="h5">
-                  {new Intl.NumberFormat("vi-VN").format(carePackage?.price)}{" "}
+                  {new Intl.NumberFormat("vi-VN").format(carePackage?.price)}
                   VNĐ
                 </Typography>
               </Box>

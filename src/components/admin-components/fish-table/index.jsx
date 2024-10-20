@@ -51,6 +51,21 @@ function FishTable({ columns, fishData, title, ModalComponent, onChange }) {
     }
   };
 
+  const handleConfirmAvailable = async (fish) => {
+    // Cập nhật trạng thái thành "Còn hàng"
+    const updatedFish = {
+      ...fish,
+      status: "Còn hàng",
+    };
+    try {
+      await changeFishStatus(updatedFish);
+      onChange(); // Cập nhật giao diện sau khi thay đổi
+      console.log("Trạng thái đã cập nhật thành Còn hàng");
+    } catch (error) {
+      console.error("Cập nhật thất bại:", error);
+    }
+  };
+
   const changeFishStatus = async (data) => {
     try {
       let res = await editFishInfo(data);
@@ -86,12 +101,21 @@ function FishTable({ columns, fishData, title, ModalComponent, onChange }) {
                 <td>{fish.price} VND</td>
                 <td>{fish.status}</td>
                 <td className="btn-container">
-                  <Checkbox
-                    checked={fish.status === "Hết hàng"}
-                    onChange={() => handleChangeStatus(fish)}
-                  >
-                    Đánh dấu hết hàng
-                  </Checkbox>
+                  {/* Checkbox để đánh dấu hết hàng */}
+                  {fish.status != "Chờ xác nhận" && (
+                    <Checkbox
+                      checked={fish.status === "Hết hàng"}
+                      onChange={() => handleChangeStatus(fish)}
+                    >
+                      Đánh dấu hết hàng
+                    </Checkbox>
+                  )}
+                  {/* Nút xác nhận khi trạng thái là "Đang chờ xác nhận" */}
+                  {fish.status === "Chờ xác nhận" && (
+                    <Button onClick={() => handleConfirmAvailable(fish)}>
+                      Xác nhận Còn hàng
+                    </Button>
+                  )}
                   <Button onClick={() => handleViewDetail(fish.productID)}>
                     {showDetail === fish.productID
                       ? "Ẩn chi tiết"
@@ -134,9 +158,6 @@ function FishTable({ columns, fishData, title, ModalComponent, onChange }) {
                         <p>
                           <strong>Loại:</strong> {fish.type}
                         </p>
-                        <p>
-                          <strong>Mã ký gửi:</strong> {fish.koiConsignmentID}
-                        </p>
                       </div>
 
                       <div
@@ -159,7 +180,7 @@ function FishTable({ columns, fishData, title, ModalComponent, onChange }) {
                         </p>
                         <img
                           src={fish.certificate}
-                          alt="Fish"
+                          alt="Certificate"
                           style={{ maxWidth: "200px", borderRadius: "8px" }}
                         />
                       </div>
@@ -172,7 +193,7 @@ function FishTable({ columns, fishData, title, ModalComponent, onChange }) {
         </tbody>
       </table>
 
-      {/* Modal xác nhận */}
+      {/* Modal xác nhận trạng thái Hết hàng */}
       <Modal
         title="Xác nhận thay đổi trạng thái"
         open={isModalVisible}

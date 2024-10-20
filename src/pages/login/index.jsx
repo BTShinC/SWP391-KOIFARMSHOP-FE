@@ -15,7 +15,6 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/features/userSlice";
 
-
 const firebaseConfig = {
   apiKey: "AIzaSyDzdOryEzjKOSYu5q-EiTZyK5DcwwsUqms",
   authDomain: "koifarmshop-1f095.firebaseapp.com",
@@ -63,8 +62,7 @@ function LoginPage() {
       // Log the roleName to the console
       console.log("User Role Name:", response.data.account.roleName); // Log the roleName
 
-
-      localStorage.setItem("token", response.data.account.token); 
+      localStorage.setItem("token", response.data.token);
       console.log("Response from API:", response.data.account);
 
       // Save user data to Redux
@@ -83,7 +81,6 @@ function LoginPage() {
 
       // lưu trữ thông tin của user
       // dispatch action
-
     } catch (err) {
       console.error("Error response from API:", err.response?.data);
       toast.error(err.response.data);
@@ -119,7 +116,6 @@ function LoginPage() {
 
       // Điều hướng đến trang home
       navigate("/");
-
     } catch (error) {
       console.error("Error logging in with Google:", error);
     }

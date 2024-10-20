@@ -145,11 +145,12 @@ function CareFormCombo({ id }) {
     const uploadedImages = await uploadFilesToFirebase(fileList);
     const finalData = {
       ...data,
-      images: uploadedImages,
+      image: uploadedImages[0]?.url,
+      image1: uploadedImages[1]?.url,
+      image2: uploadedImages[2]?.url,
     };
-
     console.log(
-      "Form data with uploaded images and certifications:",
+      "Form data with uploaded images and certifications combo:",
       finalData
     );
     localStorage.setItem("careFormCombo", JSON.stringify(finalData));
@@ -201,7 +202,7 @@ function CareFormCombo({ id }) {
                 onChange={handleChange}
                 beforeUpload={() => false} // Tắt tự động upload
               >
-                {fileList.length >= 4 ? null : uploadButton}
+                {fileList.length >= 3 ? null : uploadButton}
               </Upload>
               {previewImage && (
                 <Image
