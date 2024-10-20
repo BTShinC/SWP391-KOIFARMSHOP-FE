@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { HomeOutlined } from "@ant-design/icons";
 import "./index.scss";
 
 function AdminSideBar() {
@@ -20,6 +21,14 @@ function AdminSideBar() {
             className="sidebar__logo"
           />
         </div>
+        
+        <div
+          className="sidebar__return"
+          onClick={() => handleNavigation("/")}
+        >
+          <span><HomeOutlined /> Trang chủ</span>
+        </div>
+      
         <div
           className={`sidebar__item ${location.pathname === "/admin" ? "active" : ""
             }`}

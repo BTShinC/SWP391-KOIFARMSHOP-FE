@@ -96,6 +96,15 @@ const fetchAllProductCombo = async () => {
     throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
   }
 };
+const fetchProductComboById = async (id) => {
+  try {
+    const response = await api.get(`productcombo/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching product by ID:", error);
+    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+  }
+};
 
 
 const editComboInfo = async (data) => {
@@ -169,6 +178,7 @@ export {
   addFish,
   editComboInfo,
   fetchAllProductCombo,
+  fetchProductComboById,
   fetchProductById,
   fetchAllTransactions,
   editUser,

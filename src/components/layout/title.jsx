@@ -21,7 +21,7 @@ function LayoutTitle() {
   }else if (location.pathname === "/shoppingcart") {
     title = "Giỏ hàng";
   }else if (location.pathname === "/product") {
-    title = "Cá koi Nhật";
+    title = "Cá Koi Nhật";
   }else if (location.pathname === "/privacy-policy") {
     title = "Chính sách bảo mật";
   }else if (location.pathname === "/support-policy") {
@@ -31,8 +31,16 @@ function LayoutTitle() {
   }else if (location.pathname === "/refund-policy") {
     title = "Chính sách đổi trả";
   }else if (location.pathname === "/blog") {
-    title = "Tin tức";}
-
+    title = "Tin tức";
+  }else if (location.pathname === "/wallet") {
+    title = "Ví tiền";
+  }else if (location.pathname === "/productcombo") {
+    title = "Cá Koi Nhật";
+  }else if (location.pathname === "/orderTracking") {
+    title = "Theo dõi đơn hàng";
+  }else if (location.pathname === "/checkout") {
+    title = "Thanh toán";
+  }
   return (
     <>
       <Header />

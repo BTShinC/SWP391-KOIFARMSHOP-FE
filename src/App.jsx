@@ -11,6 +11,7 @@ import ContactPage from "./pages/contact";
 import ComparePage from "./pages/compare";
 import ManageOrder from "./pages/admin/manageOrders";
 import ProductPage from "./pages/product";
+import ProductComboPage from "./pages/productCombo";
 import BlogList from "./pages/blogList";
 import RecoveryPassword from "./pages/forgot-password/recovery-password";
 import AdminMembers from "./pages/admin/admin-members";
@@ -22,6 +23,7 @@ import OrderPolicy from "./components/footer/footer page/order-policy";
 import RefundPolicy from "./components/footer/footer page/refund-policy";
 import LayoutTitle from "./components/layout/title";
 import SinglepProduct from "./components/single-product";
+import SingleProductCombo from "./components/single-productCombo";
 import ShoppingCartPage from "./pages/shopping-cart";
 import ManageProductCombo from "./pages/admin/manageProductCombo";
 import ManageTransactions from "./pages/admin/manageTransactions";
@@ -30,6 +32,8 @@ import Consignment from "./pages/consignment";
 import CarePackageDetail from "./pages/consignment/carePackage-detail";
 import ConsignmentForm from "./pages/consignment-form";
 import CarePackageList from "./pages/consignment/carePackage-list";
+import OrderTracking from "./pages/orderTracking";
+import CheckoutPage from './pages/checkout';
 
 
 function App() {
@@ -54,6 +58,10 @@ function App() {
         {
           path: "/singleproduct/:id",
           element: <SinglepProduct />,
+        },
+        {
+          path: "/singleproductcombo/:id",
+          element: <SingleProductCombo />,
         },
         {
           path: "/recoveryPassword",
@@ -109,6 +117,11 @@ function App() {
         },
 
         {
+          path: "/productcombo",
+          element: <ProductComboPage />,
+        },
+
+        {
           path: "/privacy-policy",
           element: <PrivacyPolicy />,
         },
@@ -135,9 +148,17 @@ function App() {
         {
           path  : "/wallet",
           element : <WalletPage />
+        },
+
+        {
+          path: "/orderTracking",
+          element: <OrderTracking />,
+        },
+
+        {
+          path: "/checkout",
+          element: <CheckoutPage />,
         }
-
-
       ],
     },
 
