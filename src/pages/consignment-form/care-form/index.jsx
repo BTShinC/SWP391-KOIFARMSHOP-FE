@@ -13,7 +13,7 @@ import {
 import { addDays, format } from "date-fns";
 import { Upload, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { storage } from "../../../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useForm } from "react-hook-form";
@@ -158,8 +158,24 @@ function CareForm({ id }) {
       "Form data with uploaded images and certifications:",
       finalData
     );
+    localStorage.setItem("careForm", JSON.stringify(finalData));
     navigation("/consignmentPayment", { state: finalData });
   };
+
+  useEffect(() => {
+    // Lấy dữ liệu từ localStorage khi trang tải lại
+    const savedFormValue = localStorage.getItem("careForm");
+    if (savedFormValue) {
+      const parsedFormValue = JSON.parse(savedFormValue);
+      Object.keys(parsedFormValue).forEach((key) =>
+        setValue(key, parsedFormValue[key])
+      );
+      console.log(
+        "Form values loaded from localStorage cá thể:",
+        parsedFormValue
+      );
+    }
+  }, [setValue]);
 
   const uploadButton = (
     <button
@@ -188,8 +204,17 @@ function CareForm({ id }) {
     <div className="care-form" style={{ padding: "2rem" }}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box>
+          <Button
+            variant="contained"
+            className="back-button"
+            onClick={() => navigation(-1)}
+          >
+            Trở lại
+          </Button>
+        </Box>
+        <Box>
           <Typography variant="h2" className="title-typography">
-            Ký gửi cá thể
+            Ký gửi chăm sóc cá thể
           </Typography>
         </Box>
         <Grid container spacing={4}>
@@ -301,6 +326,9 @@ function CareForm({ id }) {
             </Grid>
           </Grid>
           <Grid item xs={6}>
+            <Box>
+              <Typography variant="h6">Thông tin khách hàng</Typography>
+            </Box>
             <Grid item xs={12} sx={{ marginBottom: 2 }}>
               <TextField
                 {...register("fullName", {
@@ -360,7 +388,7 @@ function CareForm({ id }) {
               />
               <input
                 type="hidden"
-                {...register("carePackageID")} 
+                {...register("carePackageID")}
                 value={carePackage.id}
               />
             </Grid>

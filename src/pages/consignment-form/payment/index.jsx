@@ -13,9 +13,10 @@ import {
 } from "@mui/material";
 import "./index.scss";
 import WalletIcon from "@mui/icons-material/Wallet";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 PaymentPage.propTypes = {};
 function PaymentPage() {
   const [paymentMethod, setPaymentMethod] = useState("Ví cửa hàng");
@@ -29,7 +30,7 @@ function PaymentPage() {
     {
       id: 1,
       title: "Gói chăm sóc cá Koi tiêu chuẩn",
-      price: 1500000,
+      price: 15,
       description:
         "Bao gồm kiểm tra sức khỏe định kỳ và tư vấn chăm sóc cá Koi.",
       services: [
@@ -42,7 +43,7 @@ function PaymentPage() {
     {
       id: 2,
       title: "Gói chăm sóc cá Koi nâng cao",
-      price: 3000000,
+      price: 30,
       description: "Dịch vụ chăm sóc chuyên sâu cho các giống cá Koi quý hiếm.",
       services: ["Kiểm tra chuyên sâu", "Điều trị bệnh cá", "Chăm sóc định kỳ"],
       image: "/images/a.jpg",
@@ -87,12 +88,23 @@ function PaymentPage() {
           accountBalance: newBalance,
         };
         console.log("Updated user balance:", updatedUser);
+        toast.success("Thanh toán thành công");
       }
-      console.log("Không đủ tiền");
+    console.log("Không đủ tiền");
   };
+  const navigation = useNavigate();
   return (
     <div className="consignment-payment">
       <Card className="pay-form-container">
+        <Box sx={{marginBottom:"3rem"}}>
+          <Button
+            variant="contained"
+            className="back-button"
+            onClick={() => navigation(-1)}
+          >
+            Trở lại
+          </Button>
+        </Box>
         <CardContent>
           <Grid2 container spacing={12}>
             <Grid2 xs={6} className="pay-form-box">
@@ -134,7 +146,6 @@ function PaymentPage() {
             <FormControl fullWidth>
               <FormLabel>Hình thức thanh toán</FormLabel>
               <RadioGroup
-                true
                 defaultValue="Ví cửa hàng"
                 value={paymentMethod}
                 onChange={handlePaymentMethodChange}
