@@ -2,7 +2,8 @@ import PropTypes from "prop-types";
 import "./index.scss";
 import { Pagination } from "@mui/material";
 import { useState } from "react";
-const AdminTable = ({ columns, data, title, ModalComponent }) => {
+
+const AdminTable = ({ columns, data, title, ModalComponent, onChange }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
   const handleChangePage = (event, page) => {
@@ -12,6 +13,7 @@ const AdminTable = ({ columns, data, title, ModalComponent }) => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  
   return (
     <div className="admin-table">
       <div>
@@ -38,8 +40,9 @@ const AdminTable = ({ columns, data, title, ModalComponent }) => {
                 {ModalComponent && (
                   <ModalComponent
                     userData={row}
-                    title="Chỉnh sửa vai trò"
+                    title="Chỉnh sửa thông tin"
                     className="modal-edit-user-button"
+                    onChange={onChange} // Truyền hàm onChange vào ModalComponent
                   />
                 )}
               </td>
@@ -69,6 +72,7 @@ AdminTable.propTypes = {
   columns: PropTypes.arrayOf(PropTypes.string).isRequired,
   title: PropTypes.string.isRequired,
   ModalComponent: PropTypes.elementType,
+  onChange: PropTypes.func.isRequired, // Thêm prop onChange để truyền vào ModalComponent
 };
 
 export default AdminTable;

@@ -22,6 +22,8 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
     quantity: 0,
     description: "",
     image: "",
+    image1: "",
+    image2: "",
     price: 1,
     consignmentType: "",
     desiredPrice: 1,
@@ -32,7 +34,7 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
   };
 
   const [formValue, setFormValue] = useState(initFormValue);
-  const [fileList, setFileList] = useState([]);
+  const [fileList, setFileList] = useState({ image: [], image1: [], image2: [] });
 
   const handleChange = (event) => {
     const { value, name } = event.target;
@@ -63,20 +65,21 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
     }
   }, [formValue.type]);
 
-  const handleUploadChange = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
+  const handleUploadChange = ({ fileList: newFileList }, field) => {
+    setFileList((prevFileList) => ({
+      ...prevFileList,
+      [field]: newFileList,
+    }));
 
     if (newFileList.length > 0) {
       const file = newFileList[0].originFileObj;
       const storageRef = ref(storage, `uploads/${file.name}`);
       uploadBytes(storageRef, file)
-        .then(() => {
-          return getDownloadURL(storageRef);
-        })
+        .then(() => getDownloadURL(storageRef))
         .then((url) => {
           setFormValue((prevFormValue) => ({
             ...prevFormValue,
-            image: url,
+            [field]: url,
           }));
         })
         .catch((error) => {
@@ -111,19 +114,62 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
       <form>
         <div className="add-fish__modal">
           <h2>Thông tin cá</h2>
-          <div style={{ display: "flex", gap: "5rem" }}>
+          <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+            {/* Upload ảnh chính */}
             <div>
-              <label className="form-label">Ảnh:</label>
+              <label className="form-label">Ảnh chính:</label>
               <Upload
                 name="image"
                 listType="picture-card"
                 className="image-uploader"
-                fileList={fileList}
-                onChange={handleUploadChange}
+                fileList={fileList.image}
+                onChange={({ fileList }) => handleUploadChange({ fileList }, "image")}
                 beforeUpload={() => false}
                 required
               >
-                {fileList.length >= 1 ? null : (
+                {fileList.image.length >= 1 ? null : (
+                  <div>
+                    <PlusOutlined />
+                    <div style={{ marginTop: 8 }}>Upload</div>
+                  </div>
+                )}
+              </Upload>
+            </div>
+
+            {/* Upload ảnh phụ 1 */}
+            <div>
+              <label className="form-label">Ảnh phụ 1:</label>
+              <Upload
+                name="image1"
+                listType="picture-card"
+                className="image-uploader"
+                fileList={fileList.image1}
+                onChange={({ fileList }) => handleUploadChange({ fileList }, "image1")}
+                beforeUpload={() => false}
+                required
+              >
+                {fileList.image1.length >= 1 ? null : (
+                  <div>
+                    <PlusOutlined />
+                    <div style={{ marginTop: 8 }}>Upload</div>
+                  </div>
+                )}
+              </Upload>
+            </div>
+
+            {/* Upload ảnh phụ 2 */}
+            <div>
+              <label className="form-label">Ảnh phụ 2:</label>
+              <Upload
+                name="image2"
+                listType="picture-card"
+                className="image-uploader"
+                fileList={fileList.image2}
+                onChange={({ fileList }) => handleUploadChange({ fileList }, "image2")}
+                beforeUpload={() => false}
+                required
+              >
+                {fileList.image2.length >= 1 ? null : (
                   <div>
                     <PlusOutlined />
                     <div style={{ marginTop: 8 }}>Upload</div>
@@ -132,6 +178,8 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
               </Upload>
             </div>
           </div>
+
+          {/* Các trường thông tin khác */}
           <div>
             <label className="form-label">Tên lô cá:</label>
             <input

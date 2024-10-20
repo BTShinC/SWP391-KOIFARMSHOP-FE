@@ -8,7 +8,7 @@ const UserInfoPage = () => {
   const user = useSelector((state) => state.user);
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState(user.account); // Tạo state để lưu thông tin người dùng
-
+  console.log("userInfo =>",userInfo)
   useEffect(() => {
     if (!user || !user.account) {
       navigate("/login");
@@ -45,11 +45,11 @@ const UserInfoPage = () => {
             <span className="userinfo__label">Email:</span> {userInfo.email}
           </div>
           <div className="userinfo__item">
-            <span className="userinfo__label">Số điện thoại:</span>{" "}
+            <span className="userinfo__label">Số điện thoại:</span>
             {userInfo.phoneNumber}
           </div>
           <div className="userinfo__item">
-            <span className="userinfo__label">Số dư tài khoản:</span>{" "}
+            <span className="userinfo__label">Số dư tài khoản:</span>
             {userInfo.accountBalance.toFixed(2)} VND
           </div>
 

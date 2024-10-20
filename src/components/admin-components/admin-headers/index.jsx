@@ -7,9 +7,9 @@ function AdminHeader() {
   return (
     <div className="content__header">
       <div className="content__welcome">
-        <h3>Xin chào {user ? user.fullName : "User"}!</h3>{" "}
+        <h3>Xin chào {user ? user.fullName : "User"}</h3>
         {/* Kiểm tra giá trị userName */}
-        <span>Chào mừng trở lại {user ? user.fullName : "User"} </span>
+        <span>Chào mừng trở lại ! </span>
       </div>
       <div className="admin-info">
         <div className="admin-info__avatar">

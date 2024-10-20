@@ -15,33 +15,48 @@ function EditProductComboModal({ fishData, onChange }) {
   const initFormValue = {
     productComboID: fishData.productComboID,
     comboName: fishData.comboName,
-    breed: fishData.breed,
     size: fishData.size,
+    breed: fishData.breed,
     healthStatus: fishData.healthStatus,
+    quantity: fishData.quantity,
     description: fishData.description,
     image: fishData.image,
+    image1: fishData.image1,
+    image2: fishData.image2,
     price: fishData.price,
-    type: fishData.type,
-    quantity: fishData.quantity,
-    status: fishData.status,
-    desiredPrice: fishData.desiredPrice,
     consignmentType: fishData.consignmentType,
-    age: fishData.age || 1,
+    desiredPrice: fishData.desiredPrice,
+    type: fishData.type,
+    status: fishData.status,
+    carePackageID: fishData.carePackageID,
   };
 
   const [formValue, setFormValue] = useState(initFormValue);
-  const [fileList, setFileList] = useState(
-    fishData.image
+  const [fileList, setFileList] = useState({
+    image: fishData.image
+      ? [{ uid: "-1", name: "image.png", status: "done", url: fishData.image }]
+      : [],
+    image1: fishData.image1
       ? [
           {
-            uid: "-1",
-            name: "image.png",
+            uid: "-2",
+            name: "image1.png",
             status: "done",
-            url: fishData.image,
+            url: fishData.image1,
           },
         ]
-      : []
-  );
+      : [],
+    image2: fishData.image2
+      ? [
+          {
+            uid: "-3",
+            name: "image2.png",
+            status: "done",
+            url: fishData.image2,
+          },
+        ]
+      : [],
+  });
   const [open, setOpen] = useState(false);
 
   const handleChange = (event) => {
@@ -56,40 +71,55 @@ function EditProductComboModal({ fishData, onChange }) {
   const handleUploadChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
 
-    if (newFileList.length > 0) {
-      const file = newFileList[0].originFileObj;
+    const uploadedFiles = newFileList.filter((file) => file.originFileObj);
+    const uploadPromises = uploadedFiles.map((fileObj, index) => {
+      const file = fileObj.originFileObj;
       const storageRef = ref(storage, `uploads/${file.name}`);
-      uploadBytes(storageRef, file)
+      return uploadBytes(storageRef, file)
         .then(() => getDownloadURL(storageRef))
         .then((url) => {
-          setFormValue((prevFormValue) => ({
-            ...prevFormValue,
-            image: url,
-          }));
+          if (index === 0) {
+            setFormValue((prevFormValue) => ({ ...prevFormValue, image: url }));
+          } else if (index === 1) {
+            setFormValue((prevFormValue) => ({
+              ...prevFormValue,
+              image1: url,
+            }));
+          } else if (index === 2) {
+            setFormValue((prevFormValue) => ({
+              ...prevFormValue,
+              image2: url,
+            }));
+          }
         })
         .catch((error) => {
           console.error("Error uploading file:", error);
         });
-    }
+    });
+
+    Promise.all(uploadPromises);
   };
 
   const handleOk = async () => {
     const data = {
       productComboID: formValue.productComboID,
       comboName: formValue.comboName,
-      breed: formValue.breed,
       size: formValue.size,
+      breed: formValue.breed,
       healthStatus: formValue.healthStatus,
+      quantity: formValue.quantity,
       description: formValue.description,
-      image: formValue.image,
-      price: parseFloat(formValue.price), // Đảm bảo là số
-      type: formValue.type,
-      quantity: parseInt(formValue.quantity, 10), // Đảm bảo là số nguyên
-      status: formValue.status,
-      desiredPrice: parseFloat(formValue.desiredPrice),
+      image: formValue.image, // Ảnh chính
+      image1: formValue.image1, // Ảnh phụ 1
+      image2: formValue.image2, // Ảnh phụ 2
+      price: parseFloat(formValue.price),
       consignmentType: formValue.consignmentType,
-      age: formValue.age,
+      desiredPrice: parseFloat(formValue.desiredPrice),
+      type: formValue.type,
+      status: formValue.status,
+      carePackageID: formValue.carePackageID,
     };
+    console.log(data);
     try {
       let res = await editComboInfo(data);
       if (res) {
@@ -117,19 +147,68 @@ function EditProductComboModal({ fishData, onChange }) {
         <form>
           <div className="add-fish__modal">
             <h2>Thông tin Combo</h2>
-            <div style={{ display: "flex", gap: "5rem" }}>
+            <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+              {/* Upload ảnh chính */}
               <div>
-                <label className="form-label">Ảnh:</label>
+                <label className="form-label">Ảnh chính:</label>
                 <Upload
                   name="image"
                   listType="picture-card"
                   className="image-uploader"
-                  fileList={fileList}
-                  onChange={handleUploadChange}
+                  fileList={fileList.image}
+                  onChange={({ fileList }) =>
+                    handleUploadChange(fileList, "image")
+                  }
                   beforeUpload={() => false}
                   required
                 >
-                  {fileList.length >= 1 ? null : (
+                  {fileList.image.length >= 1 ? null : (
+                    <div>
+                      <PlusOutlined />
+                      <div style={{ marginTop: 8 }}>Upload</div>
+                    </div>
+                  )}
+                </Upload>
+              </div>
+
+              {/* Upload ảnh phụ 1 */}
+              <div>
+                <label className="form-label">Ảnh phụ 1:</label>
+                <Upload
+                  name="image1"
+                  listType="picture-card"
+                  className="image-uploader"
+                  fileList={fileList.image1}
+                  onChange={({ fileList }) =>
+                    handleUploadChange(fileList, "image1")
+                  }
+                  beforeUpload={() => false}
+                  required
+                >
+                  {fileList.image1.length >= 1 ? null : (
+                    <div>
+                      <PlusOutlined />
+                      <div style={{ marginTop: 8 }}>Upload</div>
+                    </div>
+                  )}
+                </Upload>
+              </div>
+
+              {/* Upload ảnh phụ 2 */}
+              <div>
+                <label className="form-label">Ảnh phụ 2:</label>
+                <Upload
+                  name="image2"
+                  listType="picture-card"
+                  className="image-uploader"
+                  fileList={fileList.image2}
+                  onChange={({ fileList }) =>
+                    handleUploadChange(fileList, "image2")
+                  }
+                  beforeUpload={() => false}
+                  required
+                >
+                  {fileList.image2.length >= 1 ? null : (
                     <div>
                       <PlusOutlined />
                       <div style={{ marginTop: 8 }}>Upload</div>
