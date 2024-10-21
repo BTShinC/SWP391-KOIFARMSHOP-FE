@@ -10,7 +10,7 @@ import "./index.scss"; // Import the CSS file
 function CheckoutPage() {
     const user = useSelector((state) => state.user);
     const cartItems = useSelector((state) => state.cart.items);
-    const account = useSelector((state) => state.user.account);
+    const account = useSelector((state) => state.user.accountID);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -43,7 +43,7 @@ function CheckoutPage() {
     }, [cartItems, discount]);
 
     const deductAccountBalance = async (accountID, amount) => {
-        const apiUrl = `http://103.90.227.69:8080/api/account/deductBalance/${accountID}?amount=${amount}`;
+        const apiUrl = `http://103.90.227.69:8080/api/account/deductBalance/${user.accountID}?amount=${amount}`;
         try {
             const response = await fetch(apiUrl, {
                 method: 'PUT',
@@ -72,7 +72,7 @@ function CheckoutPage() {
             console.log("Account ID:", account.accountID);
 
             // Check account balance
-            const balanceResponse = await axios.get(`http://103.90.227.69:8080/api/account/${account.accountID}`);
+            const balanceResponse = await axios.get(`http://103.90.227.69:8080/api/account/${user.accountID}`);
             const accountBalance = balanceResponse.data.accountBalance;
 
             // Prepare order data
@@ -85,11 +85,11 @@ function CheckoutPage() {
 
             if (accountBalance >= finalPrice) {
                 // Deduct balance from account using the predefined function
-                await deductAccountBalance(account.accountID, finalPrice);
+                await deductAccountBalance(user.accountID, finalPrice);
 
                 // Prepare query parameters
                 const params = new URLSearchParams({
-                    accountId: account.accountID,
+                    accountId: user.accountID,
                     ...productIds.length > 0 && { productIds: productIds.join(',') },
                     ...productComboIds.length > 0 && { productComboIds: productComboIds.join(',') }
                 });
