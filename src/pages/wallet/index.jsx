@@ -4,7 +4,6 @@ import './index.scss'; // Import styles
 import vnNum2Words from 'vn-num2words'; // Import the vn-num2words library
 import { toast } from 'react-toastify'; // Import toast for notifications
 import { useSelector } from "react-redux";
-import { fetchTransactionHistory } from '../../service/userService';
 
 function WalletPage() {
     const [amount, setAmount] = useState('');
@@ -13,22 +12,21 @@ function WalletPage() {
     const user = useSelector((state) => state.user);
 
     // Function to fetch transaction history
-    const loadTransactionHistory = async () => {
-        if (user && user.accountID) {
-          try {
-            const data = await fetchTransactionHistory(user.accountID); // Gọi hàm từ userService
-            setTransactions(data); // Cập nhật trạng thái với dữ liệu giao dịch
-          } catch (error) {
-            console.error("Error loading transaction history:", error);
+    const fetchTransactionHistory = async () => {
+        const apiUrl = `http://103.90.227.69:8080/api/transactions/account/${user.account.accountID}`; // Use accountID in the URL
+        try {
+            const response = await axios.get(apiUrl);
+            setTransactions(response.data); // Assuming response.data contains the transaction history
+        } catch (error) {
+            console.error("Error fetching transaction history:", error);
             toast.error("Failed to load transaction history.");
-          }
         }
-      };
+    };
 
     useEffect(() => {
         // Fetch transaction history when the component mounts
-        loadTransactionHistory(); // Gọi hàm khi component được tải
-    }, [user.accountID]); // Fetch again if accountID changes
+        fetchTransactionHistory();
+    }, [user.account.accountID]); // Fetch again if accountID changes
 
     const handleAmountChange = (e) => {
         const value = e.target.value;
@@ -43,7 +41,6 @@ function WalletPage() {
     };
 
     const handleTransactionConfirm = async () => {
-        const accountId = user.accountID; // Use the correct property for account ID
         const totalAmount = amount || selectedLevel;
 
         // Check if the total amount is less than 100,000
@@ -52,7 +49,7 @@ function WalletPage() {
             return;
         }
 
-      
+        const accountId = user.account.accountID; // Use the correct property for account ID
         console.log("Account ID:", accountId);
         console.log("Total Amount (Price):", totalAmount); // Log the total amount
 
@@ -69,7 +66,6 @@ function WalletPage() {
                 date: currentDate,     // Add current date
                 status: "Chờ xác nhận", // Default status
             });
-            console.log("Transaction added successfully:", response.data);
             
             // Redirect to VNPAY link
             const vnpayLink = response.data; // Assuming response.data contains the VNPAY link

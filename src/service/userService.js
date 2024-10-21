@@ -165,15 +165,7 @@ const deleteCartItem = async (cartItemId) => {
     throw error; // Ném lỗi ra ngoài để xử lý ở nơi gọi hàm
   }
 };
-const fetchTransactionHistory = async (accountID) => {
-  try {
-    const response = await api.get(`transactions/account/${accountID}`); // Gọi API để lấy lịch sử giao dịch
-    return response.data; // Trả về dữ liệu từ API
-  } catch (error) {
-    console.error("Error fetching transaction history:", error);
-    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
-  }
-};
+
 
 
 
@@ -195,5 +187,5 @@ export {
   addToCartAPI,
   fetchCartItems,
   deleteCartItem,
-  fetchTransactionHistory,
+
 };

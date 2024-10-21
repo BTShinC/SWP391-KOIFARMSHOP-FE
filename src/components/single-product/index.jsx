@@ -27,22 +27,22 @@ function SinglepProduct() {
 
 
 
-  // useEffect(() => {
-  //   return () => {
-  //     const removeTemporaryCartItem = async () => {
-  //       try {
-  //         if (account && account.accountID) {
-  //           await deleteCartItem(product.productID); // Gọi hàm xóa sản phẩm
-  //           console.log("Temporary cart item removed");
-  //         }
-  //       } catch (error) {
-  //         console.error("Error removing temporary cart item:", error);
-  //       }
-  //     };
+  useEffect(() => {
+    return () => {
+      const removeTemporaryCartItem = async () => {
+        try {
+          if (account && account.accountID) {
+            await deleteCartItem(product.productID); // Gọi hàm xóa sản phẩm
+            console.log("Temporary cart item removed");
+          }
+        } catch (error) {
+          console.error("Error removing temporary cart item:", error);
+        }
+      };
 
-  //     removeTemporaryCartItem();
-  //   };
-  // }, [account, product]);
+      removeTemporaryCartItem();
+    };
+  }, [account, product]);
 
   useEffect(() => {
     const loadProduct = async () => {
