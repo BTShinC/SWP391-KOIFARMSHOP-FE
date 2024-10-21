@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Modal, Upload, Button } from "antd";
+import { Modal, Upload, Button, Input } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import PropTypes from "prop-types";
 import { storage } from "/src/firebase.js";
@@ -14,170 +14,155 @@ EditProductComboModal.propTypes = {
 function EditProductComboModal({ fishData, onChange }) {
   const initFormValue = {
     productComboID: fishData.productComboID,
-    comboName:fishData.comboName,
-    breed: fishData.breed,
+    comboName: fishData.comboName,
     size: fishData.size,
+    breed: fishData.breed,
     healthStatus: fishData.healthStatus,
+    quantity: fishData.quantity,
     description: fishData.description,
     image: fishData.image,
+    image1: fishData.image1,
+    image2: fishData.image2,
     price: fishData.price,
-    type: fishData.type,
-    quantity: fishData.quantity,
-    status: fishData.status,
-    desiredPrice: fishData.desiredPrice,
     consignmentType: fishData.consignmentType,
+    desiredPrice: fishData.desiredPrice,
+    type: fishData.type,
+    status: fishData.status,
+    carePackageID: fishData.carePackageID,
   };
 
   const [formValue, setFormValue] = useState(initFormValue);
-  const [fileList, setFileList] = useState(
-    fishData.image
+  const [fileList, setFileList] = useState({
+    image: fishData.image
+      ? [{ uid: "-1", name: "image.png", status: "done", url: fishData.image }]
+      : [],
+    image1: fishData.image1
       ? [
           {
-            uid: "-1",
-            name: "image.png",
+            uid: "-2",
+            name: "image1.png",
             status: "done",
-            url: fishData.image,
+            url: fishData.image1,
           },
         ]
-      : []
-  );
-
-  const [certificateList, setCertificateList] = useState(
-    fishData.certificate
+      : [],
+    image2: fishData.image2
       ? [
           {
-            uid: "-1",
-            name: "certificate.png",
+            uid: "-3",
+            name: "image2.png",
             status: "done",
-            url: fishData.certificate,
+            url: fishData.image2,
           },
         ]
-      : []
-  );
-
+      : [],
+  });
   const [open, setOpen] = useState(false);
+
   const handleChange = (event) => {
     const { value, name } = event.target;
 
-    if (name === "type" && value === "Ký gửi") {
-      setFormValue((prevValue) => ({
-        ...prevValue,
-        [name]: value,
-        consignmentType: "Ký gửi để bán", // Đặt loại hình ký gửi thành "Ký gửi để bán"
-      }));
-    } else {
-      setFormValue((prevValue) => ({
-        ...prevValue,
-        [name]: value,
-      }));
-    }
+    setFormValue((prevValue) => ({
+      ...prevValue,
+      [name]: value,
+    }));
   };
 
   const handleUploadChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
 
-    if (newFileList.length > 0) {
-      const file = newFileList[0].originFileObj;
+    const uploadedFiles = newFileList.filter((file) => file.originFileObj);
+    const uploadPromises = uploadedFiles.map((fileObj, index) => {
+      const file = fileObj.originFileObj;
       const storageRef = ref(storage, `uploads/${file.name}`);
-      uploadBytes(storageRef, file)
-        .then(() => {
-          return getDownloadURL(storageRef);
-        })
+      return uploadBytes(storageRef, file)
+        .then(() => getDownloadURL(storageRef))
         .then((url) => {
-          setFormValue((prevFormValue) => ({
-            ...prevFormValue,
-            imageUrl: url,
-          }));
+          if (index === 0) {
+            setFormValue((prevFormValue) => ({ ...prevFormValue, image: url }));
+          } else if (index === 1) {
+            setFormValue((prevFormValue) => ({
+              ...prevFormValue,
+              image1: url,
+            }));
+          } else if (index === 2) {
+            setFormValue((prevFormValue) => ({
+              ...prevFormValue,
+              image2: url,
+            }));
+          }
         })
         .catch((error) => {
           console.error("Error uploading file:", error);
         });
-    }
-  };
+    });
 
-  const handleCertificateChange = ({ fileList: newFileList }) => {
-    setCertificateList(newFileList);
-
-    if (newFileList.length > 0) {
-      const file = newFileList[0].originFileObj;
-      const storageRef = ref(storage, `uploads/certificates/${file.name}`);
-      uploadBytes(storageRef, file)
-        .then(() => {
-          return getDownloadURL(storageRef);
-        })
-        .then((url) => {
-          setFormValue((prevFormValue) => ({
-            ...prevFormValue,
-            certificateUrl: url,
-          }));
-        })
-        .catch((error) => {
-          console.error("Error uploading certificate:", error);
-        });
-    }
+    Promise.all(uploadPromises);
   };
 
   const handleOk = async () => {
-    // Thêm `async` vào hàm
-    // Xử lý lưu thông tin cá
-    console.log("Form value:", formValue);
     const data = {
-      id: formValue.productComboID,
-      comboName: fishData.comboName,
-      breed: formValue.breed,
+      productComboID: formValue.productComboID,
+      comboName: formValue.comboName,
       size: formValue.size,
+      breed: formValue.breed,
       healthStatus: formValue.healthStatus,
-      description: formValue.description,
-      image: formValue.image,
-      price: formValue.price,
-      certificate: formValue.certificate,
-      type: formValue.type,
       quantity: formValue.quantity,
-      status: formValue.status,
-      desiredPrice: formValue.price,
+      description: formValue.description,
+      image: formValue.image, // Ảnh chính
+      image1: formValue.image1, // Ảnh phụ 1
+      image2: formValue.image2, // Ảnh phụ 2
+      price: parseFloat(formValue.price),
       consignmentType: formValue.consignmentType,
+      desiredPrice: parseFloat(formValue.desiredPrice),
+      type: formValue.type,
+      status: formValue.status,
+      carePackageID: formValue.carePackageID,
     };
-    console.log(fishData);
     console.log(data);
     try {
-      let res = await editComboInfo(data); // Sử dụng `await` để chờ kết quả
+      let res = await editComboInfo(data);
       if (res) {
-    onChange();
         console.log("Thành công");
+        onChange();
       }
     } catch (error) {
-      console.log("Lỗi:", error);
+      console.error("Error:", error);
     }
-
-    onClose(); // Gọi hàm onClose để đóng modal
+    setOpen(false);
   };
 
   const showModal = () => {
     setOpen(true);
   };
+
   const onClose = () => {
     setOpen(false);
   };
+
   return (
     <>
       <Button onClick={showModal}>Chỉnh sửa</Button>
       <Modal open={open} onOk={handleOk} onCancel={onClose} centered>
         <form>
           <div className="add-fish__modal">
-            <h2>Thông tin cá</h2>
-            <div style={{ display: "flex", gap: "5rem" }}>
+            <h2>Thông tin Combo</h2>
+            <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+              {/* Upload ảnh chính */}
               <div>
-                <label className="form-label">Ảnh:</label>
+                <label className="form-label">Ảnh chính:</label>
                 <Upload
                   name="image"
                   listType="picture-card"
                   className="image-uploader"
-                  fileList={fileList}
-                  onChange={handleUploadChange}
+                  fileList={fileList.image}
+                  onChange={({ fileList }) =>
+                    handleUploadChange(fileList, "image")
+                  }
                   beforeUpload={() => false}
                   required
                 >
-                  {fileList.length >= 1 ? null : (
+                  {fileList.image.length >= 1 ? null : (
                     <div>
                       <PlusOutlined />
                       <div style={{ marginTop: 8 }}>Upload</div>
@@ -185,18 +170,45 @@ function EditProductComboModal({ fishData, onChange }) {
                   )}
                 </Upload>
               </div>
+
+              {/* Upload ảnh phụ 1 */}
               <div>
-                <label className="form-label">Chứng nhận:</label>
+                <label className="form-label">Ảnh phụ 1:</label>
                 <Upload
-                  name="certificate"
+                  name="image1"
                   listType="picture-card"
-                  className="certificate-uploader"
-                  fileList={certificateList}
-                  onChange={handleCertificateChange}
+                  className="image-uploader"
+                  fileList={fileList.image1}
+                  onChange={({ fileList }) =>
+                    handleUploadChange(fileList, "image1")
+                  }
                   beforeUpload={() => false}
                   required
                 >
-                  {certificateList.length >= 1 ? null : (
+                  {fileList.image1.length >= 1 ? null : (
+                    <div>
+                      <PlusOutlined />
+                      <div style={{ marginTop: 8 }}>Upload</div>
+                    </div>
+                  )}
+                </Upload>
+              </div>
+
+              {/* Upload ảnh phụ 2 */}
+              <div>
+                <label className="form-label">Ảnh phụ 2:</label>
+                <Upload
+                  name="image2"
+                  listType="picture-card"
+                  className="image-uploader"
+                  fileList={fileList.image2}
+                  onChange={({ fileList }) =>
+                    handleUploadChange(fileList, "image2")
+                  }
+                  beforeUpload={() => false}
+                  required
+                >
+                  {fileList.image2.length >= 1 ? null : (
                     <div>
                       <PlusOutlined />
                       <div style={{ marginTop: 8 }}>Upload</div>
@@ -207,7 +219,7 @@ function EditProductComboModal({ fishData, onChange }) {
             </div>
             <div>
               <label className="form-label">Giống:</label>
-              <input
+              <Input
                 className="form-control"
                 type="text"
                 name="breed"
@@ -218,7 +230,7 @@ function EditProductComboModal({ fishData, onChange }) {
             </div>
             <div>
               <label className="form-label">Kích thước trung bình:</label>
-              <input
+              <Input
                 className="form-control"
                 type="text"
                 name="size"
@@ -227,36 +239,25 @@ function EditProductComboModal({ fishData, onChange }) {
                 required
               />
             </div>
-
+            <div>
+              <label className="form-label">Số lượng:</label>
+              <Input
+                className="form-control"
+                type="number"
+                name="quantity"
+                value={formValue.quantity}
+                min={1}
+                onChange={handleChange}
+                required
+              />
+            </div>
             <div>
               <label className="form-label">Tình trạng sức khỏe:</label>
-              <input
+              <Input
                 className="form-control"
                 type="text"
                 name="healthStatus"
                 value={formValue.healthStatus}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label className="form-label">Đặc điểm tính cách:</label>
-              <input
-                className="form-control"
-                type="text"
-                name="personalityTrait"
-                value={formValue.personalityTrait}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label className="form-label">Nguồn gốc:</label>
-              <input
-                className="form-control"
-                type="text"
-                name="origin"
-                value={formValue.origin}
                 onChange={handleChange}
                 required
               />
@@ -272,7 +273,7 @@ function EditProductComboModal({ fishData, onChange }) {
             </div>
             <div>
               <label className="form-label">Loại:</label>
-              <input
+              <Input
                 className="form-control"
                 type="text"
                 name="type"
@@ -284,7 +285,7 @@ function EditProductComboModal({ fishData, onChange }) {
             {formValue.type === "Ký gửi" && (
               <div>
                 <label className="form-label">Loại hình ký gửi:</label>
-                <input
+                <Input
                   className="form-control"
                   type="text"
                   name="consignmentType"
@@ -295,7 +296,7 @@ function EditProductComboModal({ fishData, onChange }) {
             )}
             <div>
               <label className="form-label">Giá:</label>
-              <input
+              <Input
                 className="form-control"
                 type="number"
                 name="price"

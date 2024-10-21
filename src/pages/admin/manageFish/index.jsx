@@ -1,3 +1,4 @@
+import { useState, useEffect, useCallback } from "react";
 import { Select, Button } from "antd";
 import AdminFilter from "../../../components/admin-components/admin-filter";
 import AdminHeader from "../../../components/admin-components/admin-headers";
@@ -5,9 +6,9 @@ import AdminSideBar from "../../../components/admin-components/admin-sidebar";
 import FishTable from "../../../components/admin-components/fish-table";
 import EditFishModal from "./EditFishModal";
 import AddFishModal from "./AddFishModal";
+import { Pagination } from "@mui/material";
+import { fetchAllProduct, fetchAllConsignment } from "../../../service/userService";
 import "./index.scss";
-import { fetchAllProduct } from "../../../service/userService";
-import { useEffect, useState, useCallback } from "react";
 
 const { Option } = Select;
 
@@ -22,12 +23,27 @@ const columns = [
 ];
 
 function ManageFish() {
-  const [fishData, setFishData] = useState([]); // Dữ liệu gốc
-  const [filteredFishData, setFilteredFishData] = useState([]); // Dữ liệu đã lọc
-  const [filterType, setFilterType] = useState("all"); // Giống loài
-  const [statusFilter, setStatusFilter] = useState("all"); // Trạng thái
-  const [searchValue, setSearchValue] = useState(""); // Giá trị tìm kiếm
-  const [sortOrder, setSortOrder] = useState(null); // Sắp xếp giá
+  const [fishData, setFishData] = useState([]);
+  const [filteredFishData, setFilteredFishData] = useState([]);
+  const [filterType, setFilterType] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [searchValue, setSearchValue] = useState("");
+  const [sortOrder, setSortOrder] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+  const [consignmentData, setConsignmentData] = useState([]); // Thêm consignmentData
+
+  // Gọi API để lấy consignmentData
+  const getConsignmentData = useCallback(async () => {
+    try {
+      const res = await fetchAllConsignment();
+      if (res && res.data) {
+        setConsignmentData(res.data);
+      }
+    } catch (error) {
+      console.log("Lỗi khi lấy consignmentData:", error);
+    }
+  }, []);
 
   const applyFilters = useCallback(
     (data) => {
@@ -61,7 +77,7 @@ function ManageFish() {
         });
       }
 
-      setFilteredFishData(filtered); // Cập nhật dữ liệu đã lọc
+      setFilteredFishData(filtered);
     },
     [searchValue, filterType, statusFilter, sortOrder]
   );
@@ -70,8 +86,8 @@ function ManageFish() {
     try {
       let res = await fetchAllProduct();
       if (res && res.data) {
-        setFishData(res.data); // Cập nhật dữ liệu gốc
-        applyFilters(res.data); // Áp dụng các bộ lọc ngay khi có dữ liệu
+        setFishData(res.data);
+        applyFilters(res.data); 
       }
     } catch (error) {
       console.log(error);
@@ -80,7 +96,8 @@ function ManageFish() {
 
   useEffect(() => {
     getAllProduct();
-  }, [getAllProduct]);
+    getConsignmentData();
+  }, [getAllProduct, getConsignmentData]);
 
   const handleSearch = (value) => {
     setSearchValue(value);
@@ -106,6 +123,16 @@ function ManageFish() {
     getAllProduct();
   };
 
+  const paginatedData = useCallback(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filteredFishData.slice(startIndex, endIndex);
+  }, [filteredFishData, currentPage]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div className="manage-fish">
       <div className="admin-sidebar">
@@ -127,9 +154,10 @@ function ManageFish() {
             onChange={handleBreedFilter}
           >
             <Option value="all">Tất cả</Option>
-            <Option value="Koi">Koi</Option>
-            <Option value="Betta">Betta</Option>
-            <Option value="Goldfish">Goldfish</Option>
+            <Option value="Kohaku">Kohaku</Option>
+            <Option value="Showa">Showa</Option>
+            <Option value="Snake">Snake</Option>
+            <Option value="Tancho">Tancho</Option>
           </Select>
 
           <Select
@@ -138,11 +166,12 @@ function ManageFish() {
             onChange={handleStatusFilter}
           >
             <Option value="all">Tất cả</Option>
+            <Option value="Chờ xác nhận">Chờ xác nhận</Option>
+            <Option value="Đang chăm sóc">Đang chăm sóc</Option>
             <Option value="Còn hàng">Còn hàng</Option>
             <Option value="Hết hàng">Hết hàng</Option>
           </Select>
 
-          {/* Nút giá tăng dần và giảm dần với class active */}
           <Button
             className={
               sortOrder === "asc" ? "button-active" : "button-inactive"
@@ -163,11 +192,21 @@ function ManageFish() {
         </div>
 
         <FishTable
-          fishData={filteredFishData}
+          fishData={paginatedData()} // Dữ liệu đã phân trang
           columns={columns}
           title="Quản lý giống cá"
           ModalComponent={EditFishModal}
           onChange={handleDataChange}
+          consignmentData={consignmentData} // Truyền consignmentData vào FishTable
+        />
+
+        {/* Phân trang */}
+        <Pagination
+          count={Math.ceil(filteredFishData.length / itemsPerPage)}
+          page={currentPage}
+          onChange={(event, value) => handlePageChange(value)}
+          color="primary"
+          style={{ textAlign: "center", marginTop: "20px" }}
         />
       </div>
     </div>
