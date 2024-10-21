@@ -64,7 +64,7 @@ function LoginPage() {
       console.log("User Role Name:", response.data.account.roleName); // Log the roleName
 
 
-      localStorage.setItem("token", response.data.account.token); 
+      localStorage.setItem("token", response.data.token); 
       console.log("Response from API:", response.data.account);
 
       // Save user data to Redux
