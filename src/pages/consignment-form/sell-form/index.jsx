@@ -20,6 +20,7 @@ import "./index.scss";
 import SellFormCombo from "../sell-form-combo";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
 function SellForm() {
   const {
     register,
@@ -115,17 +116,17 @@ function SellForm() {
   const onSubmit = async (data) => {
     const uploadedImages = await uploadFilesToFirebase(fileList); // Upload file hình ảnh cá KOI
     const uploadedCerts = await uploadFilesToFirebase(certFileList); // Upload file chứng nhận
-
     const finalData = {
       ...data,
+      productName: uuidv4(),
       image: uploadedImages[0]?.url,
       image1: uploadedImages[1]?.url,
       image2: uploadedImages[2]?.url,
-      certifications: uploadedCerts,
-      Status: "Còn hàng",
-      Type: "Ký gửi",
+      certificate: uploadedCerts[0]?.url,
+      status: "Chờ xác nhận",
+      type: "Ký gửi",
       consignmentType: "Ký gửi để bán",
-      price: 1,
+      price: data.desiredPrice,
     };
 
     console.log(
@@ -237,6 +238,19 @@ function SellForm() {
           </Grid>
           <Grid item xs={12}>
             <TextField
+              {...register("age", {
+                required: "Vui lòng nhập tuổi cá",
+                min: 1,
+              })}
+              label="Số tháng tuổi"
+              fullWidth
+              type="number"
+              error={!!errors.age}
+              helperText={errors.age?.message}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
               {...register("size", {
                 required: "Vui lòng nhập kích thước",
               })}
@@ -297,19 +311,19 @@ function SellForm() {
                 row
                 aria-labelledby="demo-radio-buttons-group-label"
                 defaultValue="Đực"
-                onChange={(event) => setValue("gender", event.target.value)}
+                onChange={(event) => setValue("sex", event.target.value)}
               >
                 <FormControlLabel
                   value="Đực"
                   control={<Radio />}
                   label="Đực"
-                  {...register("gender")}
+                  {...register("sex")}
                 />
                 <FormControlLabel
                   value="Cái"
                   control={<Radio />}
                   label="Cái"
-                  {...register("gender")}
+                  {...register("sex")}
                 />
               </RadioGroup>
             </FormControl>
@@ -378,7 +392,6 @@ function SellForm() {
               helperText={errors.description?.message}
             />
           </Grid>
-
           {/* Nút Submit */}
           <Grid item xs={12} style={{ textAlign: "center", marginTop: "2rem" }}>
             <Button type="submit" className="submit-form-btn">

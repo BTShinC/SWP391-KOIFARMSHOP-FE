@@ -10,52 +10,27 @@ import {
 import "./index.scss"; // Import file SCSS của bạn
 import { useNavigate } from "react-router-dom";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment"; // Import icon ngọn lửa
-const koiCarePackages = [
-  {
-    id: 1,
-    title: "Gói chăm sóc cá Koi tiêu chuẩn",
-    price: "1.500.000đ/tháng",
-    description: "Bao gồm kiểm tra sức khỏe định kỳ và tư vấn chăm sóc cá Koi.",
-    services: [
-      "Kiểm tra chất lượng nước",
-      "Kiểm tra sức khỏe cá",
-      "Tư vấn dinh dưỡng",
-    ],
-    image: "/images/cakoi2.webp",
-  },
-  {
-    id: 2,
-    title: "Gói chăm sóc cá Koi nâng cao",
-    price: "3.000.000đ/tháng",
-    description: "Dịch vụ chăm sóc chuyên sâu cho các giống cá Koi quý hiếm.",
-    services: ["Kiểm tra chuyên sâu", "Điều trị bệnh cá", "Chăm sóc định kỳ"],
-    image: "/images/a.jpg",
-  },
-  {
-    id: 3,
-    title: "Gói chăm sóc cá Koi VIP",
-    price: "5.000.000đ/tháng",
-    description:
-      "Dịch vụ cao cấp bao gồm chăm sóc, điều trị, và tư vấn toàn diện.",
-    services: ["Chăm sóc 24/7", "Tư vấn chuyên gia", "Bảo hiểm sức khỏe cá"],
-    image: "/images/ca-koi-chat-luong.webp",
-  },
-  {
-    id: 4,
-    title: "Gói lên màu cho cá Koi",
-    price: "3.500.000đ/tháng",
-    description:
-      "Dịch vụ chuyên nghiệp giúp tăng cường màu sắc cá Koi, cải thiện sức khỏe và ngoại hình.",
-    services: [
-      "Chăm sóc dinh dưỡng đặc biệt",
-      "Kiểm tra định kỳ tình trạng màu sắc",
-      "Tư vấn điều chỉnh chế độ chăm sóc",
-    ],
-    image: "/images/image 111.png",
-  },
-];
+import { useCallback, useEffect, useState } from "react";
+import { fetchAllCarePackages } from "../../../service/userService";
 
 function ConsignmentPackageExample() {
+  const getAllCarePackages = useCallback(async () => {
+    try {
+      let res = await fetchAllCarePackages();
+      if (res && res.data) {
+        setKoiCarePackages(res.data);
+        console.log("koiCarePackages =>", res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    getAllCarePackages();
+  }, [getAllCarePackages]);
+  const [koiCarePackages, setKoiCarePackages] = useState([]);
+
   const navigate = useNavigate();
   const handleCarePackageDetail = (id) => {
     navigate(`/carepackagedetail/${id}`);
@@ -63,7 +38,7 @@ function ConsignmentPackageExample() {
   return (
     <>
       <Grid container spacing={3} justifyContent="center" alignItems="stretch">
-        {koiCarePackages.map((product) => (
+        {koiCarePackages.slice(0, 4).map((product) => (
           <Grid item xs={12} sm={6} key={product.id}>
             <Card className="hover-card">
               <CardMedia
@@ -95,14 +70,14 @@ function ConsignmentPackageExample() {
                 </ul>
                 {/* Cập nhật màu và kích thước giá */}
                 <Typography className="price-text">
-                  {product.price}
+                  {new Intl.NumberFormat("vi-VN").format(product?.price)}VNĐ/tháng
                   <LocalFireDepartmentIcon className="fire-icon" />
                 </Typography>
               </CardContent>
               <Box sx={{ textAlign: "center", paddingBottom: "1rem" }}>
                 <Button
                   className="detail-care-package-btn"
-                  onClick={() => handleCarePackageDetail(product.id)}
+                  onClick={() => handleCarePackageDetail(product.carePackageID)}
                 >
                   Xem chi tiết
                 </Button>

@@ -1,8 +1,9 @@
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import "./index.scss";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ArrowDropUp, ArrowDropDown } from "@mui/icons-material"; // Mũi tên chỉ hướng
+import { fetchAllCarePackages } from "../../../service/userService";
 
 function CarePackageList() {
   const navigate = useNavigate();
@@ -10,38 +11,28 @@ function CarePackageList() {
   const [selectedType, setSelectedType] = useState("");
   const [sortPriceDirection, setSortPriceDirection] = useState(null); // Trạng thái sắp xếp giá
 
-  const koiCarePackages = [
-    {
-      id: 1,
-      title: "Gói chăm sóc cá Koi tiêu chuẩn",
-      price: "1500000", // Chuyển giá thành số để dễ so sánh
-      description:
-        "Bao gồm kiểm tra sức khỏe định kỳ và tư vấn chăm sóc cá Koi.",
-      services: [
-        "Kiểm tra chất lượng nước",
-        "Kiểm tra sức khỏe cá",
-        "Tư vấn dinh dưỡng",
-      ],
-      image: "/images/cakoi2.webp",
-      tag: "HOT",
-      type: "Cá thể",
-    },
-    {
-      id: 2,
-      title: "Gói chăm sóc cá Koi nâng cao",
-      price: "3000000",
-      description: "Dịch vụ chăm sóc chuyên sâu cho các giống cá Koi quý hiếm.",
-      services: ["Kiểm tra chuyên sâu", "Điều trị bệnh cá", "Chăm sóc định kỳ"],
-      image: "/images/a.jpg",
-      tag: "SALE",
-      type: "Lô",
-    },
-  ];
+  const getAllCarePackages = useCallback(async () => {
+    try {
+      let res = await fetchAllCarePackages();
+      if (res && res.data) {
+        setKoiCarePackages(res.data);
+        console.log("koiCarePackages =>", res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    getAllCarePackages();
+  }, [getAllCarePackages]);
+  const [koiCarePackages, setKoiCarePackages] = useState([]);
 
   // Lọc và sắp xếp các gói chăm sóc
   const filteredPackages = koiCarePackages
     .filter((item) => {
-      const matchesSearch = item.title
+      const packageName = item.packageName || ""; // Đảm bảo packageName không phải là undefined
+      const matchesSearch = packageName
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
       const matchesType = selectedType === "" || item.type === selectedType;
@@ -49,9 +40,9 @@ function CarePackageList() {
     })
     .sort((a, b) => {
       if (sortPriceDirection === "asc") {
-        return a.price - b.price; // Sắp xếp tăng dần
+        return a.price - b.price;
       } else if (sortPriceDirection === "desc") {
-        return b.price - a.price; // Sắp xếp giảm dần
+        return b.price - a.price;
       }
       return 0; // Không sắp xếp
     });
@@ -130,14 +121,18 @@ function CarePackageList() {
           <Grid
             container
             spacing={4}
-            key={item.id}
+            key={item.carePackageID}
             className="care-package-item"
             alignItems="center"
           >
             {/* Image Column */}
             <Grid item xs={12} md={6}>
               <Box className="image-container">
-                <img src={item.image} height={"300px"} alt={item.title} />
+                <img
+                  src={item.images[0]}
+                  height={"300px"}
+                  alt={item.packageName}
+                />
               </Box>
             </Grid>
 
@@ -145,18 +140,31 @@ function CarePackageList() {
             <Grid item xs={12} md={6}>
               <Box className="description-container">
                 <div className="title-wrapper">
-                  <Typography variant="h4">{item.title}</Typography>
+                  <Typography variant="h4">{item.packageName} ({item?.type})</Typography>
                   {item.tag && (
-                    <span
-                      className={`label-tag ${
-                        item.tag === "SALE" ? "label-sale" : ""
-                      }`}
-                    >
-                      {item.tag}
-                    </span>
+                    <>
+                      <span
+                        className={`label-tag ${
+                          item.tag.toLowerCase() === "sale"
+                            ? "label-sale"
+                            : item.tag.toLowerCase() === "best seller"
+                            ? "label-best-seller"
+                            : ""
+                        }`}
+                      >
+                        {item.tag}
+                      </span>
+                    </>
                   )}
                 </div>
-                <Typography variant="h6">{item.price}đ</Typography>
+                {item.tag.toLowerCase() === 'sale' && (
+                  <Typography variant="h6" sx={{ textDecoration: 'line-through'}}>
+                    {new Intl.NumberFormat("vi-VN").format(item.price * 1.2)}VNĐ
+                  </Typography>
+                )}
+                <Typography variant="h6">
+                  {new Intl.NumberFormat("vi-VN").format(item.price)} VNĐ
+                </Typography>
                 <ul>
                   {item.services.map((service, index) => (
                     <li key={index}>{service}</li>
@@ -165,7 +173,7 @@ function CarePackageList() {
                 <Button
                   variant="contained"
                   className="view-detail-btn"
-                  onClick={() => handleDetailPackage(item.id)}
+                  onClick={() => handleDetailPackage(item.carePackageID)}
                 >
                   Xem chi tiết
                 </Button>

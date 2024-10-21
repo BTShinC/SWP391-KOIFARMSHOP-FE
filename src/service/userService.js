@@ -1,5 +1,4 @@
 import api from "../config/api";
-
 const Register = async (data) => {
   try {
     const response = await api.post("Register", data);
@@ -87,6 +86,7 @@ const fetchProductById = async (id) => {
     throw error; // Throw error to handle it in the calling function
   }
 };
+
 const fetchAllProductCombo = async () => {
   try {
     const response = await api.get("productcombo");
@@ -110,6 +110,16 @@ const editComboInfo = async (data) => {
   try {
     const response = await api.put(`productcombo/${data.productComboID}`, data);
     return response;
+  } catch (error) {
+    console.error(error);
+    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+  }
+};
+
+const fetchProductComboById = async (id) => {
+  try {
+    const response = await api.get(`productcombo/${id}`);
+    return response.data;
   } catch (error) {
     console.error(error);
     throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
@@ -169,6 +179,92 @@ const deleteCartItem = async (cartItemId) => {
   }
 };
 
+const fetchAllCarePackages = async () => {
+  try {
+    const response = await api.get(`carePackages`);
+    console.log(response.data);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+const createConsignment = async (data) => {
+  try {
+    const response = await api.post(`consignments`, data);
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+const fetchAllConsignment = async () => {
+  try {
+    const response = await api.get(`consignments`);
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+const updateConsignmentStatus = async (id, status) => {
+  try {
+    const response = await api.put(
+      `consignments/${id}`,
+      { status },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log("Response từ API:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Lỗi từ API:", error.response || error.message);
+    throw error;
+  }
+};
+const updateProductStatus = async (id, status) => {
+  try {
+    const response = await api.put(
+      `product/${id}`,
+      { status },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log("Response từ API Product:", response.data);
+    return response
+  } catch (error) {
+    console.error("Lỗi khi cập nhật Product:", error.response || error.message);
+    throw error;
+  }
+};
+
+const updateProductComboStatus = async (id, status) => {
+  try {
+    const response = await api.put(
+      `productcombo/${id}`,
+      { status },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log('Response từ API Product Combo:', response.data);
+    return response
+  } catch (error) {
+    console.error('Lỗi khi cập nhật Product Combo:', error.response || error.message);
+    throw error;
+  }
+};
 export {
   Register,
   ChangePassword,
@@ -186,4 +282,11 @@ export {
   fetchCartItems,
   deleteCartItem,
   AddFishCombo,
+  fetchProductComboById,
+  fetchAllCarePackages,
+  createConsignment,
+  fetchAllConsignment,
+  updateConsignmentStatus,
+  updateProductComboStatus,
+  updateProductStatus,
 };

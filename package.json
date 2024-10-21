@@ -39,6 +39,7 @@
     "swiper": "^11.1.14",
     "swp391-koifarmshop-fe": "file:",
     "ui": "^0.2.4",
+    "uuid": "^10.0.0",
     "vn-num2words": "^1.0.4"
   },
   "devDependencies": {

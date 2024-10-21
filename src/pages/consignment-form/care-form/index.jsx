@@ -13,7 +13,7 @@ import {
 import { addDays, format } from "date-fns";
 import { Upload, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { storage } from "../../../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useForm } from "react-hook-form";
@@ -21,9 +21,13 @@ import "./index.scss";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import { fetchAllCarePackages } from "../../../service/userService";
+import { v4 as uuidv4 } from "uuid";
+
 CareForm.propTypes = {
   id: PropTypes.number.isRequired,
 };
+
 function CareForm({ id }) {
   const {
     register,
@@ -31,64 +35,44 @@ function CareForm({ id }) {
     setValue,
     formState: { errors },
   } = useForm();
-  const koiCarePackages = [
-    {
-      id: 1,
-      title: "Gói chăm sóc cá Koi tiêu chuẩn",
-      price: "1.500.000đ/tháng",
-      description:
-        "Bao gồm kiểm tra sức khỏe định kỳ và tư vấn chăm sóc cá Koi.",
-      services: [
-        "Kiểm tra chất lượng nước",
-        "Kiểm tra sức khỏe cá",
-        "Tư vấn dinh dưỡng",
-      ],
-      image: "/images/cakoi2.webp",
-    },
-    {
-      id: 2,
-      title: "Gói chăm sóc cá Koi nâng cao",
-      price: "3.000.000đ/tháng",
-      description: "Dịch vụ chăm sóc chuyên sâu cho các giống cá Koi quý hiếm.",
-      services: ["Kiểm tra chuyên sâu", "Điều trị bệnh cá", "Chăm sóc định kỳ"],
-      image: "/images/a.jpg",
-    },
-    {
-      id: 3,
-      title: "Gói chăm sóc cá Koi VIP",
-      price: "5.000.000đ/tháng",
-      description:
-        "Dịch vụ cao cấp bao gồm chăm sóc, điều trị, và tư vấn toàn diện.",
-      services: ["Chăm sóc 24/7", "Tư vấn chuyên gia", "Bảo hiểm sức khỏe cá"],
-      image: "/images/ca-koi-chat-luong.webp",
-    },
-    {
-      id: 4,
-      title: "Gói lên màu cho cá Koi",
-      price: "3.500.000đ/tháng",
-      description:
-        "Dịch vụ chuyên nghiệp giúp tăng cường màu sắc cá Koi, cải thiện sức khỏe và ngoại hình.",
-      services: [
-        "Chăm sóc dinh dưỡng đặc biệt",
-        "Kiểm tra định kỳ tình trạng màu sắc",
-        "Tư vấn điều chỉnh chế độ chăm sóc",
-      ],
-      image: "/images/image 111.png",
-    },
-  ];
+
+  const getAllCarePackages = useCallback(async () => {
+    try {
+      let res = await fetchAllCarePackages();
+      if (res && res.data) {
+        setKoiCarePackages(res.data);
+        console.log("koiCarePackages =>", res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    getAllCarePackages();
+  }, [getAllCarePackages]);
+
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState([]);
   const [certFileList, setCertFileList] = useState([]);
   const [previewCertImage, setPreviewCertImage] = useState("");
+  const [koiCarePackages, setKoiCarePackages] = useState([]);
   const user = useSelector((state) => state.user.account);
   console.log(user);
   const carePackageID = id;
   console.log("carePackageID =>", carePackageID);
 
   const carePackage = koiCarePackages.find((item) => {
-    return item.id === id;
+    return item.carePackageID === id;
   });
+
+  // Cập nhật giá trị cho carePackageID khi dữ liệu sẵn sàng
+  useEffect(() => {
+    if (carePackage?.carePackageID) {
+      setValue("carePackageID", carePackage.carePackageID);
+    }
+  }, [carePackage, setValue]);
 
   // Preview ảnh khi chọn
   const handlePreview = async (file) => {
@@ -150,12 +134,18 @@ function CareForm({ id }) {
 
     const finalData = {
       ...data,
-      image: uploadedImages[0].url,
-      image1: uploadedImages[1].url,
-      image2: uploadedImages[2].url,
-      certifications: uploadedCerts,
+      image: uploadedImages[0]?.url || "",
+      image1: uploadedImages[1]?.url || "",
+      image2: uploadedImages[2]?.url || "",
+      certificate: uploadedCerts[0]?.url || "",
+      accountID: user?.accountID,
+      price: carePackage?.price,
+      type: "Ký gửi",
+      consignmentType: "chăm sóc",
+      status: "Chờ xác nhận",
+      desiredPrice:carePackage?.price,
+      productName: uuidv4(),
     };
-
     console.log(
       "Form data with uploaded images and certifications cá thể:",
       finalData
@@ -195,16 +185,19 @@ function CareForm({ id }) {
   const getTodayDate = () => {
     return format(new Date(), "yyyy-MM-dd");
   };
+
   const getTodayDatePlus30Days = () => {
     const today = new Date();
     const futureDate = addDays(today, 30);
     return format(futureDate, "yyyy-MM-dd");
   };
+
   const navigation = useNavigate();
 
   return (
     <div className="care-form" style={{ padding: "2rem" }}>
       <form onSubmit={handleSubmit(onSubmit)}>
+        <input type="hidden" {...register("carePackageID")} />
         <Box>
           <Button
             variant="contained"
@@ -243,7 +236,7 @@ function CareForm({ id }) {
                 />
               )}
             </Grid>
-            
+
             <Grid item xs={12} sx={{ marginBottom: 2 }}>
               <Typography>Ảnh chứng nhận</Typography>
               <Upload
@@ -276,7 +269,33 @@ function CareForm({ id }) {
                 helperText={errors.breed?.message}
               />
             </Grid>
-
+            <Grid item xs={12} sx={{ marginBottom: 2 }}>
+              <TextField
+                {...register("size", {
+                  required: "Vui lòng nhập Kích thước",
+                  min: {
+                    value: 1,
+                    message: "Kích thước phải lớn hơn hoặc bằng 1",
+                  },
+                })}
+                label="Kích thước"
+                type="number"
+                fullWidth
+                error={!!errors.size}
+                helperText={errors.size?.message}
+              />
+            </Grid>
+            <Grid item xs={12} sx={{ marginBottom: 2 }}>
+              <TextField
+                {...register("age", {
+                  required: "Vui lòng nhập tuổi",
+                })}
+                label="Số năm tuổi cá"
+                fullWidth
+                error={!!errors.age}
+                helperText={errors.age?.message}
+              />
+            </Grid>
             <Grid item xs={12} sx={{ marginBottom: 2 }}>
               <TextField
                 {...register("origin", {
@@ -298,19 +317,19 @@ function CareForm({ id }) {
                   row
                   aria-labelledby="demo-radio-buttons-group-label"
                   defaultValue="Đực"
-                  onChange={(event) => setValue("gender", event.target.value)}
+                  onChange={(event) => setValue("sex", event.target.value)}
                 >
                   <FormControlLabel
                     value="Đực"
                     control={<Radio />}
                     label="Đực"
-                    {...register("gender")}
+                    {...register("sex")}
                   />
                   <FormControlLabel
                     value="Cái"
                     control={<Radio />}
                     label="Cái"
-                    {...register("gender")}
+                    {...register("sex")}
                   />
                 </RadioGroup>
               </FormControl>
@@ -327,19 +346,29 @@ function CareForm({ id }) {
                 helperText={errors.healthStatus?.message}
               />
             </Grid>
+            <Grid item xs={12} sx={{ marginBottom: 2 }}>
+              <TextField
+                {...register("personalityTrait", {
+                  required: "Vui lòng nhập tính cách cá",
+                })}
+                label="Tính cách cá"
+                fullWidth
+                error={!!errors.personalityTrait}
+                helperText={errors.personalityTrait?.message}
+              />
+            </Grid>
           </Grid>
           <Grid item xs={6}>
             <Box>
-              <Typography variant="h6">Thông tin khách hàng</Typography>
+              <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                Thông tin khách hàng
+              </Typography>
             </Box>
             <Grid item xs={12} sx={{ marginBottom: 2 }}>
               <TextField
-                {...register("fullName", {
-                  required: "Vui lòng nhập họ và tên",
-                })}
                 label="Họ và tên"
                 fullWidth
-                value={user.fullName}
+                value={user?.fullName || ""}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -348,12 +377,11 @@ function CareForm({ id }) {
               />
             </Grid>
 
-            <Grid item xs={12} sx={{ marginBottom: 2 }}>
+            <Grid item xs={12} sx={{ marginBottom: 3 }}>
               <TextField
-                {...register("email", { required: "Vui lòng nhập email" })}
                 label="Email"
                 fullWidth
-                value={user.email}
+                value={user?.email || ""}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -362,44 +390,51 @@ function CareForm({ id }) {
               />
             </Grid>
 
-            <Grid item xs={12} sx={{ marginBottom: 2 }}>
+            <Grid item xs={12} sx={{ marginBottom: 3 }}>
               <TextField
-                {...register("phoneNumber", {
-                  required: "Vui lòng nhập số điện thoại",
-                })}
                 label="Số điện thoại"
                 fullWidth
                 InputLabelProps={{
                   shrink: true,
                 }}
-                value={user.phoneNumber}
+                value={user?.phoneNumber || ""}
                 error={!!errors.phoneNumber}
                 helperText={errors.phoneNumber?.message}
               />
             </Grid>
 
-            <Grid item xs={12} sx={{ marginBottom: 2 }}>
+            <Grid item xs={12} sx={{ marginBottom: 3 }}>
               <TextField
                 label="Gói chăm sóc"
                 fullWidth
-                value={carePackage.title}
+                value={carePackage?.packageName || ""}
                 disabled
                 className="highlighted-textfield"
                 InputLabelProps={{
                   shrink: true,
                 }}
               />
-              <input
-                type="hidden"
-                {...register("carePackageID")}
-                value={carePackage.id}
-              />
             </Grid>
             <Grid item xs={12} sx={{ marginBottom: 2 }}>
               <TextField
                 label="Tổng chi phí"
                 fullWidth
-                value={carePackage.price}
+                value={new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(carePackage?.price || 0)}
+                disabled
+                className="highlighted-textfield"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sx={{ marginBottom: 2 }}>
+              <TextField
+                label="Tổng thời gian"
+                fullWidth
+                value={`${carePackage?.duration || 0} ngày`}
                 disabled
                 className="highlighted-textfield"
                 InputLabelProps={{

@@ -14,6 +14,7 @@ EditFishModal.propTypes = {
 function EditFishModal({ fishData, onChange }) {
   const initFormValue = {
     productID: fishData.productID,
+    productName:fishData.productName,
     breed: fishData.breed,
     size: fishData.size,
     age: fishData.age,
@@ -211,7 +212,17 @@ function EditFishModal({ fishData, onChange }) {
                 </Upload>
               </div>
             </div>
-
+            <div>
+              <label className="form-label">Tên sản phẩm:</label>
+              <input
+                className="form-control"
+                type="text"
+                name="breed"
+                value={formValue.productName}
+                onChange={handleChange}
+                required
+              />
+            </div>
             <div>
               <label className="form-label">Giống:</label>
               <input

@@ -1,7 +1,7 @@
 import { Button, TextField, Grid, Box, Typography } from "@mui/material";
 import { Upload, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { storage } from "../../../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useForm } from "react-hook-form";
@@ -10,6 +10,8 @@ import PropTypes from "prop-types";
 import { addDays, format } from "date-fns";
 import InputAdornment from "@mui/material/InputAdornment";
 import { useNavigate } from "react-router-dom";
+import { fetchAllCarePackages } from "../../../service/userService";
+import { v4 as uuidv4 } from "uuid";
 CareFormCombo.propTypes = {
   id: PropTypes.number.isRequired,
 };
@@ -25,53 +27,24 @@ function CareFormCombo({ id }) {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState([]);
+  const [koiCarePackages, setKoiCarePackages] = useState([]);
   const navigation = useNavigate();
-  const koiCarePackages = [
-    {
-      id: 1,
-      title: "Gói chăm sóc cá Koi tiêu chuẩn",
-      price: "1.500.000đ/tháng",
-      description:
-        "Bao gồm kiểm tra sức khỏe định kỳ và tư vấn chăm sóc cá Koi.",
-      services: [
-        "Kiểm tra chất lượng nước",
-        "Kiểm tra sức khỏe cá",
-        "Tư vấn dinh dưỡng",
-      ],
-      image: "/images/cakoi2.webp",
-    },
-    {
-      id: 2,
-      title: "Gói chăm sóc cá Koi nâng cao",
-      price: "3.000.000đ/tháng",
-      description: "Dịch vụ chăm sóc chuyên sâu cho các giống cá Koi quý hiếm.",
-      services: ["Kiểm tra chuyên sâu", "Điều trị bệnh cá", "Chăm sóc định kỳ"],
-      image: "/images/a.jpg",
-    },
-    {
-      id: 3,
-      title: "Gói chăm sóc cá Koi VIP",
-      price: "5.000.000đ/tháng",
-      description:
-        "Dịch vụ cao cấp bao gồm chăm sóc, điều trị, và tư vấn toàn diện.",
-      services: ["Chăm sóc 24/7", "Tư vấn chuyên gia", "Bảo hiểm sức khỏe cá"],
-      image: "/images/ca-koi-chat-luong.webp",
-    },
-    {
-      id: 4,
-      title: "Gói lên màu cho cá Koi",
-      price: "3.500.000đ/tháng",
-      description:
-        "Dịch vụ chuyên nghiệp giúp tăng cường màu sắc cá Koi, cải thiện sức khỏe và ngoại hình.",
-      services: [
-        "Chăm sóc dinh dưỡng đặc biệt",
-        "Kiểm tra định kỳ tình trạng màu sắc",
-        "Tư vấn điều chỉnh chế độ chăm sóc",
-      ],
-      image: "/images/image 111.png",
-    },
-  ];
 
+  const getAllCarePackages = useCallback(async () => {
+    try {
+      let res = await fetchAllCarePackages();
+      if (res && res.data) {
+        setKoiCarePackages(res.data);
+        console.log("koiCarePackages =>", res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    getAllCarePackages();
+  }, [getAllCarePackages]);
   // Lấy thông tin user + thông tin gói chăm sóc
   const user = useSelector((state) => state.user.account);
   console.log(user);
@@ -79,7 +52,7 @@ function CareFormCombo({ id }) {
   console.log("carePackageID =>", carePackageID);
 
   const carePackage = koiCarePackages.find((item) => {
-    return item.id === id;
+    return item.carePackageID === id;
   });
   const getTodayDate = () => {
     return format(new Date(), "yyyy-MM-dd");
@@ -148,6 +121,14 @@ function CareFormCombo({ id }) {
       image: uploadedImages[0]?.url,
       image1: uploadedImages[1]?.url,
       image2: uploadedImages[2]?.url,
+      comboName: uuidv4(),
+      type: "Ký gửi",
+      accountID: user?.accountID,
+      consignmentType: "chăm sóc",
+      carePackageID : carePackage?.carePackageID,
+      price: carePackage?.price,
+      status: "Chờ xác nhận",
+      desiredPrice: carePackage?.price,
     };
     console.log(
       "Form data with uploaded images and certifications combo:",
@@ -214,17 +195,6 @@ function CareFormCombo({ id }) {
                   src={previewImage}
                 />
               )}
-            </Grid>
-            <Grid item xs={12} sx={{ marginBottom: 2 }}>
-              <TextField
-                {...register("comboName", {
-                  required: "Vui lòng nhập tên lô cá mong muốn",
-                })}
-                label="Tên lô cá bạn mong muốn"
-                fullWidth
-                error={!!errors.comboName}
-                helperText={errors.comboName?.message}
-              />
             </Grid>
             <Grid item xs={12} sx={{ marginBottom: 2 }}>
               <TextField
@@ -341,24 +311,21 @@ function CareFormCombo({ id }) {
               <TextField
                 label="Gói chăm sóc"
                 fullWidth
-                value={carePackage.title}
+                value={carePackage?.packageName}
                 disabled
                 className="highlighted-textfield"
                 InputLabelProps={{
                   shrink: true,
                 }}
               />
-              <input
-                type="hidden"
-                {...register("carePackageID")}
-                value={carePackage.id}
-              />
             </Grid>
             <Grid item xs={12} sx={{ marginBottom: 2 }}>
               <TextField
                 label="Tổng chi phí"
                 fullWidth
-                value={carePackage.price}
+                value={`${new Intl.NumberFormat("vi-VN").format(
+                  carePackage?.price || 0
+                )} VNĐ`}
                 disabled
                 className="highlighted-textfield"
                 InputLabelProps={{

@@ -7,6 +7,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage"; // Firebase
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
 function SellFormCombo() {
   const {
     register,
@@ -83,7 +84,9 @@ function SellFormCombo() {
       image2: uploadedImages[2]?.url,
       type: "Ký gửi",
       consignmentType: "Ký gửi để bán",
-      price: 1,
+      price: data.desiredPrice,
+      status:"Chờ xác nhận",
+      comboName:uuidv4()
     };
     console.log(
       "Form data with uploaded images and certifications:",
