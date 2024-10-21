@@ -23,7 +23,7 @@ function SinglepProduct() {
   const { id } = useParams(); // Lấy productId từ URL
   const [product, setProduct] = useState(null); // State để lưu thông tin sản phẩm
   const dispatch = useDispatch(); // Khởi tạo dispatch
-  const account = useSelector((state) => state.user.account); // Lấy accountId từ Redux
+  const account = useSelector((state) => state.user); // Lấy accountId từ Redux
 
 
 
@@ -114,6 +114,7 @@ function SinglepProduct() {
         "Error adding to cart:",
         error.response?.data || error.message
       );
+      message.error("Không thể thêm sản phẩm vào giỏ hàng.");
     }
   };
 
