@@ -31,7 +31,7 @@ function PaymentPage() {
   const paymentData = location?.state;
   console.log("Payment data received:", paymentData);
   const id = paymentData.carePackageID;
-  const user = useSelector((state) => state.user.account);
+  const user = useSelector((state) => state?.user);
   console.log(user);
 
   const getAllCarePackages = useCallback(async () => {

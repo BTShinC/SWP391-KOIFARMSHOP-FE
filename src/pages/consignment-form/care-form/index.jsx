@@ -58,7 +58,7 @@ function CareForm({ id }) {
   const [certFileList, setCertFileList] = useState([]);
   const [previewCertImage, setPreviewCertImage] = useState("");
   const [koiCarePackages, setKoiCarePackages] = useState([]);
-  const user = useSelector((state) => state.user.account);
+  const user = useSelector((state) => state?.user);
   console.log(user);
   const carePackageID = id;
   console.log("carePackageID =>", carePackageID);

@@ -34,7 +34,7 @@ function SellFormCombo() {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState([]);
-  const user = useSelector((state) => state.user.account);
+  const user = useSelector((state) => state?.user);
   // Preview ảnh khi chọn
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {

@@ -16,7 +16,7 @@ import {
 } from "../../../../service/userService";
 
 function SellPayment() {
-  const user = useSelector((state) => state.user.account);
+  const user = useSelector((state) => state?.user);
   const navigate = useNavigate();
   const location = useLocation();
   const finalData = location.state;

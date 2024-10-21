@@ -51,7 +51,7 @@ function SellForm() {
   const [certFileList, setCertFileList] = useState([]); // Thêm state cho chứng nhận
   const [previewCertImage, setPreviewCertImage] = useState(""); // Preview chứng nhận
   const [isBatchSell, setIsBatchSell] = useState(false); // State để theo dõi loại form
-  const user = useSelector((state) => state?.user?.account);
+  const user = useSelector((state) => state?.user);
   const navigation = useNavigate();
   // Nếu người dùng chọn ký gửi bán lô thì render component khác
   if (isBatchSell) {

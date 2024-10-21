@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import UserAvatar from "../user-avatar";
 import "./index.scss";
 function AdminHeader() {
-  const user = useSelector((state) => state?.user?.account)
+  const user = useSelector((state) => state?.user)
   return (
     <div className="content__header">
       <div className="content__welcome">

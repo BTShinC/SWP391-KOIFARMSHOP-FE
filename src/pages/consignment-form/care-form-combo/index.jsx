@@ -46,7 +46,7 @@ function CareFormCombo({ id }) {
     getAllCarePackages();
   }, [getAllCarePackages]);
   // Lấy thông tin user + thông tin gói chăm sóc
-  const user = useSelector((state) => state.user.account);
+  const user = useSelector((state) => state?.user);
   console.log(user);
   const carePackageID = id;
   console.log("carePackageID =>", carePackageID);
