@@ -18,13 +18,12 @@ const UserInfoPage = () => {
 
 
   useEffect(() => {
-    if (!user || !user.account) {
-      // Kiểm tra nếu chưa đăng nhập, điều hướng đến trang đăng nhập
-      navigate("/login"); // Chuyển hướng đến trang login
+    if (!user) {
+      navigate("/login");
     }
   }, [user, navigate]);
 
-  return user && user.account ? (
+  return user ? (
     <div className="user-info">
       <div className="userinfo__container">
         <div className="userinfo__logo">
@@ -38,24 +37,24 @@ const UserInfoPage = () => {
 
           <div className="userinfo__details">
             <div className="userinfo__item">
-              <span className="userinfo__label">Họ và tên:</span> {user.account.fullName}
+              <span className="userinfo__label">Họ và tên:</span> {user?.fullName}
             </div>
             <div className="userinfo__item">
-              <span className="userinfo__label">Địa chỉ:</span> {user.account.address}
+              <span className="userinfo__label">Địa chỉ:</span> {user?.address}
             </div>
             <div className="userinfo__item">
-              <span className="userinfo__label">Email:</span> {user.account.email}
+              <span className="userinfo__label">Email:</span> {user?.email}
             </div>
             <div className="userinfo__item">
-              <span className="userinfo__label">Số điện thoại:</span> {user.account.phoneNumber}
+              <span className="userinfo__label">Số điện thoại:</span> {user?.phoneNumber}
             </div>
             <div className="userinfo__item">
-              <span className="userinfo__label">Số dư:</span> {formatCurrency(user.account.accountBalance)}VND
+              <span className="userinfo__label">Số dư:</span> {formatCurrency(user?.accountBalance)}VND
             </div>
 
           </div>
           <ModalEditUser
-            userData={user.account}
+            userData={user}
             title="Thay đổi thông tin cá nhân"
           />
         </div>
