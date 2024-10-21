@@ -15,30 +15,30 @@ const ShoppingCart = ({ onClose }) => {
 
   // useEffect(() => {
   //   console.log("Current account:", account);
-    const loadCartItems = async () => {
-      if (account && account.accountID) {
-        try {
-          setLoading(true);
-          const items = await fetchCartItems(account.accountID);
-          dispatch(setCartItems(items));
-        } catch (error) {
-          console.error("Failed to load cart items:", error);
-          message.error("Không thể tải giỏ hàng");
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        console.log("No account ID available");
-        setLoading(false);
-      }
-    };
+    // const loadCartItems = async () => {
+    //   if (account && account.accountID) {
+    //     try {
+    //       setLoading(true);
+    //       const items = await fetchCartItems(account.accountID);
+    //       dispatch(setCartItems(items));
+    //     } catch (error) {
+    //       console.error("Failed to load cart items:", error);
+    //       message.error("Không thể tải giỏ hàng");
+    //     } finally {
+    //       setLoading(false);
+    //     }
+    //   } else {
+    //     console.log("No account ID available");
+    //     setLoading(false);
+    //   }
+    // };
 
   //   loadCartItems();
   // }, [account, dispatch]);
 
   useEffect(() => {
     console.log("Current account:", account);
-    loadCartItems(); // Gọi hàm loadCartItems khi component mount
+    // loadCartItems(); // Gọi hàm loadCartItems khi component mount
   }, [account, dispatch]);
 
   const subtotal = cartItems.reduce(
@@ -53,7 +53,7 @@ const ShoppingCart = ({ onClose }) => {
       await deleteCartItem(cartItemId); // Gọi hàm deleteCartItem
       dispatch(removeFromCart(cartItemId)); // Cập nhật Redux store
       message.success("Đã xóa sản phẩm khỏi giỏ hàng");
-      loadCartItems();
+      // loadCartItems();
     } catch (error) {
       console.error("Error removing item from cart:", error);
       message.error("Không thể xóa sản phẩm khỏi giỏ hàng");

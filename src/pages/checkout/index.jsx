@@ -22,7 +22,7 @@ function CheckoutPage() {
 
     useEffect(() => {
         const calculateTotal = () => {
-            const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+            const subtotal = cartItems.reduce((total, item) => total + item.price, 0);
             setTotalAmount(subtotal);
             if (subtotal >= 2000000) {
                 const discountAmount = subtotal * 0.05; // 5% discount if order > 2,000,000
