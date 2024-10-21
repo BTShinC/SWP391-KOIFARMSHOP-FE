@@ -5,21 +5,24 @@ import "./index.scss";
 import PropTypes from "prop-types";
 import { storage } from "/src/firebase.js"; // Đảm bảo đường dẫn đúng đến file cấu hình Firebase
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
+import { editUser } from "../../../service/userService";
 
 ModalEditUser.propTypes = {
   title: PropTypes.string.isRequired,
   userData: PropTypes.object.isRequired,
   className: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
-function ModalEditUser({ title, userData, className = "" }) {
+function ModalEditUser({ title, userData, className = "", onChange }) {
   const initFormValue = {
-    fullName: userData.fullName || "",
-    phoneNumber: userData.phoneNumber || "",
-    email: userData.email || "",
-    address: userData.address || "",
-    imageUrl: userData.imageUrl || "", // Lưu URL của ảnh
-    roleID: userData.roleID || "",
+    accountID: userData.accountID,
+    fullName: userData.fullName,
+    phoneNumber: userData.phoneNumber,
+    email: userData.email,
+    address: userData.address,
+    imageUrl: userData.imageUrl, // Save the image URL here
+    roleName: userData.roleName,
   };
 
   const [formValue, setFormValue] = useState(initFormValue);
@@ -28,12 +31,14 @@ function ModalEditUser({ title, userData, className = "" }) {
 
   useEffect(() => {
     setFormValue({
-      fullName: userData.fullName || "",
-      phoneNumber: userData.phoneNumber || "",
-      email: userData.email || "",
-      address: userData.address || "",
-      imageUrl: userData.imageUrl || "",
-      roleID: userData.roleID || "",
+      accountID: userData.accountID,
+      fullName: userData.fullName,
+      phoneNumber: userData.phoneNumber,
+      email: userData.email,
+      accountBalance: userData.accountBalance,
+      address: userData.address,
+      image: userData.image, // Image URL from userData
+      roleName: userData.roleName,
     });
   }, [userData]);
 
@@ -48,45 +53,59 @@ function ModalEditUser({ title, userData, className = "" }) {
   const showModal = () => {
     setOpen(true);
   };
+
   const handleCancel = () => {
     setOpen(false);
   };
 
   const handleUploadChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
+  };
 
-    if (newFileList.length > 0) {
-      const file = newFileList[0].originFileObj; // Lấy file từ danh sách file
-      const storageRef = ref(storage, `uploads/${file.name}`); // Tạo reference đến Firebase Storage
-      // Tải tệp lên Firebase Storage
-      uploadBytes(storageRef, file)
-        .then(() => {
-          // Sau khi upload thành công, lấy URL của tệp đã tải lên
-          return getDownloadURL(storageRef);
-        })
-        .then((url) => {
-          console.log("File available at:", url); // Debug: Xác minh URL
-          // Cập nhật formValue với URL mới
-          setFormValue((prevFormValue) => {
-            const updatedFormValue = {
-              ...prevFormValue,
-              imageUrl: url, // Lưu URL của ảnh vào formValue
-            };
-            // Kiểm tra formValue sau khi cập nhật
-            console.log("Form value sau khi cập nhật:", updatedFormValue);
-            return updatedFormValue;
-          });
-        })
-        .catch((error) => {
-          console.error("Error uploading file:", error); // Debug: Xác minh lỗi
-        });
+  const uploadImageToFirebase = async (file) => {
+    const storageRef = ref(storage, `uploads/${file.name}`); // Create reference in Firebase Storage
+    try {
+      await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(storageRef);
+      return downloadURL; // Return the image URL
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      throw error;
     }
   };
 
-  const handleOk = () => {
+  const handleOk = async () => {
+    let imageUrl = formValue.image; // Default to the existing image URL
+
+    if (fileList.length > 0 && fileList[0].originFileObj) {
+      // If there's a new image to upload, upload it to Firebase
+      const file = fileList[0].originFileObj;
+      try {
+        imageUrl = await uploadImageToFirebase(file);
+      } catch (error) {
+        console.error("Image upload failed:", error);
+        return; 
+      }
+    }
+
+    const updatedFormValue = {
+      ...formValue,
+      image: imageUrl,
+    };
+
+    try {
+      let res = await editUser(updatedFormValue);
+      if (res) {
+        console.log("User updated successfully");
+        onChange(updatedFormValue); 
+      }
+    } catch (error) {
+      console.log("Error updating user:", error);
+    }
+
     setOpen(false);
-    console.log(formValue)
   };
+
   return (
     <>
       <Button
@@ -103,13 +122,15 @@ function ModalEditUser({ title, userData, className = "" }) {
         title="Cập nhật thông tin cá nhân"
         open={open}
         onOk={handleOk}
+        okText="Thay đổi"
         onCancel={handleCancel}
+        cancelText="Hủy bỏ"
         centered
       >
         <form>
           <div className="edit-user__modal">
             <h2>Thông tin cá nhân</h2>
-            {className !== "modal-edit-user-button" && (
+            {className !== "modal-edit-user-button" ? (
               <div>
                 <label className="form-label">Ảnh đại diện:</label>
                 <Upload
@@ -127,65 +148,106 @@ function ModalEditUser({ title, userData, className = "" }) {
                     </div>
                   )}
                 </Upload>
+                <div>
+                  <label className="form-label">Họ và tên:</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="fullName"
+                    value={formValue.fullName}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div>
+                  <label className="form-label">Số điện thoại:</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="phoneNumber"
+                    value={formValue.phoneNumber}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div>
+                  <label className="form-label">Email:</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="email"
+                    value={formValue.email}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div>
+                  <label className="form-label">Địa chỉ:</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="address"
+                    value={formValue.address}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
               </div>
-            )}
-            <div>
-              <label className="form-label">Họ và tên:</label>
-              <input
-                className="form-control"
-                type="text"
-                name="fullName"
-                value={formValue.fullName}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label className="form-label">Số điện thoại:</label>
-              <input
-                className="form-control"
-                type="text"
-                name="phoneNumber"
-                value={formValue.phoneNumber}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label className="form-label">Email:</label>
-              <input
-                className="form-control"
-                type="text"
-                name="email"
-                value={formValue.email}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label className="form-label">Địa chỉ:</label>
-              <input
-                className="form-control"
-                type="text"
-                name="address"
-                value={formValue.address}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            {className == "modal-edit-user-button" && (
-              <div>
-                <label className="form-label">Role:</label>
-                <select
-                  className="form-control"
-                  type="number"
-                  name="roleID"
-                  value={formValue.roleID}
-                  onChange={handleChange}
-                >
-                  <option value="">Chọn vai trò</option>{" "}
-                  {/* Giá trị mặc định */}
-                  <option value="1">Admin</option>
-                  <option value="2">Manager</option>
-                </select>
-              </div>
+            ) : (
+              className == "modal-edit-user-button" && (
+                <div>
+                  <div>
+                    <label className="form-label">Họ và tên:</label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      name="fullName"
+                      value={formValue.fullName}
+                      disabled
+                    />
+                  </div>
+                  <div>
+                    <label className="form-label">Số điện thoại:</label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      name="phoneNumber"
+                      value={formValue.phoneNumber}
+                      disabled
+                    />
+                  </div>
+                  <div>
+                    <label className="form-label">Email:</label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      name="email"
+                      value={formValue.email}
+                      disabled
+                    />
+                  </div>
+                  <div>
+                    <label className="form-label">Địa chỉ:</label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      name="address"
+                      value={formValue.address}
+                      disabled
+                    />
+                  </div>
+                  <label className="form-label">Vai trò:</label>
+                  <select
+                    className="form-control"
+                    onChange={handleChange}
+                    type="number"
+                    name="roleName"
+                    value={formValue.roleName}
+                  >
+                    <option value="">Chọn vai trò</option>{" "}
+                    {/* Giá trị mặc định */}
+                    <option value="Admin">Quản trị viên</option>
+                    <option value="Customer">Khách hàng</option>
+                  </select>
+                </div>
+              )
             )}
           </div>
         </form>
@@ -193,5 +255,4 @@ function ModalEditUser({ title, userData, className = "" }) {
     </>
   );
 }
-
 export default ModalEditUser;
