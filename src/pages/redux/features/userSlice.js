@@ -6,14 +6,10 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    login: (state, action) => action.payload, // Cập nhật trạng thái người dùng
+    login: (state, action) => action.payload,
     logout: () => initialState,
     setUser: (state, action) => {
-      return { 
-        accountId: action.payload.accountId,
-        fullName: action.payload.fullName, // Lưu fullName
-        accountBalance: action.payload.accountBalance // Lưu accountBalance
-      }; 
+      return { accountId: action.payload.accountId }; // Cập nhật tài khoản người dùng
     },
   },
 });

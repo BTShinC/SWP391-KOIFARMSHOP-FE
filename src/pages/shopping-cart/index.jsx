@@ -14,7 +14,7 @@ import { useEffect } from "react";
 function ShoppingCartPage() {
   const cartItems = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
-  const account = useSelector(state => state.user); // Lấy thông tin tài khoản từ Redux
+  const account = useSelector(state => state.user.account); // Lấy thông tin tài khoản từ Redux
 
 
   const subtotal = cartItems.reduce(

@@ -9,7 +9,7 @@ import { deleteCartItem, fetchCartItems } from "../../service/userService";
 
 const ShoppingCart = ({ onClose }) => {
   const cartItems = useSelector(state => state.cart.items);
-  const account = useSelector((state) => state.user);
+  const account = useSelector((state) => state.user.account);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
 
