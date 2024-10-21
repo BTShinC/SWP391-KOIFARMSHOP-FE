@@ -1,14 +1,10 @@
 import { Link } from "react-router-dom";
-import {
-  SearchOutlined,
-  UserOutlined,
-  ShoppingCartOutlined,
-} from "@ant-design/icons";
+import { SearchOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import "./index.scss";
 import Sidebar from "../slidebars";
 import { useSelector } from "react-redux";
-
+import UserAvatar from "../admin-components/user-avatar";
 function Header() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const user = useSelector((state) => state.user);
@@ -45,7 +41,7 @@ function Header() {
             <Link to="/product">Cá Koi Nhật</Link>
           </li>
           <li>
-            <Link to="/">Ký gửi</Link>
+            <Link to="/consignment">Ký gửi</Link>
           </li>
           <li>
             <Link to="/blog">Tin tức</Link>
@@ -58,19 +54,19 @@ function Header() {
 
       <div className="header__icon">
         <ul>
-          {user && (
+          {/* {user && (
             <li className="userName">
-                <span>{user.userName}</span>            
-                <div>{user.accountBalance} VND</div>         
+              <span>{user.account.fullName}</span>
+              <div>{user.account.accountBalance} VND</div>
             </li>
-          )}
+          )} */}
           <li>
             <Link to="#" onClick={toggleSidebar}>
-              <UserOutlined />
+            <UserAvatar></UserAvatar>
             </Link>
           </li>
           <li>
-            <Link to="/">
+            <Link to="/admin">
               <SearchOutlined />
             </Link>
           </li>

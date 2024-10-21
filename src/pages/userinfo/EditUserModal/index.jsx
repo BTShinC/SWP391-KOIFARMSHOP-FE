@@ -16,6 +16,7 @@ ModalEditUser.propTypes = {
 
 function ModalEditUser({ title, userData, className = "", onChange }) {
   const initFormValue = {
+<<<<<<< HEAD
     accountID: userData.accountID,
     fullName: userData.fullName,
     phoneNumber: userData.phoneNumber,
@@ -23,6 +24,14 @@ function ModalEditUser({ title, userData, className = "", onChange }) {
     address: userData.address,
     imageUrl: userData.imageUrl, // Save the image URL here
     roleName: userData.roleName,
+=======
+    fullName: userData.fullName || "",
+    phoneNumber: userData.phoneNumber || "",
+    email: userData.email || "",
+    address: userData.address || "",
+    imageUrl: userData.imageUrl || "", // Lưu URL của ảnh
+    role: userData.role || "",
+>>>>>>> bad687b40b0fc555d0b4a2c1fcc32ac0ffef9e11
   };
 
   const [formValue, setFormValue] = useState(initFormValue);
@@ -31,6 +40,7 @@ function ModalEditUser({ title, userData, className = "", onChange }) {
 
   useEffect(() => {
     setFormValue({
+<<<<<<< HEAD
       accountID: userData.accountID,
       fullName: userData.fullName,
       phoneNumber: userData.phoneNumber,
@@ -39,6 +49,14 @@ function ModalEditUser({ title, userData, className = "", onChange }) {
       address: userData.address,
       image: userData.image, // Image URL from userData
       roleName: userData.roleName,
+=======
+      fullName: userData.fullName || "",
+      phoneNumber: userData.phoneNumber || "",
+      email: userData.email || "",
+      address: userData.address || "",
+      imageUrl: userData.imageUrl || "",
+      role: userData.role || "",
+>>>>>>> bad687b40b0fc555d0b4a2c1fcc32ac0ffef9e11
     });
   }, [userData]);
 
@@ -104,6 +122,10 @@ function ModalEditUser({ title, userData, className = "", onChange }) {
     }
 
     setOpen(false);
+<<<<<<< HEAD
+=======
+    console.log(formValue);
+>>>>>>> bad687b40b0fc555d0b4a2c1fcc32ac0ffef9e11
   };
 
   return (
@@ -190,6 +212,10 @@ function ModalEditUser({ title, userData, className = "", onChange }) {
                   />
                 </div>
               </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> bad687b40b0fc555d0b4a2c1fcc32ac0ffef9e11
             ) : (
               className == "modal-edit-user-button" && (
                 <div>
@@ -236,10 +262,16 @@ function ModalEditUser({ title, userData, className = "", onChange }) {
                   <label className="form-label">Vai trò:</label>
                   <select
                     className="form-control"
+<<<<<<< HEAD
                     onChange={handleChange}
                     type="number"
                     name="roleName"
                     value={formValue.roleName}
+=======
+                    type="number"
+                    name="role"
+                    value={formValue.roleID}
+>>>>>>> bad687b40b0fc555d0b4a2c1fcc32ac0ffef9e11
                   >
                     <option value="">Chọn vai trò</option>{" "}
                     {/* Giá trị mặc định */}
@@ -248,6 +280,10 @@ function ModalEditUser({ title, userData, className = "", onChange }) {
                   </select>
                 </div>
               )
+<<<<<<< HEAD
+=======
+
+>>>>>>> bad687b40b0fc555d0b4a2c1fcc32ac0ffef9e11
             )}
           </div>
         </form>

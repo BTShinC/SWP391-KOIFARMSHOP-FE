@@ -1,7 +1,8 @@
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input } from "antd";
 import { ChangePassword } from "../../../service/userService";
 import { useLocation } from "react-router-dom";
 import ForgotPassword from "..";
+import { toast } from "react-toastify";
 
 function RecoveryPassword() {
   const location = useLocation();
@@ -20,10 +21,10 @@ function RecoveryPassword() {
     try {
       const result = await ChangePassword(data);
       console.log("Password reset successful:", result);
-      message.success("Khôi phục mật khẩu thành công!", 2);
+      toast.success("Khôi phục mật khẩu thành công!", 2);
     } catch (error) {
       console.log("Lỗi khôi phục mật khẩu:", error);
-      message.error("Khôi phục mật khẩu thất bại!", 2);
+      toast.error("Khôi phục mật khẩu thất bại!", 2);
     }
   };
 

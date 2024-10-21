@@ -7,7 +7,7 @@
   align-items: center;
   background-color: #f6f2e7;  
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  height: 100vh;
+  height: 140vh;
   .sidebar__logo-container {
     display: flex;
     justify-content: center;
@@ -64,7 +64,7 @@
     }
   }
 
-  .sidebar__logout {
+  .sidebar__logout{
     margin-top: auto;
     padding: 15px;
     background-color: #d4c8b2; 
@@ -75,6 +75,23 @@
     span {
       text-decoration: none;
       color: #ffffff;
+      font-weight: bold;
+    }
+
+    &:hover {
+      background-color: #b3a48f; 
+    }
+  }
+  .sidebar__return{
+    padding: 5px;
+    background-color: #d4c8b2; 
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    width: 8vw;
+    
+    span {
+      color: black;
       font-weight: bold;
     }
 

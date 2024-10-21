@@ -2,8 +2,6 @@ import PropTypes from "prop-types";
 import "./index.scss";
 import { Pagination } from "@mui/material";
 import { useState } from "react";
-
-
 const AdminTable = ({ columns, data, title, ModalComponent }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
@@ -14,7 +12,6 @@ const AdminTable = ({ columns, data, title, ModalComponent }) => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-
   return (
     <div className="admin-table">
       <div>
@@ -41,7 +38,7 @@ const AdminTable = ({ columns, data, title, ModalComponent }) => {
                 {ModalComponent && (
                   <ModalComponent
                     userData={row}
-                    title="Chỉnh sửa"
+                    title="Chỉnh sửa vai trò"
                     className="modal-edit-user-button"
                   />
                 )}

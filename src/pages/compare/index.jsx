@@ -2,33 +2,59 @@ import { useState, useEffect } from 'react';
 
 import "./index.scss";
 
-import Footer from '../../components/footer';
+
 import { Button } from 'antd';
 import SelectFishModal from './selecfish-modal';
 import { PlusOutlined, DeleteOutlined, RollbackOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 
-
-// Sample fish data for testing
-const sampleFish = {
-    productID: '001',
-    breed: 'Tancho Kohaku',
-    size: '80cm',
-    sex: 'Đực',
-    healthStatus: 'Tốt',
-    personalityTrait: 'Đặc biệt',
-    origin: 'Danchi Farm',
-    description: 'Mô tả cá 1',
-    certificateUrl: 'Chứng nhận 1',
-    price: '25000000 VND',
-    imgSrc: '/images/kohaku.svg', // Add image source
-};
+// Import the fish data from the modal file
+const fishData = [
+    {
+        id: "DK001",
+        image: "/images/kohaku.svg", // Ensure this image path is correct
+        title: "Kohaku",
+        price: '1.500.000',
+        productID: '1',
+        breed: 'Kohaku',
+        size: '84cm',
+        sex: 'Đực',
+        healthStatus: 'Tốt',
+        personalityTrait: 'Hiền',
+        origin: 'Nhật bản',
+        description: 'Koi Kohaku Là dòng Koi được yêu thích nhất. Là dòng Koi được lai tạo đầu tiên tại Nhật. Có lịch sử lâu đời (từ TK 19). Koi nổi bật với nước da trắng hơn tuyết, các điểm đỏ Hi lớn, phân bố đều, hài hòa trên thân.',
+        certificateUrl: '', // Add certificate URL if available
+    },
+    {
+        id: "DK002",
+        image: "/images/koi5.svg", // Ensure this image path is correct
+        title: "Showa",
+        price: '2.300.000',
+        productID: '2',
+        breed: 'Showa',
+        size: '100cm',
+        sex: 'Cái',
+        healthStatus: 'Tốt',
+        personalityTrait: 'Hiền',
+        origin: 'Nhật bản',
+        description: 'Cá Koi Showa là dòng Gosanke tiêu chuẩn, thuộc dòng cá Koi nhóm AAA của Nhật Koi Showa hấp dẫn người chơi bởi 3 màu đỏ-đen-trắng. Trong đó, màu trắng (Shiroji) là màu nền, tiếp theo là màu đỏ (Hi) và màu đen (Sumi).',
+        certificateUrl: '', // Add certificate URL if available
+    },
+];
+const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'decimal',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
 
 function ComparePage() {
     const [selectedFishes, setSelectedFishes] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
 
     useEffect(() => {
-        // setSelectedFishes([sampleFish]); // Set sample fish for testing
+        // Set initial selected fishes with the imported fish data
+        setSelectedFishes([fishData[0], fishData[1]]); // Automatically add the two fish
     }, []);
 
     const showModal = () => {
@@ -65,7 +91,7 @@ function ComparePage() {
                     <div className="col-5">
                         {selectedFishes.length > 0 ? (
                             <div className="fish-card">
-                                <img src={selectedFishes[0].imgSrc} alt={selectedFishes[0].breed} className="fish-image" />
+                                <img src={selectedFishes[0].image} alt={selectedFishes[0].breed} className="fish-image" />
                                 <h2>{selectedFishes[0].breed}</h2>
                                 <p>Mã sản phẩm: {selectedFishes[0].productID}</p>
                                 <p>Giống: {selectedFishes[0].breed}</p>
@@ -89,7 +115,7 @@ function ComparePage() {
                     <div className="col-5">
                         {selectedFishes.length > 1 ? (
                             <div className="fish-card">
-                                <img src={selectedFishes[1].imgSrc} alt={selectedFishes[1].breed} className="fish-image" />
+                                <img src={selectedFishes[1].image} alt={selectedFishes[1].breed} className="fish-image" />
                                 <h2>{selectedFishes[1].breed}</h2>
                                 <p>Mã sản phẩm: {selectedFishes[1].productID}</p>
                                 <p>Giống: {selectedFishes[1].breed}</p>

@@ -80,7 +80,9 @@ function Body() {
             Cá Koi không chỉ làm không gian thêm sinh động mà còn giúp giảm căng
             thẳng và mệt mỏi.
           </h5>
+          <Link to="/product">
           <button className="view-more-button">Xem thêm</button>
+          </Link>
         </div>
         <div className="body__background__carousel">
           <Carousel slidesPerView={2} />
@@ -97,8 +99,9 @@ function Body() {
             cao tại Việt Nam. Với tiêu chuẩn vượt trội và cam kết mang lại dịch
             vụ hoàn hảo, Koifish luôn nỗ lực để mỗi khách hàng đều hài lòng.
           </h5>
-          
-          <button className="view-more-button">Xem thêm</button>
+          <Link to="/about">
+            <button className="view-more-button">Xem thêm</button>
+          </Link>
           
         </div>
 

@@ -1,7 +1,7 @@
 .body {
 
   &__poster {
-    margin-top: 15px;
+    
     width: 100%;
     filter: drop-shadow(0px 4px 4px rgba(238, 238, 238, 0.25));
 
@@ -189,7 +189,8 @@
         color: #333;
         margin-bottom: 20px;
       }
-
+      a{
+        text-decoration: none;
       .view-more-button {
         background-color: #edd38a;
         color: #441d01;
@@ -200,11 +201,11 @@
         border-radius: 50px;
         display: block;
         margin: 40px auto; 
-
         &:hover {
           background-color: #d9c073; 
         }
       }
+    }
     }
 
     &__image {

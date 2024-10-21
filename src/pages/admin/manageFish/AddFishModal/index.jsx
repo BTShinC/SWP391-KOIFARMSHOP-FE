@@ -10,15 +10,16 @@ AddFishModal.propTypes = {
   title: PropTypes.string.isRequired,
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onChange:PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
-function AddFishModal({ title, visible, onClose,onChange }) {
+function AddFishModal({ title, visible, onClose, onChange }) {
   const initFormValue = {
     productName: "",
     breed: "",
     size: "",
     sex: "",
+    age: 1,
     healthStatus: "",
     personalityTrait: "",
     origin: "",
@@ -39,22 +40,23 @@ function AddFishModal({ title, visible, onClose,onChange }) {
 
   const handleChange = (event) => {
     const { value, name } = event.target;
+
     setFormValue((prevValue) => {
       let updatedValue = { ...prevValue, [name]: value };
 
-      // Kiểm tra nếu đang thay đổi `desiredPrice`
-      if (name === "desiredPrice") {
-        updatedValue.price = value; // Gán `price` bằng với `desiredPrice`
+      // Kiểm tra nếu người dùng đang thay đổi `price` và `desiredPrice` chưa được thay đổi
+      if (name === "price" && !prevValue.desiredPriceChanged) {
+        updatedValue.desiredPrice = value; // Gán giá trị của `price` cho `desiredPrice`
       }
-      // Kiểm tra nếu đang thay đổi `price`
-      if (name === "price") {
-        updatedValue.desiredPrice = value; // Gán `desiredPrice` bằng với `price`
+
+      // Nếu người dùng thay đổi `desiredPrice`, đánh dấu nó là đã được thay đổi
+      if (name === "desiredPrice") {
+        updatedValue.desiredPriceChanged = true; // Đánh dấu `desiredPrice` đã thay đổi
       }
 
       return updatedValue;
     });
   };
-
   useEffect(() => {
     if (formValue.type === "Ký gửi") {
       setFormValue((prevValue) => ({
@@ -62,7 +64,7 @@ function AddFishModal({ title, visible, onClose,onChange }) {
         consignmentType: "Ký gửi để bán",
       }));
     } else {
-      setFormValue((prevValue) => ({  
+      setFormValue((prevValue) => ({
         ...prevValue,
         consignmentType: "Trang trại đăng bán",
       }));
@@ -214,6 +216,18 @@ function AddFishModal({ title, visible, onClose,onChange }) {
             />
           </div>
           <div>
+            <label className="form-label">Tuổi:</label>
+            <input
+              className="form-control"
+              type="number"
+              name="age"
+              min={1}
+              value={formValue.age}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
             <label className="form-label">Giới tính:</label>
             <select
               className="form-control"
@@ -297,18 +311,32 @@ function AddFishModal({ title, visible, onClose,onChange }) {
             </div>
           )}
           {formValue.consignmentType === "Ký gửi để bán" && (
-            <div>
-              <label className="form-label">Giá mong muốn:</label>
-              <input
-                className="form-control"
-                type="number"
-                min={1}
-                name="desiredPrice"
-                value={formValue.desiredPrice}
-                onChange={handleChange}
-                required
-              />
-            </div>
+            <>
+              <div>
+                <label className="form-label">Giá khách hàng mong muốn :</label>
+                <input
+                  className="form-control"
+                  type="number"
+                  min={1}
+                  name="desiredPrice"
+                  value={formValue.desiredPrice}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label className="form-label">Giá đăng bán:</label>
+                <input
+                  className="form-control"
+                  type="number"
+                  name="price"
+                  min={1}
+                  value={formValue.price}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </>
           )}
           {formValue.consignmentType != "Ký gửi để bán" && (
             <div>

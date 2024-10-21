@@ -1,5 +1,6 @@
 import "./index.scss";
 import ModalEditUser from "./EditUserModal";
+<<<<<<< HEAD
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -63,6 +64,71 @@ const UserInfoPage = () => {
       </div>
     </div>
   ) : null;
+=======
+
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useEffect } from "react"; // Import useEffect
+
+const UserInfoPage = () => {
+  const user = useSelector((state) => state.user);
+  const navigate = useNavigate(); // Khởi tạo useNavigate
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('vi-VN', {
+        style: 'decimal',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+    }).format(amount);
+};
+
+
+
+  useEffect(() => {
+    if (!user || !user.account) {
+      // Kiểm tra nếu chưa đăng nhập, điều hướng đến trang đăng nhập
+      navigate("/login"); // Chuyển hướng đến trang login
+    }
+  }, [user, navigate]);
+
+  return user && user.account ? (
+    <div className="user-info">
+      <div className="userinfo__container">
+        <div className="userinfo__logo">
+          <img
+            src="/public/images/a.jpg"
+            alt="User Avatar"
+            className="userinfo__avatar"
+          />
+        </div>
+        <div className="userinfo__details">
+
+          <div className="userinfo__details">
+            <div className="userinfo__item">
+              <span className="userinfo__label">Họ và tên:</span> {user.account.fullName}
+            </div>
+            <div className="userinfo__item">
+              <span className="userinfo__label">Địa chỉ:</span> {user.account.address}
+            </div>
+            <div className="userinfo__item">
+              <span className="userinfo__label">Email:</span> {user.account.email}
+            </div>
+            <div className="userinfo__item">
+              <span className="userinfo__label">Số điện thoại:</span> {user.account.phoneNumber}
+            </div>
+            <div className="userinfo__item">
+              <span className="userinfo__label">Số dư:</span> {formatCurrency(user.account.accountBalance)}VND
+            </div>
+
+          </div>
+          <ModalEditUser
+            userData={user.account}
+            title="Thay đổi thông tin cá nhân"
+          />
+        </div>
+      </div>
+    </div>
+  ) : null; // Không render gì nếu chưa đăng nhập, chỉ điều hướng
+>>>>>>> bad687b40b0fc555d0b4a2c1fcc32ac0ffef9e11
 };
 
 export default UserInfoPage;
