@@ -65,10 +65,15 @@ function LoginPage() {
 
 
       localStorage.setItem("token", response.data.token); 
+      localStorage.setItem("accountId", response.data.account.accountID); // Lưu accountId vào localStorage
       console.log("Response from API:", response.data.account);
 
       // Save user data to Redux
-      dispatch(login(response.data));
+     dispatch(login({
+      accountId: response.data.account.accountID,
+      fullName: response.data.account.fullName, // Lưu fullName
+      accountBalance: response.data.account.accountBalance // Lưu accountBalance
+    }));
 
       // Check user role and navigate accordingly
       if (response.data.account.roleName === "Admin") {
