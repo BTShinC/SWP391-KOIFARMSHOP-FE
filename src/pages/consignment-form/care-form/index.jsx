@@ -13,7 +13,7 @@ import {
 import { addDays, format } from "date-fns";
 import { Upload, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { storage } from "../../../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useForm } from "react-hook-form";
@@ -21,14 +21,13 @@ import "./index.scss";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import { fetchAllCarePackages } from "../../../service/userService";
 import { v4 as uuidv4 } from "uuid";
 
 CareForm.propTypes = {
-  id: PropTypes.number.isRequired,
+  carePackage: PropTypes.object.isRequired,
 };
 
-function CareForm({ id }) {
+function CareForm({ carePackage }) {
   const {
     register,
     handleSubmit,
@@ -36,36 +35,13 @@ function CareForm({ id }) {
     formState: { errors },
   } = useForm();
 
-  const getAllCarePackages = useCallback(async () => {
-    try {
-      let res = await fetchAllCarePackages();
-      if (res && res.data) {
-        setKoiCarePackages(res.data);
-        console.log("koiCarePackages =>", res.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
-  useEffect(() => {
-    getAllCarePackages();
-  }, [getAllCarePackages]);
-
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState([]);
   const [certFileList, setCertFileList] = useState([]);
   const [previewCertImage, setPreviewCertImage] = useState("");
-  const [koiCarePackages, setKoiCarePackages] = useState([]);
   const user = useSelector((state) => state?.user);
   console.log(user);
-  const carePackageID = id;
-  console.log("carePackageID =>", carePackageID);
-
-  const carePackage = koiCarePackages.find((item) => {
-    return item.carePackageID === id;
-  });
 
   // Cập nhật giá trị cho carePackageID khi dữ liệu sẵn sàng
   useEffect(() => {
@@ -471,6 +447,7 @@ function CareForm({ id }) {
                 {...register("description")}
                 label="Ghi chú"
                 fullWidth
+                defaultValue="Không"
                 error={!!errors.description}
                 helperText={errors.description?.message}
               />

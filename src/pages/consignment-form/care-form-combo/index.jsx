@@ -1,7 +1,7 @@
 import { Button, TextField, Grid, Box, Typography } from "@mui/material";
 import { Upload, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { storage } from "../../../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useForm } from "react-hook-form";
@@ -10,112 +10,70 @@ import PropTypes from "prop-types";
 import { addDays, format } from "date-fns";
 import InputAdornment from "@mui/material/InputAdornment";
 import { useNavigate } from "react-router-dom";
-import { fetchAllCarePackages } from "../../../service/userService";
 import { v4 as uuidv4 } from "uuid";
+
 CareFormCombo.propTypes = {
-  id: PropTypes.number.isRequired,
+  carePackage: PropTypes.object.isRequired,  // Truyền carePackage qua props
 };
 
-function CareFormCombo({ id }) {
+function CareFormCombo({ carePackage }) {
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm();
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState([]);
-  const [koiCarePackages, setKoiCarePackages] = useState([]);
-  const navigation = useNavigate();
+  const navigate = useNavigate();
 
-  const getAllCarePackages = useCallback(async () => {
-    try {
-      let res = await fetchAllCarePackages();
-      if (res && res.data) {
-        setKoiCarePackages(res.data);
-        console.log("koiCarePackages =>", res.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
-  useEffect(() => {
-    getAllCarePackages();
-  }, [getAllCarePackages]);
-  // Lấy thông tin user + thông tin gói chăm sóc
+  // Lấy thông tin user từ Redux
   const user = useSelector((state) => state?.user);
-  console.log(user);
-  const carePackageID = id;
-  console.log("carePackageID =>", carePackageID);
 
-  const carePackage = koiCarePackages.find((item) => {
-    return item.carePackageID === id;
-  });
-  const getTodayDate = () => {
-    return format(new Date(), "yyyy-MM-dd");
-  };
+  const getTodayDate = () => format(new Date(), "yyyy-MM-dd");
+
   const getTodayDatePlus30Days = () => {
-    const today = new Date();
-    const futureDate = addDays(today, 30);
+    const futureDate = addDays(new Date(), 30);
     return format(futureDate, "yyyy-MM-dd");
   };
+
   // Preview ảnh khi chọn
-  const handlePreview = async (file) => {
+  const handlePreview = useCallback(async (file) => {
     if (!file.url && !file.preview) {
       file.preview = URL.createObjectURL(file.originFileObj);
     }
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);
-  };
+  }, []);
 
   // Xử lý thay đổi file list
-  const handleChange = ({ fileList: newFileList }) => {
+  const handleChange = useCallback(({ fileList: newFileList }) => {
     setFileList(newFileList);
-  };
-
-  useEffect(() => {
-    // Lấy dữ liệu từ localStorage khi trang tải lại
-    const savedFormValue = localStorage.getItem("careFormCombo");
-    if (savedFormValue) {
-      const parsedFormValue = JSON.parse(savedFormValue);
-      Object.keys(parsedFormValue).forEach((key) =>
-        setValue(key, parsedFormValue[key])
-      );
-      console.log("Form values loaded from localStorage:", parsedFormValue);
-    }
-  }, [setValue]);
+  }, []);
 
   // Upload ảnh lên Firebase
-  const uploadFilesToFirebase = async (files) => {
+  const uploadFilesToFirebase = useCallback(async (files) => {
     const uploadPromises = files.map((fileObj) => {
       const file = fileObj.originFileObj;
-      const storageRef = ref(storage, `upload/${file.name}`); // Tạo reference trong Firebase Storage
-
+      const storageRef = ref(storage, `upload/${file.name}`);
       return uploadBytes(storageRef, file)
-        .then(() => getDownloadURL(storageRef)) // Lấy URL sau khi upload
+        .then(() => getDownloadURL(storageRef))
         .then((downloadURL) => ({
           name: file.name,
-          url: downloadURL, // Trả về URL của file sau khi upload
+          url: downloadURL,
         }))
         .catch((error) => {
           console.error("Error uploading file:", error);
         });
     });
+    return await Promise.all(uploadPromises);
+  }, []);
 
-    try {
-      const uploadedFiles = await Promise.all(uploadPromises); // Chờ tất cả các file được upload
-      return uploadedFiles; // Trả về danh sách file đã upload
-    } catch (error) {
-      console.error("Error uploading files:", error);
-      return [];
-    }
-  };
   // Xử lý submit form
-  const onSubmit = async (data) => {
+  const onSubmit = useCallback(async (data) => {
     const uploadedImages = await uploadFilesToFirebase(fileList);
+
     const finalData = {
       ...data,
       image: uploadedImages[0]?.url,
@@ -125,19 +83,18 @@ function CareFormCombo({ id }) {
       type: "Ký gửi",
       accountID: user?.accountID,
       consignmentType: "chăm sóc",
-      carePackageID : carePackage?.carePackageID,
+      carePackageID: carePackage?.carePackageID,
       price: carePackage?.price,
       status: "Chờ xác nhận",
       desiredPrice: carePackage?.price,
     };
-    console.log(
-      "Form data with uploaded images and certifications combo:",
-      finalData
-    );
+
+    console.log("Form data with uploaded images:", finalData);
     localStorage.setItem("careFormCombo", JSON.stringify(finalData));
-    navigation("/consignmentPayment", { state: finalData });
-  };
-  // Nút upload ảnh và chứng nhận
+    navigate("/consignmentPayment", { state: finalData });
+  }, [fileList, user, carePackage, navigate, uploadFilesToFirebase]);
+
+  // Nút upload ảnh
   const uploadButton = (
     <button
       style={{
@@ -150,6 +107,7 @@ function CareFormCombo({ id }) {
       <div style={{ marginTop: 8 }}>Upload</div>
     </button>
   );
+
   return (
     <div className="care-form" style={{ padding: "2rem" }}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -157,7 +115,7 @@ function CareFormCombo({ id }) {
           <Button
             variant="contained"
             className="back-button"
-            onClick={() => navigation(-1)}
+            onClick={() => navigate(-1)}
           >
             Trở lại
           </Button>
@@ -181,7 +139,7 @@ function CareFormCombo({ id }) {
                 fileList={fileList}
                 onPreview={handlePreview}
                 onChange={handleChange}
-                beforeUpload={() => false} // Tắt tự động upload
+                beforeUpload={() => false}
               >
                 {fileList.length >= 3 ? null : uploadButton}
               </Upload>
@@ -214,19 +172,15 @@ function CareFormCombo({ id }) {
                 min={1}
                 error={!!errors.size}
                 helperText={errors.size?.message}
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">cm</InputAdornment>
-                    ),
-                  },
+                InputProps={{
+                  endAdornment: <InputAdornment position="end">cm</InputAdornment>,
                 }}
               />
             </Grid>
             <Grid item xs={12} sx={{ marginBottom: 2 }}>
               <TextField
                 {...register("quantity", {
-                  required: "Vui lòng số lượng",
+                  required: "Vui lòng nhập số lượng",
                   min: {
                     value: 2,
                     message: "Số lượng phải lớn hơn hoặc bằng 2",
@@ -361,6 +315,7 @@ function CareFormCombo({ id }) {
               <TextField
                 {...register("description")}
                 label="Ghi chú"
+                defaultValue="Không"
                 fullWidth
                 error={!!errors.description}
               />

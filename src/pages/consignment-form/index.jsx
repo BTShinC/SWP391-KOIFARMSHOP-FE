@@ -6,9 +6,11 @@ import { useSelector } from "react-redux";
 import SellOffline from "./sell-offlline-form";
 function ConsignmentForm() {
   const location = useLocation();
-  const { id, type } = location.state || {};
+  const { carePackage ,id, type } = location.state || {};
   console.log("ID:", id);
   console.log("Type:", type);
+  console.log("carePackage",carePackage)
+
   const user = useSelector((state) => state.user);
   console.log(user);
   if (!user) {
@@ -16,11 +18,11 @@ function ConsignmentForm() {
   }
   return type === "Cá thể" ? (
     <div>
-      <CareForm id = {id} />
+      <CareForm carePackage = {carePackage} />
     </div>
   ) : type === "Lô" ? (
     <div>
-      <CareFormCombo id = {id} />
+      <CareFormCombo carePackage = {carePackage} />
     </div>
   ) : type === "Online" ? (
     <div>

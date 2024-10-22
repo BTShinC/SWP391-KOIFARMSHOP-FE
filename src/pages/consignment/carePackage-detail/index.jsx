@@ -42,10 +42,10 @@ function CarePackageDetail() {
     return <Typography variant="h4">Không tìm thấy sản phẩm</Typography>;
   }
 
-  const handleCareConsignmentFrom = (id, type) => {
-    navigate("/consignmentFrom", { state: { id, type } });
+  const handleCareConsignmentFrom = (carePackage,type) => {
+    navigate("/consignmentFrom", { state: { carePackage,type } });
   };
-
+  
   return (
     <div>
       <Button
@@ -110,7 +110,7 @@ function CarePackageDetail() {
               {data.packageName}
             </Typography>
             <Typography variant="h6" color="primary">
-              Giá: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.price)}
+              Giá: {new Intl.NumberFormat('vi-VN').format(data.price)}  VNĐ
             </Typography>
             <Typography variant="body1" gutterBottom>
               {data.description}
@@ -129,7 +129,7 @@ function CarePackageDetail() {
           </CardContent>
           <Button
             className="careConsignment-btn"
-            onClick={() => handleCareConsignmentFrom(data.carePackageID, data.type)}
+            onClick={() => handleCareConsignmentFrom(data, data.type)}
           >
             Ký gửi ngay
             <LocalFireDepartmentIcon />
