@@ -58,7 +58,7 @@ const ShoppingCart = ({ onClose }) => {
 
   useEffect(() => {
     console.log("Current account:", account);
-    // loadCartItems(); // Gọi hàm loadCartItems khi component mount
+    loadCartItems(); // Gọi hàm loadCartItems khi component mount
   }, [account, dispatch]);
 
   const subtotal = cartItems.reduce(
