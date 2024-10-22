@@ -15,7 +15,7 @@ const ShoppingCart = ({ onClose }) => {
 
   // useEffect(() => {
   //   console.log("Current account:", account);
-<<<<<<< Updated upstream
+
     // const loadCartItems = async () => {
     //   if (account && account.accountID) {
     //     try {
@@ -33,7 +33,7 @@ const ShoppingCart = ({ onClose }) => {
     //     setLoading(false);
     //   }
     // };
-=======
+
     const loadCartItems = async () => {
       if (account && account.accountId) {
         try {
@@ -51,7 +51,7 @@ const ShoppingCart = ({ onClose }) => {
         setLoading(false);
       }
     };
->>>>>>> Stashed changes
+
 
   //   loadCartItems();
   // }, [account, dispatch]);
