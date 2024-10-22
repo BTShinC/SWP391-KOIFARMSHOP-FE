@@ -13,7 +13,7 @@ const Register = async (data) => {
 const ChangePassword = async (data) => {
   try {
     const response = await api.post("reset", data);
-    return response.data;
+    return response;
   } catch (error) {
     console.error(error);
     throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
@@ -22,11 +22,11 @@ const ChangePassword = async (data) => {
 
 const sendEmailToRecoveryPassword = async (data) => {
   try {
-    const response = await api.post("forgot", data);
-    return response;
+    const response = await api.post('forgot',data);
+    return response.data;
   } catch (error) {
     console.error(error);
-    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+    throw error; 
   }
 };
 

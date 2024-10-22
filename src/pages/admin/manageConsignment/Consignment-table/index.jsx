@@ -1,22 +1,24 @@
 import { Button, Spin } from "antd";
 import PropTypes from "prop-types";
+import { format } from 'date-fns';
 import React, { useState, useEffect } from "react";
 import "./index.scss";
 import {
   fetchProductById,
   fetchProductComboById,
-} from "../../../../service/userService"; // API lấy thông tin sản phẩm và combo
+} from "../../../../service/userService";
 import ChangeStatusConsignment from "../../../../components/changeStatusConsignment";
 
 ConsignmentTable.propTypes = {
   consignmentData: PropTypes.arrayOf(PropTypes.object).isRequired,
   columns: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onChange:PropTypes.func
 };
 
-function ConsignmentTable({ consignmentData, columns }) {
-  const [consignmentTypes, setConsignmentTypes] = useState({}); // Lưu loại ký gửi cho từng consignmentID
-  const [showDetail, setShowDetail] = useState(null); // Để theo dõi trạng thái hiển thị chi tiết
-  const [productDetails, setProductDetails] = useState(null); // Chi tiết sản phẩm hoặc combo
+function ConsignmentTable({ consignmentData, columns, onChange }) {
+  const [consignmentTypes, setConsignmentTypes] = useState({});
+  const [showDetail, setShowDetail] = useState(null);
+  const [productDetails, setProductDetails] = useState(null);
   const [loading, setLoading] = useState(false);
 
   // Hàm xác định loại ký gửi
@@ -58,7 +60,7 @@ function ConsignmentTable({ consignmentData, columns }) {
         }
       }
 
-      setConsignmentTypes(newConsignmentTypes); // Lưu tất cả consignmentType vào state
+      setConsignmentTypes(newConsignmentTypes);
       setLoading(false);
     };
 
@@ -110,6 +112,14 @@ function ConsignmentTable({ consignmentData, columns }) {
                 <td>{consignment.consignmentDate || "N/A"}</td>
                 <td>{consignment.dateReceived || "N/A"}</td>
                 <td>{consignment.dateExpiration || "N/A"}</td>
+                <td>
+                  {consignment.saleDate
+                    ? format(
+                        new Date(consignment.saleDate),
+                        "dd/MM/yyyy HH:mm:ss"
+                      )
+                    : "N/A"}
+                </td>
                 <td>{consignment.productComboID || consignment.productID}</td>
                 <td>{consignment.accountID || "N/A"}</td>
                 <td>
@@ -117,7 +127,7 @@ function ConsignmentTable({ consignmentData, columns }) {
                     <Spin />
                   ) : (
                     consignmentTypes[consignment.consignmentID] ||
-                    "N/A" /* Hiển thị consignmentType đã tính */
+                    "N/A"
                   )}
                 </td>
                 <td>{consignment.status || "N/A"}</td>
@@ -141,6 +151,7 @@ function ConsignmentTable({ consignmentData, columns }) {
                     consignmentID={consignment.consignmentID}
                     productID={consignment.productID}
                     productComboID={consignment.productComboID}
+                    onChange = {onChange}
                   />
                 </td>
               </tr>
@@ -191,7 +202,7 @@ function ConsignmentTable({ consignmentData, columns }) {
                                   src={productDetails.image}
                                   alt="Hình ảnh sản phẩm"
                                   style={{
-                                    display:"flex",
+                                    display: "flex",
                                     width: "150px",
                                     height: "auto",
                                     borderRadius: "8px",

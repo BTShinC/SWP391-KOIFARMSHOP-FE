@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { Button, Checkbox, Modal, message } from "antd";
 import PropTypes from "prop-types";
 import "./index.scss";
-import { editFishInfo, updateConsignmentByID } from "../../../service/userService"; // Import API update consignment
+import {
+  editFishInfo,
+  updateConsignmentByID,
+} from "../../../service/userService"; // Import API update consignment
 
 FishTable.propTypes = {
   columns: PropTypes.array.isRequired,
@@ -25,16 +28,12 @@ function FishTable({
   const [selectedFish, setSelectedFish] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  // Hàm để tìm consignmentID dựa trên productID
+  // Hàm để tìm consignment dựa trên productID
   const getConsignmentID = (productID) => {
-    if (!consignmentData || !Array.isArray(consignmentData)) {
-      return null;
-    }
-
     const consignment = consignmentData.find(
       (consign) => consign.productID === productID
     );
-    console.log("consignment =>",consignment)
+    console.log("consignment =>", consignment);
     return consignment || null;
   };
 
@@ -53,12 +52,14 @@ function FishTable({
         ...selectedFish,
         status: "Hết hàng",
       };
-  
+
       try {
-        // Lấy consignmentID từ productID
+        // Lấy consignment từ productID
         const consignment = getConsignmentID(selectedFish.productID);
         if (!consignment) {
-          message.error("Không tìm thấy consignment tương ứng với sản phẩm");
+          await changeFishStatus(updatedFish);
+          message.success("Cập nhật trạng thái cá thành công");
+          onChange();
           return;
         }
         const saleDate = new Date().toISOString();
@@ -73,7 +74,9 @@ function FishTable({
           changeFishStatus(updatedFish),
           updateConsignmentByID(updatedConsignmentStatus),
         ]);
-        message.success("Cập nhật trạng thái thành công cho cả cá và consignment");
+        message.success(
+          "Cập nhật trạng thái thành công cho cả cá và consignment"
+        );
         onChange(); // Cập nhật dữ liệu sau khi thay đổi
         setIsModalVisible(false);
         setSelectedFish(null);
@@ -83,7 +86,6 @@ function FishTable({
       }
     }
   };
-  
 
   const changeFishStatus = async (data) => {
     try {
@@ -117,7 +119,7 @@ function FishTable({
                 <td>{fish.breed}</td>
                 <td>{fish.size}</td>
                 <td>{fish.sex}</td>
-                <td>{new Intl.NumberFormat('vi-VN').format(fish.price)} VNĐ</td>
+                <td>{new Intl.NumberFormat("vi-VN").format(fish.price)} VNĐ</td>
 
                 <td>{fish.status}</td>
                 <td className="btn-container">
@@ -179,7 +181,7 @@ function FishTable({
                         {getConsignmentID(fish.productID) && (
                           <p>
                             <strong>Đơn ký gửi ID:</strong>{" "}
-                            {getConsignmentID(fish.productID)}
+                            {getConsignmentID(fish.productID).consignmentID}
                           </p>
                         )}
                       </div>

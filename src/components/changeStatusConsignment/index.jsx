@@ -14,6 +14,7 @@ ChangeStatusConsignment.propTypes = {
   productID: PropTypes.string,
   productComboID: PropTypes.string,
   consignmentID: PropTypes.string.isRequired,
+  onChange:PropTypes.func
 };
 
 function ChangeStatusConsignment({
@@ -21,6 +22,7 @@ function ChangeStatusConsignment({
   productID,
   productComboID,
   consignmentID,
+  onChange
 }) {
   const [isShowButton, setIsShowButton] = useState(false);
   const [formValue, setFormValue] = useState({
@@ -97,6 +99,7 @@ function ChangeStatusConsignment({
           ...prevFormValue,
           status: newStatus === "Hoàn tất" ? "Hoàn tất" : "Đang tiến hành",
         }));
+        onChange();
       } else {
         message.error("Cập nhật trạng thái đơn ký gửi thất bại.");
       }
@@ -177,7 +180,7 @@ function ChangeStatusConsignment({
           <div className="change-status-button">
             {formValue.status === "Chờ xác nhận" && (
               <>
-                <Button onClick={() => handleChangeStatus("Đang tiến hành")}>
+                <Button className="custom-button__transport" onClick={() => handleChangeStatus("Đang tiến hành")}>
                   Xác nhận
                 </Button>
                 <Button
@@ -191,7 +194,7 @@ function ChangeStatusConsignment({
             )}
 
             {formValue.status === "Đang tiến hành" && (
-              <Button onClick={() => handleChangeStatus("Hoàn tất")}>
+              <Button className="custom-button" onClick={() => handleChangeStatus("Hoàn tất")}>
                 Hoàn tất
               </Button>
             )}

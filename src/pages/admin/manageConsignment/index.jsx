@@ -9,6 +9,7 @@ const columns = [
   "Ngày tạo đơn",
   "Ngày nhận cá",
   "Ngày đáo hạn",
+  "Ngày hoàn tất",
   "Mã sản phẩm",
   "Khách hàng",
   "Đơn ký gửi loại",
@@ -36,6 +37,9 @@ function ManageConsignment() {
     }
   };
 
+  const handleOnchange = () => {
+    getAllConsignment();
+  };
   return (
     <div className="admin">
       <div className="admin-sidebar">
@@ -47,6 +51,7 @@ function ManageConsignment() {
         <ConsignmentTable
           columns={columns}
           consignmentData={koiConsignmentData}
+          onChange={handleOnchange}
         />
       </div>
     </div>
