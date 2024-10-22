@@ -10,14 +10,14 @@ import { toast } from "react-toastify";
 const Sidebar = ({ isOpen, onClose }) => {
   // Function to format the account balance
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'decimal',
+    return new Intl.NumberFormat("vi-VN", {
+      style: "decimal",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount);
   };
 
-  const user = useSelector((state) => state.user); 
+  const user = useSelector((state) => state.user);
   const dispatch = useDispatch(); // Khai báo useDispatch để sử dụng action
   const navigate = useNavigate(); // Sử dụng useNavigate để điều hướng
 
@@ -58,17 +58,33 @@ const Sidebar = ({ isOpen, onClose }) => {
         ) : (
           <li>
             <div className="welcome-message">
-              <p>Chào mừng, <br/>
-              {user.fullName}</p> {/* Display user's full name */}
-              <p>Số dư tài khoản: <br/>
-              {formatCurrency(user.accountBalance)} VND{/* Display formatted account balance */}</p>
+              <p>
+                Chào mừng, <br />
+                {user.fullName}
+              </p>{" "}
+              {/* Display user's full name */}
+              <p>
+                Số dư tài khoản: <br />
+                {formatCurrency(user.accountBalance)} VND
+                {/* Display formatted account balance */}
+              </p>
             </div>
+            {user &&
+              user.roleName === "Admin" && ( // Show admin button if user is an admin
+                <li>
+                  <Link to="/admin" onClick={onClose}>
+                    <Button className="adminpage-button" type="primary">Quản lý</Button>
+                  </Link>
+                </li>
+              )}
           </li>
         )}
         {!user && (
-        <li>
-          <Link to="/register" onClick={onClose}>Đăng ký</Link>
-        </li>
+          <li>
+            <Link to="/register" onClick={onClose}>
+              Đăng ký
+            </Link>
+          </li>
         )}
         {user && ( // Show logout link only if user is logged in
           <li>
@@ -105,13 +121,6 @@ const Sidebar = ({ isOpen, onClose }) => {
             </Button>
           </li>
         )}
-        {/* {user && user.account.roleName === "Admin" && ( // Show admin button if user is an admin
-          <li>
-            <Link to="/admin" onClick={onClose}>
-              <Button type="primary">Quản lý Admin</Button>
-            </Link>
-          </li>
-        )} */}
       </ul>
     </div>
   );
