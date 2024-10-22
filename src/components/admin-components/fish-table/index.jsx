@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Checkbox, Modal, message } from "antd";
 import PropTypes from "prop-types";
 import "./index.scss";
-import { editFishInfo, updateConsignmentStatus } from "../../../service/userService"; // Import API update consignment
+import { editFishInfo, updateConsignmentByID } from "../../../service/userService"; // Import API update consignment
 
 FishTable.propTypes = {
   columns: PropTypes.array.isRequired,
@@ -34,8 +34,8 @@ function FishTable({
     const consignment = consignmentData.find(
       (consign) => consign.productID === productID
     );
-
-    return consignment ? consignment.consignmentID : null;
+    console.log("consignment =>",consignment)
+    return consignment || null;
   };
 
   const handleViewDetail = (id) => {
@@ -53,29 +53,27 @@ function FishTable({
         ...selectedFish,
         status: "Hết hàng",
       };
-      console.log(updatedFish);
-
+  
       try {
-        // Gọi API để cập nhật trạng thái của cá
-        await changeFishStatus(updatedFish);
-        message.success("Cập nhật trạng thái cá thành công");
-
         // Lấy consignmentID từ productID
-        const consignmentID = getConsignmentID(selectedFish.productID);
-
-        // Nếu có consignmentID, cập nhật trạng thái của consignment thành "Hoàn tất"
-        if (consignmentID) {
-          const updatedConsignmentStatus = await updateConsignmentStatus(
-            consignmentID,
-            "Hoàn tất"
-          );
-          if (updatedConsignmentStatus.success) {
-            message.success("Cập nhật trạng thái consignment thành Hoàn tất");
-          } else {
-            message.error("Cập nhật trạng thái consignment thất bại");
-          }
+        const consignment = getConsignmentID(selectedFish.productID);
+        if (!consignment) {
+          message.error("Không tìm thấy consignment tương ứng với sản phẩm");
+          return;
         }
-
+        const saleDate = new Date().toISOString();
+        const updatedConsignmentStatus = {
+          ...consignment,
+          consignmentID: consignment.consignmentID,
+          status: "Hoàn tất",
+          saleDate: saleDate,
+        };
+        // Thực hiện cả hai tác vụ cập nhật trạng thái cá và consignment song song
+        await Promise.all([
+          changeFishStatus(updatedFish),
+          updateConsignmentByID(updatedConsignmentStatus),
+        ]);
+        message.success("Cập nhật trạng thái thành công cho cả cá và consignment");
         onChange(); // Cập nhật dữ liệu sau khi thay đổi
         setIsModalVisible(false);
         setSelectedFish(null);
@@ -85,6 +83,7 @@ function FishTable({
       }
     }
   };
+  
 
   const changeFishStatus = async (data) => {
     try {

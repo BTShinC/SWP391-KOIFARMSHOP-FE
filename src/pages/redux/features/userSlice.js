@@ -12,8 +12,11 @@ export const userSlice = createSlice({
       return { 
         accountId: action.payload.accountId,
         fullName: action.payload.fullName, // Lưu fullName
-        accountBalance: action.payload.accountBalance // Lưu accountBalance
-      }; 
+        accountBalance: action.payload.accountBalance,// Lưu accountBalance
+        image: action.payload.image,
+        email: action.payload.email,
+        phoneNumber: action.payload.phoneNumber, 
+        }; 
     },
   },
 });

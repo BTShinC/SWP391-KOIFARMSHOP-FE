@@ -259,8 +259,16 @@ const updateProductComboStatus = async (id, status) => {
   }
 };
 
-
-
+const updateConsignmentByID = async(data) =>{
+  try {
+    const response = await api.put(`/consignments/${data.consignmentID}`, data);
+    return response
+  } catch (error) {
+    console.error("Lỗi khi gọi API:", error);
+    return null;
+  }
+}
+ 
 export {
   Register,
   ChangePassword,
@@ -285,4 +293,5 @@ export {
   updateConsignmentStatus,
   updateProductComboStatus,
   updateProductStatus,
+  updateConsignmentByID,
 };

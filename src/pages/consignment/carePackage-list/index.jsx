@@ -63,18 +63,15 @@ function CarePackageList() {
   return (
     <div className="care-package-list">
       <div className="care-package-container">
-        {/* Nút Trở lại */}
-        <Button
-          variant="contained"
-          className="back-button"
-          onClick={() => navigate(-1)}
-        >
-          Trở lại
-        </Button>
-
+          <Button
+            variant="contained"
+            className="back-button"
+            onClick={() => navigate(-1)}
+          >
+            Trở lại
+          </Button>
         {/* Bộ lọc */}
         <Box className="filter-container">
-          {/* Lọc theo loại với nút */}
           <Box className="type-filter-buttons">
             <Button
               className={`filter-button ${selectedType === "" ? "active" : ""}`}
@@ -140,7 +137,9 @@ function CarePackageList() {
             <Grid item xs={12} md={6}>
               <Box className="description-container">
                 <div className="title-wrapper">
-                  <Typography variant="h4">{item.packageName} ({item?.type})</Typography>
+                  <Typography variant="h4">
+                    {item.packageName} ({item?.type})
+                  </Typography>
                   {item.tag && (
                     <>
                       <span
@@ -157,8 +156,11 @@ function CarePackageList() {
                     </>
                   )}
                 </div>
-                {item.tag.toLowerCase() === 'sale' && (
-                  <Typography variant="h6" sx={{ textDecoration: 'line-through'}}>
+                {item.tag.toLowerCase() === "sale" && (
+                  <Typography
+                    variant="h6"
+                    sx={{ textDecoration: "line-through" }}
+                  >
                     {new Intl.NumberFormat("vi-VN").format(item.price * 1.2)}VNĐ
                   </Typography>
                 )}

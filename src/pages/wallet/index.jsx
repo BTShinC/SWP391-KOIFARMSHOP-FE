@@ -9,11 +9,11 @@ function WalletPage() {
     const [amount, setAmount] = useState('');
     const [selectedLevel, setSelectedLevel] = useState(null);
     const [transactions, setTransactions] = useState([]); // State for transaction history
-    const user = useSelector((state) => state.user);
+    const user = useSelector((state) => state?.user);
 
     // Function to fetch transaction history
     const fetchTransactionHistory = async () => {
-        const apiUrl = `http://103.90.227.69:8080/api/transactions/account/${user.account.accountID}`; // Use accountID in the URL
+        const apiUrl = `http://103.90.227.69:8080/api/transactions/account/${user?.accountID}`; // Use accountID in the URL
         try {
             const response = await axios.get(apiUrl);
             setTransactions(response.data); // Assuming response.data contains the transaction history
@@ -26,7 +26,7 @@ function WalletPage() {
     useEffect(() => {
         // Fetch transaction history when the component mounts
         fetchTransactionHistory();
-    }, [user.account.accountID]); // Fetch again if accountID changes
+    }, [user?.accountID]); // Fetch again if accountID changes
 
     const handleAmountChange = (e) => {
         const value = e.target.value;
@@ -49,7 +49,7 @@ function WalletPage() {
             return;
         }
 
-        const accountId = user.account.accountID; // Use the correct property for account ID
+        const accountId = user?.accountID; // Use the correct property for account ID
         console.log("Account ID:", accountId);
         console.log("Total Amount (Price):", totalAmount); // Log the total amount
 
