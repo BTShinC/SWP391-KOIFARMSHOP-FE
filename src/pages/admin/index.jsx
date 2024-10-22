@@ -59,11 +59,11 @@ const Admin = () => {
   };
 
   // Hàm render lại dữ liệu khi có thay đổi thông tin người dùng
-  const handleUserChange = () => {
-    getAllUser(); // Gọi lại API để cập nhật thông tin mới nhất
+  const handleUserChange = (data) => {
+    console.log(data)
+    getAllUser(); 
   };
 
-  // Khi component mount, lấy dữ liệu người dùng
   useEffect(() => {
     getAllUser();
   }, []);

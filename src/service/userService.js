@@ -22,11 +22,11 @@ const ChangePassword = async (data) => {
 
 const sendEmailToRecoveryPassword = async (data) => {
   try {
-    const response = await api.post('forgot',data);
+    const response = await api.post("forgot", data);
     return response.data;
   } catch (error) {
     console.error(error);
-    throw error; 
+    throw error;
   }
 };
 
@@ -42,11 +42,11 @@ const fetchAllUser = async () => {
 
 const editUser = async (data) => {
   try {
-    const response = await api.get("account/${data.id}", data);
+    const response = await api.put(`account/${data.accountID}`, data);
     return response;
   } catch (error) {
     console.error(error);
-    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+    throw error;
   }
 };
 
@@ -112,16 +112,18 @@ const addToCartAPI = async (data) => {
     console.log("Data being sent to API:", data);
     const response = await api.post("shop-cart/add", {
       accountId: data.accountId,
-      productId: data.productId
+      productId: data.productId,
     });
     console.log("API response:", response.data);
     return response.data;
   } catch (error) {
-    console.error("Error adding to cart:", error.response?.data || error.message);
+    console.error(
+      "Error adding to cart:",
+      error.response?.data || error.message
+    );
     throw error;
   }
 };
-
 
 const fetchAllTransactions = async () => {
   try {
@@ -132,7 +134,6 @@ const fetchAllTransactions = async () => {
     throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
   }
 };
-
 
 const fetchCartItems = async (accountId) => {
   try {
@@ -151,7 +152,10 @@ const deleteCartItem = async (cartItemId) => {
     const response = await api.delete(`shop-cart/delete/${cartItemId}`); // Giả sử API của bạn có endpoint như vậy
     return response.data; // Trả về dữ liệu từ response nếu cần
   } catch (error) {
-    console.error("Error deleting cart item:", error.response?.data || error.message);
+    console.error(
+      "Error deleting cart item:",
+      error.response?.data || error.message
+    );
     throw error; // Ném lỗi ra ngoài để xử lý ở nơi gọi hàm
   }
 };
@@ -221,54 +225,17 @@ const updateConsignmentStatus = async (id, status) => {
     throw error;
   }
 };
-const updateProductStatus = async (id, status) => {
-  try {
-    const response = await api.put(
-      `product/${id}`,
-      { status },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    console.log("Response từ API Product:", response.data);
-    return response
-  } catch (error) {
-    console.error("Lỗi khi cập nhật Product:", error.response || error.message);
-    throw error;
-  }
-};
 
-const updateProductComboStatus = async (id, status) => {
-  try {
-    const response = await api.put(
-      `productcombo/${id}`,
-      { status },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    console.log('Response từ API Product Combo:', response.data);
-    return response
-  } catch (error) {
-    console.error('Lỗi khi cập nhật Product Combo:', error.response || error.message);
-    throw error;
-  }
-};
-
-const updateConsignmentByID = async(data) =>{
+const updateConsignmentByID = async (data) => {
   try {
     const response = await api.put(`/consignments/${data.consignmentID}`, data);
-    return response
+    return response;
   } catch (error) {
     console.error("Lỗi khi gọi API:", error);
     return null;
   }
-}
- 
+};
+
 export {
   Register,
   ChangePassword,
@@ -291,7 +258,5 @@ export {
   createConsignment,
   fetchAllConsignment,
   updateConsignmentStatus,
-  updateProductComboStatus,
-  updateProductStatus,
   updateConsignmentByID,
 };

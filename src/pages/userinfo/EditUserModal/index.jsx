@@ -16,7 +16,6 @@ ModalEditUser.propTypes = {
 
 function ModalEditUser({ title, userData, className = "", onChange }) {
   const initFormValue = {
-
     accountID: userData.accountID,
     fullName: userData.fullName,
     phoneNumber: userData.phoneNumber,
@@ -24,7 +23,6 @@ function ModalEditUser({ title, userData, className = "", onChange }) {
     address: userData.address,
     imageUrl: userData.imageUrl, // Save the image URL here
     roleName: userData.roleName,
-
   };
 
   const [formValue, setFormValue] = useState(initFormValue);
@@ -39,7 +37,7 @@ function ModalEditUser({ title, userData, className = "", onChange }) {
       email: userData.email,
       accountBalance: userData.accountBalance,
       address: userData.address,
-      image: userData.image, // Image URL from userData
+      image: userData.image, 
       roleName: userData.roleName,
     });
   }, [userData]);
@@ -65,11 +63,11 @@ function ModalEditUser({ title, userData, className = "", onChange }) {
   };
 
   const uploadImageToFirebase = async (file) => {
-    const storageRef = ref(storage, `uploads/${file.name}`); // Create reference in Firebase Storage
+    const storageRef = ref(storage, `uploads/${file.name}`);
     try {
       await uploadBytes(storageRef, file);
       const downloadURL = await getDownloadURL(storageRef);
-      return downloadURL; // Return the image URL
+      return downloadURL;
     } catch (error) {
       console.error("Error uploading file:", error);
       throw error;
@@ -77,7 +75,7 @@ function ModalEditUser({ title, userData, className = "", onChange }) {
   };
 
   const handleOk = async () => {
-    let imageUrl = formValue.image; // Default to the existing image URL
+    let imageUrl = formValue.image; 
 
     if (fileList.length > 0 && fileList[0].originFileObj) {
       // If there's a new image to upload, upload it to Firebase
@@ -86,7 +84,7 @@ function ModalEditUser({ title, userData, className = "", onChange }) {
         imageUrl = await uploadImageToFirebase(file);
       } catch (error) {
         console.error("Image upload failed:", error);
-        return; 
+        return;
       }
     }
 
@@ -94,19 +92,20 @@ function ModalEditUser({ title, userData, className = "", onChange }) {
       ...formValue,
       image: imageUrl,
     };
-
+    console.log("Updated form data being sent to API:", updatedFormValue);
     try {
       let res = await editUser(updatedFormValue);
       if (res) {
         console.log("User updated successfully");
-        onChange(updatedFormValue); 
+        if (onChange) {
+          onChange(updatedFormValue);
+        }
       }
     } catch (error) {
       console.log("Error updating user:", error);
     }
 
     setOpen(false);
-    console.log(formValue);
   };
 
   return (
@@ -142,7 +141,7 @@ function ModalEditUser({ title, userData, className = "", onChange }) {
                   className="avatar-uploader"
                   fileList={fileList}
                   onChange={handleUploadChange}
-                  beforeUpload={() => false} // Tránh việc tự động upload file
+                  beforeUpload={() => false}
                 >
                   {fileList.length >= 1 ? null : (
                     <div>
@@ -243,7 +242,6 @@ function ModalEditUser({ title, userData, className = "", onChange }) {
                     type="number"
                     name="roleName"
                     value={formValue.roleName}
-
                   >
                     <option value="">Chọn vai trò</option>{" "}
                     {/* Giá trị mặc định */}

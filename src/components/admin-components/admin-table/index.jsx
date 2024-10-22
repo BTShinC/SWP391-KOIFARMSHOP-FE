@@ -42,7 +42,7 @@ const AdminTable = ({ columns, data, title, ModalComponent, onChange }) => {
                     userData={row}
                     title="Chỉnh sửa thông tin"
                     className="modal-edit-user-button"
-                    onChange={onChange} // Truyền hàm onChange vào ModalComponent
+                    onChange={onChange} 
                   />
                 )}
               </td>
@@ -72,7 +72,7 @@ AdminTable.propTypes = {
   columns: PropTypes.arrayOf(PropTypes.string).isRequired,
   title: PropTypes.string.isRequired,
   ModalComponent: PropTypes.elementType,
-  onChange: PropTypes.func.isRequired, // Thêm prop onChange để truyền vào ModalComponent
+  onChange: PropTypes.func.isRequired, 
 };
 
 export default AdminTable;
