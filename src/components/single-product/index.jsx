@@ -4,7 +4,7 @@ import { Button, Typography, Image, Divider, message } from "antd";
 import Carousel from "../carousel";
 import { useState, useEffect } from "react";
 import ShoppingCart from "../shopping-cart";
-import { addToCartAPI, deleteCartItem, fetchProductById } from "../../service/userService";
+import { addToCartAPI,fetchProductById } from "../../service/userService";
 import { useDispatch, useSelector } from "react-redux";
 
 const { Title, Text } = Typography;
@@ -24,25 +24,26 @@ function SinglepProduct() {
   const [product, setProduct] = useState(null); // State để lưu thông tin sản phẩm
   const dispatch = useDispatch(); // Khởi tạo dispatch
   const account = useSelector((state) => state.user); // Lấy accountId từ Redux
+  console.log("Current account:", account);
 
 
 
-  useEffect(() => {
-    return () => {
-      const removeTemporaryCartItem = async () => {
-        try {
-          if (account && account.accountID) {
-            await deleteCartItem(product.productID); // Gọi hàm xóa sản phẩm
-            console.log("Temporary cart item removed");
-          }
-        } catch (error) {
-          console.error("Error removing temporary cart item:", error);
-        }
-      };
+  // useEffect(() => {
+  //   return () => {
+  //     const removeTemporaryCartItem = async () => {
+  //       try {
+  //         if (account && account.accountID) {
+  //           await deleteCartItem(product.productID); // Gọi hàm xóa sản phẩm
+  //           console.log("Temporary cart item removed");
+  //         }
+  //       } catch (error) {
+  //         console.error("Error removing temporary cart item:", error);
+  //       }
+  //     };
 
-      removeTemporaryCartItem();
-    };
-  }, [account, product]);
+  //     removeTemporaryCartItem();
+  //   };
+  // }, [account, product]);
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -69,7 +70,7 @@ function SinglepProduct() {
 
   const handleAddToCart = async () => {
     try {
-      if (!account || !account.accountID) {
+      if (!account || !account.accountId) {
         console.error("Account information is missing");
         return;
       }
@@ -82,12 +83,12 @@ function SinglepProduct() {
        }
 
       console.log("Sending to API:", {
-        accountId: account.accountID,
+        accountId: account.accountId,
         productId: product.productID,
       });
 
       const response = await addToCartAPI({
-        accountId: account.accountID,
+        accountId: account.accountId,
         productId: product.productID,
       });
       console.log("Added to cart successfully:", response);

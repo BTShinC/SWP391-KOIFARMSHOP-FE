@@ -15,6 +15,7 @@ const ShoppingCart = ({ onClose }) => {
 
   // useEffect(() => {
   //   console.log("Current account:", account);
+<<<<<<< Updated upstream
     // const loadCartItems = async () => {
     //   if (account && account.accountID) {
     //     try {
@@ -32,6 +33,25 @@ const ShoppingCart = ({ onClose }) => {
     //     setLoading(false);
     //   }
     // };
+=======
+    const loadCartItems = async () => {
+      if (account && account.accountId) {
+        try {
+          setLoading(true);
+          const items = await fetchCartItems(account.accountId);
+          dispatch(setCartItems(items));
+        } catch (error) {
+          console.error("Failed to load cart items:", error);
+          message.error("Không thể tải giỏ hàng");
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        console.log("No account ID available");
+        setLoading(false);
+      }
+    };
+>>>>>>> Stashed changes
 
   //   loadCartItems();
   // }, [account, dispatch]);
