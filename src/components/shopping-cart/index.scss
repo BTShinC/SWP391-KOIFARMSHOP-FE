@@ -1,0 +1,35 @@
+.close-button {
+  background: none; 
+  border: none; 
+  font-size: 5px; 
+  cursor: pointer;
+  position: absolute; 
+  top: 10px; 
+  left: 10px; 
+  color: #000; 
+
+  &:hover {
+    color: #ff4d4f; 
+  }
+}
+
+.head{
+  display: flex;
+  align-items: center;
+  gap: 100px;
+  margin-top: 30px;
+  h3{
+    padding-top: 10px;
+  }
+}
+
+h5{
+  margin-top: 100px;
+}
+
+.cart-buttons {
+  display: flex; 
+  justify-content: space-between; 
+  margin-top: 20px; 
+  border-radius: 50px;
+}

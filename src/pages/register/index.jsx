@@ -1,3 +1,4 @@
+
 import PropTypes from "prop-types";
 import logo from "/public/images/logo.svg";
 import { useNavigate, Link } from "react-router-dom";
@@ -11,8 +12,10 @@ RegisterForm.propTypes = {
 };
 
 const initFormValue = {
+
   firstName: "",
   lastName: "",
+
   userName: "",
   password: "",
   confirmPassword: "",
@@ -26,24 +29,13 @@ function RegisterForm() {
   const handleRegister = async (values) => {
     try {
       await api.post("Register", values);
+      toast.success("Đăng ký thành công")
       navigate("/login");
     } catch (err) {
       toast.error(err.response.data);
     }
   };
 
-  // const handleSubmit = (values) => {
-  //   if (values.password.length < 6) {
-  //     alert("Password must be at least 6 characters!");
-  //     return;
-  //   }
-  //   if (values.password !== values.confirmPassword) {
-  //     alert("Password and Confirm Password do not match!");
-  //     return;
-  //   }
-  //   console.log("Register Values:", values);
-  //   navigate("/login");
-  // };
 
   return (
     <div className="register">
@@ -56,6 +48,7 @@ function RegisterForm() {
           <img src={logo} alt="Logo" />
           <h2>Đăng ký</h2>
         </div>
+
 
         <Form
           name="registerForm"
@@ -149,6 +142,7 @@ function RegisterForm() {
         <div className="back-to-login">
           <span>Bạn đã là thành viên?</span>
           <Link to="/login">Đăng nhập ngay</Link>
+
         </div>
       </div>
     </div>

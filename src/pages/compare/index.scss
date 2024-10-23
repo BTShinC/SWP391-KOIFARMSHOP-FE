@@ -1,0 +1,82 @@
+.compare-page {
+
+
+
+    .compare-content {
+        margin-top: 20px;
+        padding-top: 3rem;
+
+
+        .row {
+            margin: 0;
+        }
+
+        .col-2{
+            height: 150vh;
+            
+        }
+
+        .col-5{
+            height: 150vh; 
+            
+        }
+
+        .fish-card {
+            display: flex; // Use flexbox for layout
+            flex-direction: column; // Stack elements vertically
+            justify-content: space-between; // Space out elements
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            height: 150vh;
+            
+            
+
+            .fish-image {
+                object-fit: contain;
+                max-height:  50vh;
+                border-radius: 5px;
+            }
+
+            h2 {
+                margin: 10px 0;
+            }
+
+            p {
+                margin: 5px 0;
+                flex-grow: 1; // Allow paragraphs to grow and take available space
+            }
+
+            .comparepage-button-wrapper {
+                padding-top: 0.5rem;
+                margin-top: auto; // Push the button wrapper to the bottom
+            }
+        }
+    }
+}
+
+.comparepage-button{
+    background-color: #f9f1e7;
+    color: black;
+    border: 1px solid #d4c8b2;
+    padding: 1.5rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    width: 18vw;
+    margin-bottom: 1rem;
+    margin-top: 0rem;
+
+    &:hover {
+      background-color: #e9e1d7;
+    }
+  }
+
+  .comparepage-button-wrapper{
+    padding-top: 0.5rem;
+
+  }

@@ -1,7 +1,7 @@
 .body {
 
   &__poster {
-    margin-top: 15px;
+    
     width: 100%;
     filter: drop-shadow(0px 4px 4px rgba(238, 238, 238, 0.25));
 
@@ -85,22 +85,31 @@
       text-align: center;
       color: #3a3a3a;
     }
+    .more-button-container {
+      display: flex; /* Sử dụng flexbox */
+      justify-content: center; /* Căn giữa nút */
+      margin: 30px auto 0 auto; /* Căn giữa phần margin */
+    }
+    
     .more-button {
-      display: flex;
+      display: inline-flex; /* Thay đổi sang inline-flex để nút nhỏ hơn */
       margin: 30px auto 0 auto;
       background-color: white;
       color: #b88e2f;
       border: 2px solid #b88e2f;
-      padding: 20px 25px;
-      font-size: 16px;
+      padding: 15px 25px; /* Điều chỉnh padding để nút nhỏ lại */
+      font-size: 14px; /* Điều chỉnh font size */
+      text-decoration: none; /* Đảm bảo không có gạch chân */
+      border-radius: 8px; /* Thêm bo góc nếu muốn */
       transition: all 0.3s ease;
-
+      
       &:hover {
         background-color: #b88e2f;
         color: white;
       }
     }
   }
+  
 
   &__background {
     display: flex;
@@ -180,7 +189,8 @@
         color: #333;
         margin-bottom: 20px;
       }
-
+      a{
+        text-decoration: none;
       .view-more-button {
         background-color: #edd38a;
         color: #441d01;
@@ -191,11 +201,11 @@
         border-radius: 50px;
         display: block;
         margin: 40px auto; 
-
         &:hover {
           background-color: #d9c073; 
         }
       }
+    }
     }
 
     &__image {

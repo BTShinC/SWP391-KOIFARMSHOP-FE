@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom"
 import "./index.scss"
+// import PrivacyPolicy from "./footerpage/privacy-policy"
+// import OrderPolicy from "./footerpage/order-policy"
 
 function Footer() {
   return (
@@ -12,32 +14,32 @@ function Footer() {
         <div className="footer__nav">
         <ul>
           <li>
-            <Link to="/home">Trang chủ</Link>
+            <Link to="/">Trang chủ</Link>
           </li>
           <li>
-            <Link to="/">Giới thiệu</Link>
+            <Link to="/about">Giới thiệu</Link>
           </li>
           <li>
             <Link to="/">Tin tức</Link>
           </li>
           <li>
-            <Link to="/">Liên hệ</Link>
+            <Link to="/contact">Liên hệ</Link>
           </li>
         </ul>
         </div>
         <div className="footer__help">
         <ul>
           <li>
-            <Link to="/">Chính sách bảo mật</Link>
+            <Link to="/privacy-policy">Chính sách bảo mật</Link>
           </li>
           <li>
-            <Link to="/">Giúp đỡ</Link>
+            <Link to="/support-policy">Giúp đỡ</Link>
           </li>
           <li>
-            <Link to="/">Hướng dẫn mua hàng</Link>
+            <Link to="/order-policy">Hướng dẫn mua hàng</Link>
           </li>
           <li>
-            <Link to="/">Chính sách đổi trả</Link>
+            <Link to="/refund-policy">Chính sách đổi trả</Link>
           </li>
         </ul>
         </div>

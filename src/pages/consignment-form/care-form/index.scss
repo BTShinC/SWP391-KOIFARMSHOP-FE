@@ -1,0 +1,58 @@
+.care-form {
+  display: flex;
+  flex-direction: column;
+  background-color: #fcf8f3;
+
+  // Nút Submit
+  .submit-form-btn {
+    background-color: #b88e2f;
+    color: white;
+    padding: 16px 32px; 
+    font-size: 18px; 
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 200px; 
+    transition: background-color 0.3s ease, transform 0.3s ease; 
+
+    &:hover {
+      background-color: #d4af37; 
+      transform: scale(1.05);
+    }
+
+    &:active {
+      background-color: #967d26; 
+      transform: scale(1); 
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  // Tiêu đề
+  .title-typography {
+    color: #967d26; 
+    text-align: center; 
+    margin: 1rem 0; 
+    font-weight: bold; 
+    text-transform: uppercase; 
+  }
+
+  // TextField được highlight
+  .highlighted-textfield {
+    background-color: #fff8dc; 
+
+    .MuiInputBase-input {
+      color: #daa520; 
+
+      &.Mui-disabled {
+        -webkit-text-fill-color: #daa520; 
+      }
+    }
+
+    .MuiFormLabel-root {
+      color: #daa520; 
+    }
+  }
+}

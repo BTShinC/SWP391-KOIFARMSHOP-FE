@@ -1,18 +1,32 @@
 .sidebar {
+  .sidebar-wrapper{
+    width: 100%;
+    height: 100%;
+  }
+
     position: fixed;
     top: 0;
-    right: -300px; 
-    width: 250px;
-    height: 100%;
+    right: -23vw; 
+    width: 22.8vw;
+    height: 75.5vh;
     background-color: #fff;
+    // background-image: url("https://e0.pxfuel.com/wallpapers/613/327/desktop-wallpaper-koi-fish-for-iphone-minimal-fish.jpg");
+    background-image: url("https://i.pinimg.com/736x/b8/75/bf/b875bfb674db468073469271cbc940a3.jpg");
+    // background-position-y: 58%;
+    // background-position-x: 10%;
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-size: cover;
+
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
     transition: right 0.3s ease;
     z-index: 1000; 
-  
+    border-radius: 1rem;
+    padding: 2rem;
+    text-align: center;
     &.open {
       right: 0; 
     }
-  
     .sidebar__close {
       background: none;
       border: none;
@@ -28,18 +42,30 @@
         color: #ff4d4f; 
       }
     }
+    .adminpage-button{
+      background-color: #f9f1e7;
+      color: black;
+      border: 1px solid #d4c8b2;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 6vw;
+      &:hover {
+        background-color: #e9e1d7;
+      }
+    }
   
     ul {
       list-style: none;
-      padding: 40px;
-  
+      padding: 40px;  
       li {
-        margin: 15px 0;
+        margin: 10px 0;
+        padding-bottom: 5px;
   
         a {
           text-decoration: none;
           color: #000;
           font-size: 18px;
+          
   
           &:hover {
             color: #007bff; 
@@ -48,4 +74,6 @@
       }
     }
   }
+
+ 
   

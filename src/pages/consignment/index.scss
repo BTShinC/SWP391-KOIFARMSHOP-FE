@@ -1,0 +1,104 @@
+.consignment-page {
+  background-color: #fcf8f3;
+  .consignment-page__intro {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5rem;
+    background-color: #fcf8f3;
+    .consignment-page__text {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 55vw;
+      .consignment-page__right {
+        flex: 1;
+        margin-right: 20px;
+        text-align: center; /* Căn giữa đoạn văn bản và button */
+        justify-content: center;
+        h2 {
+          font-size: 24px;
+          font-weight: bold;
+          color: #333;
+          text-align: center;
+        }
+
+        p {
+          text-align: justify;
+          font-size: 20px;
+          line-height: 2;
+          color: #555;
+        }
+
+        .ant-btn-primary {
+          background-color: #edd38a;
+          border-color: #edd38a;
+          display: inline-flex; /* Chuyển sang inline-flex để có căn giữa tốt hơn */
+          justify-content: center; /* Căn giữa nội dung theo chiều ngang */
+          align-items: center; /* Căn giữa nội dung theo chiều dọc */
+          padding: 1.5rem 3rem; /* Điều chỉnh thêm khoảng cách hai bên */
+          border-radius: 3rem;
+          color: #441d01;
+          font-size: 18px; /* Đảm bảo font-size có đơn vị */
+          text-align: center; /* Căn giữa nội dung nếu cần trong các trường hợp đặc biệt */
+          &:hover {
+            background-color: #d09b35;
+            border-color: #d09b35;
+          }
+        }
+      }
+
+      .koi-image {
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        object-fit: cover;
+        overflow: hidden;
+      }
+    }
+  }
+  .consignment-carousel-background {
+    height: 530px;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .package-title {
+    font-weight: 700;
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    position: relative;
+    padding-bottom: 10px;
+  }
+  .package-title::after {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 4px;
+    background-color: #000;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px;
+  }
+  .more-button {
+    display: inline-flex; /* Thay đổi sang inline-flex để nút nhỏ hơn */
+    margin: 30px auto 0 auto;
+    background-color: white;
+    color: #b88e2f;
+    border: 2px solid #b88e2f;
+    padding: 15px 25px; /* Điều chỉnh padding để nút nhỏ lại */
+    font-size: 14px; /* Điều chỉnh font size */
+    text-decoration: none; /* Đảm bảo không có gạch chân */
+    border-radius: 8px; /* Thêm bo góc nếu muốn */
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background-color: #b88e2f;
+      color: white;
+    }
+  }
+  
+}
