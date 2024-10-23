@@ -14,7 +14,7 @@ import { useEffect } from "react";
 function ShoppingCartPage() {
   const cartItems = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
-  const account = useSelector(state => state.user); // Lấy thông tin tài khoản từ Redux
+  const user = useSelector((state) => state.user);
 
 
   const subtotal = cartItems.reduce(
@@ -22,14 +22,14 @@ function ShoppingCartPage() {
     0
   );
 
-  
+
 
 
 
   const loadCartItems = async () => {
-    if (account && account.accountId) {
+    if (user && user.accountID) {
       try {
-        const items = await fetchCartItems(account.accountId);
+        const items = await fetchCartItems(user.accountID);
         dispatch(setCartItems(items)); // Cập nhật Redux store với giỏ hàng mới
       } catch (error) {
         console.error("Failed to load cart items:", error);
@@ -42,7 +42,7 @@ function ShoppingCartPage() {
 
   useEffect(() => {
     loadCartItems();
-  }, [account, dispatch]);
+  }, [user, dispatch]);
 
   const handleRemoveFromCart = async (cartItemId) => {
     try {
@@ -56,7 +56,7 @@ function ShoppingCartPage() {
       message.error("Không thể xóa sản phẩm khỏi giỏ hàng");
     }
   };
-  
+
 
   return (
     <div className="shopping-cart-page">
@@ -119,9 +119,9 @@ function ShoppingCartPage() {
           <span style={{ color: "#B88E2F" }}>{subtotal.toLocaleString("vi-VN")} VNĐ</span>
         </div>
         <Link to="/checkout">
-        <Button style={{ backgroundColor: "#F9F1E7" }} className="checkout-button">
-          Thanh Toán
-        </Button>
+          <Button style={{ backgroundColor: "#F9F1E7" }} className="checkout-button">
+            Thanh Toán
+          </Button>
         </Link>
       </div>
     </div>

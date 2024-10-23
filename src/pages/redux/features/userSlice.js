@@ -10,9 +10,10 @@ export const userSlice = createSlice({
     logout: () => initialState,
     setUser: (state, action) => {
       return { 
-        accountId: action.payload.accountId,
+        accountID: action.payload.accountID,
         fullName: action.payload.fullName, // Lưu fullName
-        accountBalance: action.payload.accountBalance // Lưu accountBalance
+        accountBalance: action.payload.accountBalance, // Lưu accountBalance
+        roleName: action.payload.roleName // Lưu roleName
       }; 
     },
   },

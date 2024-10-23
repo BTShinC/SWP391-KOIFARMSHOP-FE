@@ -33,6 +33,7 @@ import CarePackageDetail from "./pages/consignment/carePackage-detail";
 import ConsignmentForm from "./pages/consignment-form";
 import CarePackageList from "./pages/consignment/carePackage-list";
 import OrderTracking from "./pages/orderTracking";
+import ConsignmentTracking from "./pages/consignmentTracking";
 import CheckoutPage from './pages/checkout';
 
 
@@ -153,6 +154,11 @@ function App() {
         {
           path: "/orderTracking",
           element: <OrderTracking />,
+        },
+
+        {
+          path: "/consignmentTracking",
+          element: <ConsignmentTracking />,
         },
 
         {

@@ -35,10 +35,10 @@ const ShoppingCart = ({ onClose }) => {
     // };
 
     const loadCartItems = async () => {
-      if (account && account.accountId) {
+      if (account.accountID) {
         try {
           setLoading(true);
-          const items = await fetchCartItems(account.accountId);
+          const items = await fetchCartItems(account.accountID);
           dispatch(setCartItems(items));
         } catch (error) {
           console.error("Failed to load cart items:", error);

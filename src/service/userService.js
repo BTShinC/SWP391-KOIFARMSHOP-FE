@@ -121,8 +121,8 @@ const addToCartAPI = async (data) => {
   try {
     console.log("Data being sent to API:", data);
     const response = await api.post("shop-cart/add", {
-      accountId: data.accountId,
-      productId: data.productId
+      accountID: data.accountId,
+      productID: data.productId
     });
     console.log("API response:", response.data);
     return response.data;
