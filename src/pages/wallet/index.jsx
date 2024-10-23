@@ -4,7 +4,9 @@ import "./index.scss"; // Import styles
 import vnNum2Words from "vn-num2words"; // Import the vn-num2words library
 import { toast } from "react-toastify"; // Import toast for notifications
 import { useSelector } from "react-redux";
-import api from '../../config/api'; // Import your API configuration
+
+import api from "../../config/api";
+
 
 function WalletPage() {
   const [amount, setAmount] = useState("");
@@ -20,17 +22,21 @@ function WalletPage() {
   // Function to fetch transaction history
   const fetchTransactionHistory = async () => {
     if (!user || !user.accountID) {
+
       console.error("User or account information is missing");
       return;
     }
 
-    const apiUrl = `http://103.90.227.69:8080/api/transactions/account/${user.accountID}`;
+
+    const apiUrl = `/transactions/account/${user.accountID}`; // Use relative path with api instance
     try {
-      const response = await axios.get(apiUrl, { headers });
-      setTransactions(response.data);
+        const response = await api.get(apiUrl, {
+});
+        setTransactions(response.data); // Assuming response.data contains the transaction history
+
     } catch (error) {
-      console.error("Error fetching transaction history:", error);
-      toast.error("Failed to load transaction history.");
+        console.error("Error fetching transaction history:", error);
+        toast.error("Failed to load transaction history.");
     }
   };
 
@@ -83,11 +89,11 @@ function WalletPage() {
       return;
     }
 
-    const accountID = user.accountID; // Use the correct property for account ID
-    console.log("Account ID:", accountID);
-    console.log("Total Amount (Price):", totalAmount); // Log the total amount
 
-    const apiUrl = "http://103.90.227.69:8080/api/transactions/create"; // Replace with your actual API endpoint
+    const accountId = user.accountID; // Sửa từ accountId thành accountID
+    console.log("Account ID:", accountId);
+
+    console.log("Total Amount (Price):", totalAmount); // Log the total amount
 
     // Get the current date in ISO format
     const currentDate = new Date().toISOString();
@@ -99,49 +105,53 @@ function WalletPage() {
         date: currentDate,
       });
 
-      // Direct API call to handle the transaction
-      const response = await axios.post(apiUrl, {
-        accountID: accountID, // Sử dụng accountID theo yêu cầu của API
-        price: totalAmount,    // Sử dụng price thay vì totalAmount
-        date: currentDate,     // Thêm ngày hiện tại
-        // status: "Chờ xác nhận", // Trạng thái mặc định
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Gửi token trong header
-          'Content-Type': 'application/json' // Định dạng nội dung
+
+      const response = await api.post(
+        "/transactions/create",
+        {
+          // Use the api instance
+          accountID: accountId,
+          price: totalAmount,
+          date: new Date().toISOString(), // Add the current date
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
+
 
       // Redirect to VNPAY link
       const vnpayLink = response.data; // Assuming response.data contains the VNPAY link
-      const transactionId = response.data.vnp_TxnRef; // Get transaction ID from response
-      window.location.href = vnpayLink; // Redirect to VNPAY link
+      const transactionId = response.data.vnp_TxnRef; // Lấy ID giao dịch từ phản hồi
+      window.location.href = vnpayLink; // Chuyển hướng đến liên kết VNPAY
 
-      toast.success("Đã xác nhận giao dịch! Vui lòng chờ cập nhật."); // Notify success
-      console.log("Response from API:", vnpayLink); // Log the response data
+      toast.success("Đã xác nhận giao dịch! Vui lòng chờ cập nhật."); // Thông báo thành công
+      console.log("Response from API:", vnpayLink); // Ghi log dữ liệu phản hồi
 
-      // Fetch the updated transaction history
-      fetchTransactionHistory(); // Refresh the transaction history
+      // Lấy lịch sử giao dịch đã cập nhật
+      fetchTransactionHistory(); // Làm mới lịch sử giao dịch
 
-      // Post transaction response to the API after successful payment
+      // Gửi phản hồi giao dịch đến API sau khi thanh toán thành công
       const transactionResponse = {
-        vnp_TxnRef: transactionId, // Use the actual transaction ID from the response
-        vnp_ResponseCode: "00", // Replace with actual response code
-        vnp_Amount: totalAmount.toString(), // Convert amount to string
+        vnp_TxnRef: transactionId, // Sử dụng ID giao dịch thực tế từ phản hồi
+        vnp_ResponseCode: "00", // Thay thế bằng mã phản hồi thực tế
+        vnp_Amount: totalAmount.toString(), // Chuyển đổi số tiền thành chuỗi
       };
 
-      await axios.post(
-        `http://103.90.227.69:8080/api/transactions/vnpay/response`,
-        transactionResponse
-      );
+      // Sử dụng api instance để gửi phản hồi
+      const apiResponse = await api.post(`/transactions/vnpay/response`, transactionResponse); // Sử dụng đường dẫn tương đối với api instance
+      console.log("API Response:", apiResponse.data); // Kiểm tra xem có nhận được phản hồi không
     } catch (error) {
       console.error("Error adding transaction:", error);
       const errorMessage = error.response?.data?.message || "Có lỗi xảy ra."; // Lấy thông báo lỗi từ server
-      toast.error("Giao dịch thất bại: " + errorMessage); // Notify failure with error message
+      toast.error("Giao dịch thất bại: " + errorMessage); // Thông báo thất bại với thông báo lỗi
     }
 
-    setAmount(""); // Reset amount after confirmation
-    setSelectedLevel(null); // Reset selected level
+    setAmount(""); // Đặt lại số tiền sau khi xác nhận
+    setSelectedLevel(null); // Đặt lại cấp độ đã chọn
   };
 
   // Sort transactions by transactionID in descending order

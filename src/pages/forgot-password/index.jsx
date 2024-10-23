@@ -8,23 +8,11 @@ function ForgotPassword() {
     try {
       const res = await sendEmailToRecoveryPassword(value);
       console.log(res);
-      // Kiểm tra mã trạng thái của phản hồi
       setSuccessMessage(
         "Chúng tôi đã gửi thông báo đến email của bạn! Kiểm tra email của bạn."
       );
     } catch (error) {
-      // Kiểm tra xem error.response có tồn tại không
-      if (error.response) {
-        // Truy cập error.response.data để lấy thông báo lỗi
-        const errorMessage =
-          error.response.data || "Có lỗi xảy ra, vui lòng thử lại.";
-        setErrorMessage(errorMessage);
-        console.log("Lỗi khôi phục mật khẩu:", errorMessage);
-      } else {
-        // Trường hợp lỗi không có phản hồi từ API (lỗi mạng, v.v.)
-        setErrorMessage("Có lỗi xảy ra, vui lòng kiểm tra kết nối mạng.");
-        console.log("Lỗi:", error);
-      }
+      console.log(error)
     }
   };
   const resetForm = () => {
@@ -41,7 +29,11 @@ function ForgotPassword() {
       </div>
       <div className="forgot-password__container">
         <div style={{ marginBottom: "1rem", textAlign: "center" }}>
-          <img src="/public/images/logo.svg" alt="Logo" style={{ maxWidth: "100px" }} />
+          <img
+            src="/images/logo.svg"
+            alt="Logo"
+            style={{ maxWidth: "100px" }}
+          />
         </div>
         {successMessage ? (
           <div className="alert alert-success">{successMessage}</div>

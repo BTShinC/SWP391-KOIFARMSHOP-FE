@@ -6,32 +6,34 @@ import { useSelector } from "react-redux";
 import SellOffline from "./sell-offlline-form";
 function ConsignmentForm() {
   const location = useLocation();
-  const { id, type } = location.state || {};
-  console.log("ID:", id); // ID bạn đã truyền
-  console.log("Type:", type); // Type bạn đã truyền
+  const { carePackage ,id, type } = location.state || {};
+  console.log("ID:", id);
+  console.log("Type:", type);
+  console.log("carePackage",carePackage)
+
   const user = useSelector((state) => state.user);
   console.log(user);
   if (!user) {
-    return <Navigate to="/login" replace />; // Chuyển hướng đến trang login
+    return <Navigate to="/login" replace />;
   }
   return type === "Cá thể" ? (
     <div>
-      <CareForm />
+      <CareForm carePackage = {carePackage} />
     </div>
   ) : type === "Lô" ? (
     <div>
-      <CareFormCombo /> 
+      <CareFormCombo carePackage = {carePackage} />
     </div>
   ) : type === "Online" ? (
     <div>
-      <SellForm />
-    </div> 
-  ) : type == "Offline"?(
-    <div>
-      <SellOffline/>
+      <SellForm id = {id} />
     </div>
-  ) :(
-    <div>Không tìm thấy loại ký gửi phù hợp</div> // Trường hợp không khớp với bất kỳ điều kiện nào
+  ) : type == "Offline" ? (
+    <div>
+      <SellOffline id = {id} />
+    </div>
+  ) : (
+    <div>Không tìm thấy loại ký gửi phù hợp</div>
   );
 }
 

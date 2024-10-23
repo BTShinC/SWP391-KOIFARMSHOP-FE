@@ -12,18 +12,18 @@ import ComparePage from "./pages/compare";
 import ManageOrder from "./pages/admin/manageOrders";
 import ProductPage from "./pages/product";
 import ProductComboPage from "./pages/productCombo";
+import SinglepProduct from "./components/single-product";
+import SingleProductCombo from "./components/single-productCombo";
 import BlogList from "./pages/blogList";
+import BlogDetail from "./pages/blogList/blogPost/blogDetail";
 import RecoveryPassword from "./pages/forgot-password/recovery-password";
 import AdminMembers from "./pages/admin/admin-members";
 import ManageConsignment from "./pages/admin/manageConsignment";
-import BlogDetail from "./pages/blogList/blogPost/blogDetail";
 import PrivacyPolicy from "./components/footer/footer page/privacy-policy";
 import SupportPolicy from "./components/footer/footer page/support-policy";
 import OrderPolicy from "./components/footer/footer page/order-policy";
 import RefundPolicy from "./components/footer/footer page/refund-policy";
 import LayoutTitle from "./components/layout/title";
-import SinglepProduct from "./components/single-product";
-import SingleProductCombo from "./components/single-productCombo";
 import ShoppingCartPage from "./pages/shopping-cart";
 import ManageProductCombo from "./pages/admin/manageProductCombo";
 import ManageTransactions from "./pages/admin/manageTransactions";
@@ -32,13 +32,15 @@ import Consignment from "./pages/consignment";
 import CarePackageDetail from "./pages/consignment/carePackage-detail";
 import ConsignmentForm from "./pages/consignment-form";
 import CarePackageList from "./pages/consignment/carePackage-list";
+import PaymentPage from "./pages/consignment-form/payment";
+import SellPayment from "./pages/consignment-form/payment/sell-payment";
 import OrderTracking from "./pages/orderTracking";
+
 import ConsignmentTracking from "./pages/consignmentTracking";
-import CheckoutPage from './pages/checkout';
+import VnpayResponsePage from "./components/vnpay";
 
 
 function App() {
-
   const router = createBrowserRouter([
     {
       path: "",
@@ -86,7 +88,6 @@ function App() {
         },
       ],
     },
-
     {
       path: "",
       element: <LayoutTitle />,
@@ -107,7 +108,6 @@ function App() {
           path: "/compare",
           element: <ComparePage />,
         },
-
         {
           path: "/shoppingcart",
           element: <ShoppingCartPage />,
@@ -116,46 +116,50 @@ function App() {
           path: "/product",
           element: <ProductPage />,
         },
-
         {
           path: "/productcombo",
           element: <ProductComboPage />,
         },
-
         {
           path: "/privacy-policy",
           element: <PrivacyPolicy />,
+        },
+        {
+          path: "/support-policy",
+          element: <SupportPolicy />,
+        },
+        {
+          path: "/order-policy",
+          element: <OrderPolicy />,
+        },
+        {
+          path: "/refund-policy",
+          element: <RefundPolicy />,
         },
         {
           path: "/consignmentFrom",
           element: <ConsignmentForm />,
         },
         {
-          path: "/support-policy",
-          element: <SupportPolicy />,
+          path: "/consignmentPayment",
+          element: <PaymentPage />,
         },
-
         {
-          path: "/order-policy",
-          element: <OrderPolicy />,
+          path: "/consignmentSellPayment",
+          element: <SellPayment />,
         },
-
         {
-          path: "/refund-policy",
-          element: <RefundPolicy />,
+          path: "/wallet",
+          element: <WalletPage />,
         },
-
-
         {
-          path  : "/wallet",
-          element : <WalletPage />
+          path: "/wallet/vnpay/response",
+          element: <VnpayResponsePage />,
         },
-
         {
           path: "/orderTracking",
           element: <OrderTracking />,
         },
-
         {
           path: "/consignmentTracking",
           element: <ConsignmentTracking />,
@@ -164,10 +168,9 @@ function App() {
         {
           path: "/checkout",
           element: <CheckoutPage />,
-        }
+        },
       ],
     },
-
     {
       path: "/admin",
       element: <Admin />,
@@ -176,7 +179,6 @@ function App() {
       path: "/managefish",
       element: <ManageFish />,
     },
-
     {
       path: "/manageOrder",
       element: <ManageOrder />,
@@ -194,16 +196,15 @@ function App() {
       element: <ManageProductCombo />,
     },
     {
-
       path: "/manageTransaction",
-      element: <ManageTransactions/>,
+      element: <ManageTransactions />,
     },
     {
-      path :"/blog/:id" ,
-      element :<BlogDetail />
-
+      path: "/blog/:id",
+      element: <BlogDetail />,
     },
   ]);
+
   return <RouterProvider router={router} />;
 }
 

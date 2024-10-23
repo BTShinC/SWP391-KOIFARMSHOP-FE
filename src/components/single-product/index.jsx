@@ -72,7 +72,9 @@ function SinglepProduct() {
 
   const handleAddToCart = async () => {
     try {
-      if (!user.accountID) {
+
+      if (!account || !account.accountID) { // Sửa từ accountId thành accountID
+
         console.error("Account information is missing");
         return;
       }
@@ -85,12 +87,16 @@ function SinglepProduct() {
        }
 
       console.log("Sending to API:", {
-        accountId: user.accountID,
+
+        accountID: account.accountID,
+
         productId: product.productID,
       });
 
       const response = await addToCartAPI({
-        accountId: user.accountID,
+
+        accountID: account.accountID, // Sửa từ accountId thành accountID
+
         productId: product.productID,
       });
       console.log("Added to cart successfully:", response);

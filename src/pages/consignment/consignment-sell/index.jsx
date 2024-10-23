@@ -24,7 +24,7 @@ function ConsignmentSell() {
             component="img"
             alt="Online Consignment"
             height="140"
-            image="/public/images/a.jpg"
+            image="/images/a.jpg"
           />
           <CardContent className="card-content">
             <Button
@@ -59,7 +59,7 @@ function ConsignmentSell() {
             component="img"
             alt="Offline Consignment"
             height="140"
-            image="/public/images/a.jpg"
+            image="/images/a.jpg"
           />
           <CardContent className="card-content">
             <Button

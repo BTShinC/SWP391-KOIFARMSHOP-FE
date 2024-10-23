@@ -84,8 +84,9 @@ function CheckoutPage() {
 
         console.log("Query Parameters:", params.toString());
 
-        const orderResponse = await api.post(
-          `/orders/makeOrder?${params.toString()}`,
+
+        const orderResponse = await api.post(`/orders/makeOrder?${params.toString()}`,
+
           { promotionID: null } // Add promotionID parameter and set to null by default
         ); 
         console.log("Order Response:", orderResponse.data);
