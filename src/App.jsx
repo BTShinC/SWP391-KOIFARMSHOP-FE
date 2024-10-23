@@ -35,8 +35,10 @@ import CarePackageList from "./pages/consignment/carePackage-list";
 import PaymentPage from "./pages/consignment-form/payment";
 import SellPayment from "./pages/consignment-form/payment/sell-payment";
 import OrderTracking from "./pages/orderTracking";
-import CheckoutPage from "./pages/checkout";
+
+import ConsignmentTracking from "./pages/consignmentTracking";
 import VnpayResponsePage from "./components/vnpay";
+
 
 function App() {
   const router = createBrowserRouter([
@@ -158,6 +160,11 @@ function App() {
           path: "/orderTracking",
           element: <OrderTracking />,
         },
+        {
+          path: "/consignmentTracking",
+          element: <ConsignmentTracking />,
+        },
+
         {
           path: "/checkout",
           element: <CheckoutPage />,

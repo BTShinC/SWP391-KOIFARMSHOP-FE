@@ -16,7 +16,7 @@ function SingleProductCombo() {
   const [cartVisible, setCartVisible] = useState(false); // State to manage cart visibility
   const [cartItems, setCartItems] = useState([]); // State to store cart items
   const dispatch = useDispatch(); // Initialize dispatch
-  const account = useSelector((state) => state.user.account); // Get accountId from Redux
+  const user = useSelector((state) => state.user);
 
   // Fetch product combo from backend when component mounts
   useEffect(() => {
@@ -43,18 +43,18 @@ function SingleProductCombo() {
 
   const handleAddToCart = async () => {
     try {
-      if (!account || !account.accountID) {
+      if (user.accountID) {
         console.error("Account information is missing");
         return;
       }
 
       console.log("Sending to API:", {
-        accountId: account.accountID,
+        accountId: user.accountID,
         productId: productCombo.productComboID // Use productComboID
       });
 
       const response = await addToCartAPI({
-        accountId: account.accountID,
+        accountId: user.accountID,
         productId: productCombo.productComboID // Use productComboID
       });
       console.log("Added to cart successfully:", response);

@@ -4,12 +4,15 @@ import "./index.scss"; // Import styles
 import vnNum2Words from "vn-num2words"; // Import the vn-num2words library
 import { toast } from "react-toastify"; // Import toast for notifications
 import { useSelector } from "react-redux";
+
 import api from "../../config/api";
+
 
 function WalletPage() {
   const [amount, setAmount] = useState("");
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [transactions, setTransactions] = useState([]); // State for transaction history
+  const [accountBalance, setAccountBalance] = useState(0); // State for account balance
   const user = useSelector((state) => state.user);
   console.log("Current user:", user);
 
@@ -19,21 +22,40 @@ function WalletPage() {
   // Function to fetch transaction history
   const fetchTransactionHistory = async () => {
     if (!user || !user.accountID) {
-      // Sửa từ accountId thành accountID
+
       console.error("User or account information is missing");
-      return; // Không thực hiện fetch nếu thông tin tài khoản không có
+      return;
     }
+
 
     const apiUrl = `/transactions/account/${user.accountID}`; // Use relative path with api instance
     try {
         const response = await api.get(apiUrl, {
 });
         setTransactions(response.data); // Assuming response.data contains the transaction history
+
     } catch (error) {
         console.error("Error fetching transaction history:", error);
         toast.error("Failed to load transaction history.");
     }
   };
+
+  // Fetch account balance from API when the component mounts
+  useEffect(() => {
+    const fetchAccountBalance = async () => {
+      if (user.accountID) {
+        try {
+          const response = await api.get(`/account/${user.accountID}`);
+          setAccountBalance(response.data.accountBalance); // Set the fetched balance
+        } catch (error) {
+          console.error("Error fetching account balance:", error);
+        }
+      }
+    };
+
+    fetchAccountBalance();
+  }, [user]);
+
   useEffect(() => {
     // Fetch transaction history when the component mounts
     fetchTransactionHistory();
@@ -67,8 +89,10 @@ function WalletPage() {
       return;
     }
 
+
     const accountId = user.accountID; // Sửa từ accountId thành accountID
     console.log("Account ID:", accountId);
+
     console.log("Total Amount (Price):", totalAmount); // Log the total amount
 
     // Get the current date in ISO format
@@ -76,12 +100,12 @@ function WalletPage() {
 
     try {
       console.log("Data to send:", {
-        accountID: accountId,
+        accountID: accountID,
         price: totalAmount,
         date: currentDate,
       });
 
-      // Direct API call to handle the transaction
+
       const response = await api.post(
         "/transactions/create",
         {
@@ -97,6 +121,7 @@ function WalletPage() {
           },
         }
       );
+
 
       // Redirect to VNPAY link
       const vnpayLink = response.data; // Assuming response.data contains the VNPAY link
@@ -135,86 +160,82 @@ function WalletPage() {
   });
 
   return (
-    <div className="wallet-page">
-      <div className="amount-selection">
-        <h2>Vui lòng chọn số tiền cần nạp</h2>
-        <div className="button-group">
-          <button
-            className="fixed-ammount-button"
-            onClick={() => handleLevelSelect(1000000)}
-          >
-            1.000.000 VND
-          </button>
-          <button
-            className="fixed-ammount-button"
-            onClick={() => handleLevelSelect(2000000)}
-          >
-            2.000.000 VND
-          </button>
+    <div className="wallet-page-wrapper">
+      <div className="wallet-page">
+        <div className="account-balance">
+          <h2 className="balance-number">Số dư tài khoản: <br/>{accountBalance.toLocaleString('vi-VN')} VND</h2>
         </div>
-        <div className="button-group">
-          <button
-            className="fixed-ammount-button"
-            onClick={() => handleLevelSelect(5000000)}
-          >
-            5.000.000 VND
-          </button>
-          <button
-            className="fixed-ammount-button"
-            onClick={() => handleLevelSelect(10000000)}
-          >
-            10.000.000 VND
-          </button>
+        <div className="amount-selection">
+          <h2>Vui lòng chọn số tiền cần nạp</h2>
+          <div className="button-group">
+            <button
+              className="fixed-ammount-button"
+              onClick={() => handleLevelSelect(1000000)}
+            >
+              1.000.000 VND
+            </button>
+            <button
+              className="fixed-ammount-button"
+              onClick={() => handleLevelSelect(2000000)}
+            >
+              2.000.000 VND
+            </button>
+          </div>
+          <div className="button-group">
+            <button
+              className="fixed-ammount-button"
+              onClick={() => handleLevelSelect(5000000)}
+            >
+              5.000.000 VND
+            </button>
+            <button
+              className="fixed-ammount-button"
+              onClick={() => handleLevelSelect(10000000)}
+            >
+              10.000.000 VND
+            </button>
+          </div>
+          <input
+            type="number"
+            value={amount}
+            onChange={handleAmountChange}
+            placeholder="Nhập số tiền mong muốn"
+          />
+          {amount && <p>{vnNum2Words(amount)} VND</p>}{" "}
+          {/* Display amount in words using vn-num2words */}
         </div>
-        <input
-          type="number"
-          value={amount}
-          onChange={handleAmountChange}
-          placeholder="Nhập số tiền mong muốn"
-        />
-        {amount && <p>{vnNum2Words(amount)} VND</p>}{" "}
-        {/* Display amount in words using vn-num2words */}
-      </div>
-      {/* {amount || selectedLevel ? (
-                <img className='QR'
-                    src="/public/images/QR_Koi_bank.jpg" // Replace with the path to your static image
-                    alt="QR" 
-                />
-            ) : null} */}
-      <button className="confirm-button" onClick={handleTransactionConfirm}>
-        Xác nhận
-      </button>
+        <button className="confirm-button" onClick={handleTransactionConfirm}>
+          Xác nhận
+        </button>
 
-      {/* Transaction History Table */}
-      <h2>Lịch sử giao dịch</h2>
-      <table className="transaction-history-table">
-        <thead>
-          <tr>
-            <th>Mã giao dịch</th>
-            <th>Số tiền</th>
-            <th>Ngày giao dịch</th>
-            <th>Trạng thái</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedTransactions.map((transaction) => (
-            <tr key={transaction.transactionID}>
-              {" "}
-              {/* Use transactionID as the key */}
-              <td>{transaction.transactionID}</td> {/* Display transactionID */}
-              <td>{transaction.price} VND</td> {/* Display price */}
-              <td>
-                {transaction.date
-                  ? new Date(transaction.date).toLocaleDateString()
-                  : "Chưa xác định"}
-              </td>{" "}
-              {/* Display date or a placeholder */}
-              <td>{transaction.status || "Chờ xác nhận"}</td>{" "}
-              {/* Display status or default */}
+        {/* Transaction History Table */}
+        <h2>Lịch sử giao dịch</h2>
+        <table className="transaction-history-table">
+          <thead>
+            <tr>
+              <th>Mã giao dịch</th>
+              <th>Số tiền</th>
+              <th>Ngày giao dịch</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {sortedTransactions.map((transaction) => (
+              <tr key={transaction.transactionID}>
+                {" "}
+                {/* Use transactionID as the key */}
+                <td>{transaction.transactionID}</td> {/* Display transactionID */}
+                <td>{transaction.price} VND</td> {/* Display price */}
+                <td>
+                  {transaction.date
+                    ? new Date(transaction.date).toLocaleDateString()
+                    : "Chưa xác định"}
+                </td>{" "}
+                {/* Display date or a placeholder */}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

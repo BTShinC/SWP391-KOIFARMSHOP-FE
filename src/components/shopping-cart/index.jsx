@@ -35,7 +35,9 @@ const ShoppingCart = ({ onClose }) => {
     // };
 
     const loadCartItems = async () => {
+
       if (account && account.accountID) {
+
         try {
           setLoading(true);
           const items = await fetchCartItems(account.accountID);
