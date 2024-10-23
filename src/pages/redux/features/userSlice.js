@@ -9,14 +9,18 @@ export const userSlice = createSlice({
     login: (state, action) => action.payload,
     logout: () => initialState,
     setUser: (state, action) => {
-      state.accountID = action.payload.accountID;
-      state.fullName = action.payload.fullName;
-      state.accountBalance = action.payload.accountBalance;
-      state.image = action.payload.image;
-      state.email = action.payload.email;
-      state.phoneNumber = action.payload.phoneNumber;
-      state.address = action.payload.address;
-      state.roleName = action.payload.roleName;
+
+      return { 
+        accountID: action.payload.accountId,
+        fullName: action.payload.fullName, // Lưu fullName
+        accountBalance: action.payload.accountBalance // Lưu accountBalance
+        image = action.payload.image;
+      email = action.payload.email;
+      phoneNumber = action.payload.phoneNumber;
+      address = action.payload.address;
+      roleName = action.payload.roleName;
+      }; 
+
     },
   },
 });

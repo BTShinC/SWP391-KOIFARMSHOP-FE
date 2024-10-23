@@ -27,7 +27,10 @@ const UserInfoPage = () => {
   // Nếu không có user, chuyển hướng về trang login
   useEffect(() => {
     if (!user) {
-      navigate("/login");
+
+      // Kiểm tra nếu chưa đăng nhập, điều hướng đến trang đăng nhập
+      navigate("/login"); // Chuyển hướng đến trang login
+
     }
   }, [user, navigate]);
 
@@ -44,6 +47,7 @@ const UserInfoPage = () => {
         <div className="userinfo__details">
           <div className="userinfo__details">
             <div className="userinfo__item">
+
               <span className="userinfo__label">Họ và tên:</span> {user?.fullName}
             </div>
             <div className="userinfo__item">
@@ -57,6 +61,7 @@ const UserInfoPage = () => {
             </div>
             <div className="userinfo__item">
               <span className="userinfo__label">Số dư:</span> {formatCurrency(user?.accountBalance)} VND
+
             </div>
           </div>
           <ModalEditUser
