@@ -36,6 +36,7 @@ import PaymentPage from "./pages/consignment-form/payment";
 import SellPayment from "./pages/consignment-form/payment/sell-payment";
 import OrderTracking from "./pages/orderTracking";
 import CheckoutPage from "./pages/checkout";
+import VnpayResponsePage from "./components/vnpay";
 
 function App() {
   const router = createBrowserRouter([
@@ -148,6 +149,10 @@ function App() {
         {
           path: "/wallet",
           element: <WalletPage />,
+        },
+        {
+          path: "/wallet/vnpay/response",
+          element: <VnpayResponsePage />,
         },
         {
           path: "/orderTracking",
