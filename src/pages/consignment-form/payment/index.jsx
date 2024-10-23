@@ -60,75 +60,94 @@ function PaymentPage() {
 
   const handlePayment = async () => {
     if (paymentMethod === "Ví cửa hàng") {
-      if (user.accountBalance >= carePackage.price) {
-        // Trừ phí và cập nhật số dư tài khoản
-        const newBalance = user.accountBalance - carePackage.price;
-        const updatedUser = {
-          ...user,
-          accountBalance: newBalance,
-        };
-        console.log("Updated user balance:", updatedUser);
+      if (user.accountBalance >= carePackage?.price) {
+        try {
+          let productID = null;
+          let productComboID = null;
 
-        // Kiểm tra và xóa careForm nếu có
-        if (localStorage.getItem("careForm")) {
-          localStorage.removeItem("careForm");
-          console.log("careForm đã bị xóa");
-          try {
-            // Gọi API để thêm sản phẩm
-            let res = await addFish(paymentData);
+          // Kiểm tra và tạo đơn ký gửi cá thể
+          if (localStorage.getItem("careForm")) {
+            console.log("Bắt đầu tạo đơn ký gửi cho cá thể...");
+            const res = await addFish(paymentData); // Gọi API để thêm sản phẩm cá thể
+
             if (res && res.data) {
-              // Thêm productID vào paymentData
-              const productID = res.data.productID;
-              paymentData.productID = productID; // Thêm productID vào paymentData
-              console.log("Thêm sản phẩm thành công, productID:", productID);
+              productID = res.data.productID;
+              paymentData.productID = productID;
+              console.log(
+                "Thêm sản phẩm cá thể thành công, productID:",
+                productID
+              );
 
-              // Sau khi thêm productID, gọi API để tạo đơn ký gửi
-              let res1 = await createConsignment(paymentData);
+              // Tạo đơn ký gửi cho sản phẩm cá thể
+              const res1 = await createConsignment(paymentData);
               if (res1) {
-                console.log("Tạo đơn ký gửi thành công");
+                console.log("Tạo đơn ký gửi cá thể thành công");
               } else {
-                console.log("Tạo đơn ký gửi thất bại");
+                throw new Error("Tạo đơn ký gửi cá thể thất bại");
               }
             } else {
-              console.log("Thêm sản phẩm thất bại");
+              throw new Error("Thêm sản phẩm cá thể thất bại");
             }
-          } catch (error) {
-            console.log("Lỗi khi thực hiện thanh toán:", error);
           }
-        }
 
-        // Kiểm tra và xóa careFormCombo nếu có
-        if (localStorage.getItem("careFormCombo")) {
-          localStorage.removeItem("careFormCombo");
-          console.log("careFormCombo đã bị xóa");
-          try {
-            // Gọi API để thêm sản phẩm
-            let res = await AddFishCombo(paymentData);
+          // Kiểm tra và tạo đơn ký gửi cho combo
+          if (localStorage.getItem("careFormCombo")) {
+            console.log("Bắt đầu tạo đơn ký gửi cho combo...");
+            const res = await AddFishCombo(paymentData); // Gọi API để thêm combo sản phẩm
+
             if (res && res.data) {
-              const productComboID = res.data.productComboID;
-              paymentData.productComboID = productComboID; 
-              console.log("Thêm sản phẩm thành công, productID:", productComboID);
+              productComboID = res.data.productComboID;
+              paymentData.productComboID = productComboID;
+              console.log(
+                "Thêm sản phẩm combo thành công, productComboID:",
+                productComboID
+              );
 
-              // Sau khi thêm productID, gọi API để tạo đơn ký gửi
-              let res1 = await createConsignment(paymentData);
+              // Tạo đơn ký gửi cho combo
+              const res1 = await createConsignment(paymentData);
               if (res1) {
-                console.log("Tạo đơn ký gửi thành công");
+                console.log("Tạo đơn ký gửi combo thành công");
               } else {
-                console.log("Tạo đơn ký gửi thất bại");
+                throw new Error("Tạo đơn ký gửi combo thất bại");
               }
             } else {
-              console.log("Thêm sản phẩm thất bại");
+              throw new Error("Thêm sản phẩm combo thất bại");
             }
-          } catch (error) {
-            console.log("Lỗi khi thực hiện thanh toán:", error);
           }
+
+          // Nếu đến đây mà không có lỗi nào, nghĩa là đơn ký gửi đã thành công
+          // Tiến hành cập nhật số dư tài khoản
+          const newBalance = user.accountBalance - carePackage.price;
+          const updatedUser = { ...user, accountBalance: newBalance };
+          console.log("Updated user balance:", updatedUser);
+
+          // Xóa localStorage sau khi thanh toán thành công
+          if (localStorage.getItem("careForm")) {
+            localStorage.removeItem("careForm");
+            console.log("careForm đã bị xóa");
+          }
+          if (localStorage.getItem("careFormCombo")) {
+            localStorage.removeItem("careFormCombo");
+            console.log("careFormCombo đã bị xóa");
+          }
+
+          toast.success("Thanh toán thành công");
+        } catch (error) {
+          console.error(
+            "Lỗi khi thực hiện thanh toán hoặc tạo đơn ký gửi:",
+            error.message || error
+          );
+          toast.error(
+            "Có lỗi xảy ra trong quá trình thanh toán hoặc tạo đơn ký gửi."
+          );
         }
-        toast.success("Thanh toán thành công");
       } else {
         console.log("Không đủ tiền");
+        toast.error("Không đủ tiền trong tài khoản.");
       }
     }
   };
+
   const navigation = useNavigate();
   return (
     <div className="consignment-payment">

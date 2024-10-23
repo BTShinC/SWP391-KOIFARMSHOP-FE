@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Modal, Upload, Button } from "antd";
+import { Modal, Upload, Button, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import PropTypes from "prop-types";
 import { storage } from "/src/firebase.js";
@@ -122,7 +122,7 @@ function EditFishModal({ fishData, onChange }) {
   const handleOk = async () => {
     const data = {
       productID: fishData.productID,
-      productName: fishData.productName,
+      productName: formValue.productName,
       breed: formValue.breed,
       size: formValue.size,
       sex: formValue.sex,
@@ -153,7 +153,8 @@ function EditFishModal({ fishData, onChange }) {
       console.error("Lỗi chi tiết:", error.response || error.message || error);
     }
 
-    onClose(); 
+    onClose();
+    message.success("Cập nhật cá thành công") 
   };
 
   const showModal = () => {
@@ -217,7 +218,7 @@ function EditFishModal({ fishData, onChange }) {
               <input
                 className="form-control"
                 type="text"
-                name="breed"
+                name="productName"
                 value={formValue.productName}
                 onChange={handleChange}
                 required

@@ -75,7 +75,7 @@ function FishTable({
           updateConsignmentByID(updatedConsignmentStatus),
         ]);
         message.success(
-          "Cập nhật trạng thái thành công cho cả cá và consignment"
+          "Cập nhật trạng thái thành công cho cả cá và đơn ký gửi"
         );
         onChange(); // Cập nhật dữ liệu sau khi thay đổi
         setIsModalVisible(false);
@@ -123,7 +123,7 @@ function FishTable({
 
                 <td>{fish.status}</td>
                 <td className="btn-container">
-                  {fish.status !== "Chờ xác nhận" && (
+                  {fish.status === "Còn hàng" && (
                     <>
                       <Checkbox
                         checked={fish.status === "Hết hàng"}

@@ -168,6 +168,7 @@ function ManageFish() {
             <Option value="all">Tất cả</Option>
             <Option value="Chờ xác nhận">Chờ xác nhận</Option>
             <Option value="Đang chăm sóc">Đang chăm sóc</Option>
+            <Option value="Hoàn tất chăm sóc">Hoàn tất chăm sóc</Option>
             <Option value="Còn hàng">Còn hàng</Option>
             <Option value="Hết hàng">Hết hàng</Option>
           </Select>

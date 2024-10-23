@@ -102,7 +102,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         )}
         {user && ( // Show logout link only if user is logged in
           <li>
-            <Link to="/" onClick={onClose}>
+            <Link to="/consignmentTracking" onClick={onClose}>
               Trạng thái ký gửi
             </Link>
           </li>

@@ -1,7 +1,7 @@
 import { Button, Spin } from "antd";
 import PropTypes from "prop-types";
-import { format } from 'date-fns';
-import React, { useState, useEffect } from "react";
+import { format } from "date-fns";
+import React, { useState } from "react";
 import "./index.scss";
 import {
   fetchProductById,
@@ -12,64 +12,17 @@ import ChangeStatusConsignment from "../../../../components/changeStatusConsignm
 ConsignmentTable.propTypes = {
   consignmentData: PropTypes.arrayOf(PropTypes.object).isRequired,
   columns: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onChange:PropTypes.func
+  onChange: PropTypes.func,
 };
 
 function ConsignmentTable({ consignmentData, columns, onChange }) {
-  const [consignmentTypes, setConsignmentTypes] = useState({});
   const [showDetail, setShowDetail] = useState(null);
   const [productDetails, setProductDetails] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Hàm xác định loại ký gửi
-  const determineConsignmentType = async (productID, productComboID) => {
-    try {
-      let product;
-      if (productComboID) {
-        // Nếu có productComboID, gọi API để lấy thông tin combo
-        product = await fetchProductComboById(productComboID);
-      } else if (productID) {
-        // Nếu không có productComboID, gọi API để lấy thông tin sản phẩm
-        product = await fetchProductById(productID);
-      }
-
-      if (product?.carePackageID) {
-        return "chăm sóc";
-      }
-    } catch (error) {
-      console.error("Lỗi khi lấy thông tin sản phẩm hoặc combo:", error);
-    }
-    return "ký gửi để bán";
-  };
-
-  // Gọi API để lấy loại ký gửi cho tất cả các consignment ngay khi bảng được hiển thị
-  useEffect(() => {
-    const fetchConsignmentTypes = async () => {
-      setLoading(true);
-      const newConsignmentTypes = {};
-
-      for (const consignment of consignmentData) {
-        const productIdToFetch =
-          consignment.productID || consignment.productComboID;
-        if (productIdToFetch) {
-          const consignmentType = await determineConsignmentType(
-            consignment.productID,
-            consignment.productComboID
-          );
-          newConsignmentTypes[consignment.consignmentID] = consignmentType;
-        }
-      }
-
-      setConsignmentTypes(newConsignmentTypes);
-      setLoading(false);
-    };
-
-    fetchConsignmentTypes();
-  }, [consignmentData]);
-
   // Hàm xử lý khi nhấn nút "Xem chi tiết"
   const handleViewDetail = async (id, productID, productComboID) => {
-    setShowDetail((prev) => (prev === id ? null : id)); // Toggle hiển thị chi tiết
+    setShowDetail((prev) => (prev === id ? null : id));
 
     const productIdToFetch = productID || productComboID;
     if (productIdToFetch) {
@@ -82,7 +35,7 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
           res = await fetchProductById(productID);
         }
 
-        setProductDetails(res); // Lưu chi tiết sản phẩm hoặc combo
+        setProductDetails(res);
       } catch (error) {
         console.error("Error fetching product details:", error);
       } finally {
@@ -109,27 +62,30 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
             <React.Fragment key={consignment.consignmentID || index}>
               <tr>
                 <td>{consignment.consignmentID}</td>
-                <td>{consignment.consignmentDate || "N/A"}</td>
+                <td>
+                  {consignment.consignmentDate
+                    ? format(
+                        new Date(consignment.consignmentDate),
+                        "dd/MM/yyyy"
+                      )
+                    : "N/A"}
+                </td>
+
                 <td>{consignment.dateReceived || "N/A"}</td>
                 <td>{consignment.dateExpiration || "N/A"}</td>
                 <td>
                   {consignment.saleDate
-                    ? format(
-                        new Date(consignment.saleDate),
-                        "dd/MM/yyyy HH:mm:ss"
-                      )
+                    ? format(new Date(consignment.saleDate), "dd/MM/yyyy")
                     : "N/A"}
                 </td>
                 <td>{consignment.productComboID || consignment.productID}</td>
-                <td>{consignment.accountID || "N/A"}</td>
                 <td>
-                  {loading ? (
-                    <Spin />
-                  ) : (
-                    consignmentTypes[consignment.consignmentID] ||
-                    "N/A"
+                  {new Intl.NumberFormat("vi-VN").format(
+                    consignment?.total || 0
                   )}
+                  VNĐ
                 </td>
+                <td>{consignment.consignmentType}</td>
                 <td>{consignment.status || "N/A"}</td>
                 <td className="btn-container">
                   <Button
@@ -145,13 +101,12 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
                       ? "Ẩn chi tiết"
                       : "Xem chi tiết"}
                   </Button>
-                  {/* Truyền consignmentID, productID và productComboID vào ChangeStatusConsignment */}
                   <ChangeStatusConsignment
                     data={consignment}
                     consignmentID={consignment.consignmentID}
                     productID={consignment.productID}
                     productComboID={consignment.productComboID}
-                    onChange = {onChange}
+                    onChange={onChange}
                   />
                 </td>
               </tr>
@@ -173,30 +128,57 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
                       >
                         <div>
                           <div>
+                            {!productDetails.carePackageID &&
+                              consignment.farmName && (
+                                <a
+                                  href={consignment.farmName}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <strong>
+                                    Link dẫn tới trang trại của bạn:{" "}
+                                  </strong>
+                                  {consignment.farmName}
+                                </a>
+                              )}
+
                             <p>
-                              <strong>Tên sản phẩm:</strong>{" "}
+                              <strong>Tên sản phẩm:</strong>
                               {productDetails.productName ||
                                 productDetails.comboName}
                             </p>
                             <p>
-                              <strong>Mô tả:</strong>{" "}
+                              <strong>Mô tả:</strong>
                               {productDetails.description || "N/A"}
                             </p>
                             <p>
-                              <strong>Gói chăm sóc:</strong>{" "}
+                              <strong>Gói chăm sóc:</strong>
                               {productDetails.carePackageID || "N/A"}
                             </p>
+                            {!productDetails.carePackageID && (
+                              <>
+                                <p>
+                                  <strong>Giá bán: </strong>
+                                  {productDetails.price !== undefined &&
+                                  productDetails.price !== null
+                                    ? `${new Intl.NumberFormat("vi-VN").format(
+                                        productDetails.desiredPrice
+                                      )} VNĐ`
+                                    : "Không có giá"}
+                                </p>
+                                <p>
+                                  <strong>Giá bán khách mong đợi: </strong>
+                                  {productDetails.desiredPrice !== undefined &&
+                                  productDetails.desiredPrice !== null
+                                    ? `${new Intl.NumberFormat("vi-VN").format(
+                                        productDetails.desiredPrice
+                                      )} VNĐ`
+                                    : "Không có giá"}
+                                </p>
+                              </>
+                            )}
                             <p>
-                              <strong>Giá bán:</strong>{" "}
-                              {productDetails.price !== undefined &&
-                              productDetails.price !== null
-                                ? `${new Intl.NumberFormat("vi-VN").format(
-                                    productDetails.desiredPrice
-                                  )} VNĐ`
-                                : "Không có giá"}
-                            </p>
-                            <p>
-                              <strong>Hình ảnh:</strong>{" "}
+                              <strong>Hình ảnh:</strong>
                               {productDetails.image ? (
                                 <img
                                   src={productDetails.image}

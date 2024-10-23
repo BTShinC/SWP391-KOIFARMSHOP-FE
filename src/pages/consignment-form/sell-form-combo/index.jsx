@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
+import { format } from "date-fns";
 function SellFormCombo() {
   const {
     register,
@@ -67,8 +68,8 @@ function SellFormCombo() {
     });
 
     try {
-      const uploadedFiles = await Promise.all(uploadPromises); // Chờ tất cả các file được upload
-      return uploadedFiles; // Trả về danh sách file đã upload
+      const uploadedFiles = await Promise.all(uploadPromises);
+      return uploadedFiles;
     } catch (error) {
       console.error("Error uploading files:", error);
       return [];
@@ -76,7 +77,8 @@ function SellFormCombo() {
   };
   // Xử lý submit form
   const onSubmit = async (data) => {
-    const uploadedImages = await uploadFilesToFirebase(fileList); // Upload file hình ảnh cá KOI
+    const uploadedImages = await uploadFilesToFirebase(fileList);
+    const consignmentDate = format(new Date(), "yyyy-MM-dd");
     const finalData = {
       ...data,
       image: uploadedImages[0]?.url,
@@ -85,8 +87,11 @@ function SellFormCombo() {
       type: "Ký gửi",
       consignmentType: "Ký gửi để bán",
       price: data.desiredPrice,
-      status:"Chờ xác nhận",
-      comboName:uuidv4()
+      status: "Chờ xác nhận",
+      comboName: uuidv4(),
+      salePrice:data.desiredPrice,
+      reason: "",
+      consignmentDate: consignmentDate,
     };
     console.log(
       "Form data with uploaded images and certifications:",
@@ -151,6 +156,23 @@ function SellFormCombo() {
                 src={previewImage}
               />
             )}
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              {...register("farmName", {
+                required: "Vui lòng nhập đường dẫn trang trại của bạn",
+                pattern: {
+                  value: /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/, 
+                  message:
+                    "Vui lòng nhập một đường dẫn hợp lệ (bắt đầu bằng http hoặc https)",
+                },
+              })}
+              label="Đường dẫn trang trại của bạn"
+              type="url"
+              fullWidth
+              error={!!errors.farmName}
+              helperText={errors.farmName?.message}
+            />
           </Grid>
           <Grid item xs={12}>
             <TextField
@@ -274,6 +296,7 @@ function SellFormCombo() {
               {...register("description")}
               label="Ghi chú"
               fullWidth
+              defaultValue="không"
               error={!!errors.description}
               helperText={errors.description?.message}
             />

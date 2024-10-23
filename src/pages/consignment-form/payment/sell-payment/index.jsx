@@ -23,27 +23,29 @@ function SellPayment() {
   // Hàm tính toán phí chăm sóc dựa trên các tiêu chí
   const countFee = () => {
     let fee = 0;
+
     if (finalData?.quantity) {
       if (finalData.quantity <= 10 && finalData.size <= 40) {
-        fee = finalData.day * 150000;
+        fee = finalData.day * 20000; 
       } else if (finalData.quantity <= 20 && finalData.size <= 40) {
-        fee = finalData.day * 180000;
+        fee = finalData.day * 40000;
       } else if (finalData.quantity <= 10 && finalData.size > 40) {
-        fee = finalData.day * 200000;
+        fee = finalData.day * 60000; 
       } else {
-        fee = finalData.day * 250000;
+        fee = finalData.day * 90000; 
       }
-    } else {
+    } 
+    else {
       if (finalData.size <= 40) {
-        fee =
-          finalData.day < 60 ? 250000 * finalData.day : 150000 * finalData.day;
+        fee = finalData.day <= 60 ? 50000 * finalData.day : 25000 * finalData.day;
       } else {
-        fee =
-          finalData.day < 60 ? 300000 * finalData.day : 200000 * finalData.day;
+        fee = finalData.day <= 60 ? 90000 * finalData.day : 70000 * finalData.day;
       }
     }
+  
     return fee;
   };
+  
 
   const fee = countFee();
 
@@ -64,7 +66,7 @@ function SellPayment() {
             const generateProductID = res.data.productID;
             console.log("generateProductID =>", generateProductID);
             const consignment = {
-              consignmentDate: finalData.date,
+              ...finalData,
               saleDate: null,
               salePrice: finalData.price,
               dateReceived: null,
@@ -73,6 +75,7 @@ function SellPayment() {
               accountID: user?.accountID,
               productID: generateProductID,
               productComboID: null,
+              total:fee,
             };
             console.log("consignment =>",consignment)
             try {
@@ -96,10 +99,10 @@ function SellPayment() {
           let res = await AddFishCombo(finalData);
           if (res) {
             console.log("Thành công");
-            const generateProductComboID = res.data.productID;
+            const generateProductComboID = res.data.productComboID;
             console.log("generateProductID =>", generateProductComboID);
             const consignment = {
-              consignmentDate: finalData.date,
+              ...finalData,
               saleDate: null,
               salePrice: finalData.price,
               dateReceived: null,

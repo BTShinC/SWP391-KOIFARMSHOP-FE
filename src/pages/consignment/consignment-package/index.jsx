@@ -39,17 +39,17 @@ function ConsignmentPackageExample() {
     <>
       <Grid container spacing={3} justifyContent="center" alignItems="stretch">
         {koiCarePackages.slice(0, 4).map((product) => (
-          <Grid item xs={12} sm={6} key={product.id}>
+          <Grid item xs={12} sm={6} key={product.carePackageID}>
             <Card className="hover-card">
               <CardMedia
                 component="img"
-                src={product.image}
-                alt={product.title}
+                src={product.images[0]}
+                alt={product.packageName}
                 className="card-media"
               />
               <CardContent>
                 <Typography variant="h6" gutterBottom>
-                  {product.title}
+                  {product.packageName}
                 </Typography>
                 {/* Căn trái phần mô tả */}
                 <Typography
@@ -77,7 +77,7 @@ function ConsignmentPackageExample() {
               <Box sx={{ textAlign: "center", paddingBottom: "1rem" }}>
                 <Button
                   className="detail-care-package-btn"
-                  onClick={() => handleCarePackageDetail(product.carePackageID)}
+                  onClick={() => handleCarePackageDetail(product?.carePackageID)}
                 >
                   Xem chi tiết
                 </Button>

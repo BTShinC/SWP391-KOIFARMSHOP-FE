@@ -36,7 +36,7 @@ import PaymentPage from "./pages/consignment-form/payment";
 import SellPayment from "./pages/consignment-form/payment/sell-payment";
 import OrderTracking from "./pages/orderTracking";
 import CheckoutPage from "./pages/checkout";
-
+import ConsignmentTracking from './pages/consignmentTracking'
 function App() {
   const router = createBrowserRouter([
     {
@@ -92,6 +92,10 @@ function App() {
         {
           path: "/about",
           element: <AboutPage />,
+        },
+        {
+          path: "/consignmentTracking",
+          element: <ConsignmentTracking />,
         },
         {
           path: "/blog",

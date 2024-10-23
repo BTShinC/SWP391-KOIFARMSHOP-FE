@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = null; // Trạng thái ban đầu là null
+const initialState = null;
 
 export const userSlice = createSlice({
   name: "user",
@@ -9,18 +9,13 @@ export const userSlice = createSlice({
     login: (state, action) => action.payload,
     logout: () => initialState,
     setUser: (state, action) => {
-
-      return { 
-        accountID: action.payload.accountId,
-        fullName: action.payload.fullName, // Lưu fullName
-        accountBalance: action.payload.accountBalance // Lưu accountBalance
-        image = action.payload.image;
-      email = action.payload.email;
-      phoneNumber = action.payload.phoneNumber;
-      address = action.payload.address;
-      roleName = action.payload.roleName;
-      }; 
-
+      // Kiểm tra dữ liệu có được truyền vào đúng không trước khi thực hiện set dữ liệu
+      state.accountID = action.payload.accountID;
+      state.fullName = action.payload.fullName;
+      state.accountBalance = action.payload.accountBalance;
+      state.image = action.payload.image; 
+      state.email = action.payload.email;  
+      state.phoneNumber = action.payload.phoneNumber;
     },
   },
 });

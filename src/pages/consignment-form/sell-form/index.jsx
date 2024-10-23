@@ -21,6 +21,7 @@ import SellFormCombo from "../sell-form-combo";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
+import { format } from "date-fns";
 function SellForm() {
   const {
     register,
@@ -111,11 +112,11 @@ function SellForm() {
       return [];
     }
   };
-
+  const consignmentDate = format(new Date(), "yyyy-MM-dd");
   // Xử lý submit form
   const onSubmit = async (data) => {
-    const uploadedImages = await uploadFilesToFirebase(fileList); // Upload file hình ảnh cá KOI
-    const uploadedCerts = await uploadFilesToFirebase(certFileList); // Upload file chứng nhận
+    const uploadedImages = await uploadFilesToFirebase(fileList);
+    const uploadedCerts = await uploadFilesToFirebase(certFileList);
     const finalData = {
       ...data,
       productName: uuidv4(),
@@ -127,6 +128,9 @@ function SellForm() {
       type: "Ký gửi",
       consignmentType: "Ký gửi để bán",
       price: data.desiredPrice,
+      salePrice:data.desiredPrice,
+      reason: "",
+      consignmentDate: consignmentDate,
     };
 
     console.log(
@@ -226,7 +230,23 @@ function SellForm() {
               />
             )}
           </Grid>
-
+          <Grid item xs={12}>
+            <TextField
+              {...register("farmName", {
+                required: "Vui lòng nhập đường dẫn trang trại của bạn",
+                pattern: {
+                  value: /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/,
+                  message:
+                    "Vui lòng nhập một đường dẫn hợp lệ (bắt đầu bằng http hoặc https)",
+                },
+              })}
+              label="Đường dẫn trang trại của bạn"
+              type="url"
+              fullWidth
+              error={!!errors.farmName}
+              helperText={errors.farmName?.message}
+            />
+          </Grid>
           <Grid item xs={12}>
             <TextField
               {...register("breed", { required: "Vui lòng nhập giống cá" })}
@@ -242,7 +262,7 @@ function SellForm() {
                 required: "Vui lòng nhập tuổi cá",
                 min: 1,
               })}
-              label="Số tháng tuổi"
+              label="Số năm tuổi"
               fullWidth
               type="number"
               error={!!errors.age}
@@ -387,6 +407,7 @@ function SellForm() {
             <TextField
               {...register("description")}
               label="Ghi chú"
+              defaultValue="không"
               fullWidth
               error={!!errors.description}
               helperText={errors.description?.message}
