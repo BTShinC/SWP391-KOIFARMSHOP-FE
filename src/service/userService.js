@@ -121,9 +121,9 @@ const addToCartAPI = async (data) => {
   try {
     console.log("Data being sent to API:", data);
     const response = await api.post("shop-cart/add", {
-      accountId: data.accountId,
-      productId: data.productId
-    });
+      accountID: data.accountID, // Change this to accountID
+      productID: data.productId
+  });
     console.log("API response:", response.data);
     return response.data;
   } catch (error) {
@@ -144,10 +144,10 @@ const fetchAllTransactions = async () => {
 };
 
 
-const fetchCartItems = async (accountId) => {
-  const response = await api.get(`/shop-cart/account/${accountId}`); // Sử dụng đường dẫn API chính xác
-  console.log("Cart items response:", response.data); // Kiểm tra phản hồi từ API
-  return response.data; // Trả về dữ liệu
+const fetchCartItems = async (accountID) => { // Sửa từ accountId thành accountID
+    const response = await api.get(`/shop-cart/account/${accountID}`); // Sử dụng đường dẫn API chính xác
+    console.log("Cart items response:", response.data); // Kiểm tra phản hồi từ API
+    return response.data; // Trả về dữ liệu
 };
 
 const deleteCartItem = async (cartItemId) => {

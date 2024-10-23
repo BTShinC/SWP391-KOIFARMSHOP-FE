@@ -35,10 +35,10 @@ const ShoppingCart = ({ onClose }) => {
     // };
 
     const loadCartItems = async () => {
-      if (account && account.accountId) {
+      if (account && account.accountID) {
         try {
           setLoading(true);
-          const items = await fetchCartItems(account.accountId);
+          const items = await fetchCartItems(account.accountID);
           dispatch(setCartItems(items));
         } catch (error) {
           console.error("Failed to load cart items:", error);
@@ -73,7 +73,7 @@ const ShoppingCart = ({ onClose }) => {
       await deleteCartItem(cartItemId); // Gọi hàm deleteCartItem
       dispatch(removeFromCart(cartItemId)); // Cập nhật Redux store
       message.success("Đã xóa sản phẩm khỏi giỏ hàng");
-      // loadCartItems();
+      loadCartItems();
     } catch (error) {
       console.error("Error removing item from cart:", error);
       message.error("Không thể xóa sản phẩm khỏi giỏ hàng");

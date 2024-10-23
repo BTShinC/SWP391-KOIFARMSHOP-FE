@@ -27,9 +27,9 @@ function ShoppingCartPage() {
 
 
   const loadCartItems = async () => {
-    if (account && account.accountId) {
+    if (account && account.accountID) {
       try {
-        const items = await fetchCartItems(account.accountId);
+        const items = await fetchCartItems(account.accountID);
         dispatch(setCartItems(items)); // Cập nhật Redux store với giỏ hàng mới
       } catch (error) {
         console.error("Failed to load cart items:", error);

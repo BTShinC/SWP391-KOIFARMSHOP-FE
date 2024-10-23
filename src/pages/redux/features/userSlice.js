@@ -10,7 +10,7 @@ export const userSlice = createSlice({
     logout: () => initialState,
     setUser: (state, action) => {
       return { 
-        accountId: action.payload.accountId,
+        accountID: action.payload.accountId,
         fullName: action.payload.fullName, // Lưu fullName
         accountBalance: action.payload.accountBalance // Lưu accountBalance
       }; 

@@ -11,6 +11,7 @@ const { Option } = Select;
 const EditTransactionModal = ({ visible, onClose, transactionData, onUpdate }) => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     form.setFieldsValue({ status: transactionData.status }); // Set initial status from transactionData
@@ -32,10 +33,11 @@ const EditTransactionModal = ({ visible, onClose, transactionData, onUpdate }) =
     try {
       const response = await fetch(apiUrl, {
         method: 'PUT',
-        headers: {
-          'Accept': '*/*',
-          'Content-Type': 'application/json',
-        },
+        
+          headers: {
+              Authorization: `Bearer ${token}`, // Gửi token trong header
+              'Content-Type': 'application/json' // Định dạng nội dung
+          },
         body: JSON.stringify({ imageUrl }), // Include imageUrl if needed
       });
 

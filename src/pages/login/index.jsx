@@ -65,12 +65,12 @@ function LoginPage() {
 
 
       localStorage.setItem("token", response.data.token); 
-      localStorage.setItem("accountId", response.data.account.accountID); // Lưu accountId vào localStorage
+      localStorage.setItem("accountID", response.data.account.accountID); // Lưu accountId vào localStorage
       console.log("Response from API:", response.data.account);
 
       // Save user data to Redux
       dispatch(login({
-        accountId: response.data.account.accountID,
+        accountID: response.data.account.accountID,
         fullName: response.data.account.fullName,
         accountBalance: response.data.account.accountBalance
       }));

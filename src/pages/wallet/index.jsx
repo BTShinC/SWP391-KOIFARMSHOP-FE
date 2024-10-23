@@ -17,19 +17,18 @@ function WalletPage() {
 
   // Function to fetch transaction history
   const fetchTransactionHistory = async () => {
-    if (!user || !user.accountID) {
-      // Sử dụng accountID thay vì accountId
-      console.error("User or account information is missing");
-      return; // Không thực hiện fetch nếu thông tin tài khoản không có
+    if (!user || !user.accountID) { // Sửa từ accountId thành accountID
+        console.error("User or account information is missing");
+        return; // Không thực hiện fetch nếu thông tin tài khoản không có
     }
 
-    const apiUrl = `http://103.90.227.69:8080/api/transactions/account/${user.accountID}`; // Sử dụng accountID trong URL
+    const apiUrl = `http://103.90.227.69:8080/api/transactions/account/${user.accountID}`; // Sửa từ accountId thành accountID
     try {
-      const response = await axios.get(apiUrl, { headers });
-      setTransactions(response.data); // Giả sử response.data chứa lịch sử giao dịch
+        const response = await axios.get(apiUrl, { headers });
+        setTransactions(response.data); // Giả sử response.data chứa lịch sử giao dịch
     } catch (error) {
-      console.error("Error fetching transaction history:", error);
-      toast.error("Failed to load transaction history.");
+        console.error("Error fetching transaction history:", error);
+        toast.error("Failed to load transaction history.");
     }
   };
   useEffect(() => {
@@ -65,7 +64,7 @@ function WalletPage() {
       return;
     }
 
-    const accountId = user.accountID; // Use the correct property for account ID
+    const accountId = user.accountID; // Sửa từ accountId thành accountID
     console.log("Account ID:", accountId);
     console.log("Total Amount (Price):", totalAmount); // Log the total amount
 
