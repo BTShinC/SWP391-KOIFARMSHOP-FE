@@ -1,0 +1,123 @@
+.relative-img {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Tăng khoảng cách giữa các hình ảnh */
+  padding: 1.5rem;
+
+  img {
+    width: 100px; /* Tăng kích thước ảnh nhỏ */
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.3s ease; /* Thêm hiệu ứng khi hover */
+
+    &:hover {
+      transform: scale(1.15); /* Phóng to hơn khi hover */
+    }
+  }
+}
+
+.main-img {
+  margin: 2rem 0; 
+  display: flex;
+  justify-content: center; 
+
+  img {
+    width: 80%; 
+    height: auto;
+    object-fit: cover;
+    border-radius: 12px; 
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15); 
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.1); 
+    }
+  }
+}
+
+.global-box {
+  margin: 0;
+  padding: 2rem; 
+}
+
+.img-description {
+  margin-top: 2rem;
+  font-size: 1.2rem; 
+  h4 {
+    font-size: 2rem; 
+    color: #b07d62;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+  }
+
+  h6 {
+    font-size: 1.8rem;
+    color: #8c6b42;
+    margin-bottom: 1.5rem;
+  }
+
+  ul {
+    padding-left: 2rem;
+    list-style-type: none;
+    li {
+      font-size: 1.2rem; 
+      color: #6e655b;
+      font-weight: bold;
+      margin-bottom: 0.8rem;
+      position: relative;
+      
+      &:before {
+        content: "✔";
+        position: absolute;
+        left: -2rem; 
+        color: #a47c48;
+      }
+    }
+  }
+}
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 0.8rem 2rem;
+  background-color: #a47c48 !important;
+  color: #fff;
+  font-size: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  z-index: 100; 
+  &:hover {
+    background-color: #8c6b42;
+  }
+}
+.careConsignment-btn {
+  display: inline-flex; 
+  margin: 40px auto 0 auto; 
+  background-color: white;
+  color: #b88e2f !important;
+  border: 2px solid #b88e2f !important;
+  padding: 20px 35px; 
+  font-size: 16px; 
+  text-decoration: none; 
+  border-radius: 10px; 
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #b88e2f; 
+    color: white !important;
+  }
+
+  svg {
+    color: #b88e2f; 
+    font-size: 1.5rem;
+  }
+
+  &:hover svg {
+    color: white; 
+  }
+}

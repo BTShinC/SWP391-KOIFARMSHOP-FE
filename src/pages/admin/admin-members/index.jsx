@@ -4,6 +4,8 @@ import AdminHeader from "../../../components/admin-components/admin-headers";
 import AdminSideBar from "../../../components/admin-components/admin-sidebar";
 import AdminTable from "/src/components/admin-components/admin-table/index";
 import { fetchAllUser } from "../../../service/userService";
+import ModalEditUser from "/src/pages/userinfo/EditUserModal/index";
+
 AdminMembers.propTypes = {};
 
 const columns = [
@@ -13,30 +15,47 @@ const columns = [
   "Số điện thoại",
   "Địa chỉ",
   "Số dư ví",
-  "Vai trò",
+  "Thao tác",
 ];
-const handleSearch = (value) => {
-  console.log(value);
-};
 
 function AdminMembers() {
-  useEffect(() => {
-    getUser();
-  },[]);
   const [userData, setUserData] = useState([]);
-  const getUser = async () => {
+  
+  useEffect(() => {
+    getAllUser();
+  }, []);
+
+  // Fetch all users
+  const getAllUser = async () => {
     try {
       let res = await fetchAllUser();
-      console.log(res);
-      if (res) {
-        setUserData(res.data);
+      if (res && res.data) {
+        const customers = res.data.filter(
+          (user) => user.roleName === "Admin"
+        );
+        setUserData(customers);
       }
     } catch (error) {
       console.log(error);
     }
   };
-  const adminUsers = userData
-    .filter((user) => user.role === "admin")
+
+  // Search users by name
+  const handleSearch = (value) => {
+    if (value.trim() === "") {
+      getAllUser();
+    } else {
+      const filtered = userData.filter((user) =>
+        user.fullName.toLowerCase().includes(value.toLowerCase())
+      );
+      setUserData(filtered);
+    }
+  };
+
+  // Refresh the user data after editing
+  const handleUserChange = () => {
+    getAllUser(); // Re-fetch the user data after editing
+  };
 
   return (
     <div className="admin">
@@ -47,9 +66,16 @@ function AdminMembers() {
         <AdminHeader />
         <h1 className="content__title">Trang quản lý</h1>
         <AdminFilter onSearch={handleSearch} />
-        <AdminTable columns={columns} data={adminUsers} title="Thành viên" />
+        <AdminTable
+          columns={columns}
+          data={userData}
+          title="Thành viên"
+          ModalComponent={ModalEditUser}
+          onChange={handleUserChange}
+        />
       </div>
     </div>
   );
 }
+
 export default AdminMembers;

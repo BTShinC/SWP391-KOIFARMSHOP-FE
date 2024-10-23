@@ -4,6 +4,7 @@ import AdminSideBar from "/src/components/admin-components/admin-sidebar";
 import ProductComboTable from "../../../components/admin-components/productCombo-table";
 import { useEffect, useState } from "react";
 import { fetchAllProductCombo } from "../../../service/userService";
+import AddFishComboModal from "./AddFishComboModal";
 
 ManageProductCombo.propTypes = {};
 function ManageProductCombo() {
@@ -38,10 +39,9 @@ function ManageProductCombo() {
     "Trạng thái",
     "Thao tác",
   ];
-  // const onChange = () =>{
-  //   fetchAllProductCombo();
-  // }
-
+  const handleOnChange = () => {
+    getProductCombo();
+  };
   return (
     <div className="admin">
       <div className="admin-sidebar">
@@ -50,8 +50,12 @@ function ManageProductCombo() {
       <div className="admin-content">
         <AdminHeader />
         <h1 className="content__title">Trang quản lý</h1>
-        <AdminFilter onSearch={handleSearch} buttonText="Thêm mới người dùng" />
-        <ProductComboTable  data={data} columns={columns} />
+        <AdminFilter
+          onSearch={handleSearch}
+          ModalComponent={AddFishComboModal}
+          onChange={handleOnChange}
+        />
+        <ProductComboTable data={data} columns={columns} onChange={handleOnChange}/>
       </div>
     </div>
   );

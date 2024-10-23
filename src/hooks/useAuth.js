@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { login } from "../pages/redux/features/userSlice";
+
 
 import api from "../config/api";
+import { login } from "../pages/redux/features/userSlice";
 
 
 
@@ -12,13 +13,19 @@ const useAuth = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      // Giả sử bạn có một API để lấy thông tin người dùng từ token
-      const fetchUserData = async (id) => {
+      // Giả sử bạn có một cách để lấy accountId từ token hoặc từ localStorage
+      const accountId = localStorage.getItem("accountID"); // Lưu accountId khi đăng nhập thành công
+
+      const fetchUserData = async () => {
         try {
-          const response = await api.get(`account/${id}`); // Thay đổi endpoint nếu cần
-          dispatch(login(response.data)); // Cập nhật thông tin người dùng vào Redux
+          const response = await api.get(`account/${accountId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          dispatch(login(response.data)); // Cập nhật trạng thái người dùng
         } catch (error) {
-          console.error("Failed to fetch user data:", error);
+          console.error("Error fetching user data:", error);
         }
       };
 

@@ -1,22 +1,28 @@
 import "./index.scss";
-import { Button, InputNumber, message } from "antd";
+import { Button, message } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteCartItem, fetchCartItems } from "../../service/userService";
 import { removeFromCart, setCartItems } from "../redux/features/createSlice";
+
+import { Link } from "react-router-dom";
+
+import { useEffect } from "react";
 
 
 
 function ShoppingCartPage() {
   const cartItems = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
-  const account = useSelector(state => state.user.account); // Lấy thông tin tài khoản từ Redux
-  
+  const account = useSelector(state => state.user); // Lấy thông tin tài khoản từ Redux
+
 
   const subtotal = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
+    (total, item) => total + item.price,
     0
   );
+
+  
 
 
 
@@ -34,20 +40,23 @@ function ShoppingCartPage() {
     }
   };
 
+  useEffect(() => {
+    loadCartItems();
+  }, [account, dispatch]);
+
   const handleRemoveFromCart = async (cartItemId) => {
     try {
       // Gọi API để xóa item
       await deleteCartItem(cartItemId); // Gọi hàm deleteCartItem
       dispatch(removeFromCart(cartItemId)); // Cập nhật Redux store
       message.success("Đã xóa sản phẩm khỏi giỏ hàng");
-
-      // Reload lại giỏ hàng
       loadCartItems(); // Gọi lại hàm loadCartItems để cập nhật giỏ hàng
     } catch (error) {
       console.error("Error removing item from cart:", error);
       message.error("Không thể xóa sản phẩm khỏi giỏ hàng");
     }
   };
+  
 
   return (
     <div className="shopping-cart-page">
@@ -107,11 +116,13 @@ function ShoppingCartPage() {
         </div>
         <div className="total">
           <span>Tổng tiền</span>
-          <span style={{color:"#B88E2F"}}>{subtotal.toLocaleString("vi-VN")} VNĐ</span>
+          <span style={{ color: "#B88E2F" }}>{subtotal.toLocaleString("vi-VN")} VNĐ</span>
         </div>
-        <Button style={{backgroundColor:"#F9F1E7"}} className="checkout-button">
+        <Link to="/checkout">
+        <Button style={{ backgroundColor: "#F9F1E7" }} className="checkout-button">
           Thanh Toán
         </Button>
+        </Link>
       </div>
     </div>
   );

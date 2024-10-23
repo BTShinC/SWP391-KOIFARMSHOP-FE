@@ -1,0 +1,139 @@
+/* src/pages/productCombo/index.scss */
+.product-combo-page {
+    width: 100%;
+    margin: 0 auto; // Center the page
+
+    .search-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+        border-radius: 10px;
+    }
+
+    .search-filter {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .filter-options {
+            display: flex;
+            align-items: center;
+
+            button {
+                margin-right: 5px; // Space between buttons
+            }
+        }
+
+        .search-input {
+            width: 300px;
+            margin-left: 10px;
+            border: 1px solid #d4c8b2;
+        }
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-align: center;
+        padding-top: 2rem;
+        padding-bottom: 1rem;
+    }
+
+    .product-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: left;
+        align-items: flex-start; 
+        padding-left: 10vw;
+
+        .ant-card {
+            margin: 16px;
+            width: calc(30% - 32px);
+            transition: transform 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column; 
+            justify-content: space-between;
+            height: 87vh; 
+
+            // Enhanced border styles
+            border: 1px solid #d4c8b2; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+
+            &:hover {
+                transform: scale(1.05);
+            }
+
+            .ant-card-cover {
+                img {
+                    height: 50vh; // Set a fixed height for uniformity
+                    object-fit: contain; 
+                    transition: filter 0.3s ease-in-out;
+
+                    &:hover {
+                        filter: grayscale(30%);
+                    }
+                }
+            }
+
+            .ant-card-body {
+                text-align: center; // Center all properties
+                display: flex;
+                flex-direction: column; // Stack elements vertically
+                justify-content: space-between; // Space out elements
+                flex-grow: 1; // Allow the body to grow and fill the card
+
+                .ant-card-meta-title {
+                    font-weight: bold; 
+                    overflow: hidden; // Prevent overflow
+                    text-overflow: ellipsis; // Add ellipsis for overflow text
+                    white-space: nowrap; // Prevent text wrapping
+                }
+
+                .price {
+                    font-weight: bold; 
+                }          
+                p {
+                    margin: 5px 0;
+                    flex-grow: 1; // Allow paragraphs to grow and take available space
+                    overflow: hidden; // Prevent overflow
+                    text-overflow: ellipsis; // Add ellipsis for overflow text
+                    white-space: nowrap; // Prevent text wrapping
+                }
+
+                button {
+                    margin-top: 10px; 
+                }
+
+                .product-detail-button {
+                    background-color: #f9f1e7;
+                    color: black;
+                    border: 1px solid #d4c8b2;
+                    padding: 1.5rem;
+                    font-weight: 600;
+                    font-size: 1.1rem;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    width: 100%;
+                    margin-bottom: 2rem;
+                    margin-top: 1rem;
+
+                    &:hover {
+                        background-color: #e9e1d7;
+                    } 
+                }
+            }
+        }
+    }
+
+    .pagination-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+        border-radius: 10px;
+    }
+}

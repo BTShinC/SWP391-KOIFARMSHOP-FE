@@ -2,9 +2,8 @@ import PropTypes from "prop-types";
 import "./index.scss";
 import { Pagination } from "@mui/material";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
 
-const AdminTable = ({ columns, data, title, ModalComponent }) => {
+const AdminTable = ({ columns, data, title, ModalComponent, onChange }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
   const handleChangePage = (event, page) => {
@@ -14,7 +13,7 @@ const AdminTable = ({ columns, data, title, ModalComponent }) => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-  const location = useLocation();
+  
   return (
     <div className="admin-table">
       <div>
@@ -37,13 +36,13 @@ const AdminTable = ({ columns, data, title, ModalComponent }) => {
               <td>{row.email}</td>
               <td>{row.phoneNumber}</td>
               <td>{row.accountBalance}</td>
-              {location.pathname === "/members" && <td>{row.role}</td>}
               <td>
                 {ModalComponent && (
                   <ModalComponent
                     userData={row}
-                    title="Chỉnh sửa"
+                    title="Chỉnh sửa thông tin"
                     className="modal-edit-user-button"
+                    onChange={onChange} 
                   />
                 )}
               </td>
@@ -73,6 +72,7 @@ AdminTable.propTypes = {
   columns: PropTypes.arrayOf(PropTypes.string).isRequired,
   title: PropTypes.string.isRequired,
   ModalComponent: PropTypes.elementType,
+  onChange: PropTypes.func.isRequired, 
 };
 
 export default AdminTable;

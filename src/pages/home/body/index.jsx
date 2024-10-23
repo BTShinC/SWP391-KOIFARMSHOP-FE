@@ -2,7 +2,7 @@ import poster from "swp391-koifarmshop-fe/public/images/poster-upscaled.jpeg";
 //upscalled image
 
 import "./index.scss";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { Card } from "antd";
 import Meta from "antd/es/card/Meta";
@@ -100,7 +100,7 @@ function Body() {
             vụ hoàn hảo, Koifish luôn nỗ lực để mỗi khách hàng đều hài lòng.
           </h5>
           <Link to="/about">
-          <button className="view-more-button">Xem thêm</button>
+            <button className="view-more-button">Xem thêm</button>
           </Link>
           
         </div>

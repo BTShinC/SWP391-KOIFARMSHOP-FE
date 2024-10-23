@@ -9,12 +9,31 @@ import { deleteCartItem, fetchCartItems } from "../../service/userService";
 
 const ShoppingCart = ({ onClose }) => {
   const cartItems = useSelector(state => state.cart.items);
-  const account = useSelector((state) => state.user.account);
+  const account = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
 
   // useEffect(() => {
   //   console.log("Current account:", account);
+
+    // const loadCartItems = async () => {
+    //   if (account && account.accountID) {
+    //     try {
+    //       setLoading(true);
+    //       const items = await fetchCartItems(account.accountID);
+    //       dispatch(setCartItems(items));
+    //     } catch (error) {
+    //       console.error("Failed to load cart items:", error);
+    //       message.error("Không thể tải giỏ hàng");
+    //     } finally {
+    //       setLoading(false);
+    //     }
+    //   } else {
+    //     console.log("No account ID available");
+    //     setLoading(false);
+    //   }
+    // };
+
     const loadCartItems = async () => {
       if (account && account.accountID) {
         try {
@@ -33,6 +52,7 @@ const ShoppingCart = ({ onClose }) => {
       }
     };
 
+
   //   loadCartItems();
   // }, [account, dispatch]);
 
@@ -42,22 +62,10 @@ const ShoppingCart = ({ onClose }) => {
   }, [account, dispatch]);
 
   const subtotal = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
+    (total, item) => total + item.price,
     0
   );
 
-  // const handleUpdateQuantity = async (itemId, newQuantity) => {
-  //   try {
-  //     if (newQuantity > 0) {
-  //       dispatch(updateQuantity({ id: itemId, quantity: newQuantity }));
-  //     } else {
-  //       dispatch(removeFromCart(itemId));
-  //     }
-  //   } catch (error) {
-  //     console.error("Error updating cart:", error);
-  //     message.error("Không thể cập nhật giỏ hàng");
-  //   }
-  // };
 
   const handleRemoveFromCart = async (cartItemId) => {
     try {
@@ -105,7 +113,7 @@ const ShoppingCart = ({ onClose }) => {
               avatar={
                 <img
                   src={item.image}
-                  alt={item.productName}
+                  alt={item.name}
                   style={{ width: 50, height: 50 }}
                 />
               }
@@ -113,7 +121,7 @@ const ShoppingCart = ({ onClose }) => {
               description={
                 <>
                   <div>
-                    <strong>Giống:</strong> {item.breed} <br />
+                    <strong>Tên:</strong> {item.name} <br />
                     {/* <strong>Số lượng:</strong> {item.quantity} <br /> */}
                     <strong>Giá:</strong> {item.price.toLocaleString("vi-VN")} VNĐ
                   </div>

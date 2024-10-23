@@ -1,0 +1,69 @@
+.blog-post {
+  margin-bottom: 24px;
+
+  &__card {
+    max-width: 360px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 8px;
+    overflow: hidden;
+
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  &__image {
+    object-fit: cover;
+    height: 200px;
+  }
+
+  &__content {
+    background-color: #f9f9f9;
+    padding: 16px 24px;
+
+    .blog-post__title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #2a3d45;
+      margin-bottom: 12px;
+    }
+
+    .blog-post__description {
+      font-size: 0.9rem;
+      color: #5f6368;
+      margin-bottom: 16px;
+    }
+
+    .blog-post__date,
+    .blog-post__author {
+      color: #9aa0a6;
+      font-size: 0.85rem;
+    }
+
+    .blog-post__author {
+      margin-top: 8px;
+    }
+  }
+
+  &__actions {
+    background-color: #f9f9f9;
+    padding: 12px 24px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__button {
+    background-color: #8b4513 !important; /* Earthy brown color */
+    color: white;
+    font-weight: bold;
+    text-transform: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #a0522d; /* Lighter brown on hover */
+    }
+  }
+}

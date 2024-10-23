@@ -10,10 +10,10 @@ AddFishModal.propTypes = {
   title: PropTypes.string.isRequired,
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onChange:PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
-function AddFishModal({ title, visible, onClose,onChange }) {
+function AddFishModal({ title, visible, onClose, onChange }) {
   const initFormValue = {
     productName: "",
     breed: "",
@@ -25,6 +25,8 @@ function AddFishModal({ title, visible, onClose,onChange }) {
     origin: "",
     description: "",
     image: "",
+    image1: "",
+    image2: "",
     price: 1,
     certificate: "",
     type: "",
@@ -35,27 +37,35 @@ function AddFishModal({ title, visible, onClose,onChange }) {
   };
 
   const [formValue, setFormValue] = useState(initFormValue);
-  const [fileList, setFileList] = useState([]);
+  const [fileList, setFileList] = useState({
+    image: [],
+    image1: [],
+    image2: [],
+  });
   const [certificateList, setCertificateList] = useState([]);
 
+  // Function to handle form value changes
   const handleChange = (event) => {
     const { value, name } = event.target;
+
     setFormValue((prevValue) => {
       let updatedValue = { ...prevValue, [name]: value };
 
-      // Kiểm tra nếu đang thay đổi `desiredPrice`
-      if (name === "desiredPrice") {
-        updatedValue.price = value; // Gán `price` bằng với `desiredPrice`
+      // Check if price is being changed and desiredPrice is not updated
+      if (name === "price" && !prevValue.desiredPriceChanged) {
+        updatedValue.desiredPrice = value; // Sync desiredPrice with price
       }
-      // Kiểm tra nếu đang thay đổi `price`
-      if (name === "price") {
-        updatedValue.desiredPrice = value; // Gán `desiredPrice` bằng với `price`
+
+      // Mark desiredPrice as changed if user edits it
+      if (name === "desiredPrice") {
+        updatedValue.desiredPriceChanged = true;
       }
 
       return updatedValue;
     });
   };
 
+  // Update consignment type based on selected type
   useEffect(() => {
     if (formValue.type === "Ký gửi") {
       setFormValue((prevValue) => ({
@@ -63,35 +73,40 @@ function AddFishModal({ title, visible, onClose,onChange }) {
         consignmentType: "Ký gửi để bán",
       }));
     } else {
-      setFormValue((prevValue) => ({  
+      setFormValue((prevValue) => ({
         ...prevValue,
         consignmentType: "Trang trại đăng bán",
       }));
     }
   }, [formValue.type]);
 
-  const handleUploadChange = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
+  // Upload image to Firebase Storage
+  const handleUploadChange =
+    (key) =>
+    ({ fileList: newFileList }) => {
+      setFileList((prevList) => ({
+        ...prevList,
+        [key]: newFileList,
+      }));
 
-    if (newFileList.length > 0) {
-      const file = newFileList[0].originFileObj;
-      const storageRef = ref(storage, `uploads/${file.name}`);
-      uploadBytes(storageRef, file)
-        .then(() => {
-          return getDownloadURL(storageRef);
-        })
-        .then((url) => {
-          setFormValue((prevFormValue) => ({
-            ...prevFormValue,
-            image: url,
-          }));
-        })
-        .catch((error) => {
-          console.error("Error uploading file:", error);
-        });
-    }
-  };
+      if (newFileList.length > 0) {
+        const file = newFileList[0].originFileObj;
+        const storageRef = ref(storage, `uploads/${file.name}`);
+        uploadBytes(storageRef, file)
+          .then(() => getDownloadURL(storageRef))
+          .then((url) => {
+            setFormValue((prevFormValue) => ({
+              ...prevFormValue,
+              [key]: url, // Assign the URL to the corresponding image field
+            }));
+          })
+          .catch((error) => {
+            console.error("Error uploading file:", error);
+          });
+      }
+    };
 
+  // Upload certificate file to Firebase Storage
   const handleCertificateChange = ({ fileList: newFileList }) => {
     setCertificateList(newFileList);
 
@@ -99,9 +114,7 @@ function AddFishModal({ title, visible, onClose,onChange }) {
       const file = newFileList[0].originFileObj;
       const storageRef = ref(storage, `uploads/certificates/${file.name}`);
       uploadBytes(storageRef, file)
-        .then(() => {
-          return getDownloadURL(storageRef);
-        })
+        .then(() => getDownloadURL(storageRef))
         .then((url) => {
           setFormValue((prevFormValue) => ({
             ...prevFormValue,
@@ -114,9 +127,8 @@ function AddFishModal({ title, visible, onClose,onChange }) {
     }
   };
 
+  // Handle form submission
   const handleOk = async () => {
-    // Xử lý lưu thông tin cá
-    console.log("Form value:", formValue);
     try {
       let res = await addFish(formValue);
       if (res) {
@@ -127,7 +139,7 @@ function AddFishModal({ title, visible, onClose,onChange }) {
       console.log(error);
     }
 
-    onClose(); // Gọi hàm onClose để đóng modal
+    onClose(); // Close the modal
   };
 
   return (
@@ -143,17 +155,17 @@ function AddFishModal({ title, visible, onClose,onChange }) {
           <h2>Thông tin cá</h2>
           <div style={{ display: "flex", gap: "5rem" }}>
             <div>
-              <label className="form-label">Ảnh:</label>
+              <label className="form-label">Ảnh 1:</label>
               <Upload
                 name="image"
                 listType="picture-card"
                 className="image-uploader"
-                fileList={fileList}
-                onChange={handleUploadChange}
+                fileList={fileList.image}
+                onChange={handleUploadChange("image")}
                 beforeUpload={() => false}
                 required
               >
-                {fileList.length >= 1 ? null : (
+                {fileList.image.length >= 1 ? null : (
                   <div>
                     <PlusOutlined />
                     <div style={{ marginTop: 8 }}>Upload</div>
@@ -162,17 +174,17 @@ function AddFishModal({ title, visible, onClose,onChange }) {
               </Upload>
             </div>
             <div>
-              <label className="form-label">Chứng nhận:</label>
+              <label className="form-label">Ảnh 2:</label>
               <Upload
-                name="certificate"
+                name="image2"
                 listType="picture-card"
-                className="certificate-uploader"
-                fileList={certificateList}
-                onChange={handleCertificateChange}
+                className="image-uploader"
+                fileList={fileList.image1}
+                onChange={handleUploadChange("image1")}
                 beforeUpload={() => false}
                 required
               >
-                {certificateList.length >= 1 ? null : (
+                {fileList.image1.length >= 1 ? null : (
                   <div>
                     <PlusOutlined />
                     <div style={{ marginTop: 8 }}>Upload</div>
@@ -180,6 +192,44 @@ function AddFishModal({ title, visible, onClose,onChange }) {
                 )}
               </Upload>
             </div>
+            <div>
+              <label className="form-label">Ảnh 3:</label>
+              <Upload
+                name="image3"
+                listType="picture-card"
+                className="image-uploader"
+                fileList={fileList.image2}
+                onChange={handleUploadChange("image2")}
+                beforeUpload={() => false}
+                required
+              >
+                {fileList.image2.length >= 1 ? null : (
+                  <div>
+                    <PlusOutlined />
+                    <div style={{ marginTop: 8 }}>Upload</div>
+                  </div>
+                )}
+              </Upload>
+            </div>
+          </div>
+          <div>
+            <label className="form-label">Chứng nhận:</label>
+            <Upload
+              name="certificate"
+              listType="picture-card"
+              className="certificate-uploader"
+              fileList={certificateList}
+              onChange={handleCertificateChange}
+              beforeUpload={() => false}
+              required
+            >
+              {certificateList.length >= 1 ? null : (
+                <div>
+                  <PlusOutlined />
+                  <div style={{ marginTop: 8 }}>Upload</div>
+                </div>
+              )}
+            </Upload>
           </div>
           <div>
             <label className="form-label">Tên gọi cá:</label>
@@ -215,17 +265,17 @@ function AddFishModal({ title, visible, onClose,onChange }) {
             />
           </div>
           <div>
-              <label className="form-label">Tuổi:</label>
-              <input
-                className="form-control"
-                type="number"
-                name="age"
-                min={1}
-                value={formValue.age}
-                onChange={handleChange}
-                required
-              />
-            </div>
+            <label className="form-label">Tuổi:</label>
+            <input
+              className="form-control"
+              type="number"
+              name="age"
+              min={1}
+              value={formValue.age}
+              onChange={handleChange}
+              required
+            />
+          </div>
           <div>
             <label className="form-label">Giới tính:</label>
             <select
@@ -310,20 +360,34 @@ function AddFishModal({ title, visible, onClose,onChange }) {
             </div>
           )}
           {formValue.consignmentType === "Ký gửi để bán" && (
-            <div>
-              <label className="form-label">Giá mong muốn:</label>
-              <input
-                className="form-control"
-                type="number"
-                min={1}
-                name="desiredPrice"
-                value={formValue.desiredPrice}
-                onChange={handleChange}
-                required
-              />
-            </div>
+            <>
+              <div>
+                <label className="form-label">Giá khách hàng mong muốn :</label>
+                <input
+                  className="form-control"
+                  type="number"
+                  min={1}
+                  name="desiredPrice"
+                  value={formValue.desiredPrice}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label className="form-label">Giá đăng bán:</label>
+                <input
+                  className="form-control"
+                  type="number"
+                  name="price"
+                  min={1}
+                  value={formValue.price}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </>
           )}
-          {formValue.consignmentType != "Ký gửi để bán" && (
+          {formValue.consignmentType !== "Ký gửi để bán" && (
             <div>
               <label className="form-label">Giá:</label>
               <input

@@ -1,10 +1,10 @@
 import "./index.scss";
-import { Link, useParams } from "react-router-dom";
-import { Button, Typography, Image, Divider } from "antd";
+import { Link,useParams} from "react-router-dom";
+import { Button, Typography, Image, Divider, message } from "antd";
 import Carousel from "../carousel";
 import { useState, useEffect } from "react";
 import ShoppingCart from "../shopping-cart";
-import { addToCartAPI, fetchProductById } from "../../service/userService";
+import { addToCartAPI,fetchProductById } from "../../service/userService";
 import { useDispatch, useSelector } from "react-redux";
 
 const { Title, Text } = Typography;
@@ -12,28 +12,42 @@ const { Title, Text } = Typography;
 function SinglepProduct() {
   const [cartVisible, setCartVisible] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "decimal",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
   const { id } = useParams(); // Lấy productId từ URL
   const [product, setProduct] = useState(null); // State để lưu thông tin sản phẩm
   const dispatch = useDispatch(); // Khởi tạo dispatch
-  const account = useSelector((state) => state.user.account); // Lấy accountId từ Redux
+  const account = useSelector((state) => state.user); // Lấy accountId từ Redux
+  console.log("Current account:", account);
 
-  // Fetch thông tin người dùng khi component mount
+
+
   // useEffect(() => {
-  //   const fetchUserData = async () => {
-  //     try {
-  //       const response = await fetchUser(); // Gọi API để lấy thông tin người dùng
-  //       dispatch(setUser({ accountId: response.accountId })); // Lưu accountId vào Redux
-  //     } catch (error) {
-  //       console.error("Error fetching user data:", error);
-  //     }
+  //   return () => {
+  //     const removeTemporaryCartItem = async () => {
+  //       try {
+  //         if (account && account.accountID) {
+  //           await deleteCartItem(product.productID); // Gọi hàm xóa sản phẩm
+  //           console.log("Temporary cart item removed");
+  //         }
+  //       } catch (error) {
+  //         console.error("Error removing temporary cart item:", error);
+  //       }
+  //     };
+
+  //     removeTemporaryCartItem();
   //   };
+  // }, [account, product]);
 
-  //   fetchUserData();
-  // }, [dispatch]);
-
-  // Fetch sản phẩm từ backend khi component mount
   useEffect(() => {
     const loadProduct = async () => {
+      
       try {
         const response = await fetchProductById(id);
         console.log("Fetched product:", response);
@@ -44,7 +58,7 @@ function SinglepProduct() {
     };
 
     loadProduct();
-  }, [id,dispatch]);
+  }, [id, dispatch]);
 
   useEffect(() => {
     console.log("Current account:", account);
@@ -56,25 +70,32 @@ function SinglepProduct() {
 
   const handleAddToCart = async () => {
     try {
-      if (!account || !account.accountID) {
+      if (!account || !account.accountID) { // Sửa từ accountId thành accountID
         console.error("Account information is missing");
         return;
       }
 
+       // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+       const existingItem = cartItems.find(item => item.productID === product.productID);
+       if (existingItem) {
+         message.warning("Sản phẩm đã có trong giỏ hàng.");
+         return; // Không thêm sản phẩm nếu đã có
+       }
+
       console.log("Sending to API:", {
-        accountId: account.accountID,
-        productId: product.productID
+        accountID: account.accountID,
+        productId: product.productID,
       });
 
       const response = await addToCartAPI({
-        accountId: account.accountID,
-        productId: product.productID
+        accountID: account.accountID, // Sửa từ accountId thành accountID
+        productId: product.productID,
       });
       console.log("Added to cart successfully:", response);
 
       // Fetch product details
-    const productDetails = await fetchProductById(product.productID);
-    console.log("Fetched product details:", productDetails);
+      const productDetails = await fetchProductById(product.productID);
+      console.log("Fetched product details:", productDetails);
 
       // Cập nhật cartItems để hiển thị thông tin sản phẩm
       setCartItems((prevItems) => [
@@ -90,7 +111,11 @@ function SinglepProduct() {
 
       setCartVisible(true);
     } catch (error) {
-      console.error("Error adding to cart:", error.response?.data || error.message);
+      console.error(
+        "Error adding to cart:",
+        error.response?.data || error.message
+      );
+      message.error("Không thể thêm sản phẩm vào giỏ hàng.");
     }
   };
 
@@ -99,11 +124,11 @@ function SinglepProduct() {
       <div className="breadcrumb-banner">
         <nav className="breadcrumb">
           <Link to="/" className="breadcrumb-link faded">
-            HomePage
+            Trang chủ
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
-          <Link to="/shop" className="breadcrumb-link faded">
-            Shop
+          <Link to="/product" className="breadcrumb-link faded">
+            Cá Koi Nhật
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
           <span className="breadcrumb-current">
@@ -145,20 +170,17 @@ function SinglepProduct() {
             <div className="product-details">
               <Title level={6}>{product.productName}</Title>
               <Text className="price" style={{ color: "#9F9F9F" }}>
-                Giá: {product.price} VNĐ
+                Giá: {formatCurrency(product.price)} VNĐ
               </Text>
               <Text>Tuổi: {product.size} tháng tuổi</Text>
               <Text>Giới tính: {product.sex}</Text>
               <Text>Kích thước: {product.size} cm</Text>
               <Text>Giống: {product.breed}</Text>
               <Text>Nguồn gốc: {product.origin}</Text>
-
               <div className="action-buttons">
-                <Link to="/shoppingcart">
-                  <Button type="default" className="buy-button">
-                    Mua ngay
-                  </Button>
-                </Link>
+                <Button  className="buy-button" on>
+                  Mua ngay
+                </Button>
 
                 <Button onClick={handleAddToCart} className="buy-button">
                   Thêm vào giỏ hàng
