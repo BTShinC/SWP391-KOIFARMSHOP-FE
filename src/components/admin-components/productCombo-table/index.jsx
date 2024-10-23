@@ -1,7 +1,6 @@
 
 import PropTypes from "prop-types";
-import EditProductComboModal from "./editProductCombo";
-
+import EditProductComboModal from "../../../pages/admin/manageProductCombo/editProductCombo";
 function ProductComboTable({ data = [], columns = [] , onChange}) {
   console.log(data);
 

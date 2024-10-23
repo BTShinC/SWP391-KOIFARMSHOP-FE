@@ -12,12 +12,15 @@ import {
 } from "@mui/material";
 import { Upload, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { storage } from "../../../firebase"; // Đảm bảo bạn đã cấu hình đúng Firebase
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"; // Firebase storage functions
 import { useForm } from "react-hook-form";
 import "./index.scss";
 import SellFormCombo from "../sell-form-combo";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
 function SellForm() {
   const {
     register,
@@ -26,6 +29,21 @@ function SellForm() {
     formState: { errors },
   } = useForm();
 
+  useEffect(() => {
+    // Lấy dữ liệu từ localStorage khi trang tải lại
+    const savedFormValue = localStorage.getItem("sellForm");
+    if (savedFormValue) {
+      const parsedFormValue = JSON.parse(savedFormValue);
+      Object.keys(parsedFormValue).forEach((key) =>
+        setValue(key, parsedFormValue[key])
+      );
+      console.log(
+        "Form values loaded from localStorage cá thể:",
+        parsedFormValue
+      );
+    }
+  }, [setValue]);
+
   // State để kiểm soát file upload
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -33,7 +51,8 @@ function SellForm() {
   const [certFileList, setCertFileList] = useState([]); // Thêm state cho chứng nhận
   const [previewCertImage, setPreviewCertImage] = useState(""); // Preview chứng nhận
   const [isBatchSell, setIsBatchSell] = useState(false); // State để theo dõi loại form
-
+  const user = useSelector((state) => state?.user);
+  const navigation = useNavigate();
   // Nếu người dùng chọn ký gửi bán lô thì render component khác
   if (isBatchSell) {
     return <SellFormCombo />;
@@ -97,21 +116,25 @@ function SellForm() {
   const onSubmit = async (data) => {
     const uploadedImages = await uploadFilesToFirebase(fileList); // Upload file hình ảnh cá KOI
     const uploadedCerts = await uploadFilesToFirebase(certFileList); // Upload file chứng nhận
-
     const finalData = {
       ...data,
-      images: uploadedImages,
-      certifications: uploadedCerts,
-      Status: "Còn hàng",
-      Type: "Ký gửi",
+      productName: uuidv4(),
+      image: uploadedImages[0]?.url,
+      image1: uploadedImages[1]?.url,
+      image2: uploadedImages[2]?.url,
+      certificate: uploadedCerts[0]?.url,
+      status: "Chờ xác nhận",
+      type: "Ký gửi",
       consignmentType: "Ký gửi để bán",
-      price: 1,
+      price: data.desiredPrice,
     };
 
     console.log(
       "Form data with uploaded images and certifications:",
       finalData
-    ); // Xem dữ liệu và URL
+    );
+    localStorage.setItem("sellForm", JSON.stringify(finalData));
+    navigation("/consignmentSellPayment", { state: finalData });
   };
 
   // Nút upload ảnh và chứng nhận
@@ -153,7 +176,7 @@ function SellForm() {
         </Grid>
         <Box>
           <Typography variant="h2" className="title-typography">
-            Ký gửi bán cá thể
+            Ký gửi bán cá thể ONLINE
           </Typography>
         </Box>
 
@@ -167,7 +190,7 @@ function SellForm() {
               onChange={handleChange}
               beforeUpload={() => false} // Tắt tự động upload
             >
-              {fileList.length >= 4 ? null : uploadButton}
+              {fileList.length >= 3 ? null : uploadButton}
             </Upload>
             {previewImage && (
               <Image
@@ -211,6 +234,19 @@ function SellForm() {
               fullWidth
               error={!!errors.breed}
               helperText={errors.breed?.message}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              {...register("age", {
+                required: "Vui lòng nhập tuổi cá",
+                min: 1,
+              })}
+              label="Số tháng tuổi"
+              fullWidth
+              type="number"
+              error={!!errors.age}
+              helperText={errors.age?.message}
             />
           </Grid>
           <Grid item xs={12}>
@@ -275,19 +311,19 @@ function SellForm() {
                 row
                 aria-labelledby="demo-radio-buttons-group-label"
                 defaultValue="Đực"
-                onChange={(event) => setValue("gender", event.target.value)}
+                onChange={(event) => setValue("sex", event.target.value)}
               >
                 <FormControlLabel
                   value="Đực"
                   control={<Radio />}
                   label="Đực"
-                  {...register("gender")}
+                  {...register("sex")}
                 />
                 <FormControlLabel
                   value="Cái"
                   control={<Radio />}
                   label="Cái"
-                  {...register("gender")}
+                  {...register("sex")}
                 />
               </RadioGroup>
             </FormControl>
@@ -316,14 +352,12 @@ function SellForm() {
             />
           </Grid>
           <Grid item xs={12}>
-            <Box>
+            <Box marginBottom={2}>
               <Typography variant="h5">Thông tin khách hàng</Typography>
             </Box>
             <TextField
-              {...register("fullName", {
-                required: "Vui lòng nhập họ và tên",
-              })}
               label="Họ và tên"
+              defaultValue={user?.fullName}
               fullWidth
               error={!!errors.fullName}
               helperText={errors.fullName?.message}
@@ -332,8 +366,8 @@ function SellForm() {
 
           <Grid item xs={12}>
             <TextField
-              {...register("email", { required: "Vui lòng nhập email" })}
               label="Email"
+              defaultValue={user?.email}
               fullWidth
               error={!!errors.email}
               helperText={errors.email?.message}
@@ -342,10 +376,8 @@ function SellForm() {
 
           <Grid item xs={12}>
             <TextField
-              {...register("phoneNumber", {
-                required: "Vui lòng nhập số điện thoại",
-              })}
               label="Số điện thoại"
+              defaultValue={user?.phoneNumber}
               fullWidth
               error={!!errors.phoneNumber}
               helperText={errors.phoneNumber?.message}
@@ -360,7 +392,6 @@ function SellForm() {
               helperText={errors.description?.message}
             />
           </Grid>
-
           {/* Nút Submit */}
           <Grid item xs={12} style={{ textAlign: "center", marginTop: "2rem" }}>
             <Button type="submit" className="submit-form-btn">

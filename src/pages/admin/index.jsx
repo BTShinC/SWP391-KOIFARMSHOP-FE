@@ -22,32 +22,28 @@ const Admin = () => {
   const [userData, setUserData] = useState([]);
   // State lưu trữ dữ liệu người dùng đã lọc
   const [filteredUserData, setFilteredUserData] = useState([]);
-  //Hàm render ra mỗi khi chạy page
-  useEffect(() => {
-    // Gọi API lấy toàn bộ dữ liệu người dùng
-    getAllUser();
-  }, []);
-  //Gọi api lấy dữ liệu người dùng
+
+  // Hàm gọi API lấy toàn bộ dữ liệu người dùng
   const getAllUser = async () => {
     try {
       let res = await fetchAllUser();
       if (res && res.data) {
-        console.log(res);
-        // Lọc ra những người dùng có role là "Customer"
         const customers = res.data.filter(
           (user) => user.roleName === "Customer"
         );
-        setUserData(customers); // Cập nhật dữ liệu gốc
-        setFilteredUserData(customers); // Cập nhật dữ liệu lọc ban đầu
+        setUserData(customers);
+        setFilteredUserData(customers);
       }
     } catch (error) {
       console.log(error);
     }
   };
+
   // Hàm xử lý tiếng việt
   const removeAccents = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   };
+
   // Hàm search theo tên người dùng
   const handleSearch = (value) => {
     if (value.trim() === "") {
@@ -61,6 +57,17 @@ const Admin = () => {
       setFilteredUserData(filtered);
     }
   };
+
+  // Hàm render lại dữ liệu khi có thay đổi thông tin người dùng
+  const handleUserChange = (data) => {
+    console.log(data)
+    getAllUser(); 
+  };
+
+  useEffect(() => {
+    getAllUser();
+  }, []);
+
   return (
     <div className="admin">
       <div className="admin-sidebar">
@@ -69,14 +76,13 @@ const Admin = () => {
       <div className="admin-content">
         <AdminHeader />
         <h1 className="content__title">Trang quản lý</h1>
-        {/* Component lọc và tìm kiếm */}
         <AdminFilter onSearch={handleSearch} buttonText="Thêm mới người dùng" />
-        {/* Bảng hiển thị danh sách người dùng */}
         <AdminTable
-          data={filteredUserData} // Truyền dữ liệu người dùng đã lọc vào bảng
+          data={filteredUserData}
           columns={columns}
           title="Hồ sơ khách hàng"
-          ModalComponent={ModalEditUser} // Modal chỉnh sửa thông tin người dùng
+          ModalComponent={ModalEditUser}
+          onChange={handleUserChange}
         />
       </div>
     </div>

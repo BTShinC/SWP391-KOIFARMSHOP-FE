@@ -5,6 +5,7 @@ import AdminSideBar from "../../../components/admin-components/admin-sidebar";
 import AdminTable from "/src/components/admin-components/admin-table/index";
 import { fetchAllUser } from "../../../service/userService";
 import ModalEditUser from "/src/pages/userinfo/EditUserModal/index";
+
 AdminMembers.propTypes = {};
 
 const columns = [
@@ -16,16 +17,19 @@ const columns = [
   "Số dư ví",
   "Thao tác",
 ];
+
 function AdminMembers() {
+  const [userData, setUserData] = useState([]);
+  
   useEffect(() => {
     getAllUser();
   }, []);
-  const [userData, setUserData] = useState([]);
+
+  // Fetch all users
   const getAllUser = async () => {
     try {
       let res = await fetchAllUser();
       if (res && res.data) {
-        console.log(res);
         const customers = res.data.filter(
           (user) => user.roleName === "Admin"
         );
@@ -36,16 +40,21 @@ function AdminMembers() {
     }
   };
 
+  // Search users by name
   const handleSearch = (value) => {
     if (value.trim() === "") {
       getAllUser();
     } else {
-      // Lọc người dùng dựa trên tên
       const filtered = userData.filter((user) =>
         user.fullName.toLowerCase().includes(value.toLowerCase())
       );
       setUserData(filtered);
     }
+  };
+
+  // Refresh the user data after editing
+  const handleUserChange = () => {
+    getAllUser(); // Re-fetch the user data after editing
   };
 
   return (
@@ -62,9 +71,11 @@ function AdminMembers() {
           data={userData}
           title="Thành viên"
           ModalComponent={ModalEditUser}
+          onChange={handleUserChange}
         />
       </div>
     </div>
   );
 }
+
 export default AdminMembers;

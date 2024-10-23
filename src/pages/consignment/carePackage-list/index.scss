@@ -13,7 +13,6 @@
       display: flex;
       gap: 1rem;
       margin-bottom: 1.5rem;
-
       .filter-button {
         background-color: #e0e0e0;
         color: #333;
@@ -153,7 +152,11 @@
             text-transform: uppercase;
             margin-left: 0.5rem;
           }
-
+          .label-best-seller {
+            background-color: gold;
+            color: black;
+            font-style: italic;
+          }
           .label-sale {
             background-color: #4caf50;
           }
@@ -200,12 +203,12 @@
       position: absolute;
       top: 20px;
       left: 20px;
-      padding: 0.8rem 2rem;
+      padding: 0.4rem 1rem;
       background-color: #a47c48;
       color: #fff;
-      font-size: 1rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      font-size: 0.9rem; 
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
       text-transform: uppercase;
       font-weight: bold;
       transition: background-color 0.3s ease;

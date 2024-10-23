@@ -1,17 +1,22 @@
-import {
-  Button,
-  TextField,
-  Grid,
-  Box,
-  Typography,
-} from "@mui/material";
+import { Button, TextField, Grid, Box, Typography } from "@mui/material";
 import { Upload, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { useState } from "react";
-import { storage } from "../../../firebase"; // Đảm bảo bạn đã cấu hình đúng Firebase
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage"; // Firebase storage functions
+import { useCallback, useState } from "react";
+import { storage } from "../../../firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useForm } from "react-hook-form";
-function CareFormCombo() {
+import { useSelector } from "react-redux";
+import PropTypes from "prop-types";
+import { addDays, format } from "date-fns";
+import InputAdornment from "@mui/material/InputAdornment";
+import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+
+CareFormCombo.propTypes = {
+  carePackage: PropTypes.object.isRequired,  // Truyền carePackage qua props
+};
+
+function CareFormCombo({ carePackage }) {
   const {
     register,
     handleSubmit,
@@ -21,61 +26,75 @@ function CareFormCombo() {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState([]);
+  const navigate = useNavigate();
+
+  // Lấy thông tin user từ Redux
+  const user = useSelector((state) => state?.user);
+
+  const getTodayDate = () => format(new Date(), "yyyy-MM-dd");
+
+  const getTodayDatePlus30Days = () => {
+    const futureDate = addDays(new Date(), 30);
+    return format(futureDate, "yyyy-MM-dd");
+  };
 
   // Preview ảnh khi chọn
-  const handlePreview = async (file) => {
+  const handlePreview = useCallback(async (file) => {
     if (!file.url && !file.preview) {
       file.preview = URL.createObjectURL(file.originFileObj);
     }
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);
-  };
+  }, []);
 
   // Xử lý thay đổi file list
-  const handleChange = ({ fileList: newFileList }) => {
+  const handleChange = useCallback(({ fileList: newFileList }) => {
     setFileList(newFileList);
-  };
+  }, []);
 
-  // Upload ảnh và chứng nhận lên Firebase
-  const uploadFilesToFirebase = async (files) => {
+  // Upload ảnh lên Firebase
+  const uploadFilesToFirebase = useCallback(async (files) => {
     const uploadPromises = files.map((fileObj) => {
       const file = fileObj.originFileObj;
-      const storageRef = ref(storage, `upload/${file.name}`); // Tạo reference trong Firebase Storage
-
+      const storageRef = ref(storage, `upload/${file.name}`);
       return uploadBytes(storageRef, file)
-        .then(() => getDownloadURL(storageRef)) // Lấy URL sau khi upload
+        .then(() => getDownloadURL(storageRef))
         .then((downloadURL) => ({
           name: file.name,
-          url: downloadURL, // Trả về URL của file sau khi upload
+          url: downloadURL,
         }))
         .catch((error) => {
           console.error("Error uploading file:", error);
         });
     });
+    return await Promise.all(uploadPromises);
+  }, []);
 
-    try {
-      const uploadedFiles = await Promise.all(uploadPromises); // Chờ tất cả các file được upload
-      return uploadedFiles; // Trả về danh sách file đã upload
-    } catch (error) {
-      console.error("Error uploading files:", error);
-      return [];
-    }
-  };
   // Xử lý submit form
-  const onSubmit = async (data) => {
-    const uploadedImages = await uploadFilesToFirebase(fileList); // Upload file hình ảnh cá KOI
+  const onSubmit = useCallback(async (data) => {
+    const uploadedImages = await uploadFilesToFirebase(fileList);
+
     const finalData = {
       ...data,
-      images: uploadedImages, // Thêm URL ảnh đã upload vào dữ liệu form
+      image: uploadedImages[0]?.url,
+      image1: uploadedImages[1]?.url,
+      image2: uploadedImages[2]?.url,
+      comboName: uuidv4(),
+      type: "Ký gửi",
+      accountID: user?.accountID,
+      consignmentType: "chăm sóc",
+      carePackageID: carePackage?.carePackageID,
+      price: carePackage?.price,
+      status: "Chờ xác nhận",
+      desiredPrice: carePackage?.price,
     };
 
-    console.log(
-      "Form data with uploaded images and certifications:",
-      finalData
-    ); // Xem dữ liệu và URL
-  };
+    console.log("Form data with uploaded images:", finalData);
+    localStorage.setItem("careFormCombo", JSON.stringify(finalData));
+    navigate("/consignmentPayment", { state: finalData });
+  }, [fileList, user, carePackage, navigate, uploadFilesToFirebase]);
 
-  // Nút upload ảnh và chứng nhận
+  // Nút upload ảnh
   const uploadButton = (
     <button
       style={{
@@ -93,121 +112,220 @@ function CareFormCombo() {
     <div className="care-form" style={{ padding: "2rem" }}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box>
+          <Button
+            variant="contained"
+            className="back-button"
+            onClick={() => navigate(-1)}
+          >
+            Trở lại
+          </Button>
+        </Box>
+        <Box>
           <Typography variant="h2" className="title-typography">
-            Ký gửi theo lô
+            Ký gửi chăm sóc theo lô
           </Typography>
         </Box>
-        <Grid container spacing={4}>
+        <Grid container spacing={6}>
           <Grid item xs={6}>
-            <Typography>Ảnh lô cá</Typography>
-            <Upload
-              listType="picture-card"
-              fileList={fileList}
-              onPreview={handlePreview}
-              onChange={handleChange}
-              beforeUpload={() => false} // Tắt tự động upload
-            >
-              {fileList.length >= 4 ? null : uploadButton}
-            </Upload>
-            {previewImage && (
-              <Image
-                wrapperStyle={{ display: "none" }}
-                preview={{
-                  visible: previewOpen,
-                  onVisibleChange: (visible) => setPreviewOpen(visible),
-                }}
-                src={previewImage}
+            <Box>
+              <Typography variant="h5" sx={{ marginBottom: 2 }}>
+                Thông tin cá ký gửi
+              </Typography>
+            </Box>
+            <Grid item xs={12} sx={{ marginBottom: 2 }}>
+              <Typography>Ảnh lô cá</Typography>
+              <Upload
+                listType="picture-card"
+                fileList={fileList}
+                onPreview={handlePreview}
+                onChange={handleChange}
+                beforeUpload={() => false}
+              >
+                {fileList.length >= 3 ? null : uploadButton}
+              </Upload>
+              {previewImage && (
+                <Image
+                  wrapperStyle={{ display: "none" }}
+                  preview={{
+                    visible: previewOpen,
+                    onVisibleChange: (visible) => setPreviewOpen(visible),
+                  }}
+                  src={previewImage}
+                />
+              )}
+            </Grid>
+            <Grid item xs={12} sx={{ marginBottom: 2 }}>
+              <TextField
+                {...register("breed", { required: "Vui lòng nhập giống cá" })}
+                label="Giống cá"
+                fullWidth
+                error={!!errors.breed}
+                helperText={errors.breed?.message}
               />
-            )}
+            </Grid>
+            <Grid item xs={12} sx={{ marginBottom: 2 }}>
+              <TextField
+                {...register("size", { required: "Vui lòng nhập kích thước" })}
+                label="Kích thước trung bình"
+                fullWidth
+                type="number"
+                min={1}
+                error={!!errors.size}
+                helperText={errors.size?.message}
+                InputProps={{
+                  endAdornment: <InputAdornment position="end">cm</InputAdornment>,
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sx={{ marginBottom: 2 }}>
+              <TextField
+                {...register("quantity", {
+                  required: "Vui lòng nhập số lượng",
+                  min: {
+                    value: 2,
+                    message: "Số lượng phải lớn hơn hoặc bằng 2",
+                  },
+                })}
+                label="Số lượng cá"
+                type="number"
+                fullWidth
+                error={!!errors.quantity}
+                helperText={errors.quantity?.message}
+              />
+            </Grid>
+            <Grid item xs={12} sx={{ marginBottom: 2 }}>
+              <TextField
+                {...register("origin", {
+                  required: "Vui lòng nhập nguồn gốc",
+                })}
+                label="Nguồn gốc"
+                fullWidth
+                error={!!errors.origin}
+                helperText={errors.origin?.message}
+              />
+            </Grid>
+            <Grid item xs={12} sx={{ marginBottom: 2 }}>
+              <TextField
+                {...register("healthStatus", {
+                  required: "Vui lòng nhập tình trạng sức khỏe cá",
+                })}
+                label="Tình trạng sức khỏe"
+                fullWidth
+                error={!!errors.healthStatus}
+                helperText={errors.healthStatus?.message}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <TextField
-              {...register("breed", { required: "Vui lòng nhập giống cá" })}
-              label="Giống cá"
-              fullWidth
-              error={!!errors.breed}
-              helperText={errors.breed?.message}
-            />
-          </Grid>
+          <Grid item xs={6}>
+            <Box>
+              <Typography variant="h5" sx={{ marginBottom: 2 }}>
+                Thông tin khách hàng
+              </Typography>
+            </Box>
+            <Grid item xs={12} sx={{ marginBottom: 2 }}>
+              <TextField
+                label="Họ và tên"
+                fullWidth
+                value={user.fullName}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                error={!!errors.fullName}
+                helperText={errors.fullName?.message}
+              />
+            </Grid>
 
-          <Grid item xs={12}>
-            <TextField
-              {...register("origin", {
-                required: "Vui lòng nhập nguồn gốc",
-              })}
-              label="Nguồn gốc"
-              fullWidth
-              error={!!errors.origin}
-              helperText={errors.origin?.message}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              {...register("healthStatus", {
-                required: "Vui lòng nhập tình trạng sức khỏe cá",
-              })}
-              label="Tình trạng sức khỏe"
-              fullWidth
-              error={!!errors.healthStatus}
-              helperText={errors.healthStatus?.message}
-            />
-          </Grid>
+            <Grid item xs={12} sx={{ marginBottom: 2 }}>
+              <TextField
+                label="Email"
+                fullWidth
+                value={user.email}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                error={!!errors.email}
+                helperText={errors.email?.message}
+              />
+            </Grid>
 
-          <Grid item xs={12}>
-            <TextField
-              {...register("fullName", {
-                required: "Vui lòng nhập họ và tên",
-              })}
-              label="Họ và tên"
-              fullWidth
-              error={!!errors.fullName}
-              helperText={errors.fullName?.message}
+            <Grid item xs={12} sx={{ marginBottom: 2 }}>
+              <TextField
+                label="Số điện thoại"
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                value={user.phoneNumber}
+                error={!!errors.phoneNumber}
+                helperText={errors.phoneNumber?.message}
+              />
+            </Grid>
+
+            <Grid item xs={12} sx={{ marginBottom: 2 }}>
+              <TextField
+                label="Gói chăm sóc"
+                fullWidth
+                value={carePackage?.packageName}
+                disabled
+                className="highlighted-textfield"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sx={{ marginBottom: 2 }}>
+              <TextField
+                label="Tổng chi phí"
+                fullWidth
+                value={`${new Intl.NumberFormat("vi-VN").format(
+                  carePackage?.price || 0
+                )} VNĐ`}
+                disabled
+                className="highlighted-textfield"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sx={{ marginBottom: 3.5 }}>
+              <TextField
+                label="Thời gian dự kiến nhận cá"
+                fullWidth
+                value={getTodayDate()}
+                disabled
+                className="highlighted-textfield"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sx={{ marginBottom: 2 }}>
+              <TextField
+                label="Thời gian dự kiến nhận lại cá"
+                fullWidth
+                value={getTodayDatePlus30Days()}
+                disabled
+                className="highlighted-textfield"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sx={{ marginBottom: 2 }}>
+              <TextField
+                {...register("description")}
+                label="Ghi chú"
+                defaultValue="Không"
+                fullWidth
+                error={!!errors.description}
+              />
+            </Grid>
+            <input
+              type="hidden"
+              value={user.accountID}
+              {...register("accountID")}
             />
           </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              {...register("email", { required: "Vui lòng nhập email" })}
-              label="Email"
-              fullWidth
-              error={!!errors.email}
-              helperText={errors.email?.message}
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              {...register("phoneNumber", {
-                required: "Vui lòng nhập số điện thoại",
-              })}
-              label="Số điện thoại"
-              fullWidth
-              error={!!errors.phoneNumber}
-              helperText={errors.phoneNumber?.message}
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              label="Gói chăm sóc"
-              fullWidth
-              value="GÓI CHĂM SÓC ĐẶC BIỆT" // Giá trị cố định
-              disabled // Trường bị disable
-              className="highlighted-textfield" // Áp dụng SCSS
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              {...register("description")}
-              label="Ghi chú"
-              fullWidth
-              error={!!errors.description}
-              helperText={errors.description?.message}
-            />
-          </Grid>
-
-          {/* Nút Submit */}
           <Grid item xs={12} style={{ textAlign: "center", marginTop: "2rem" }}>
             <Button type="submit" className="submit-form-btn">
               Xác nhận thông tin

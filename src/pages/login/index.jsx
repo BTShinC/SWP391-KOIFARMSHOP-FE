@@ -69,11 +69,18 @@ function LoginPage() {
       console.log("Response from API:", response.data.account);
 
       // Save user data to Redux
-      dispatch(login({
-        accountID: response.data.account.accountID,
-        fullName: response.data.account.fullName,
-        accountBalance: response.data.account.accountBalance
-      }));
+
+     dispatch(login({
+      accountID: response.data.account.accountID,
+      fullName: response.data.account.fullName, 
+      accountBalance: response.data.account.accountBalance, 
+      image: response.data.account.image,
+      email: response.data.account.email,
+      address: response.data.account.address,
+      phoneNumber: response.data.account.phoneNumber,
+      roleName: response.data.account.roleName,
+    }));
+
 
       // Check user role and navigate accordingly
       if (response.data.account.roleName === "Admin") {
