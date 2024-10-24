@@ -123,7 +123,7 @@ function SinglepProduct() {
         "Error adding to cart:",
         error.response?.data || error.message
       );
-      message.error("Không thể thêm sản phẩm vào giỏ hàng.");
+      message.error("Sản phẩm đã hết hàng.");
     }
   };
 

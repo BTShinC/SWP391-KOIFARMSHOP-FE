@@ -290,7 +290,7 @@ function ChangeStatus({ data }) {
           <div className="change-status-button">
             {status === "Đang xử lý" && (
               <>
-                <Button onClick={() => handleUpdateStatus("Đang chuẩn bị")}>
+                <Button style={{marginTop:10,marginBottom:10}} onClick={() => handleUpdateStatus("Đang chuẩn bị")} className="btn-button">
                   Xác nhận
                 </Button>
                 <Button type="primary" danger onClick={confirmCancel}>
@@ -306,7 +306,7 @@ function ChangeStatus({ data }) {
             )}
             {status === "Đang vận chuyển" && (
               <Button onClick={() => handleUpdateStatus("Đã giao hàng")}>
-                Đang vận chuyển
+                Đã giao hàng
               </Button>
             )}
             {status === "Đã giao hàng" && (
