@@ -1,0 +1,59 @@
+.order-tracking-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+
+    h1 {
+        color: #B88E2F;
+        margin-bottom: 20px;
+    }
+
+    .ant-collapse {
+        background-color: #FFF;
+        border: 1px solid #E7E7E7;
+        border-radius: 8px;
+    }
+
+    .ant-collapse-item {
+        border-bottom: 1px solid #E7E7E7;
+    }
+
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+
+        span {
+            margin-right: 20px;
+        }
+
+        .status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+
+            &.đang-xử-lý { background-color: #FFF2CC; color: #D6A100; }
+            &.đã-giao-hàng { background-color: #D4EDDA; color: #155724; }
+            &.đã-hủy { background-color: #F8D7DA; color: #721C24; }
+        }
+    }
+
+    .order-details {
+        margin-top: 20px;
+
+        h3 {
+            color: #B88E2F;
+            margin-bottom: 10px;
+        }
+
+        .ant-table-thead > tr > th {
+            background-color: #F9F1E7;
+            color: #B88E2F;
+        }
+
+        .ant-table-tbody > tr > td {
+            border-bottom: 1px solid #E7E7E7;
+        }
+    }
+}
