@@ -242,9 +242,9 @@ function OrderTracking() {
   };
 
   return (
-    <div className="order-tracking-page-wrapper">
+    <div className="order-tracking-page-wrapper" style={{margin:50}}>
       <div className="order-tracking-page">
-        <h1>Theo Dõi Đơn Hàng</h1>
+        {/* <h1 style={{marginTop:50, marginBottom: 50}}>Đơn Hàng Của Bạn</h1> */}
         {loading ? (
           <Spin size="large" />
         ) : (

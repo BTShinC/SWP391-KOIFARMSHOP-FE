@@ -14,7 +14,7 @@ import { useEffect } from "react";
 function ShoppingCartPage() {
   const cartItems = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
+  const account = useSelector((state) => state.user);
 
 
   const subtotal = cartItems.reduce(
@@ -44,7 +44,7 @@ function ShoppingCartPage() {
 
   useEffect(() => {
     loadCartItems();
-  }, [user, dispatch]);
+  }, [account, dispatch]);
 
   const handleRemoveFromCart = async (cartItemId) => {
     try {

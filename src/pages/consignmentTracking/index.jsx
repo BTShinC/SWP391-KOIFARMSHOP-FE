@@ -42,15 +42,15 @@ function ConsignmentTracking() {
     }
   };
 
-  const fetchConsignmentDetails = async (productId, productComboId) => {
+  const fetchConsignmentDetails = async (productID, productComboID) => {
     try {
       let image = null;
-      if (productId) {
-        const productResponse = await api.get(`/product/${productId}`);
+      if (productID) {
+        const productResponse = await api.get(`/product/${productID}`);
         console.log("Product Response:", productResponse.data); // Log product response
         image = productResponse.data.image;
-      } else if (productComboId) {
-        const comboResponse = await api.get(`/productcombo/${productComboId}`);
+      } else if (productComboID) {
+        const comboResponse = await api.get(`/productcombo/${productComboID}`);
         console.log("Product Combo Response:", comboResponse.data); // Log product combo response
         image = comboResponse.data.image;
       }
@@ -289,11 +289,11 @@ function ConsignmentTracking() {
   return (
     <div className="consignment-tracking-page-wrapper">
       <div className="consignment-tracking-page">
-        <h1>Theo Dõi Ký Gửi</h1>
+
         {loading ? (
           <Spin size="large" />
         ) : (
-          <Tabs defaultActiveKey="1">
+          <Tabs defaultActiveKey="1"  style={{marginLeft:20, marginBottom:20}}>
             <TabPane className="consignment-tab" tab="Dịch vụ chăm sóc" key="1">
               <Collapse accordion>
                 {Object.entries(consignmentDetailsMap)
