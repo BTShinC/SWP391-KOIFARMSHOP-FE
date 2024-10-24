@@ -10,7 +10,6 @@ import {
   refundConsignmentSell,
   updateConsignmentByID,
 } from "../../service/userService";
-import RejectionReasonModal from "./RejectionReasonModal";
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -197,6 +196,12 @@ function ConsignmentTracking() {
         const date = new Date(dateString);
         return date.toLocaleDateString();
       },
+    },
+    {
+      title: "Lý do",
+      dataIndex: "reason",
+      key: "reason",
+      render: (text, record) => record.reason || "",
     },
     { title: "Trạng thái", dataIndex: "status", key: "status" },
     {

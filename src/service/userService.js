@@ -227,10 +227,15 @@ const updateConsignmentStatus = async (id, status, saleDate = null) => {
 
 const updateConsignmentByID = async (data) => {
   try {
+    console.log("Dữ liệu gửi lên API:", data);  // Log dữ liệu trước khi gọi API
     const response = await api.put(`/consignments/${data.consignmentID}`, data);
     return response;
   } catch (error) {
-    console.error("Lỗi khi gọi API:", error);
+    if (error.response) {
+      console.error("Lỗi từ phía server:", error.response.data); // Log phản hồi chi tiết từ server
+    } else {
+      console.error("Lỗi khi gọi API:", error.message);
+    }
     return null;
   }
 };
