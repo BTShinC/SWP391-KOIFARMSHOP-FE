@@ -39,6 +39,7 @@ import ConsignmentTracking from "./pages/consignmentTracking";
 import VnpayResponsePage from "./components/vnpay";
 import CheckoutPage from "./pages/checkout";
 import OrderSuccess from "./pages/orderSuccess";
+import ConsignmentSuccess from "./pages/consignmentSuccess";
 
 
 function App() {
@@ -174,6 +175,10 @@ function App() {
         {
           path: "/orderSuccess",
           element: <OrderSuccess />,
+        },
+        {
+          path: "/consignmentSuccess",
+          element: <ConsignmentSuccess />,
         }
       ],
     },
