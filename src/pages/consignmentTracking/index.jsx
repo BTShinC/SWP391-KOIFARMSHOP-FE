@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Card, Spin, message, Collapse, Table, Tabs } from "antd";
+import { Card, Spin, message, Collapse, Table, Tabs, Pagination } from "antd";
 import api from '../../config/api';
 import './index.scss';
 
@@ -11,6 +11,8 @@ function ConsignmentTracking() {
   const [consignments, setConsignments] = useState([]);
   const [consignmentDetailsMap, setConsignmentDetailsMap] = useState({});
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [consignmentsPerPage] = useState(5); // Number of consignments per page
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -28,7 +30,12 @@ function ConsignmentTracking() {
     }
     try {
       const response = await api.get(`/consignments/account/${accountId}`);
-      setConsignments(response.data);
+      const sortedConsignments = response.data.sort((a, b) => {
+        const aNumber = parseInt(a.consignmentID.replace('C', ''), 10);
+        const bNumber = parseInt(b.consignmentID.replace('C', ''), 10);
+        return bNumber - aNumber; // Sort in descending order
+      });
+      setConsignments(sortedConsignments);
     } catch (error) {
       console.error("Error fetching consignments:", error);
       message.error("Error fetching consignments.");
@@ -144,71 +151,87 @@ function ConsignmentTracking() {
     { title: 'Thao tác', key: 'action', render: () => <button className="btn-edit-consignment">Thao tác</button> }, // Placeholder button
   ];
 
+  // Pagination logic
+  const indexOfLastConsignment = currentPage * consignmentsPerPage;
+  const indexOfFirstConsignment = indexOfLastConsignment - consignmentsPerPage;
+  const currentConsignments = consignments.slice(indexOfFirstConsignment, indexOfLastConsignment);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   return (
-    <div className="consignment-tracking-page-wrapper"  >
+    <div className="consignment-tracking-page-wrapper">
       <div className="consignment-tracking-page">
         <h1>Theo Dõi Ký Gửi</h1>
         {loading ? (
           <Spin size="large" />
         ) : (
-          <Tabs defaultActiveKey="1">
-            <TabPane className="consignment-tab" tab="Dịch vụ chăm sóc" key="1">
-              <Collapse accordion>
-                {Object.entries(consignmentDetailsMap)
-                  .filter(([id, consignment]) => consignment.consignmentType.includes("chăm sóc"))
-                  .map(([id, consignment]) => (
-                    <Panel
-                      key={id}
-                      header={
-                        <div className="order-header">
-                          <span>Mã ký gửi: {consignment.consignmentID}</span>
-                          {/* Add other header details as needed */}
-                        </div>
-                      }
-                    >
-                      <Card className="order-details">
-                        {/* You can add more consignment details here */}
-                        <h3>Chi tiết ký gửi:</h3>
-                        <Table
-                          columns={careColumns}
-                          dataSource={[consignment]} // Pass an array with the consignment object
-                          rowKey="consignmentID"
-                          pagination={false} // Remove pagination
-                        />
-                      </Card>
-                    </Panel>
-                  ))}
-              </Collapse>
-            </TabPane>
-            <TabPane className="consignment-tab" tab="Dịch vụ bán" key="2">
-              <Collapse accordion>
-                {Object.entries(consignmentDetailsMap)
-                  .filter(([id, consignment]) => consignment.consignmentType.includes("bán"))
-                  .map(([id, consignment]) => (
-                    <Panel
-                      key={id}
-                      header={
-                        <div className="order-header">
-                          <span>Mã ký gửi: {consignment.consignmentID}</span>
-                          {/* Add other header details as needed */}
-                        </div>
-                      }
-                    >
-                      <Card className="order-details">
-                        {/* You can add more consignment details here */}
-                        <h3>Chi tiết ký gửi:</h3>
-                        <Table
-                          columns={saleColumns}
-                          dataSource={[consignment]}
-                          rowKey="consignmentID"
-                          pagination={false} // Remove pagination
-                        />
-                      </Card>
-                    </Panel>
-                  ))}
-              </Collapse>
-            </TabPane>
-          </Tabs>
+          <>
+            <Tabs defaultActiveKey="1">
+              <TabPane className="consignment-tab" tab="Dịch vụ chăm sóc" key="1">
+                <Collapse accordion>
+                  {currentConsignments
+                    .filter((consignment) => consignment.consignmentType.includes("chăm sóc"))
+                    .map((consignment) => (
+                      <Panel
+                        key={consignment.consignmentID}
+                        header={
+                          <div className="order-header">
+                            <span>Mã ký gửi: {consignment.consignmentID}</span>
+                            {/* Add other header details as needed */}
+                          </div>
+                        }
+                      >
+                        <Card className="order-details">
+                          <h3>Chi tiết ký gửi:</h3>
+                          <Table
+                            columns={careColumns}
+                            dataSource={[consignment]} // Pass an array with the consignment object
+                            rowKey="consignmentID"
+                            pagination={false} // Remove pagination
+                          />
+                        </Card>
+                      </Panel>
+                    ))}
+                </Collapse>
+              </TabPane>
+              <TabPane className="consignment-tab" tab="Dịch vụ bán" key="2">
+                <Collapse accordion>
+                  {currentConsignments
+                    .filter((consignment) => consignment.consignmentType.includes("bán"))
+                    .map((consignment) => (
+                      <Panel
+                        key={consignment.consignmentID}
+                        header={
+                          <div className="order-header">
+                            <span>Mã ký gửi: {consignment.consignmentID}</span>
+                            {/* Add other header details as needed */}
+                          </div>
+                        }
+                      >
+                        <Card className="order-details">
+                          <h3>Chi tiết ký gửi:</h3>
+                          <Table
+                            columns={saleColumns}
+                            dataSource={[consignment]}
+                            rowKey="consignmentID"
+                            pagination={false} // Remove pagination
+                          />
+                        </Card>
+                      </Panel>
+                    ))}
+                </Collapse>
+              </TabPane>
+            </Tabs>
+            <Pagination
+              current={currentPage}
+              pageSize={consignmentsPerPage}
+              total={consignments.length}
+              onChange={handlePageChange}
+              style={{ marginTop: '20px', textAlign: 'center', justifyContent: 'center' }}
+            />
+          </>
         )}
       </div>
     </div>

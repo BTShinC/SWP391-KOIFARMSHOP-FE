@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Card, Spin, message, Collapse, Table, Tabs } from "antd";
+import { Card, Spin, message, Collapse, Table, Pagination } from "antd";
 import api from '../../config/api';
 import './index.scss';
-import { render } from "react-dom";
 import { blue } from "@mui/material/colors";
 
 const { Panel } = Collapse;
-const { TabPane } = Tabs;
 
 function OrderTracking() {
   const [orders, setOrders] = useState([]);
   const [orderDetailsMap, setOrderDetailsMap] = useState({});
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [ordersPerPage] = useState(5); // Number of orders per page
   const user = useSelector((state) => state.user);
   console.log("Current user:", user);
 
@@ -30,7 +30,12 @@ function OrderTracking() {
 
     try {
       const response = await api.get(`/orders/account/${user.accountID}`);
-      setOrders(response.data);
+      const sortedOrders = response.data.sort((a, b) => {
+        const aNumber = parseInt(a.orderID.replace('O', ''), 10);
+        const bNumber = parseInt(b.orderID.replace('O', ''), 10);
+        return bNumber - aNumber; // Sort in descending order
+      });
+      setOrders(sortedOrders);
     } catch (error) {
       if (error.response) {
         console.error("Error data:", error.response.data);
@@ -168,12 +173,17 @@ function OrderTracking() {
       render: (text, record) => record.productID || record.productComboID
     },
     {
+      title: 'Tên sản phẩm',
+      dataIndex: 'productName',
+      key: 'productName',
+      render: (productName) => productName || 'N/A'
+    },
+    {
       title: 'Giá',
       dataIndex: 'price',
       key: 'price',
       render: (price) => price ? `${price.toLocaleString('vi-VN')} VND` : 'N/A'
     },
-    
     {
       title: 'Loại',
       dataIndex: 'type',
@@ -182,6 +192,15 @@ function OrderTracking() {
     }
   ];
 
+  // Pagination logic
+  const indexOfLastOrder = currentPage * ordersPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+  const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div className="order-tracking-page-wrapper">
       <div className="order-tracking-page">
@@ -189,40 +208,49 @@ function OrderTracking() {
         {loading ? (
           <Spin size="large" />
         ) : (
-          <Collapse accordion>
-            {orders.map((order) => {
-              const orderDetails = orderDetailsMap[order.orderID] || [];
-              const detailsLoading = !orderDetailsMap[order.orderID];
+          <>
+            <Collapse accordion>
+              {currentOrders.map((order) => {
+                const orderDetails = orderDetailsMap[order.orderID] || [];
+                const detailsLoading = !orderDetailsMap[order.orderID];
 
                 return (
-                <Panel
-                  key={order.orderID}
-                  header={
-                  <div className="order-header" >
-                    <span>Mã đơn hàng: {order.orderID}</span>
-                    <span>Tổng cộng: {order.total.toLocaleString('vi-VN')} VND</span>
-                    <span>Ngày đặt hàng: {new Date(order.date).toLocaleDateString()}</span>
-                    <span style={{ color: blue[400] }} className={`status ${order.status.toLowerCase()}`}>{order.status}</span>
-                  </div>
-                  }
-                >
-                  <Card className="order-details">
-                  <h3>Chi tiết đơn hàng:</h3>
-                  {detailsLoading ? (
-                    <Spin />
-                  ) : (
-                    <Table
-                    columns={columns}
-                    dataSource={orderDetails}
-                    rowKey={(record) => record.productID || record.productComboID}
-                    pagination={false} // Remove pagination
-                    />
-                  )}
-                  </Card>
-                </Panel>
+                  <Panel
+                    key={order.orderID}
+                    header={
+                      <div className="order-header">
+                        <span>Mã đơn hàng: {order.orderID}</span>
+                        <span>Tổng cộng: {order.total.toLocaleString('vi-VN')} VND</span>
+                        <span>Ngày đặt hàng: {new Date(order.date).toLocaleDateString()}</span>
+                        <span style={{ color: blue[400] }} className={`status ${order.status?.toLowerCase()}`}>{order.status}</span>
+                      </div>
+                    }
+                  >
+                    <Card className="order-details">
+                      <h3>Chi tiết đơn hàng:</h3>
+                      {detailsLoading ? (
+                        <Spin />
+                      ) : (
+                        <Table
+                          columns={columns}
+                          dataSource={orderDetails}
+                          rowKey={(record) => record.productID || record.productComboID}
+                          pagination={false} // Remove pagination
+                        />
+                      )}
+                    </Card>
+                  </Panel>
                 );
-            })}
-          </Collapse>
+              })}
+            </Collapse>
+            <Pagination
+              current={currentPage}
+              pageSize={ordersPerPage}
+              total={orders.length}
+              onChange={handlePageChange}
+              style={{ marginTop: '20px', textAlign: 'center', justifyContent: 'center' }}
+            />
+          </>
         )}
       </div>
     </div>

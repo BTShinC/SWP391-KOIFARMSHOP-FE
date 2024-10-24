@@ -35,10 +35,10 @@ import CarePackageList from "./pages/consignment/carePackage-list";
 import PaymentPage from "./pages/consignment-form/payment";
 import SellPayment from "./pages/consignment-form/payment/sell-payment";
 import OrderTracking from "./pages/orderTracking";
-
 import ConsignmentTracking from "./pages/consignmentTracking";
 import VnpayResponsePage from "./components/vnpay";
 import CheckoutPage from "./pages/checkout";
+import OrderSuccess from "./pages/orderSuccess";
 
 
 function App() {
@@ -170,6 +170,11 @@ function App() {
           path: "/checkout",
           element: <CheckoutPage />,
         },
+
+        {
+          path: "/orderSuccess",
+          element: <OrderSuccess />,
+        }
       ],
     },
     {

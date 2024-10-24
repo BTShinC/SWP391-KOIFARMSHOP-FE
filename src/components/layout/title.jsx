@@ -42,6 +42,8 @@ function LayoutTitle() {
     title = "Theo dõi ký gửi";
   }else if (location.pathname === "/checkout") {
     title = "Thanh toán";
+  }else if (location.pathname === "/orderSuccess") {
+    title = "Đặt hàng thành công";
   }
   return (
     <>

@@ -93,15 +93,12 @@ function CheckoutPage() {
 
         dispatch(clearCart());
         message.success("Đơn hàng của bạn đã được đặt thành công!");
-        message.success(
-          "Bạn sẽ được điều hướng về trang chủ trong 5s, vui lòng đừng thao tác!"
-        );
+        navigate("/orderSuccess");
 
         let countdown = 3;
         const countdownInterval = setInterval(() => {
           if (countdown <= 0) {
             clearInterval(countdownInterval);
-            navigate("/");
           } else {
             countdown--;
           }
