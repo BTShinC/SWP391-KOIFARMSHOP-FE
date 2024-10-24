@@ -110,12 +110,16 @@ function SingleProductCombo() {
               <Text>Giống: {productCombo.breed}</Text>
               <Text>Số lượng: {productCombo.quantity}</Text>
               <Text>Kích thước: {productCombo.size} cm</Text>
-              <div className="action-buttons">
-                <Link to="/shoppingcart">
-                  <Button type="default" className="buy-button">Mua ngay</Button>
-                </Link>
-                <Button onClick={handleAddToCart} className="buy-button">Thêm vào giỏ hàng</Button>
-              </div>
+              {productCombo.status === "Còn hàng" ? (
+                <div className="action-buttons">
+                  <Button className="buy-button">Mua ngay</Button>
+                  <Button onClick={handleAddToCart} className="buy-button">
+                    Thêm vào giỏ hàng
+                  </Button>
+                </div>
+              ) : (
+                <Text style={{ color: "red" }}>Sản phẩm hết hàng</Text>
+              )}
 
               <div className="divider-wrapper">
                 <Divider />
