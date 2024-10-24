@@ -169,7 +169,7 @@ function SingleProduct() {
                   </Button>
                 </div>
               ) : (
-                <Text strong >Sản phẩm hết hàng</Text>
+                <Text style={{ color: "red" }}>Sản phẩm hết hàng</Text>
               )}
               <div className="divider-wrapper">
                 <Divider />
