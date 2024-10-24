@@ -9,6 +9,7 @@ import {
   updateConsignmentByID,
   refundConsignmentSell,
 } from "../../service/userService";
+import { format } from "date-fns";
 
 ChangeStatusConsignment.propTypes = {
   data: PropTypes.object.isRequired,
@@ -80,11 +81,12 @@ function ChangeStatusConsignment({
       message.error("Có lỗi xảy ra khi cập nhật trạng thái.");
     }
   };
-
+  const currentDate = format(new Date(), "yyyy-MM-dd");
   const handleComplete = async () => {
     const updatedFormValue = {
       ...formValue,
       status: "Hoàn tất",
+      saleDate : currentDate
     };
 
     await updateConsignmentAndProduct(updatedFormValue);
