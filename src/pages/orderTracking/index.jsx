@@ -219,7 +219,7 @@ function OrderTracking() {
     try {
       const updatedOrder = {
         ...selectedOrder,
-        status: "Đã hoàn tất",
+        status: "Hoàn tất",
         ordersDetails: null // Assuming ordersDetails is not required for the update
       };
 
@@ -229,7 +229,7 @@ function OrderTracking() {
       // Update the order status locally
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
-          order.orderID === selectedOrder.orderID ? { ...order, status: "Đã hoàn tất" } : order
+          order.orderID === selectedOrder.orderID ? { ...order, status: "Hoàn tất" } : order
         )
       );
 
@@ -278,7 +278,7 @@ function OrderTracking() {
                             Đã nhận hàng
                           </Button>
                         )}
-                        {order.status === "Đã hoàn tất" && (
+                        {order.status === "Hoàn tất" && (
                           <Button
                             type="primary"
                             style={{ marginLeft: 'auto', backgroundColor: green[400], borderColor: green[400] }}

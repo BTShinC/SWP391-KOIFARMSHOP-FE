@@ -46,6 +46,8 @@ function LayoutTitle() {
     title = "Đặt hàng thành công";
   }else if (location.pathname === "/consignmentSuccess") {
     title = "Ký gửi thành công";
+  }else if (location.pathname === "/vnPayResponse") {
+    title = "Giao dịch";
   }
   return (
     <>

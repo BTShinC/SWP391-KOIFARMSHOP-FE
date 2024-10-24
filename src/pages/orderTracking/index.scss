@@ -65,12 +65,18 @@
   
       span {
         margin-right: 20px;
+        flex: 1 1 auto; /* Allow flex items to grow and shrink */
+        min-width: 0; /* Prevent overflow */
+        white-space: nowrap; /* Prevent text wrapping */
+        overflow: hidden; /* Hide overflow */
+        text-overflow: ellipsis; /* Add ellipsis for overflow text */
       }
   
       .status {
         padding: 4px 8px;
         border-radius: 4px;
         font-weight: bold;
+        flex: 0 0 auto;
   
         &.đang-xử-lý { background-color: #FFF2CC; color: #D6A100; }
         &.đã-giao-hàng { background-color: #D4EDDA; color: #155724; }
