@@ -12,7 +12,7 @@ const { Title, Text } = Typography;
 function SinglepProduct() {
   const [cartVisible, setCartVisible] = useState(false);
   const [cartItems, setCartItems] = useState([]);
-  const user = useSelector((state) => state.user);
+  const account = useSelector((state) => state.user);
 
 
   const formatCurrency = (amount) => {
@@ -25,8 +25,8 @@ function SinglepProduct() {
   const { id } = useParams(); // Lấy productId từ URL
   const [product, setProduct] = useState(null); // State để lưu thông tin sản phẩm
   const dispatch = useDispatch(); // Khởi tạo dispatch
-  console.log("Current account:", user);
-  console.log("Current ID:", user.accountID);
+  console.log("Current account:", account);
+  console.log("Current ID:", account.accountID);
 
 
 
@@ -63,8 +63,8 @@ function SinglepProduct() {
   }, [id, dispatch]);
 
   useEffect(() => {
-    console.log("Current account:", user);
-  }, user);
+    console.log("Current account:", account);
+  }, account);
 
   useEffect(() => {
     console.log("Current product:", product);

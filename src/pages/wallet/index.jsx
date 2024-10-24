@@ -100,7 +100,7 @@ function WalletPage() {
 
     try {
       console.log("Data to send:", {
-        accountID: accountID,
+        accountID: accountId,
         price: totalAmount,
         date: currentDate,
       });

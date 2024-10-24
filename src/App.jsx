@@ -38,6 +38,7 @@ import OrderTracking from "./pages/orderTracking";
 
 import ConsignmentTracking from "./pages/consignmentTracking";
 import VnpayResponsePage from "./components/vnpay";
+import CheckoutPage from "./pages/checkout";
 
 
 function App() {
