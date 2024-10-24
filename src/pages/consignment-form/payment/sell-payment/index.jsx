@@ -13,6 +13,7 @@ import {
   addFish,
   AddFishCombo,
   createConsignment,
+  editUser,
 } from "../../../../service/userService";
 
 function SellPayment() {
@@ -25,110 +26,116 @@ function SellPayment() {
     let fee = 0;
 
     if (finalData?.quantity) {
-      if (finalData.quantity <= 10 && finalData.size <= 40) {
-        fee = finalData.day * 20000; 
-      } else if (finalData.quantity <= 20 && finalData.size <= 40) {
-        fee = finalData.day * 40000;
-      } else if (finalData.quantity <= 10 && finalData.size > 40) {
-        fee = finalData.day * 60000; 
+      if (finalData?.quantity <= 10 && finalData?.size <= 40) {
+        fee = finalData?.duration * 20000;
+      } else if (finalData?.quantity <= 20 && finalData?.size <= 40) {
+        fee = finalData?.duration * 40000;
+      } else if (finalData?.quantity <= 10 && finalData?.size > 40) {
+        fee = finalData?.duration * 60000;
       } else {
-        fee = finalData.day * 90000; 
+        fee = finalData?.duration * 90000;
       }
-    } 
-    else {
+    } else {
       if (finalData.size <= 40) {
-        fee = finalData.day <= 60 ? 50000 * finalData.day : 25000 * finalData.day;
+        fee =
+          finalData?.duration <= 60
+            ? 50000 * finalData?.duration
+            : 25000 * finalData?.duration;
       } else {
-        fee = finalData.day <= 60 ? 90000 * finalData.day : 70000 * finalData.day;
+        fee =
+          finalData?.duration <= 60
+            ? 90000 * finalData?.duration
+            : 70000 * finalData?.duration;
       }
     }
-  
+
     return fee;
   };
-  
 
   const fee = countFee();
 
   // Hàm xử lý thanh toán
   const handlePayment = async () => {
-    if (user.accountBalance >= fee) {
-      const newBalance = user.accountBalance - fee;
-      const updatedUser = { ...user, accountBalance: newBalance };
-      console.log("Updated user balance:", updatedUser);
-      console.log(finalData);
-      if (localStorage.getItem("sellForm")) {
-        localStorage.removeItem("sellForm");
-        console.log("SellForm đã bị xóa");
-        try {
-          let res = await addFish(finalData);
-          if (res) {
-            console.log("Thành công");
-            const generateProductID = res.data.productID;
-            console.log("generateProductID =>", generateProductID);
-            const consignment = {
-              ...finalData,
-              saleDate: null,
-              salePrice: finalData.price,
-              dateReceived: null,
-              dateExpiration: null,
-              status: "Chờ xác nhận",
-              accountID: user?.accountID,
-              productID: generateProductID,
-              productComboID: null,
-              total:fee,
-            };
-            console.log("consignment =>",consignment)
-            try {
-              let res = await createConsignment(consignment);
-              if (res) {
-                console.log("Thành công");
-              }
-            } catch (error) {
-              console.log(error);
-            }
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      }
+    try {
+      // First, check if the user has enough balance
+      if (user.accountBalance >= fee) {
+        let generateProductID = null;
+        let generateProductComboID = null;
 
-      if (localStorage.getItem("sellFormCombo")) {
-        localStorage.removeItem("sellFormCombo");
-        console.log("sellFormCombo đã bị xóa");
-        try {
-          let res = await AddFishCombo(finalData);
+        // Check if sellForm is in localStorage (individual fish)
+        if (localStorage.getItem("sellForm")) {
+          localStorage.removeItem("sellForm");
+          console.log("SellForm đã bị xóa");
+
+          // Try adding the fish
+          const res = await addFish(finalData);
           if (res) {
-            console.log("Thành công");
-            const generateProductComboID = res.data.productComboID;
-            console.log("generateProductID =>", generateProductComboID);
-            const consignment = {
-              ...finalData,
-              saleDate: null,
-              salePrice: finalData.price,
-              dateReceived: null,
-              dateExpiration: null,
-              status: "Chờ xác nhận",
-              accountID: user?.accountID,
-              productID: null,
-              productComboID: generateProductComboID,
-            };
-            console.log("consignment =>",consignment)
-            try {
-              let res = await createConsignment(consignment);
-              if (res) {
-                console.log("Thành công");
-              }
-            } catch (error) {
-              console.log(error);
-            }
+            console.log("Thành công thêm cá");
+            generateProductID = res.data.productID;
+          } else {
+            throw new Error("Failed to add fish");
           }
-        } catch (error) {
-          console.log(error);
         }
+
+        // Check if sellFormCombo is in localStorage (fish combo)
+        if (localStorage.getItem("sellFormCombo")) {
+          localStorage.removeItem("sellFormCombo");
+          console.log("sellFormCombo đã bị xóa");
+
+          // Try adding the fish combo
+          const res = await AddFishCombo(finalData);
+          if (res) {
+            console.log("Thành công thêm combo cá");
+            generateProductComboID = res.data.productComboID;
+          } else {
+            throw new Error("Failed to add fish combo");
+          }
+        }
+
+        // Construct the consignment object based on product or product combo
+        const consignment = {
+          ...finalData,
+          saleDate: null,
+          salePrice: finalData?.price,
+          dateReceived: null,
+          dateExpiration: null,
+          status: "Chờ xác nhận",
+          accountID: user?.accountID,
+          productID: generateProductID,
+          productComboID: generateProductComboID,
+          total: fee,
+        };
+
+        console.log("consignment =>", consignment);
+
+        // Try creating the consignment
+        const consignmentRes = await createConsignment(consignment);
+        if (!consignmentRes) {
+          throw new Error("Failed to create consignment");
+        }
+        console.log("Thành công tạo đơn ký gửi");
+
+        // If everything is successful, deduct the balance
+        const newBalance = user?.accountBalance - fee;
+        const updatedUser = { ...user, accountBalance: newBalance };
+
+        // Update the user's balance
+        const updateUserapi = await editUser(updatedUser);
+        if (updateUserapi) {
+          console.log("Đã trừ tiền");
+        } else {
+          throw new Error("Failed to update user balance");
+        }
+
+        // Show success message after all operations succeed
+        toast.success("Thanh toán thành công");
+      } else {
+        // Show error if the user doesn't have enough balance
+        toast.error("Không đủ tiền để thanh toán");
       }
-      toast.success("Thanh toán thành công");
-    } else {
-      toast.error("Không đủ tiền để thanh toán");
+    } catch (error) {
+      console.error("Error in handlePayment:", error);
+      toast.error("Có lỗi xảy ra trong quá trình thanh toán");
     }
   };
 
@@ -157,7 +164,9 @@ function SellPayment() {
               <Typography variant="body1">
                 Kích thước: {finalData?.size} cm
               </Typography>
-              <Typography variant="body1">Số ngày: {finalData?.day}</Typography>
+              <Typography variant="body1">
+                Số ngày: {finalData?.duration}
+              </Typography>
             </Grid2>
             <Grid2 xs={6} className="pay-form-box__right">
               <Box

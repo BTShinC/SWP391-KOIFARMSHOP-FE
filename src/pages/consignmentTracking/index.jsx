@@ -4,10 +4,13 @@ import { Card, Spin, message, Collapse, Table, Tabs } from "antd";
 import api from "../../config/api";
 import "./index.scss";
 import {
+  editUser,
   fetchProductById,
   fetchProductComboById,
+  refundConsignmentSell,
   updateConsignmentByID,
 } from "../../service/userService";
+import RejectionReasonModal from "./RejectionReasonModal";
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -139,14 +142,29 @@ function ConsignmentTracking() {
       title: "Lý do",
       dataIndex: "reason",
       key: "reason",
-      render: (text, record) => record.reason ||"",
+      render: (text, record) => record.reason || "",
     },
     { title: "Trạng thái", dataIndex: "status", key: "status" },
     {
       title: "Thao tác",
       key: "action",
-      render: () => <button className="btn-edit-consignment">Thao tác</button>,
-    }, // Placeholder button
+      render: (text, record) => {
+        return record.status === "Hoàn tất" ? (
+          <button
+            className="btn-edit-consignment"
+            onClick={() =>
+              handleExtendConsignment(
+                record,
+                record.productID,
+                record.productComboID
+              )
+            }
+          >
+            Gia hạn
+          </button>
+        ) : null;
+      },
+    },
   ];
 
   const saleColumns = [
@@ -184,98 +202,131 @@ function ConsignmentTracking() {
     {
       title: "Thao tác",
       key: "action",
-      render: (text, record) =>
-        record.status !== "Hoàn tất" ? ( // Kiểm tra nếu trạng thái không phải "Hoàn tất"
-          <button
-            className="btn-edit-consignment"
-            onClick={() =>
-              handleChangeStatus(
-                record,
-                record.productID,
-                record.productComboID
-              )
-            }
-          >
-            Rút cá
-          </button>
-        ) : null, // Ẩn nút nếu trạng thái là "Hoàn tất"
+      render: (text, record) => {
+        // Calculate the difference between current date and consignmentDate in days
+        const consignmentDate = new Date(record.consignmentDate);
+        const currentDate = new Date();
+        const daysDifference = Math.floor(
+          (currentDate - consignmentDate) / (1000 * 60 * 60 * 24)
+        );
+
+        // Check if the status is "Chờ xác nhận" and 3 days have passed
+        if (record.status === "Chờ xác nhận" && daysDifference >= 3) {
+          return (
+            <button
+              className="btn-edit-consignment"
+              onClick={() =>
+                handleChangeStatus(
+                  record,
+                  record.productID,
+                  record.productComboID
+                )
+              }
+            >
+              Rút cá
+            </button>
+          );
+        } else if (record.status === "Chờ xác nhận" && daysDifference < 3) {
+          // If less than 3 days, disable the button and show a warning
+          return (
+            <button className="btn-edit-consignment" disabled>
+              Chờ thêm {3 - daysDifference} ngày để rút
+            </button>
+          );
+        }
+        return null;
+      },
     },
   ];
+  // Gia hạn gói chăm sóc
+  const handleExtendConsignment = (record) => {
+    console.log(
+      "Gia hạn consignment:",
+      record,
+      record.productComboID,
+      record.productID
+    );
+    // Logic gia hạn đơn ký gửi ở đây
+  };
 
+  // Thay đổi trạng thái cá
   const handleChangeStatus = async (consignment, productID, productComboID) => {
     try {
-      const newStatus = "Hoàn tất"; // Trạng thái mới là "Hoàn tất"
-      const currentDate = new Date().toISOString(); // Ngày hiện tại
+      let updatedProduct = null;
+      // Nếu có productID, lấy thông tin sản phẩm
+      if (productID) {
+        console.log(productID);
+        const product = await fetchProductById(productID);
+        if (product) {
+          updatedProduct = {
+            ...product,
+            status: "Đã hủy",
+          };
+        } else {
+          message.error("Không thể lấy thông tin sản phẩm.");
+          return;
+        }
+      }
+      // Nếu có productComboID, lấy thông tin combo sản phẩm
+      else if (productComboID) {
+        console.log(productComboID);
+        const productCombo = await fetchProductComboById(productComboID);
+        if (productCombo) {
+          updatedProduct = {
+            ...productCombo,
+            status: "Đã hủy",
+          };
+        } else {
+          message.error("Không thể lấy thông tin combo sản phẩm.");
+          return;
+        }
+      }
+      // Kiểm tra nếu updatedProduct đã được xác định
+      if (updatedProduct) {
+        const productEndpoint = productID
+          ? `/product/${productID}`
+          : `/productcombo/${productComboID}`;
+
+        try {
+          // Gửi yêu cầu cập nhật product hoặc productCombo
+          const productRes = await api.put(productEndpoint, updatedProduct);
+          if (productRes) {
+            console.log("Thành công");
+          }
+        } catch (error) {
+          console.error("Lỗi khi cập nhật sản phẩm:", error);
+          message.error("Có lỗi xảy ra khi cập nhật sản phẩm.");
+        }
+      }
+      const refundAmount = consignment.total; // Assuming 'total' is the amount to be refunded
+      const updatedUserBalance = user.accountBalance + refundAmount;
+
+      // Create an updated user object with the new balance
+      const updatedUser = { ...user, accountBalance: updatedUserBalance };
+
+      // Call the API to update the user's balance
+      const userRes = await editUser(updatedUser);
+      console.log(consignment.consignmentID)
+      const refund = await refundConsignmentSell(consignment.consignmentID)
+      if (userRes && refund) {
+        message.success(`Hoàn tiền thành công: ${refundAmount} VND`);
+      } else {
+        message.error("Không thể hoàn tiền vào ví của bạn.");
+      }
+      const newStatus = "Đã hủy";
+      const currentDate = new Date().toISOString();
       console.log(consignment);
-      // Cập nhật đối tượng consignment với trạng thái và ngày hoàn tất
       const updatedConsignment = {
         ...consignment,
         status: newStatus,
         saleDate: currentDate,
+        total:0,
       };
-      console.log();
+      console.log(updatedConsignment);
       // Gửi yêu cầu cập nhật consignment
       const consignmentRes = await updateConsignmentByID(updatedConsignment);
       if (consignmentRes) {
         message.success(`Cập nhật trạng thái đơn ký gửi thành công.`);
-
-        let updatedProduct = null;
-
-        // Nếu có productID, lấy thông tin sản phẩm
-        if (productID) {
-          console.log(productID);
-          const product = await fetchProductById(productID);
-          if (product) {
-            updatedProduct = {
-              ...product,
-              status: "Hết hàng",
-            };
-          } else {
-            message.error("Không thể lấy thông tin sản phẩm.");
-            return;
-          }
-        }
-        // Nếu có productComboID, lấy thông tin combo sản phẩm
-        else if (productComboID) {
-          console.log(productComboID);
-          const productCombo = await fetchProductComboById(productComboID);
-          if (productCombo) {
-            updatedProduct = {
-              ...productCombo,
-              status: "Hết hàng",
-            };
-          } else {
-            message.error("Không thể lấy thông tin combo sản phẩm.");
-            return;
-          }
-        }
-
-        // Kiểm tra nếu updatedProduct đã được xác định
-        if (updatedProduct) {
-          const productEndpoint = productID
-            ? `/product/${productID}`
-            : `/productcombo/${productComboID}`;
-
-          try {
-            // Gửi yêu cầu cập nhật product hoặc productCombo
-            const productRes = await api.put(productEndpoint, updatedProduct);
-
-            // Kiểm tra nếu yêu cầu API thành công
-            if (
-              productRes &&
-              productRes.status >= 200 &&
-              productRes.status < 300
-            ) {
-              message.success(`Cập nhật trạng thái sản phẩm thành công.`);
-            } else {
-              console.log("Phản hồi từ API:", productRes);
-              message.error("Cập nhật trạng thái sản phẩm thất bại.");
-            }
-          } catch (error) {
-            console.error("Lỗi khi cập nhật sản phẩm:", error);
-            message.error("Có lỗi xảy ra khi cập nhật sản phẩm.");
-          }
-        }
       } else {
         message.error("Cập nhật trạng thái đơn ký gửi thất bại.");
       }
@@ -327,7 +378,7 @@ function ConsignmentTracking() {
               <Collapse accordion>
                 {Object.entries(consignmentDetailsMap)
                   .filter(([id, consignment]) =>
-                    consignment.consignmentType.includes("bán")
+                    consignment.consignmentType.includes("Ký gửi để bán")
                   )
                   .map(([id, consignment]) => (
                     <Panel

@@ -86,3 +86,19 @@
     }
   }
 }
+.fish-detail__image-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+
+  div {
+    margin-right: 20px;
+    text-align: center;
+
+    img {
+      display: block;
+      margin: 0 auto;
+    }
+  }
+}

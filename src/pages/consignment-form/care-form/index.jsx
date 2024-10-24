@@ -124,7 +124,8 @@ function CareForm({ carePackage }) {
       reason: "",
       farmName: "",
       consignmentDate: consignmentDate,
-      total: carePackage.price
+      total: carePackage?.price,
+      duration : 30,
     };
     console.log(
       "Form data with uploaded images and certifications cá thể:",

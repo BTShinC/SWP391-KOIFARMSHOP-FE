@@ -9,7 +9,13 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { format } from "date-fns";
-function SellFormCombo() {
+import PropTypes from "prop-types";
+
+SellFormCombo.propTypes = {
+  isOnline: PropTypes.bool,
+};
+
+function SellFormCombo({ isOnline }) {
   const {
     register,
     handleSubmit,
@@ -89,7 +95,7 @@ function SellFormCombo() {
       price: data.desiredPrice,
       status: "Chờ xác nhận",
       comboName: uuidv4(),
-      salePrice:data.desiredPrice,
+      salePrice: data.desiredPrice,
       reason: "",
       consignmentDate: consignmentDate,
     };
@@ -131,7 +137,7 @@ function SellFormCombo() {
         </Grid>
         <Box>
           <Typography variant="h2" className="title-typography">
-            Ký gửi theo lô ONLINE
+            Ký gửi theo lô {isOnline ? "Online" : "Offline"}
           </Typography>
         </Box>
         <Grid container spacing={4}>
@@ -157,23 +163,25 @@ function SellFormCombo() {
               />
             )}
           </Grid>
-          <Grid item xs={12}>
-            <TextField
-              {...register("farmName", {
-                required: "Vui lòng nhập đường dẫn trang trại của bạn",
-                pattern: {
-                  value: /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/, 
-                  message:
-                    "Vui lòng nhập một đường dẫn hợp lệ (bắt đầu bằng http hoặc https)",
-                },
-              })}
-              label="Đường dẫn trang trại của bạn"
-              type="url"
-              fullWidth
-              error={!!errors.farmName}
-              helperText={errors.farmName?.message}
-            />
-          </Grid>
+          {isOnline && (
+            <Grid item xs={12}>
+              <TextField
+                {...register("farmName", {
+                  required: "Vui lòng nhập đường dẫn trang trại của bạn",
+                  pattern: {
+                    value: /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/,
+                    message:
+                      "Vui lòng nhập một đường dẫn hợp lệ (bắt đầu bằng http hoặc https)",
+                  },
+                })}
+                label="Đường dẫn trang trại của bạn"
+                type="url"
+                fullWidth
+                error={!!errors.farmName}
+                helperText={errors.farmName?.message}
+              />
+            </Grid>
+          )}
           <Grid item xs={12}>
             <TextField
               {...register("breed", { required: "Vui lòng nhập giống cá" })}
@@ -224,14 +232,14 @@ function SellFormCombo() {
           <Grid item xs={12}>
             <TextField
               label="Số ngày dự định ký gửi"
-              {...register("day", {
+              {...register("duration", {
                 required: "Vui lòng nhập số ngày dự định ký gửi",
               })}
               fullWidth
               type="number"
               inputProps={{ min: 1 }}
-              error={!!errors.day}
-              helperText={errors.day?.message}
+              error={!!errors.duration}
+              helperText={errors.duration?.message}
               className="highlighted-textfield"
             />
           </Grid>

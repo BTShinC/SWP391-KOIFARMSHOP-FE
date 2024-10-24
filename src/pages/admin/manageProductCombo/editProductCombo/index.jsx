@@ -218,6 +218,17 @@ function EditProductComboModal({ fishData, onChange }) {
               </div>
             </div>
             <div>
+              <label className="form-label">Tên lô:</label>
+              <Input
+                className="form-control"
+                type="text"
+                name="comboName"
+                value={formValue.comboName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
               <label className="form-label">Giống:</label>
               <Input
                 className="form-control"

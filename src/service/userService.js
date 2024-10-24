@@ -235,6 +235,18 @@ const updateConsignmentByID = async (data) => {
   }
 };
 
+const refundConsignmentSell = async (consignmentID) => {
+  try {
+    const response = await api.post(`/refund/${consignmentID}`, );
+    return response;
+  } catch (error) {
+    console.error("Lỗi khi gọi API:", error);
+    return null;
+  }
+};
+
+
+
 export {
   Register,
   ChangePassword,
@@ -258,4 +270,5 @@ export {
   fetchAllConsignment,
   updateConsignmentStatus,
   updateConsignmentByID,
+  refundConsignmentSell
 };

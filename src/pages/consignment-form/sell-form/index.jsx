@@ -22,7 +22,12 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { format } from "date-fns";
-function SellForm() {
+import PropTypes from "prop-types";
+
+SellForm.propTypes = {
+  isOnline: PropTypes.bool,
+};
+function SellForm({ isOnline }) {
   const {
     register,
     handleSubmit,
@@ -56,7 +61,7 @@ function SellForm() {
   const navigation = useNavigate();
   // Nếu người dùng chọn ký gửi bán lô thì render component khác
   if (isBatchSell) {
-    return <SellFormCombo />;
+    return <SellFormCombo isOnline = {isOnline} />;
   }
 
   // Preview ảnh khi chọn
@@ -162,8 +167,7 @@ function SellForm() {
           {/* Nút Quay lại */}
           <Button
             onClick={() => {
-              console.log("Quay lại");
-              window.history.back();
+              navigation(-1);
             }}
             className="back-button"
           >
@@ -180,7 +184,7 @@ function SellForm() {
         </Grid>
         <Box>
           <Typography variant="h2" className="title-typography">
-            Ký gửi bán cá thể ONLINE
+          Ký gửi bán cá thể {isOnline ? "ONLINE" : "OFFLINE"}
           </Typography>
         </Box>
 
@@ -230,23 +234,25 @@ function SellForm() {
               />
             )}
           </Grid>
-          <Grid item xs={12}>
-            <TextField
-              {...register("farmName", {
-                required: "Vui lòng nhập đường dẫn trang trại của bạn",
-                pattern: {
-                  value: /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/,
-                  message:
-                    "Vui lòng nhập một đường dẫn hợp lệ (bắt đầu bằng http hoặc https)",
-                },
-              })}
-              label="Đường dẫn trang trại của bạn"
-              type="url"
-              fullWidth
-              error={!!errors.farmName}
-              helperText={errors.farmName?.message}
-            />
-          </Grid>
+          {isOnline && (
+            <Grid item xs={12}>
+              <TextField
+                {...register("farmName", {
+                  required: "Vui lòng nhập đường dẫn trang trại của bạn",
+                  pattern: {
+                    value: /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/,
+                    message:
+                      "Vui lòng nhập một đường dẫn hợp lệ (bắt đầu bằng http hoặc https)",
+                  },
+                })}
+                label="Đường dẫn trang trại của bạn"
+                type="url"
+                fullWidth
+                error={!!errors.farmName}
+                helperText={errors.farmName?.message}
+              />
+            </Grid>
+          )}
           <Grid item xs={12}>
             <TextField
               {...register("breed", { required: "Vui lòng nhập giống cá" })}
@@ -299,14 +305,14 @@ function SellForm() {
           <Grid item xs={12}>
             <TextField
               label="Số ngày dự định ký gửi"
-              {...register("day", {
+              {...register("duration", {
                 required: "Vui lòng nhập số ngày dự định ký gửi",
               })}
               fullWidth
               type="number"
               inputProps={{ min: 1 }}
-              error={!!errors.day}
-              helperText={errors.day?.message}
+              error={!!errors.duration}
+              helperText={errors.duration?.message}
               className="highlighted-textfield"
             />
           </Grid>

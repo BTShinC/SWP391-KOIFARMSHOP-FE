@@ -102,7 +102,8 @@ function CareFormCombo({ carePackage }) {
       farmName: "",
       consignmentDate: consignmentDate,
       today : today,
-      total: carePackage?.price
+      total: carePackage?.price,
+      duration : 30,
     };
   
     console.log("Form data with uploaded images:", finalData);

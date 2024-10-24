@@ -21,6 +21,7 @@ import {
   addFish,
   AddFishCombo,
   createConsignment,
+  editUser,
   fetchAllCarePackages,
 } from "../../../service/userService";
 PaymentPage.propTypes = {};
@@ -79,6 +80,7 @@ function PaymentPage() {
               );
 
               // Tạo đơn ký gửi cho sản phẩm cá thể
+              console.log(paymentData)
               const res1 = await createConsignment(paymentData);
               if (res1) {
                 console.log("Tạo đơn ký gửi cá thể thành công");
@@ -117,9 +119,14 @@ function PaymentPage() {
 
           // Nếu đến đây mà không có lỗi nào, nghĩa là đơn ký gửi đã thành công
           // Tiến hành cập nhật số dư tài khoản
-          const newBalance = user.accountBalance - carePackage.price;
+          const newBalance = user.accountBalance - carePackage?.price;
+          console.log(newBalance)
           const updatedUser = { ...user, accountBalance: newBalance };
           console.log("Updated user balance:", updatedUser);
+          const updateUserapi = await editUser(updatedUser)
+          if(updateUserapi){  
+              console.log("Đã trừ tiền")
+          }
 
           // Xóa localStorage sau khi thanh toán thành công
           if (localStorage.getItem("careForm")) {
