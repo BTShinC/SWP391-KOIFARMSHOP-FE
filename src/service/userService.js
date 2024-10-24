@@ -89,7 +89,7 @@ const fetchProductById = async (id) => {
 };
 const fetchAllProductCombo = async () => {
   try {
-    const response = await api.get("productcombo");
+    const response = await api.get("productcombo/getall");
     return response.data;
   } catch (error) {
     console.error(error);
@@ -115,7 +115,7 @@ const addToCartAPI = async (data) => {
 
 
       accountID: data.accountID, // Change this to accountID
-      productID: data.productId
+      productID: data.productID
   });
 
 

@@ -1,19 +1,18 @@
 import "./index.scss";
-import { Link,useParams} from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Button, Typography, Image, Divider, message } from "antd";
 import Carousel from "../carousel";
 import { useState, useEffect } from "react";
 import ShoppingCart from "../shopping-cart";
-import { addToCartAPI,fetchProductById } from "../../service/userService";
+import { addToCartAPI, fetchProductById } from "../../service/userService";
 import { useDispatch, useSelector } from "react-redux";
 
 const { Title, Text } = Typography;
 
-function SinglepProduct() {
+function SingleProduct() {
   const [cartVisible, setCartVisible] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const account = useSelector((state) => state.user);
-
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("vi-VN", {
@@ -22,34 +21,15 @@ function SinglepProduct() {
       maximumFractionDigits: 0,
     }).format(amount);
   };
+
   const { id } = useParams(); // Lấy productId từ URL
   const [product, setProduct] = useState(null); // State để lưu thông tin sản phẩm
   const dispatch = useDispatch(); // Khởi tạo dispatch
   console.log("Current account:", account);
   console.log("Current ID:", account.accountID);
 
-
-
-  // useEffect(() => {
-  //   return () => {
-  //     const removeTemporaryCartItem = async () => {
-  //       try {
-  //         if (account && account.accountID) {
-  //           await deleteCartItem(product.productID); // Gọi hàm xóa sản phẩm
-  //           console.log("Temporary cart item removed");
-  //         }
-  //       } catch (error) {
-  //         console.error("Error removing temporary cart item:", error);
-  //       }
-  //     };
-
-  //     removeTemporaryCartItem();
-  //   };
-  // }, [account, product]);
-
   useEffect(() => {
     const loadProduct = async () => {
-      
       try {
         const response = await fetchProductById(id);
         console.log("Fetched product:", response);
@@ -72,32 +52,28 @@ function SinglepProduct() {
 
   const handleAddToCart = async () => {
     try {
-
-      if (!account || !account.accountID) { // Sửa từ accountId thành accountID
-
+      if (!account || !account.accountID) {
         console.error("Account information is missing");
         return;
       }
 
-       // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-       const existingItem = cartItems.find(item => item.productID === product.productID);
-       if (existingItem) {
-         message.warning("Sản phẩm đã có trong giỏ hàng.");
-         return; // Không thêm sản phẩm nếu đã có
-       }
+      // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+      const existingItem = cartItems.find(
+        (item) => item.productID === product.productID
+      );
+      if (existingItem) {
+        message.warning("Sản phẩm đã có trong giỏ hàng.");
+        return; // Không thêm sản phẩm nếu đã có
+      }
 
       console.log("Sending to API:", {
-
         accountID: account.accountID,
-
-        productId: product.productID,
+        productID: product.productID,
       });
 
       const response = await addToCartAPI({
-
-        accountID: account.accountID, // Sửa từ accountId thành accountID
-
-        productId: product.productID,
+        accountID: account.accountID,
+        productID: product.productID,
       });
       console.log("Added to cart successfully:", response);
 
@@ -185,16 +161,16 @@ function SinglepProduct() {
               <Text>Kích thước: {product.size} cm</Text>
               <Text>Giống: {product.breed}</Text>
               <Text>Nguồn gốc: {product.origin}</Text>
-              <div className="action-buttons">
-                <Button  className="buy-button" on>
-                  Mua ngay
-                </Button>
-
-                <Button onClick={handleAddToCart} className="buy-button">
-                  Thêm vào giỏ hàng
-                </Button>
-              </div>
-
+              {product.status === "Còn hàng" ? (
+                <div className="action-buttons">
+                  <Button className="buy-button">Mua ngay</Button>
+                  <Button onClick={handleAddToCart} className="buy-button">
+                    Thêm vào giỏ hàng
+                  </Button>
+                </div>
+              ) : (
+                <Text strong >Sản phẩm hết hàng</Text>
+              )}
               <div className="divider-wrapper">
                 <Divider />
               </div>
@@ -245,4 +221,4 @@ function SinglepProduct() {
   );
 }
 
-export default SinglepProduct;
+export default SingleProduct;

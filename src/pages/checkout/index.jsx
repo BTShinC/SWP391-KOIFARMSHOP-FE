@@ -68,7 +68,7 @@ function CheckoutPage() {
         .filter((item) => item.type === "Product")
         .map((item) => item.productID);
       const productComboIDs = cartItems
-        .filter((item) => item.type === "Combo")
+        .filter((item) => item.type === "ProductCombo")
         .map((item) => item.productComboID);
 
       if (accountBalance >= finalPrice) {

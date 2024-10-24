@@ -178,7 +178,7 @@ function OrderTracking() {
       title: 'Tên sản phẩm',
       dataIndex: 'productName',
       key: 'productName',
-      render: (productName) => productName || 'N/A'
+      render: (text, record) => record.productName || record.comboName
     },
     {
       title: 'Giá',

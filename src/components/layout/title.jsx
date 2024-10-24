@@ -3,6 +3,7 @@ import Header from "../header";
 import { Outlet, useLocation } from "react-router-dom";
 import Footer from "../footer";
 import Banner from "../banner";
+import e from "cors";
 
 function LayoutTitle() {
 
@@ -48,6 +49,12 @@ function LayoutTitle() {
     title = "Ký gửi thành công";
   }else if (location.pathname === "/vnPayResponse") {
     title = "Giao dịch";
+  }else if (location.pathname === "/consignmentFrom") {
+    title = "Ký gửi";
+  }else if (location.pathname === "/consignmentPayment") {
+    title = "Thanh toán";
+  }else if (location.pathname === "/consignmentSellPayment") {  
+    title = "Thanh toán";
   }
   return (
     <>
