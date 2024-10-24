@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import './index.scss'; 
 
 import { toast } from "react-toastify"; // Nhập toast nếu bạn sử dụng để thông báo
 import api from "../../config/api";
 
 const VnpayResponsePage = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
 
@@ -46,11 +49,31 @@ const VnpayResponsePage = () => {
 
   return (
     <div>
-      <h1>Transaction Response</h1>
+      {/* <h1>Transaction Response</h1>
       <p>Transaction ID: {transactionID}</p>
       <p>Amount: {amount}</p>
       <p>Response Code: {responseCode}</p>
-      {/* Hiển thị thông tin khác nếu cần */}
+      Hiển thị thông tin khác nếu cần */}
+      <div className="payment-success-page">
+      <div className="payment-success-container">
+     
+        <h2 className="success-title">Giao dịch hoàn tất</h2>
+        <p className="success-message">
+        Mã giao dịch: {transactionID}<br/> 
+        Số tiền: {amount}<br/>
+        <br/> 
+          Cảm ơn quý khách đã tin tưởng và sử dụng dịch vụ của chúng tôi!
+        </p>
+        <div className="button-group">
+          <button className="home-button" onClick={() => navigate('/')}>
+            Về trang chủ
+          </button>
+          <button className="tracking-button" onClick={() => navigate('/wallet')}>
+            Ví tiền
+          </button>
+        </div>
+      </div>
+    </div>
     </div>
   );
 };

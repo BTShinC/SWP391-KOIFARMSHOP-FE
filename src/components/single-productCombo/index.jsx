@@ -43,19 +43,19 @@ function SingleProductCombo() {
 
   const handleAddToCart = async () => {
     try {
-      if (user.accountID) {
+      if (!user.accountID) {
         console.error("Account information is missing");
         return;
       }
 
       console.log("Sending to API:", {
-        accountId: user.accountID,
-        productId: productCombo.productComboID // Use productComboID
+        accountID: user.accountID,
+        productID: productCombo.productComboID // Use productComboID
       });
 
       const response = await addToCartAPI({
-        accountId: user.accountID,
-        productId: productCombo.productComboID // Use productComboID
+        accountID: user.accountID,
+        productID: productCombo.productComboID // Use productComboID
       });
       console.log("Added to cart successfully:", response);
 
@@ -63,7 +63,7 @@ function SingleProductCombo() {
       setCartItems((prevItems) => [
         ...prevItems,
         {
-          productid: productCombo.productComboID,
+          productID: productCombo.productComboID,
           comboName: productCombo.comboName,
           price: productCombo.price,
           image: productCombo.image,

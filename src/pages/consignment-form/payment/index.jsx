@@ -124,6 +124,7 @@ function PaymentPage() {
           }
         }
         toast.success("Thanh toán thành công");
+        navigation("/consignmentSuccess");
       } else {
         console.log("Không đủ tiền");
       }
