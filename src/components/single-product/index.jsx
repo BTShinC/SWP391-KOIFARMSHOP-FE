@@ -12,6 +12,8 @@ const { Title, Text } = Typography;
 function SinglepProduct() {
   const [cartVisible, setCartVisible] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+  const account = useSelector((state) => state.user);
+
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("vi-VN", {
@@ -23,8 +25,8 @@ function SinglepProduct() {
   const { id } = useParams(); // Lấy productId từ URL
   const [product, setProduct] = useState(null); // State để lưu thông tin sản phẩm
   const dispatch = useDispatch(); // Khởi tạo dispatch
-  const account = useSelector((state) => state.user); // Lấy accountId từ Redux
   console.log("Current account:", account);
+  console.log("Current ID:", account.accountID);
 
 
 
@@ -62,7 +64,7 @@ function SinglepProduct() {
 
   useEffect(() => {
     console.log("Current account:", account);
-  }, [account]);
+  }, account);
 
   useEffect(() => {
     console.log("Current product:", product);
@@ -70,7 +72,9 @@ function SinglepProduct() {
 
   const handleAddToCart = async () => {
     try {
+
       if (!account || !account.accountID) { // Sửa từ accountId thành accountID
+
         console.error("Account information is missing");
         return;
       }
@@ -83,12 +87,16 @@ function SinglepProduct() {
        }
 
       console.log("Sending to API:", {
+
         accountID: account.accountID,
+
         productId: product.productID,
       });
 
       const response = await addToCartAPI({
+
         accountID: account.accountID, // Sửa từ accountId thành accountID
+
         productId: product.productID,
       });
       console.log("Added to cart successfully:", response);

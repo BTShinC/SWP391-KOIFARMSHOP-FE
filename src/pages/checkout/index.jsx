@@ -15,7 +15,7 @@ function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
   const [discount, setDiscount] = useState(0);
-  const deliveryFee = 0;
+  const deliveryFee = 200000;
   const [finalPrice, setFinalPrice] = useState(0);
 
   useEffect(() => {
@@ -84,7 +84,9 @@ function CheckoutPage() {
 
         console.log("Query Parameters:", params.toString());
 
+
         const orderResponse = await api.post(`/orders/makeOrder?${params.toString()}`,
+
           { promotionID: null } // Add promotionID parameter and set to null by default
         ); 
         console.log("Order Response:", orderResponse.data);

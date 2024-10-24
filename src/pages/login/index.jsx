@@ -71,6 +71,7 @@ function LoginPage() {
 
       // Save user data to Redux
 
+
      dispatch(login({
       accountID: response.data.account.accountID,
       fullName: response.data.account.fullName, 
@@ -81,6 +82,7 @@ function LoginPage() {
       phoneNumber: response.data.account.phoneNumber,
       roleName: response.data.account.roleName,
     }));
+
 
 
       // Check user role and navigate accordingly

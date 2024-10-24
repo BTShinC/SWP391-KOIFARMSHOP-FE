@@ -9,6 +9,7 @@ export const userSlice = createSlice({
     login: (state, action) => action.payload,
     logout: () => initialState,
     setUser: (state, action) => {
+
       return {
         accountID: action.payload.accountId,
         fullName: action.payload.fullName, // Lưu fullName
@@ -19,6 +20,7 @@ export const userSlice = createSlice({
         address: action.payload.address,
         roleName: action.payload.roleName,
       };
+
     },
   },
 });
