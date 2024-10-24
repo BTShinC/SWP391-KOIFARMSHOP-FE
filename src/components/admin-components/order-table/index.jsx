@@ -49,14 +49,14 @@ function OrderTable({ columns, orderData, title }) { // Khởi tạo detailData 
             <React.Fragment key={order.productID || index}>
               <tr>
                 <td>{order.orderID}</td>
-                <td>{order.total} VND</td>
+                <td>{order.total.toLocaleString()} VND</td>
                 <td>{order.date}</td>
                 <td>{order.status}</td>
                 <td className="btn-container">
                   <Button onClick={() => handleViewDetail(order.orderID)}>
                     {showDetail === order.orderID ? "Ẩn chi tiết" : "Xem chi tiết"}
                   </Button>
-                  <ChangeStatus data={order}></ChangeStatus>
+                  <ChangeStatus data={order}/>
                 </td>
               </tr>
               {/* Bảng chi tiết nhỏ */}
@@ -82,8 +82,8 @@ function OrderTable({ columns, orderData, title }) { // Khởi tạo detailData 
                                   <td>{detail.ordersDetailID}</td>
                                   <td>{detail.productID}</td>
                                   <td>{detail.productName}</td>
-                                  <td>{detail.productPrice} VND</td>
-                                  <td>{detail.discountedPrice} VND</td>
+                                  <td>{detail.productPrice.toLocaleString()} VND</td>
+                                  <td>{detail.discountedPrice.toLocaleString()} VND</td>
                                   <td>{detail.productComboID || "N/A"}</td> {/* Hiển thị "N/A" nếu không có combo */}
                                 </tr>
                               ))

@@ -89,7 +89,7 @@ const ManageOrder = () => {
   const [loading, setLoading] = useState(true); // Trạng thái loading
   const [orders, setOrders] = useState([]); // Dữ liệu đơn hàng từ API
   const [orderDetails, setOrderDetails] = useState(null); // Trạng thái để lưu chi tiết đơn hàng
-  const [isModalVisible, setIsModalVisible] = useState(false); // Trạng thái hiển thị modal
+  // const [isModalVisible, setIsModalVisible] = useState(false); // Trạng thái hiển thị modal
   useEffect(() => {
     const getOrders = async () => {
       try {
