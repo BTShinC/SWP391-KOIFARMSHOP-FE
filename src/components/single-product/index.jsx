@@ -12,7 +12,7 @@ const { Title, Text } = Typography;
 function SingleProduct() {
   const [cartVisible, setCartVisible] = useState(false);
   const [cartItems, setCartItems] = useState([]);
-  const account = useSelector((state) => state.user);
+
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("vi-VN", {
@@ -25,10 +25,11 @@ function SingleProduct() {
   const { id } = useParams(); // Lấy productId từ URL
   const [product, setProduct] = useState(null); // State để lưu thông tin sản phẩm
   const dispatch = useDispatch(); // Khởi tạo dispatch
-  console.log("Current account:", account);
-  console.log("Current ID:", account.accountID);
+  // console.log("Current account:", account);
+  // console.log("Current ID:", account.accountID);
 
   useEffect(() => {
+
     const loadProduct = async () => {
       try {
         const response = await fetchProductById(id);
@@ -42,15 +43,16 @@ function SingleProduct() {
     loadProduct();
   }, [id, dispatch]);
 
-  useEffect(() => {
-    console.log("Current account:", account);
-  }, account);
+  // useEffect(() => {
+  //   console.log("Current account:", account);
+  // }, account);
 
   useEffect(() => {
     console.log("Current product:", product);
   }, [product]);
 
   const handleAddToCart = async () => {
+    const account = useSelector((state) => state.user);
     try {
       if (!account || !account.accountID) {
         console.error("Account information is missing");
