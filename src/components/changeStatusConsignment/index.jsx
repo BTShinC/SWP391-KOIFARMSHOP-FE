@@ -39,6 +39,7 @@ function ChangeStatusConsignment({
 
   // Hàm cập nhật trạng thái sản phẩm
   const updateProductStatus = async (
+    productName,
     productData,
     isCombo = false,
     newStatus
@@ -47,8 +48,10 @@ function ChangeStatusConsignment({
       productData.status = newStatus;
       let productRes;
       if (isCombo) {
+        productData.comboName = productName;
         productRes = await editComboInfo(productData);
       } else {
+        productData.productName = productName;
         productRes = await editFishInfo(productData);
       }
       return productRes;
@@ -65,14 +68,17 @@ function ChangeStatusConsignment({
       let updatedConsignmentStatus =
         consignmentType === "chăm sóc" ? "Đang chăm sóc" : "Đang tiến hành";
       let currentDate = format(new Date(), "yyyy-MM-dd");
-      const dateExpiration = format(addDays(new Date(), formValue.duration), "yyyy-MM-dd");
+      const dateExpiration = format(
+        addDays(new Date(), formValue.duration),
+        "yyyy-MM-dd"
+      );
       const updatedFormValue = {
         ...formValue,
         dateReceived: currentDate,
         dateExpiration: dateExpiration,
         status: updatedConsignmentStatus,
       };
-
+      console.log(formValue);
       await updateConsignmentAndProduct(updatedFormValue);
 
       // Gọi lại onChange sau khi trạng thái thay đổi
@@ -191,6 +197,7 @@ function ChangeStatusConsignment({
         updatedFormValue.status,
         updatedFormValue.consignmentType
       );
+
       const productData = productID
         ? await fetchProductById(productID)
         : productComboID
@@ -202,12 +209,17 @@ function ChangeStatusConsignment({
         return;
       }
 
+      // Xác định xem có phải là combo không và cập nhật tên sản phẩm
       const isCombo = !!productComboID;
+      const productName = productData.breed +"+"+ updatedFormValue.consignmentID;
+
       const productRes = await updateProductStatus(
+        productName,
         productData,
         isCombo,
         updatedProductStatus
       );
+
       if (!productRes) {
         message.error("Cập nhật trạng thái sản phẩm thất bại.");
       }

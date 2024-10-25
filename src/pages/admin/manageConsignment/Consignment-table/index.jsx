@@ -1,4 +1,4 @@
-import { Button, Spin, Modal } from "antd";
+import { Button, Spin, Modal, message } from "antd";
 import PropTypes from "prop-types";
 import { format } from "date-fns";
 import React, { useState } from "react";
@@ -6,8 +6,10 @@ import "./index.scss";
 import {
   fetchProductById,
   fetchProductComboById,
+  updateConsignmentByID,
 } from "../../../../service/userService";
 import ChangeStatusConsignment from "../../../../components/changeStatusConsignment";
+import { Input } from "@mui/material";
 
 ConsignmentTable.propTypes = {
   consignmentData: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -20,7 +22,9 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
   const [loading, setLoading] = useState(false);
   const [consignmentStatus, setConsignmentStatus] = useState({}); // State quản lý trạng thái
   const [isModalVisible, setIsModalVisible] = useState(false); // Quản lý hiển thị modal
+  const [isModalVisibleCareInfo, setIsModalVisibleCareInfo] = useState(false);
   const [modalData, setModalData] = useState(null); // Dữ liệu cho modal
+  const [careReason, setCareReason] = useState("");
 
   // Hàm để hiển thị modal với chi tiết sản phẩm
   const handleViewDetail = async (consignment, productID, productComboID) => {
@@ -63,7 +67,27 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
   // Hàm để đóng modal
   const handleCloseModal = () => {
     setIsModalVisible(false);
+    setIsModalVisibleCareInfo(false);
     setProductDetails(null); // Xóa chi tiết sản phẩm khi đóng modal
+  };
+
+  const handleEditCareInfo = (consignment) => {
+    setIsModalVisibleCareInfo(true); // Mở modal
+    setModalData(consignment); // Lưu dữ liệu ký gửi hiện tại vào modal
+  };
+  const handleOk = async () => {
+    const updatedModalData = { ...modalData, reason: careReason };
+    console.log(updatedModalData);
+    try {
+      let res = await updateConsignmentByID(updatedModalData)
+      if(res){
+        message.success("Cập nhât thành công")
+      }
+    } catch (error) {
+      console.log(error)
+      message.error("Không cập nhật được")
+    }
+    setIsModalVisibleCareInfo(false);
   };
 
   return (
@@ -143,6 +167,11 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
                     }
                     onChange={onChange}
                   />
+                  {consignment.consignmentType === "chăm sóc" && (
+                    <Button onClick={() => handleEditCareInfo(consignment)}>
+                      Cập nhật tình hình chăm sóc
+                    </Button>
+                  )}
                 </td>
               </tr>
             </React.Fragment>
@@ -182,14 +211,14 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
                 )}
 
                 <p>
-                  <strong>Tên sản phẩm:</strong>{" "}
+                  <strong>Tên sản phẩm:</strong>
                   {productDetails.productName || productDetails.comboName}
                 </p>
                 <p>
                   <strong>Mô tả:</strong> {productDetails.description || "N/A"}
                 </p>
                 <p>
-                  <strong>Gói chăm sóc:</strong>{" "}
+                  <strong>Gói chăm sóc:</strong>
                   {productDetails.carePackageID || "N/A"}
                 </p>
                 {!productDetails.carePackageID && (
@@ -203,12 +232,8 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
                         : "Không có giá"}
                     </p>
                     <p>
-                      <strong>Giá bán khách mong đợi: </strong>
-                      {productDetails.desiredPrice
-                        ? `${new Intl.NumberFormat("vi-VN").format(
-                            productDetails.desiredPrice
-                          )} VNĐ`
-                        : "Không có giá"}
+                      <strong>Tình hình chăm sóc:</strong>
+                      {productDetails.reason || "N/A"}
                     </p>
                   </>
                 )}
@@ -225,6 +250,24 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
         ) : (
           <p>Không tìm thấy chi tiết sản phẩm</p>
         )}
+      </Modal>
+
+      {/* Modal để cập nhật tình hình chăm sóc */}
+      {/* Modal để cập nhật tình hình chăm sóc */}
+      <Modal
+        title={`Cập nhật tình hình chăm sóc ${modalData?.consignmentID || ""}`}
+        visible={isModalVisibleCareInfo}
+        onCancel={handleCloseModal}
+        onOk={handleOk}
+      >
+        <p>Cập nhật tình hình chăm sóc hiện tại cho khách hàng:</p>
+        <Input
+          placeholder="Nhập lý do cập nhật tình hình chăm sóc"
+          value={careReason}
+          onChange={(e) => {
+            setCareReason(e.target.value);
+          }}
+        />
       </Modal>
     </div>
   );
