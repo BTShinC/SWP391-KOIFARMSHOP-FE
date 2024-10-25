@@ -9,7 +9,7 @@ import {
   updateConsignmentByID,
   refundConsignmentSell,
 } from "../../service/userService";
-import { format } from "date-fns";
+import { addDays, format } from "date-fns";
 
 ChangeStatusConsignment.propTypes = {
   data: PropTypes.object.isRequired,
@@ -64,9 +64,12 @@ function ChangeStatusConsignment({
 
       let updatedConsignmentStatus =
         consignmentType === "chăm sóc" ? "Đang chăm sóc" : "Đang tiến hành";
-
+      let currentDate = format(new Date(), "yyyy-MM-dd");
+      const dateExpiration = format(addDays(new Date(), formValue.duration), "yyyy-MM-dd");
       const updatedFormValue = {
         ...formValue,
+        dateReceived: currentDate,
+        dateExpiration: dateExpiration,
         status: updatedConsignmentStatus,
       };
 
@@ -86,7 +89,7 @@ function ChangeStatusConsignment({
     const updatedFormValue = {
       ...formValue,
       status: "Hoàn tất",
-      saleDate : currentDate
+      saleDate: currentDate,
     };
 
     await updateConsignmentAndProduct(updatedFormValue);
