@@ -10,7 +10,7 @@ import {
   refundConsignmentSell,
 } from "../../service/userService";
 import { addDays, format } from "date-fns";
-
+import './index.scss'
 ChangeStatusConsignment.propTypes = {
   data: PropTypes.object.isRequired,
   productID: PropTypes.string,
@@ -75,6 +75,7 @@ function ChangeStatusConsignment({
       const updatedFormValue = {
         ...formValue,
         dateReceived: currentDate,
+        reason : "Đang chăm sóc cá cho các khách iu",
         dateExpiration: dateExpiration,
         status: updatedConsignmentStatus,
       };
@@ -95,6 +96,7 @@ function ChangeStatusConsignment({
     const updatedFormValue = {
       ...formValue,
       status: "Hoàn tất",
+      reason:"Cá của mấy khách iu đã được chăm sóc đến tận kẽ răng",
       saleDate: currentDate,
     };
 

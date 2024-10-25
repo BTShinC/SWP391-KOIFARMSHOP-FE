@@ -1,15 +1,17 @@
-import { Button, Spin, Modal, message } from "antd";
+import { Button, Spin, Modal, message, Input, Upload } from "antd";
 import PropTypes from "prop-types";
 import { format } from "date-fns";
 import React, { useState } from "react";
 import "./index.scss";
 import {
+  createCareDetail,
   fetchProductById,
   fetchProductComboById,
-  updateConsignmentByID,
 } from "../../../../service/userService";
 import ChangeStatusConsignment from "../../../../components/changeStatusConsignment";
-import { Input } from "@mui/material";
+import { PlusOutlined } from "@ant-design/icons";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { storage } from "/src/firebase.js"; // Đảm bảo cấu hình Firebase
 
 ConsignmentTable.propTypes = {
   consignmentData: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -20,16 +22,22 @@ ConsignmentTable.propTypes = {
 function ConsignmentTable({ consignmentData, columns, onChange }) {
   const [productDetails, setProductDetails] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [consignmentStatus, setConsignmentStatus] = useState({}); // State quản lý trạng thái
-  const [isModalVisible, setIsModalVisible] = useState(false); // Quản lý hiển thị modal
-  const [isModalVisibleCareInfo, setIsModalVisibleCareInfo] = useState(false);
-  const [modalData, setModalData] = useState(null); // Dữ liệu cho modal
-  const [careReason, setCareReason] = useState("");
+  const [consignmentStatus, setConsignmentStatus] = useState({});
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalData, setModalData] = useState(null);
+  const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
+  const [fileList, setFileList] = useState([]); // Quản lý fileList
+  const [careUpdate, setCareUpdate] = useState({
+    description: "",
+    updateDate: new Date().toISOString(),
+    images: "",
+    consignmentID: "",
+  });
 
   // Hàm để hiển thị modal với chi tiết sản phẩm
   const handleViewDetail = async (consignment, productID, productComboID) => {
-    setIsModalVisible(true); // Mở modal
-    setModalData(consignment); // Lưu dữ liệu ký gửi hiện tại vào modal
+    setIsModalVisible(true);
+    setModalData(consignment);
 
     const productIdToFetch = productID || productComboID;
     if (productIdToFetch) {
@@ -51,6 +59,68 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
     }
   };
 
+  // Cập nhật fileList và upload ảnh lên Firebase
+  const handleUploadChange = ({ fileList: newFileList }) => {
+    setFileList(newFileList); // Cập nhật fileList
+    if (newFileList.length > 0) {
+      const file = newFileList[0].originFileObj;
+      const storageRef = ref(storage, `uploads/${file.name}`);
+
+      uploadBytes(storageRef, file)
+        .then(() => getDownloadURL(storageRef))
+        .then((url) => {
+          // Cập nhật URL ảnh vào careUpdate
+          setCareUpdate((prevCareUpdate) => ({
+            ...prevCareUpdate,
+            images: url, // Lưu URL của ảnh vào careUpdate.images
+          }));
+          message.success("Ảnh đã được upload thành công!");
+        })
+        .catch((error) => {
+          console.error("Error uploading file:", error);
+          message.error("Lỗi khi upload ảnh!");
+        });
+    }
+  };
+
+  const handleCareUpdateChange = (e) => {
+    const { name, value } = e.target;
+    setCareUpdate((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  // Gửi cập nhật tình hình chăm sóc
+  const handleUpdateCare = async () => {
+    // Kiểm tra nếu có description và images
+    if (careUpdate.description && careUpdate.images) {
+      console.log("Dữ liệu careUpdate:", careUpdate);
+      try {
+        // Gọi API để tạo chi tiết chăm sóc
+        let res = await createCareDetail(careUpdate);
+
+        if (res) {
+          message.success(
+            `Tình hình chăm sóc của ${modalData.consignmentID} đã được cập nhật.`
+          );
+          setIsUpdateModalVisible(false); // Đóng modal sau khi cập nhật thành công
+        } else {
+          message.error(
+            `Tình hình chăm sóc của ${modalData.consignmentID} không được cập nhật.`
+          );
+        }
+      } catch (error) {
+        console.error("Error updating care details:", error);
+        message.error(
+          "Đã xảy ra lỗi khi cập nhật tình hình chăm sóc. Vui lòng thử lại."
+        );
+      }
+    } else {
+      message.error("Vui lòng nhập mô tả và upload ảnh!");
+    }
+  };
+
   // Hàm cập nhật trạng thái consignment
   const handleStatusChange = (consignmentID, newStatus) => {
     setConsignmentStatus((prevState) => ({
@@ -64,30 +134,31 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
     }
   };
 
-  // Hàm để đóng modal
-  const handleCloseModal = () => {
-    setIsModalVisible(false);
-    setIsModalVisibleCareInfo(false);
-    setProductDetails(null); // Xóa chi tiết sản phẩm khi đóng modal
+  // Đóng modal cập nhật
+  const handleCloseUpdateModal = () => {
+    setIsUpdateModalVisible(false);
+    setFileList([]); // Reset fileList khi đóng modal
+    setCareUpdate({
+      description: "",
+      updateDate: new Date().toISOString(),
+      images: "",
+      consignmentID: "",
+    });
   };
 
-  const handleEditCareInfo = (consignment) => {
-    setIsModalVisibleCareInfo(true); // Mở modal
-    setModalData(consignment); // Lưu dữ liệu ký gửi hiện tại vào modal
+  const handleOpenUpdateModal = (consignment) => {
+    setIsUpdateModalVisible(true);
+    setModalData(consignment);
+    setCareUpdate((prevState) => ({
+      ...prevState,
+      consignmentID: consignment.consignmentID, // Gán consignmentID
+    }));
   };
-  const handleOk = async () => {
-    const updatedModalData = { ...modalData, reason: careReason };
-    console.log(updatedModalData);
-    try {
-      let res = await updateConsignmentByID(updatedModalData)
-      if(res){
-        message.success("Cập nhât thành công")
-      }
-    } catch (error) {
-      console.log(error)
-      message.error("Không cập nhật được")
-    }
-    setIsModalVisibleCareInfo(false);
+
+  // Đóng modal chi tiết
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+    setProductDetails(null);
   };
 
   return (
@@ -135,7 +206,7 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
                 <td>
                   {new Intl.NumberFormat("vi-VN").format(
                     consignment?.total || 0
-                  )}
+                  )}{" "}
                   VNĐ
                 </td>
                 <td>{consignment.consignmentType}</td>
@@ -156,7 +227,14 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
                   >
                     Xem chi tiết
                   </Button>
-                  {/* Truyền trạng thái vào ChangeStatusConsignment */}
+                  {consignment.consignmentType === "chăm sóc" && (
+                    <Button
+                      onClick={() => handleOpenUpdateModal(consignment)}
+                      style={{ marginLeft: "10px" }}
+                    >
+                      Cập nhật tình hình
+                    </Button>
+                  )}
                   <ChangeStatusConsignment
                     data={consignment}
                     consignmentID={consignment.consignmentID}
@@ -167,11 +245,6 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
                     }
                     onChange={onChange}
                   />
-                  {consignment.consignmentType === "chăm sóc" && (
-                    <Button onClick={() => handleEditCareInfo(consignment)}>
-                      Cập nhật tình hình chăm sóc
-                    </Button>
-                  )}
                 </td>
               </tr>
             </React.Fragment>
@@ -179,12 +252,52 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
         </tbody>
       </table>
 
+      {/* Modal để cập nhật tình hình chăm sóc */}
+      <Modal
+        title="Cập nhật tình hình chăm sóc"
+        visible={isUpdateModalVisible}
+        onCancel={handleCloseUpdateModal}
+        onOk={handleUpdateCare}
+      >
+        <Upload
+          name="image"
+          listType="picture-card"
+          className="image-uploader"
+          fileList={fileList} // Đảm bảo quản lý fileList đúng cách
+          onChange={handleUploadChange}
+          beforeUpload={() => false}
+          style={{
+            width: "100%",
+            maxWidth: "400px",
+            marginBottom: "16px",
+          }}
+        >
+          {fileList.length >= 1 ? null : (
+            <div>
+              <PlusOutlined />
+              <div style={{ marginTop: 8 }}>Upload</div>
+            </div>
+          )}
+        </Upload>
+
+        <Input.TextArea
+          rows={4}
+          name="description"
+          value={careUpdate.description}
+          onChange={handleCareUpdateChange}
+          placeholder="Nhập mô tả tình hình chăm sóc"
+          style={{
+            marginTop: "16px",
+          }}
+        />
+      </Modal>
+
       {/* Modal để hiển thị chi tiết */}
       <Modal
         title={`Chi tiết ký gửi ${modalData?.consignmentID || ""}`}
         visible={isModalVisible}
         onCancel={handleCloseModal}
-        footer={null} // Tắt footer nếu không cần nút
+        footer={null}
       >
         {loading ? (
           <Spin />
@@ -209,16 +322,15 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
                     {modalData.farmName}
                   </a>
                 )}
-
                 <p>
-                  <strong>Tên sản phẩm:</strong>
+                  <strong>Tên sản phẩm:</strong>{" "}
                   {productDetails.productName || productDetails.comboName}
                 </p>
                 <p>
                   <strong>Mô tả:</strong> {productDetails.description || "N/A"}
                 </p>
                 <p>
-                  <strong>Gói chăm sóc:</strong>
+                  <strong>Gói chăm sóc:</strong>{" "}
                   {productDetails.carePackageID || "N/A"}
                 </p>
                 {!productDetails.carePackageID && (
@@ -232,7 +344,7 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
                         : "Không có giá"}
                     </p>
                     <p>
-                      <strong>Tình hình chăm sóc:</strong>
+                      <strong>Tình hình chăm sóc:</strong>{" "}
                       {productDetails.reason || "N/A"}
                     </p>
                   </>
@@ -250,24 +362,6 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
         ) : (
           <p>Không tìm thấy chi tiết sản phẩm</p>
         )}
-      </Modal>
-
-      {/* Modal để cập nhật tình hình chăm sóc */}
-      {/* Modal để cập nhật tình hình chăm sóc */}
-      <Modal
-        title={`Cập nhật tình hình chăm sóc ${modalData?.consignmentID || ""}`}
-        visible={isModalVisibleCareInfo}
-        onCancel={handleCloseModal}
-        onOk={handleOk}
-      >
-        <p>Cập nhật tình hình chăm sóc hiện tại cho khách hàng:</p>
-        <Input
-          placeholder="Nhập lý do cập nhật tình hình chăm sóc"
-          value={careReason}
-          onChange={(e) => {
-            setCareReason(e.target.value);
-          }}
-        />
       </Modal>
     </div>
   );

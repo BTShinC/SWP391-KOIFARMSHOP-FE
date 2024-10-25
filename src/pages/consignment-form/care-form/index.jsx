@@ -121,7 +121,7 @@ function CareForm({ carePackage }) {
       status: "Chờ xác nhận",
       desiredPrice: carePackage?.price,
       productName: uuidv4(),
-      reason: "",
+      reason: "Vui lòng mang cá đến trang trại để hoàn tất thủ tục ký gửi chăm sóc",
       farmName: "",
       consignmentDate: consignmentDate,
       total: carePackage?.price,

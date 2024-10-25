@@ -183,6 +183,16 @@ const fetchAllCarePackages = async () => {
     throw error;
   }
 };
+const fetchCarePackageByID = async (carePackageID) =>{
+  try {
+    const response = await api.get(`carePackages/${carePackageID}`);
+    console.log(response.data);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
 const createConsignment = async (data) => {
   try {
     const response = await api.post(`consignments`, data);
@@ -237,6 +247,29 @@ const updateConsignmentByID = async (data) => {
       console.error("Lỗi khi gọi API:", error.message);
     }
     return null;
+  }
+};
+
+const createCareDetail = async (data) => {
+  try {
+    console.log("Dữ liệu gửi lên API:", data); // Log dữ liệu trước khi gọi API
+
+    const response = await api.post(`/care-details`, data);
+
+    console.log("Phản hồi từ API:", response.data); // Log phản hồi từ API nếu thành công
+    return response;
+  } catch (error) {
+    if (error.response) {
+      // Lỗi từ phía server (ví dụ 4xx hoặc 5xx)
+      console.error("Lỗi từ phía server:", error.response.data); // Log phản hồi chi tiết từ server
+    } else if (error.request) {
+      // Không nhận được phản hồi từ server
+      console.error("Không nhận được phản hồi từ server:", error.request);
+    } else {
+      // Lỗi xảy ra khi thiết lập yêu cầu
+      console.error("Lỗi khi gọi API:", error.message);
+    }
+    return null; // Trả về null để biểu thị lỗi
   }
 };
 
@@ -331,7 +364,9 @@ export {
   AddFishCombo,
   fetchProductComboById,
   fetchAllCarePackages,
+  fetchCarePackageByID,
   createConsignment,
+  createCareDetail,
   fetchAllConsignment,
   updateConsignmentStatus,
   updateConsignmentByID,

@@ -98,7 +98,7 @@ function CareFormCombo({ carePackage }) {
       price: carePackage?.price,
       status: "Chờ xác nhận",
       desiredPrice: carePackage?.price,
-      reason: "",
+      reason: "Vui lòng mang cá đến trang trại để hoàn tất thủ tục ký gửi chăm sóc",
       farmName: "",
       consignmentDate: consignmentDate,
       today : today,
