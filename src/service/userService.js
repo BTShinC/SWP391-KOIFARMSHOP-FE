@@ -112,8 +112,9 @@ const addToCartAPI = async (data) => {
     console.log("Data being sent to API:", data);
     const response = await api.post("shop-cart/add", {
       accountID: data.accountID, // Change this to accountID
-      productID: data.productId,
-    });
+      productID: data.productID
+  });
+
 
     console.log("API response:", response.data);
     return response.data;
@@ -251,6 +252,62 @@ const refundConsignmentSell = async (consignmentID) => {
 };
 
 
+// const updateOrder = async (id, data) => {
+//   try {
+//     const response = await api.put(`orders/${id}`, data);
+//     return response.data; // Trả về dữ liệu từ API nếu cần
+//   } catch (error) {
+//     console.error("Error updating order:", error);
+//     throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+//   }
+// };
+
+// const fetchOrderById = async (id) => {
+//   try {
+//     const response = await api.get(`orders/${id}`); // Gọi API để lấy thông tin đơn hàng theo ID
+//     return response.data; // Trả về dữ liệu từ API
+//   } catch (error) {
+//     console.error("Error fetching order by ID:", error);
+//     throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+//   }
+// };
+
+const fetchOrders = async () => {
+  try {
+    const response = await api.get("orders"); // Gọi API để lấy danh sách đơn hàng
+    return response.data; // Trả về dữ liệu từ API
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+  }
+};
+const fetchOrderDetails = async (orderID) => {
+  try {
+    const response = await api.get(`orders-details/order/${orderID}`); // Gọi API để lấy chi tiết đơn hàng
+    console.log(response.data);
+    return response.data; // Trả về dữ liệu từ API
+  } catch (error) {
+    console.error("Error fetching order details:", error);
+    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+  }
+};
+const updateOrderStatus = async (orderID, status,accountID, date) => {
+  try {
+    const payload = {
+      status: status,
+      accountID: accountID, // Trường bắt buộc
+      date: date // Trường bắt buộc
+    };
+    const response = await api.put(`orders/${orderID}`, payload ,   { headers: { "Content-Type": "application/json" }} ); // Gọi API để cập nhật trạng thái
+    console.log("Order updated:", response.data);
+    return response.data; // Trả về dữ liệu từ API
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    console.error("Error updating order status:", error.response?.data || error.message);
+
+    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+  }
+};
 
 export {
   Register,
@@ -275,5 +332,12 @@ export {
   fetchAllConsignment,
   updateConsignmentStatus,
   updateConsignmentByID,
+
   refundConsignmentSell
+  // updateOrder,
+  // fetchOrderById,
+  fetchOrders,
+  fetchOrderDetails,
+  updateOrderStatus,
+
 };

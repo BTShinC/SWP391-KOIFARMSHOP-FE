@@ -3,6 +3,7 @@ import Header from "../header";
 import { Outlet, useLocation } from "react-router-dom";
 import Footer from "../footer";
 import Banner from "../banner";
+import e from "cors";
 
 function LayoutTitle() {
 
@@ -38,8 +39,24 @@ function LayoutTitle() {
     title = "Cá Koi Nhật";
   }else if (location.pathname === "/orderTracking") {
     title = "Theo dõi đơn hàng";
+  }else if (location.pathname === "/consignmentTracking") {
+    title = "Theo dõi ký gửi";
   }else if (location.pathname === "/checkout") {
     title = "Thanh toán";
+  }else if (location.pathname === "/orderSuccess") {
+    title = "Đặt hàng thành công";
+  }else if (location.pathname === "/consignmentSuccess") {
+    title = "Ký gửi thành công";
+  }else if (location.pathname === "/vnPayResponse") {
+    title = "Giao dịch";
+  }else if (location.pathname === "/consignmentFrom") {
+    title = "Ký gửi";
+  }else if (location.pathname === "/consignmentPayment") {
+    title = "Thanh toán";
+  }else if (location.pathname === "/consignmentSellPayment") {  
+    title = "Thanh toán";
+  }else if (location.pathname === "/wallet/vnpay/response") {  
+    title = "Xác nhận thanh toán";
   }
   return (
     <>

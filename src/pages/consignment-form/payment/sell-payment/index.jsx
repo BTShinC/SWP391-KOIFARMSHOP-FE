@@ -133,9 +133,16 @@ function SellPayment() {
         // Show error if the user doesn't have enough balance
         toast.error("Không đủ tiền để thanh toán");
       }
-    } catch (error) {
-      console.error("Error in handlePayment:", error);
-      toast.error("Có lỗi xảy ra trong quá trình thanh toán");
+// <<<<<<< tai3
+//     } catch (error) {
+//       console.error("Error in handlePayment:", error);
+//       toast.error("Có lỗi xảy ra trong quá trình thanh toán");
+// =======
+      toast.success("Thanh toán thành công");
+      navigate("/consignmentSuccess");
+    } else {
+      toast.error("Không đủ tiền để thanh toán");
+
     }
   };
 

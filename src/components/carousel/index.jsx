@@ -52,7 +52,7 @@ export default function Carousel({ slidesPerView = 4 }) {
             <HoverCard
               imgSrc={product.image}
               title={product.productName}
-              price={product.price}
+              price={product.price.toLocaleString()}
               id={product.productID}
             />
           </SwiperSlide>

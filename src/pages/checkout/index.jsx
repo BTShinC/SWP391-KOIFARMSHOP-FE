@@ -15,7 +15,7 @@ function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
   const [discount, setDiscount] = useState(0);
-  const deliveryFee = 0;
+  const deliveryFee = 200000;
   const [finalPrice, setFinalPrice] = useState(0);
 
   useEffect(() => {
@@ -68,7 +68,7 @@ function CheckoutPage() {
         .filter((item) => item.type === "Product")
         .map((item) => item.productID);
       const productComboIDs = cartItems
-        .filter((item) => item.type === "Combo")
+        .filter((item) => item.type === "ProductCombo")
         .map((item) => item.productComboID);
 
       if (accountBalance >= finalPrice) {
@@ -84,22 +84,21 @@ function CheckoutPage() {
 
         console.log("Query Parameters:", params.toString());
 
+
         const orderResponse = await api.post(`/orders/makeOrder?${params.toString()}`,
+
           { promotionID: null } // Add promotionID parameter and set to null by default
         ); 
         console.log("Order Response:", orderResponse.data);
 
         dispatch(clearCart());
         message.success("Đơn hàng của bạn đã được đặt thành công!");
-        message.success(
-          "Bạn sẽ được điều hướng về trang chủ trong 5s, vui lòng đừng thao tác!"
-        );
+        navigate("/orderSuccess");
 
         let countdown = 3;
         const countdownInterval = setInterval(() => {
           if (countdown <= 0) {
             clearInterval(countdownInterval);
-            navigate("/");
           } else {
             countdown--;
           }

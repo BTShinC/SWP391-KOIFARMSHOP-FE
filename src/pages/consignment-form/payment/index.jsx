@@ -148,6 +148,9 @@ function PaymentPage() {
             "Có lỗi xảy ra trong quá trình thanh toán hoặc tạo đơn ký gửi."
           );
         }
+
+        toast.success("Thanh toán thành công");
+        navigation("/consignmentSuccess");
       } else {
         console.log("Không đủ tiền");
         toast.error("Không đủ tiền trong tài khoản.");

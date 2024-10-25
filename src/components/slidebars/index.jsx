@@ -6,6 +6,8 @@ import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../pages/redux/features/userSlice";
 import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
+import api from "../../config/api";
 
 const Sidebar = ({ isOpen, onClose }) => {
   // Function to format the account balance
@@ -17,9 +19,28 @@ const Sidebar = ({ isOpen, onClose }) => {
     }).format(amount);
   };
 
+
+
+  const [accountBalance, setAccountBalance] = useState(0);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch(); // Khai báo useDispatch để sử dụng action
   const navigate = useNavigate(); // Sử dụng useNavigate để điều hướng
+
+     // Fetch account balance from API when the component mounts
+     useEffect(() => {
+      const fetchAccountBalance = async () => {
+        if (user.accountID) {
+          try {
+            const response = await api.get(`/account/${user.accountID}`);
+            setAccountBalance(response.data.accountBalance); // Set the fetched balance
+          } catch (error) {
+            console.error("Error fetching account balance:", error);
+          }
+        }
+      };
+  
+      fetchAccountBalance();
+    }, [user]);
 
   const handleLogout = async () => {
     try {
@@ -65,7 +86,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               {/* Display user's full name */}
               <p>
                 Số dư tài khoản: <br />
-                {formatCurrency(user.accountBalance)} VND
+                {formatCurrency(accountBalance)} VND
                 {/* Display formatted account balance */}
               </p>
             </div>
@@ -95,7 +116,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         )}
         {user && ( // Show logout link only if user is logged in
           <li>
-            <Link to="/" onClick={onClose}>
+            <Link to="/orderTracking" onClick={onClose}>
               Trạng thái đơn hàng
             </Link>
           </li>

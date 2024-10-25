@@ -35,8 +35,13 @@ import CarePackageList from "./pages/consignment/carePackage-list";
 import PaymentPage from "./pages/consignment-form/payment";
 import SellPayment from "./pages/consignment-form/payment/sell-payment";
 import OrderTracking from "./pages/orderTracking";
+import ConsignmentTracking from "./pages/consignmentTracking";
+import VnpayResponsePage from "./components/vnpay";
 import CheckoutPage from "./pages/checkout";
 import ConsignmentTracking from './pages/consignmentTracking'
+import OrderSuccess from "./pages/orderSuccess";
+import ConsignmentSuccess from "./pages/consignmentSuccess";
+
 function App() {
   const router = createBrowserRouter([
     {
@@ -154,13 +159,31 @@ function App() {
           element: <WalletPage />,
         },
         {
+          path: "/wallet/vnpay/response",
+          element: <VnpayResponsePage />,
+        },
+        {
           path: "/orderTracking",
           element: <OrderTracking />,
         },
         {
+          path: "/consignmentTracking",
+          element: <ConsignmentTracking />,
+        },
+
+        {
           path: "/checkout",
           element: <CheckoutPage />,
         },
+
+        {
+          path: "/orderSuccess",
+          element: <OrderSuccess />,
+        },
+        {
+          path: "/consignmentSuccess",
+          element: <ConsignmentSuccess />,
+        }
       ],
     },
     {
