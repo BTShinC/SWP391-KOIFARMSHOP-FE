@@ -136,7 +136,6 @@ function SellPayment() {
     } catch (error) {
       console.error("Error in handlePayment:", error);
       toast.error("Có lỗi xảy ra trong quá trình thanh toán");
-      toast.success("Thanh toán thành công");
     }
   };
 
