@@ -61,9 +61,7 @@ function Header() {
             </li>
           )} */}
           <li>
-            <Link to="#" onClick={toggleSidebar}>
-            <UserAvatar></UserAvatar>
-            </Link>
+            <UserAvatar onClick={toggleSidebar}></UserAvatar>
           </li>
           <li>
             <Link to="/admin">

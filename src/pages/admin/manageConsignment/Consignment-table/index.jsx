@@ -1,7 +1,7 @@
-import { Button, Spin } from "antd";
+import { Button, Spin, Modal } from "antd";
 import PropTypes from "prop-types";
-import { format } from 'date-fns';
-import React, { useState, useEffect } from "react";
+import { format } from "date-fns";
+import React, { useState } from "react";
 import "./index.scss";
 import {
   fetchProductById,
@@ -12,64 +12,20 @@ import ChangeStatusConsignment from "../../../../components/changeStatusConsignm
 ConsignmentTable.propTypes = {
   consignmentData: PropTypes.arrayOf(PropTypes.object).isRequired,
   columns: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onChange:PropTypes.func
+  onChange: PropTypes.func,
 };
 
 function ConsignmentTable({ consignmentData, columns, onChange }) {
-  const [consignmentTypes, setConsignmentTypes] = useState({});
-  const [showDetail, setShowDetail] = useState(null);
   const [productDetails, setProductDetails] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [consignmentStatus, setConsignmentStatus] = useState({}); // State quản lý trạng thái
+  const [isModalVisible, setIsModalVisible] = useState(false); // Quản lý hiển thị modal
+  const [modalData, setModalData] = useState(null); // Dữ liệu cho modal
 
-  // Hàm xác định loại ký gửi
-  const determineConsignmentType = async (productID, productComboID) => {
-    try {
-      let product;
-      if (productComboID) {
-        // Nếu có productComboID, gọi API để lấy thông tin combo
-        product = await fetchProductComboById(productComboID);
-      } else if (productID) {
-        // Nếu không có productComboID, gọi API để lấy thông tin sản phẩm
-        product = await fetchProductById(productID);
-      }
-
-      if (product?.carePackageID) {
-        return "chăm sóc";
-      }
-    } catch (error) {
-      console.error("Lỗi khi lấy thông tin sản phẩm hoặc combo:", error);
-    }
-    return "ký gửi để bán";
-  };
-
-  // Gọi API để lấy loại ký gửi cho tất cả các consignment ngay khi bảng được hiển thị
-  useEffect(() => {
-    const fetchConsignmentTypes = async () => {
-      setLoading(true);
-      const newConsignmentTypes = {};
-
-      for (const consignment of consignmentData) {
-        const productIdToFetch =
-          consignment.productID || consignment.productComboID;
-        if (productIdToFetch) {
-          const consignmentType = await determineConsignmentType(
-            consignment.productID,
-            consignment.productComboID
-          );
-          newConsignmentTypes[consignment.consignmentID] = consignmentType;
-        }
-      }
-
-      setConsignmentTypes(newConsignmentTypes);
-      setLoading(false);
-    };
-
-    fetchConsignmentTypes();
-  }, [consignmentData]);
-
-  // Hàm xử lý khi nhấn nút "Xem chi tiết"
-  const handleViewDetail = async (id, productID, productComboID) => {
-    setShowDetail((prev) => (prev === id ? null : id)); // Toggle hiển thị chi tiết
+  // Hàm để hiển thị modal với chi tiết sản phẩm
+  const handleViewDetail = async (consignment, productID, productComboID) => {
+    setIsModalVisible(true); // Mở modal
+    setModalData(consignment); // Lưu dữ liệu ký gửi hiện tại vào modal
 
     const productIdToFetch = productID || productComboID;
     if (productIdToFetch) {
@@ -82,13 +38,32 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
           res = await fetchProductById(productID);
         }
 
-        setProductDetails(res); // Lưu chi tiết sản phẩm hoặc combo
+        setProductDetails(res);
       } catch (error) {
         console.error("Error fetching product details:", error);
       } finally {
         setLoading(false);
       }
     }
+  };
+
+  // Hàm cập nhật trạng thái consignment
+  const handleStatusChange = (consignmentID, newStatus) => {
+    setConsignmentStatus((prevState) => ({
+      ...prevState,
+      [consignmentID]: newStatus,
+    }));
+
+    // Sau khi cập nhật, bạn có thể gọi onChange nếu cần thiết
+    if (onChange) {
+      onChange();
+    }
+  };
+
+  // Hàm để đóng modal
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+    setProductDetails(null); // Xóa chi tiết sản phẩm khi đóng modal
   };
 
   return (
@@ -109,122 +84,148 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
             <React.Fragment key={consignment.consignmentID || index}>
               <tr>
                 <td>{consignment.consignmentID}</td>
-                <td>{consignment.consignmentDate || "N/A"}</td>
-                <td>{consignment.dateReceived || "N/A"}</td>
-                <td>{consignment.dateExpiration || "N/A"}</td>
                 <td>
-                  {consignment.saleDate
+                  {consignment.consignmentDate
                     ? format(
-                        new Date(consignment.saleDate),
-                        "dd/MM/yyyy HH:mm:ss"
+                        new Date(consignment.consignmentDate),
+                        "dd/MM/yyyy"
                       )
                     : "N/A"}
                 </td>
-                <td>{consignment.productComboID || consignment.productID}</td>
-                <td>{consignment.accountID || "N/A"}</td>
                 <td>
-                  {loading ? (
-                    <Spin />
-                  ) : (
-                    consignmentTypes[consignment.consignmentID] ||
-                    "N/A"
-                  )}
+                  {consignment.dateReceived
+                    ? format(new Date(consignment.dateReceived), "dd/MM/yyyy")
+                    : "N/A"}
                 </td>
-                <td>{consignment.status || "N/A"}</td>
+                <td>
+                  {consignment.dateExpiration
+                    ? format(new Date(consignment.dateExpiration), "dd/MM/yyyy")
+                    : "N/A"}
+                </td>
+                <td>
+                  {consignment.saleDate
+                    ? format(new Date(consignment.saleDate), "dd/MM/yyyy")
+                    : "N/A"}
+                </td>
+                <td>{consignment.productComboID || consignment.productID}</td>
+                <td>
+                  {new Intl.NumberFormat("vi-VN").format(
+                    consignment?.total || 0
+                  )}
+                  VNĐ
+                </td>
+                <td>{consignment.consignmentType}</td>
+                <td>
+                  {consignmentStatus[consignment.consignmentID] ||
+                    consignment.status ||
+                    "N/A"}
+                </td>
                 <td className="btn-container">
                   <Button
                     onClick={() =>
                       handleViewDetail(
-                        consignment.consignmentID,
+                        consignment,
                         consignment.productID,
                         consignment.productComboID
                       )
                     }
                   >
-                    {showDetail === consignment.consignmentID
-                      ? "Ẩn chi tiết"
-                      : "Xem chi tiết"}
+                    Xem chi tiết
                   </Button>
-                  {/* Truyền consignmentID, productID và productComboID vào ChangeStatusConsignment */}
+                  {/* Truyền trạng thái vào ChangeStatusConsignment */}
                   <ChangeStatusConsignment
                     data={consignment}
                     consignmentID={consignment.consignmentID}
                     productID={consignment.productID}
                     productComboID={consignment.productComboID}
-                    onChange = {onChange}
+                    onChangeStatus={(newStatus) =>
+                      handleStatusChange(consignment.consignmentID, newStatus)
+                    }
+                    onChange={onChange}
                   />
                 </td>
               </tr>
-
-              {/* Hiển thị chi tiết sản phẩm khi nhấn "Xem chi tiết" */}
-              {showDetail === consignment.consignmentID && (
-                <tr>
-                  <td colSpan={8}>
-                    {loading ? (
-                      <Spin />
-                    ) : productDetails ? (
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "flex-start",
-                          justifyContent: "space-between",
-                          gap: "1rem",
-                        }}
-                      >
-                        <div>
-                          <div>
-                            <p>
-                              <strong>Tên sản phẩm:</strong>{" "}
-                              {productDetails.productName ||
-                                productDetails.comboName}
-                            </p>
-                            <p>
-                              <strong>Mô tả:</strong>{" "}
-                              {productDetails.description || "N/A"}
-                            </p>
-                            <p>
-                              <strong>Gói chăm sóc:</strong>{" "}
-                              {productDetails.carePackageID || "N/A"}
-                            </p>
-                            <p>
-                              <strong>Giá bán:</strong>{" "}
-                              {productDetails.price !== undefined &&
-                              productDetails.price !== null
-                                ? `${new Intl.NumberFormat("vi-VN").format(
-                                    productDetails.desiredPrice
-                                  )} VNĐ`
-                                : "Không có giá"}
-                            </p>
-                            <p>
-                              <strong>Hình ảnh:</strong>{" "}
-                              {productDetails.image ? (
-                                <img
-                                  src={productDetails.image}
-                                  alt="Hình ảnh sản phẩm"
-                                  style={{
-                                    display: "flex",
-                                    width: "150px",
-                                    height: "auto",
-                                    borderRadius: "8px",
-                                  }}
-                                />
-                              ) : (
-                                "Không có hình ảnh"
-                              )}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <p>Không tìm thấy chi tiết sản phẩm</p>
-                    )}
-                  </td>
-                </tr>
-              )}
             </React.Fragment>
           ))}
         </tbody>
       </table>
+
+      {/* Modal để hiển thị chi tiết */}
+      <Modal
+        title={`Chi tiết ký gửi ${modalData?.consignmentID || ""}`}
+        visible={isModalVisible}
+        onCancel={handleCloseModal}
+        footer={null} // Tắt footer nếu không cần nút
+      >
+        {loading ? (
+          <Spin />
+        ) : productDetails ? (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              justifyContent: "space-between",
+              gap: "1rem",
+            }}
+          >
+            <div>
+              <div>
+                {!productDetails.carePackageID && modalData?.farmName && (
+                  <a
+                    href={modalData.farmName}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <strong>Link dẫn tới trang trại của bạn: </strong>
+                    {modalData.farmName}
+                  </a>
+                )}
+
+                <p>
+                  <strong>Tên sản phẩm:</strong>{" "}
+                  {productDetails.productName || productDetails.comboName}
+                </p>
+                <p>
+                  <strong>Mô tả:</strong> {productDetails.description || "N/A"}
+                </p>
+                <p>
+                  <strong>Gói chăm sóc:</strong>{" "}
+                  {productDetails.carePackageID || "N/A"}
+                </p>
+                {!productDetails.carePackageID && (
+                  <>
+                    <p>
+                      <strong>Giá bán: </strong>
+                      {productDetails.price
+                        ? `${new Intl.NumberFormat("vi-VN").format(
+                            productDetails.price
+                          )} VNĐ`
+                        : "Không có giá"}
+                    </p>
+                    <p>
+                      <strong>Giá bán khách mong đợi: </strong>
+                      {productDetails.desiredPrice
+                        ? `${new Intl.NumberFormat("vi-VN").format(
+                            productDetails.desiredPrice
+                          )} VNĐ`
+                        : "Không có giá"}
+                    </p>
+                  </>
+                )}
+              </div>
+            </div>
+            <div style={{ flexShrink: 0, display: "flex", gap: "1rem" }}>
+              <img
+                src={productDetails.image}
+                alt="Fish"
+                style={{ maxWidth: "200px", borderRadius: "8px" }}
+              />
+            </div>
+          </div>
+        ) : (
+          <p>Không tìm thấy chi tiết sản phẩm</p>
+        )}
+      </Modal>
     </div>
   );
 }

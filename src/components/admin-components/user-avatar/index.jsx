@@ -1,11 +1,14 @@
 import { Avatar, Badge } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 
 
-UserAvatar.propTypes = {};
+UserAvatar.propTypes = {
+  onClick:PropTypes.func
+};
 
-function UserAvatar(
+function UserAvatar({onClick}
 ) {
     // Tùy chỉnh Badge để hiển thị dot
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -36,7 +39,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
       },
     },
   }));
-  const user = useSelector((state) => state?.user?.account)
+  const user = useSelector((state) => state?.user)
   return (
     <>
       <StyledBadge
@@ -44,7 +47,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         variant="dot" // Đây là phần quan trọng để hiển thị dot
       >
-        <Avatar alt="Travis Howard" src={user?.image}/>
+        <Avatar alt={user?.fullName} src={user?.image} onClick ={onClick} style={{cursor:"pointer"}}/>
       </StyledBadge>
     </>
   );

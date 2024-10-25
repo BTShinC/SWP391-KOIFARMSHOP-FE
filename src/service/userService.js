@@ -99,7 +99,7 @@ const fetchAllProductCombo = async () => {
 
 const editComboInfo = async (data) => {
   try {
-    const response = await api.put(`productcombo/${data.id}`, data);
+    const response = await api.put(`productcombo/${data.productComboID}`, data);
     return response;
   } catch (error) {
     console.error(error);
@@ -137,13 +137,11 @@ const fetchAllTransactions = async () => {
   }
 };
 
-
-
-const fetchCartItems = async (accountID) => { // Sửa từ accountId thành accountID
-    const response = await api.get(`/shop-cart/account/${accountID}`); // Sử dụng đường dẫn API chính xác
-    console.log("Cart items response:", response.data); // Kiểm tra phản hồi từ API
-    return response.data; // Trả về dữ liệu
-
+const fetchCartItems = async (accountID) => {
+  // Sửa từ accountId thành accountID
+  const response = await api.get(`/shop-cart/account/${accountID}`); // Sử dụng đường dẫn API chính xác
+  console.log("Cart items response:", response.data); // Kiểm tra phản hồi từ API
+  return response.data; // Trả về dữ liệu
 };
 
 const deleteCartItem = async (cartItemId) => {
@@ -160,7 +158,7 @@ const deleteCartItem = async (cartItemId) => {
 };
 const AddFishCombo = async (data) => {
   try {
-    const response = await api.post(`productcombo`, data);
+    const response = await api.post(`productcombo/postall`, data);
     return response;
   } catch (error) {
     console.error(error);
@@ -206,17 +204,20 @@ const fetchAllConsignment = async () => {
     throw error;
   }
 };
-const updateConsignmentStatus = async (id, status) => {
+const updateConsignmentStatus = async (id, status, saleDate = null) => {
   try {
-    const response = await api.put(
-      `consignments/${id}`,
-      { status },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const payload = { status };
+
+    // Nếu có saleDate (khi trạng thái là "Hoàn tất"), thêm nó vào payload
+    if (saleDate) {
+      payload.saleDate = saleDate;
+    }
+
+    const response = await api.put(`consignments/${id}`, payload, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     console.log("Response từ API:", response.data);
     return response.data;
   } catch (error) {
@@ -227,13 +228,29 @@ const updateConsignmentStatus = async (id, status) => {
 
 const updateConsignmentByID = async (data) => {
   try {
+    console.log("Dữ liệu gửi lên API:", data);  // Log dữ liệu trước khi gọi API
     const response = await api.put(`/consignments/${data.consignmentID}`, data);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      console.error("Lỗi từ phía server:", error.response.data); // Log phản hồi chi tiết từ server
+    } else {
+      console.error("Lỗi khi gọi API:", error.message);
+    }
+    return null;
+  }
+};
+
+const refundConsignmentSell = async (consignmentID) => {
+  try {
+    const response = await api.post(`/refund/${consignmentID}`, );
     return response;
   } catch (error) {
     console.error("Lỗi khi gọi API:", error);
     return null;
   }
 };
+
 
 // const updateOrder = async (id, data) => {
 //   try {
@@ -315,9 +332,12 @@ export {
   fetchAllConsignment,
   updateConsignmentStatus,
   updateConsignmentByID,
+
+  refundConsignmentSell
   // updateOrder,
   // fetchOrderById,
   fetchOrders,
   fetchOrderDetails,
   updateOrderStatus,
+
 };

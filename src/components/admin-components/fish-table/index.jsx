@@ -24,21 +24,21 @@ function FishTable({
   ModalComponent,
   onChange,
 }) {
-  const [showDetail, setShowDetail] = useState(null);
   const [selectedFish, setSelectedFish] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
 
   // Hàm để tìm consignment dựa trên productID
   const getConsignmentID = (productID) => {
     const consignment = consignmentData.find(
       (consign) => consign.productID === productID
     );
-    console.log("consignment =>", consignment);
     return consignment || null;
   };
 
-  const handleViewDetail = (id) => {
-    setShowDetail((prev) => (prev === id ? null : id));
+  const handleViewDetail = (fish) => {
+    setSelectedFish(fish);
+    setIsDetailModalVisible(true); // Mở modal khi nhấn "Xem chi tiết"
   };
 
   const handleChangeStatus = (fish) => {
@@ -75,7 +75,7 @@ function FishTable({
           updateConsignmentByID(updatedConsignmentStatus),
         ]);
         message.success(
-          "Cập nhật trạng thái thành công cho cả cá và consignment"
+          "Cập nhật trạng thái thành công cho cả cá và đơn ký gửi"
         );
         onChange(); // Cập nhật dữ liệu sau khi thay đổi
         setIsModalVisible(false);
@@ -118,102 +118,28 @@ function FishTable({
                 <td>{fish.productID}</td>
                 <td>{fish.breed}</td>
                 <td>{fish.size}</td>
-                <td>{fish.sex}</td>
-                <td>{new Intl.NumberFormat("vi-VN").format(fish.price)} VNĐ</td>
-
+                <td>{fish.consignmentType}</td>
+                <td>
+                  {new Intl.NumberFormat("vi-VN").format(fish.price)} VNĐ
+                </td>
                 <td>{fish.status}</td>
                 <td className="btn-container">
-                  {fish.status !== "Chờ xác nhận" && (
-                    <>
-                      <Checkbox
-                        checked={fish.status === "Hết hàng"}
-                        onChange={() => handleChangeStatus(fish)}
-                      >
-                        Đánh dấu hết hàng
-                      </Checkbox>
-                    </>
+                  {fish.status === "Còn hàng" && (
+                    <Checkbox
+                      checked={fish.status === "Hết hàng"}
+                      onChange={() => handleChangeStatus(fish)}
+                    >
+                      Đánh dấu hết hàng
+                    </Checkbox>
                   )}
-                  <Button onClick={() => handleViewDetail(fish.productID)}>
-                    {showDetail === fish.productID
-                      ? "Ẩn chi tiết"
-                      : "Xem chi tiết"}
+                  <Button onClick={() => handleViewDetail(fish)}>
+                    Xem chi tiết
                   </Button>
                   {ModalComponent && (
                     <ModalComponent onChange={onChange} fishData={fish} />
                   )}
                 </td>
               </tr>
-              {showDetail === fish.productID && (
-                <tr>
-                  <td colSpan={7}>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        justifyContent: "space-between",
-                        gap: "1rem",
-                      }}
-                    >
-                      <div>
-                        <p>
-                          <strong>Trạng thái sức khỏe:</strong>{" "}
-                          {fish.healthStatus}
-                        </p>
-                        <p>
-                          <strong>Tính cách:</strong> {fish.personalityTrait}
-                        </p>
-                        <p>
-                          <strong>Nguồn gốc:</strong> {fish.origin}
-                        </p>
-                        <p>
-                          <strong>Mô tả:</strong> {fish.description}
-                        </p>
-                        <p>
-                          <strong>Chứng nhận:</strong>{" "}
-                          {fish.certificate ? "Có" : "Không"}
-                        </p>
-                        <p>
-                          <strong>Loại:</strong> {fish.type}
-                        </p>
-                        <p>
-                          <strong>Gói chăm sóc:</strong> {fish.carePackageID}
-                        </p>
-                        {getConsignmentID(fish.productID) && (
-                          <p>
-                            <strong>Đơn ký gửi ID:</strong>{" "}
-                            {getConsignmentID(fish.productID).consignmentID}
-                          </p>
-                        )}
-                      </div>
-
-                      <div
-                        style={{ flexShrink: 0, display: "flex", gap: "1rem" }}
-                      >
-                        <p>
-                          <strong>Ảnh cá:</strong>
-                        </p>
-                        <img
-                          src={fish.image}
-                          alt="Fish"
-                          style={{ maxWidth: "200px", borderRadius: "8px" }}
-                        />
-                      </div>
-                      <div
-                        style={{ flexShrink: 0, display: "flex", gap: "1rem" }}
-                      >
-                        <p>
-                          <strong>Ảnh chứng nhận:</strong>
-                        </p>
-                        <img
-                          src={fish.certificate}
-                          alt="Certificate"
-                          style={{ maxWidth: "200px", borderRadius: "8px" }}
-                        />
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              )}
             </React.Fragment>
           ))}
         </tbody>
@@ -232,6 +158,87 @@ function FishTable({
           Bạn có chắc chắn muốn thay đổi trạng thái sản phẩm thành Hết hàng?
         </p>
       </Modal>
+
+      {/* Modal hiển thị chi tiết sản phẩm */}
+      {selectedFish && (
+        <Modal
+          title={`Chi tiết sản phẩm: ${selectedFish.productID}`}
+          open={isDetailModalVisible}
+          onCancel={() => setIsDetailModalVisible(false)}
+          footer={[
+            <Button key="close" onClick={() => setIsDetailModalVisible(false)}>
+              Đóng
+            </Button>,
+          ]}
+        >
+          <div className="fish-detail">
+            {/* Phần hiển thị 2 ảnh */}
+            <div className="fish-detail__image-container">
+              <div>
+                <strong>Ảnh cá:</strong>
+                <img
+                  src={selectedFish.image}
+                  alt="Fish"
+                  style={{
+                    maxWidth: "200px",
+                    borderRadius: "8px",
+                    marginRight: "20px",
+                  }}
+                />
+              </div>
+              <div>
+                <strong>Ảnh chứng nhận:</strong>
+                <img
+                  src={selectedFish.certificate}
+                  alt="Certificate"
+                  style={{ maxWidth: "200px", borderRadius: "8px" }}
+                />
+              </div>
+            </div>
+
+            {/* Phần thông tin chi tiết sản phẩm */}
+            <p>
+              <strong>Giống loài:</strong> {selectedFish.breed}
+            </p>
+            <p>
+              <strong>Kích thước:</strong> {selectedFish.size} cm
+            </p>
+            <p>
+              <strong>Giới tính:</strong> {selectedFish.sex}
+            </p>
+            <p>
+              <strong>Giá:</strong>
+              {new Intl.NumberFormat("vi-VN"
+              ).format(selectedFish.price)} VNĐ
+            </p>
+            <p>
+              <strong>Trạng thái:</strong> {selectedFish.status}
+            </p>
+            <p>
+              <strong>Trạng thái sức khỏe:</strong> {selectedFish.healthStatus}
+            </p>
+            <p>
+              <strong>Tính cách:</strong> {selectedFish.personalityTrait}
+            </p>
+            <p>
+              <strong>Nguồn gốc:</strong> {selectedFish.origin}
+            </p>
+            <p>
+              <strong>Mô tả:</strong> {selectedFish.description}
+            </p>
+            <p>
+              <strong>Chứng nhận:</strong>
+              {selectedFish.certificate ? "Có" : "Không"}
+            </p>
+            {getConsignmentID(selectedFish.productID) && (
+              <p>
+                <strong>Đơn ký gửi ID:</strong>
+                {getConsignmentID(selectedFish.productID).consignmentID}
+              </p>
+            )}
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }
