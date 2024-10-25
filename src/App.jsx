@@ -38,7 +38,6 @@ import OrderTracking from "./pages/orderTracking";
 import ConsignmentTracking from "./pages/consignmentTracking";
 import VnpayResponsePage from "./components/vnpay";
 import CheckoutPage from "./pages/checkout";
-import ConsignmentTracking from './pages/consignmentTracking'
 import OrderSuccess from "./pages/orderSuccess";
 import ConsignmentSuccess from "./pages/consignmentSuccess";
 
