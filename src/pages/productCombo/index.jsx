@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Card, Pagination, Input, Button, Dropdown, Menu } from "antd";
 import Meta from "antd/es/card/Meta";
 import { FilterOutlined } from "@ant-design/icons";
-import axios from "axios";
+import api from "../../config/api";
 import { Link } from "react-router-dom";
 
 function ProductComboPage() {
@@ -24,7 +24,7 @@ function ProductComboPage() {
     // Fetch product combo data from the API
     async function fetchComboData() {
         try {
-            const response = await axios.get("http://103.90.227.69:8080/api/productcombo");
+            const response = await api.get("/productcombo/getall");
             setComboData(response.data);
         } catch (error) {
             console.error("Error fetching product combo data:", error);
