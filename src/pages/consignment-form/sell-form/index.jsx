@@ -23,6 +23,7 @@ import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { format } from "date-fns";
 import PropTypes from "prop-types";
+import { toast } from "react-toastify";
 
 SellForm.propTypes = {
   isOnline: PropTypes.bool,
@@ -61,7 +62,7 @@ function SellForm({ isOnline }) {
   const navigation = useNavigate();
   // Nếu người dùng chọn ký gửi bán lô thì render component khác
   if (isBatchSell) {
-    return <SellFormCombo isOnline = {isOnline} />;
+    return <SellFormCombo isOnline={isOnline} />;
   }
 
   // Preview ảnh khi chọn
@@ -117,33 +118,47 @@ function SellForm({ isOnline }) {
       return [];
     }
   };
-  const consignmentDate = format(new Date(), "yyyy-MM-dd");
-  // Xử lý submit form
   const onSubmit = async (data) => {
-    const uploadedImages = await uploadFilesToFirebase(fileList);
-    const uploadedCerts = await uploadFilesToFirebase(certFileList);
-    const finalData = {
-      ...data,
-      productName: uuidv4(),
-      image: uploadedImages[0]?.url,
-      image1: uploadedImages[1]?.url,
-      image2: uploadedImages[2]?.url,
-      certificate: uploadedCerts[0]?.url,
-      status: "Chờ xác nhận",
-      type: "Ký gửi",
-      consignmentType: "Ký gửi để bán",
-      price: data.desiredPrice,
-      salePrice:data.desiredPrice,
-      reason: "",
-      consignmentDate: consignmentDate,
-    };
+    try {
+      // Kiểm tra dữ liệu form trước khi bắt đầu upload
+      if (!data || !data.desiredPrice || data.desiredPrice < 500000) {
+        toast.error("Giá bán mong đợi phải lớn hơn 500,000");
+        return;
+      }
 
-    console.log(
-      "Form data with uploaded images and certifications:",
-      finalData
-    );
-    localStorage.setItem("sellForm", JSON.stringify(finalData));
-    navigation("/consignmentSellPayment", { state: finalData });
+      // Chuẩn bị dữ liệu trước khi upload (không phụ thuộc vào upload)
+      const finalData = {
+        ...data,
+        productName: uuidv4(),
+        status: "Chờ xác nhận",
+        type: "Ký gửi",
+        consignmentType: "Ký gửi để bán",
+        price: data.desiredPrice,
+        salePrice: data.desiredPrice,
+        reason: "",
+        consignmentDate: format(new Date(), "yyyy-MM-dd"),
+      };
+
+      // Lưu thông tin vào localStorage
+      localStorage.setItem("sellForm", JSON.stringify(finalData));
+
+      // Chỉ bắt đầu upload sau khi xử lý form xong
+      const uploadedImages = await uploadFilesToFirebase(fileList);
+      const uploadedCerts = await uploadFilesToFirebase(certFileList);
+
+      // Cập nhật URL ảnh sau khi upload thành công
+      finalData.image = uploadedImages[0]?.url;
+      finalData.image1 = uploadedImages[1]?.url;
+      finalData.image2 = uploadedImages[2]?.url;
+      finalData.certificate = uploadedCerts[0]?.url;
+
+      // Điều hướng đến trang thanh toán sau khi xử lý xong mọi thứ
+      navigation("/consignmentSellPayment", { state: finalData });
+      toast.success("Dữ liệu đã được xử lý và upload thành công!");
+    } catch (error) {
+      console.error("Error in form submission:", error);
+      toast.error("Có lỗi xảy ra trong quá trình xử lý form");
+    }
   };
 
   // Nút upload ảnh và chứng nhận
@@ -184,7 +199,7 @@ function SellForm({ isOnline }) {
         </Grid>
         <Box>
           <Typography variant="h2" className="title-typography">
-          Ký gửi bán cá thể {isOnline ? "ONLINE" : "OFFLINE"}
+            Ký gửi bán cá thể {isOnline ? "ONLINE" : "OFFLINE"}
           </Typography>
         </Box>
 
@@ -293,10 +308,14 @@ function SellForm({ isOnline }) {
               label="Giá bán mong đợi"
               {...register("desiredPrice", {
                 required: "Vui lòng nhập giá bạn mong muốn",
+                min: {
+                  value: 500000,
+                  message: "Giá bán mong đợi phải lớn hơn 500,000",
+                },
               })}
               fullWidth
               type="number"
-              inputProps={{ min: 1 }}
+              inputProps={{ min: 500000 }}
               error={!!errors.desiredPrice}
               helperText={errors.desiredPrice?.message}
               className="highlighted-textfield"
