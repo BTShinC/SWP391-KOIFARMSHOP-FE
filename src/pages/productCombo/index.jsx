@@ -14,12 +14,12 @@ function ProductComboPage() {
     const itemsPerPage = 12;
     const formatCurrency = (amount) => {
         return new Intl.NumberFormat('vi-VN', {
-          style: 'decimal',
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 0,
+            style: 'decimal',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
         }).format(amount);
-      };
-    
+    };
+
 
     // Fetch product combo data from the API
     async function fetchComboData() {
@@ -36,9 +36,17 @@ function ProductComboPage() {
     }, []);
 
     // Filter product combos based on search term
-    const filteredCombos = comboData.filter(combo =>
-        combo.comboName.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredCombos = comboData
+        .filter(combo =>
+            combo.comboName &&
+            combo.comboName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+            combo.consignmentType !== "chăm sóc"
+        )
+        .sort((a, b) => {
+            if (a.status === "Còn hàng" && b.status !== "Còn hàng") return -1;
+            if (a.status !== "Còn hàng" && b.status === "Còn hàng") return 1;
+            return 0;
+        });
 
     const indexOfLastCombo = currentPage * itemsPerPage;
     const indexOfFirstCombo = indexOfLastCombo - itemsPerPage;
