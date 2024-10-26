@@ -119,7 +119,9 @@ function SingleProductCombo() {
                   </Button>
                 </div>
               ) : (
-                <Text style={{ color: "red" }}>Sản phẩm hết hàng</Text>
+                <div style={{paddingLeft: "10rem", paddingTop: "3rem"}}>
+                <Text style={{ fontSize: "Large",fontWeight: "Bold", color: "red" }}>Sản phẩm hết hàng</Text>
+                </div>
               )}
 
               <div className="divider-wrapper">

@@ -73,6 +73,7 @@ function CheckoutPage() {
 
       if (accountBalance >= finalPrice) {
         await deductAccountBalance(user.accountID, finalPrice); 
+        const promotionID = totalAmount >= 2000000 ? "PM001" : null;
 
         const params = new URLSearchParams({
           accountID: user.accountID,
@@ -80,15 +81,12 @@ function CheckoutPage() {
           ...(productComboIDs.length > 0 && {
             productComboIDs: productComboIDs.join(","),
           }),
+          promotionID // Add promotionID if it exists
         });
 
         console.log("Query Parameters:", params.toString());
-
-
-        const orderResponse = await api.post(`/orders/makeOrder?${params.toString()}`,
-
-          { promotionID: null } // Add promotionID parameter and set to null by default
-        ); 
+        const orderResponse = await api.post(`/orders/makeOrder?${params.toString()}`); 
+        console.log("Value send to API: ", {params}, { promotionID }) ;
         console.log("Order Response:", orderResponse.data);
 
         dispatch(clearCart());
