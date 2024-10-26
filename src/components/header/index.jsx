@@ -3,12 +3,9 @@ import { SearchOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import "./index.scss";
 import Sidebar from "../slidebars";
-import { useSelector } from "react-redux";
 import UserAvatar from "../admin-components/user-avatar";
 function Header() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const user = useSelector((state) => state.user);
-  console.log(user);
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
