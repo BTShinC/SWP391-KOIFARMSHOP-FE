@@ -1,26 +1,16 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Typography,
-  Grid2,
-} from "@mui/material";
+import { Box, Button, Card, CardContent, Typography, Grid2 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import {
-  addFish,
-  AddFishCombo,
-  createConsignment,
-  editUser,
-} from "../../../../service/userService";
+import { addFish, AddFishCombo, createConsignment, editUser } from "../../../../service/userService";
+import { format, addDays } from "date-fns";
 
 function SellPayment() {
   const user = useSelector((state) => state?.user);
   const navigate = useNavigate();
   const location = useLocation();
   const finalData = location.state;
+
   // Hàm tính toán phí chăm sóc dựa trên các tiêu chí
   const countFee = () => {
     let fee = 0;
@@ -37,15 +27,9 @@ function SellPayment() {
       }
     } else {
       if (finalData.size <= 40) {
-        fee =
-          finalData?.duration <= 60
-            ? 50000 * finalData?.duration
-            : 25000 * finalData?.duration;
+        fee = finalData?.duration <= 60 ? 50000 * finalData?.duration : 25000 * finalData?.duration;
       } else {
-        fee =
-          finalData?.duration <= 60
-            ? 90000 * finalData?.duration
-            : 70000 * finalData?.duration;
+        fee = finalData?.duration <= 60 ? 90000 * finalData?.duration : 70000 * finalData?.duration;
       }
     }
 
@@ -54,20 +38,25 @@ function SellPayment() {
 
   const fee = countFee();
 
+  // Hàm lấy ngày giờ UTC
+  const getCurrentUTCDate = () => {
+    const currentDate = new Date();
+    return currentDate.toISOString(); // Trả về định dạng UTC ISO 'yyyy-MM-ddTHH:mm:ss.sssZ'
+  };
+
   // Hàm xử lý thanh toán
   const handlePayment = async () => {
     try {
-      // First, check if the user has enough balance
+      // Kiểm tra số dư tài khoản
       if (user.accountBalance >= fee) {
         let generateProductID = null;
         let generateProductComboID = null;
 
-        // Check if sellForm is in localStorage (individual fish)
-        if (localStorage.getItem("sellForm")&& finalData.formType === 'sellForm') {
+        // Kiểm tra và thêm cá đơn
+        if (localStorage.getItem("sellForm") && finalData.formType === 'sellForm') {
           localStorage.removeItem("sellForm");
           console.log("SellForm đã bị xóa");
 
-          // Try adding the fish
           const res = await addFish(finalData);
           if (res) {
             console.log("Thành công thêm cá");
@@ -77,12 +66,11 @@ function SellPayment() {
           }
         }
 
-        // Check if sellFormCombo is in localStorage (fish combo)
+        // Kiểm tra và thêm combo cá
         if (localStorage.getItem("sellFormCombo") && finalData.formType === 'sellFormCombo') {
           localStorage.removeItem("sellFormCombo");
           console.log("sellFormCombo đã bị xóa");
 
-          // Try adding the fish combo
           const res = await AddFishCombo(finalData);
           if (res) {
             console.log("Thành công thêm combo cá");
@@ -92,13 +80,20 @@ function SellPayment() {
           }
         }
 
-        // Construct the consignment object based on product or product combo
+        // Tính toán ngày nhận và ngày hết hạn dựa trên thời điểm xác nhận
+        const dateReceived = getCurrentUTCDate(); // Ngày xác nhận chính xác theo UTC
+        const dateExpiration = format(
+          addDays(new Date(), finalData?.duration),
+          "yyyy-MM-dd"
+        ); // Ngày hết hạn (tính bằng duration, cũng theo UTC)
+
+        // Tạo đối tượng consignment với thông tin đơn ký gửi
         const consignment = {
           ...finalData,
           saleDate: null,
           salePrice: finalData?.price,
-          dateReceived: null,
-          dateExpiration: null,
+          dateReceived: dateReceived,
+          dateExpiration: dateExpiration,
           status: "Chờ xác nhận",
           accountID: user?.accountID,
           productID: generateProductID,
@@ -108,18 +103,17 @@ function SellPayment() {
 
         console.log("consignment =>", consignment);
 
-        // Try creating the consignment
+        // Tạo đơn ký gửi
         const consignmentRes = await createConsignment(consignment);
         if (!consignmentRes) {
           throw new Error("Failed to create consignment");
         }
         console.log("Thành công tạo đơn ký gửi");
 
-        // If everything is successful, deduct the balance
+        // Trừ tiền và cập nhật số dư tài khoản
         const newBalance = user?.accountBalance - fee;
         const updatedUser = { ...user, accountBalance: newBalance };
 
-        // Update the user's balance
         const updateUserapi = await editUser(updatedUser);
         if (updateUserapi) {
           console.log("Đã trừ tiền");
@@ -127,10 +121,10 @@ function SellPayment() {
           throw new Error("Failed to update user balance");
         }
 
-        // Show success message after all operations succeed
+        // Thông báo thành công
         toast.success("Thanh toán thành công");
       } else {
-        // Show error if the user doesn't have enough balance
+        // Thông báo lỗi nếu không đủ số dư
         toast.error("Không đủ tiền để thanh toán");
       }
     } catch (error) {
@@ -143,11 +137,7 @@ function SellPayment() {
     <div className="consignment-payment">
       <Card className="pay-form-container">
         <Box sx={{ marginBottom: "3rem" }}>
-          <Button
-            variant="contained"
-            className="back-button"
-            onClick={() => navigate(-1)}
-          >
+          <Button variant="contained" className="back-button" onClick={() => navigate(-1)}>
             Trở lại
           </Button>
         </Box>
@@ -155,31 +145,14 @@ function SellPayment() {
           <Grid2 container spacing={12}>
             <Grid2 xs={6} className="pay-form-box">
               <Typography variant="h4">Thông tin thanh toán</Typography>
-              <Typography variant="body1">
-                Loại ký gửi: {finalData?.consignmentType}
-              </Typography>
-              <Typography variant="body1">
-                Số lượng: {finalData?.quantity}
-              </Typography>
-              <Typography variant="body1">
-                Kích thước: {finalData?.size} cm
-              </Typography>
-              <Typography variant="body1">
-                Số ngày: {finalData?.duration}
-              </Typography>
+              <Typography variant="body1">Loại ký gửi: {finalData?.consignmentType}</Typography>
+              <Typography variant="body1">Số lượng: {finalData?.quantity}</Typography>
+              <Typography variant="body1">Kích thước: {finalData?.size} cm</Typography>
+              <Typography variant="body1">Số ngày: {finalData?.duration}</Typography>
             </Grid2>
             <Grid2 xs={6} className="pay-form-box__right">
-              <Box
-                sx={{
-                  marginBottom: "1.5rem",
-                  padding: "1.5rem",
-                  border: "1px solid #ccc",
-                  borderRadius: "8px",
-                }}
-              >
-                <Typography variant="h5" color="primary">
-                  Tổng chi phí
-                </Typography>
+              <Box sx={{ marginBottom: "1.5rem", padding: "1.5rem", border: "1px solid #ccc", borderRadius: "8px" }}>
+                <Typography variant="h5" color="primary">Tổng chi phí</Typography>
                 <Typography variant="body1" color="textSecondary">
                   {new Intl.NumberFormat("vi-VN").format(fee)} VNĐ
                 </Typography>
@@ -188,9 +161,7 @@ function SellPayment() {
           </Grid2>
           <hr />
           <Box className="pay-button" textAlign="center">
-            <Button variant="contained" color="primary" onClick={handlePayment}>
-              Thanh toán
-            </Button>
+            <Button variant="contained" color="primary" onClick={handlePayment}>Thanh toán</Button>
           </Box>
         </CardContent>
       </Card>

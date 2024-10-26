@@ -24,22 +24,22 @@ import {
   editUser,
   fetchAllCarePackages,
 } from "../../../service/userService";
+import { format, addDays } from "date-fns";
+
 PaymentPage.propTypes = {};
+
 function PaymentPage() {
   const [paymentMethod, setPaymentMethod] = useState("Ví cửa hàng");
   const [koiCarePackages, setKoiCarePackages] = useState([]);
   const location = useLocation();
   const paymentData = location?.state;
-  console.log("Payment data received:", paymentData);
   const id = paymentData.carePackageID;
   const user = useSelector((state) => state?.user);
-  console.log(user);
 
   const getAllCarePackages = useCallback(async () => {
     try {
       const res = await fetchAllCarePackages();
       if (res && res.data) {
-        console.log(res);
         setKoiCarePackages(res.data);
       }
     } catch (error) {
@@ -50,10 +50,14 @@ function PaymentPage() {
   useEffect(() => {
     getAllCarePackages();
   }, [getAllCarePackages]);
-  const carePackage = koiCarePackages.find((item) => {
-    return item.carePackageID == id;
-  });
-  console.log(carePackage);
+
+  const carePackage = koiCarePackages.find((item) => item.carePackageID == id);
+
+  // Lấy thời gian hiện tại theo UTC và định dạng về múi giờ Việt Nam khi cần
+  const getCurrentDateInUTC = () => {
+    const currentDate = new Date().toISOString(); // Lấy thời gian UTC
+    return currentDate;
+  };
 
   const handlePaymentMethodChange = (event) => {
     setPaymentMethod(event.target.value);
@@ -68,106 +72,70 @@ function PaymentPage() {
 
           // Kiểm tra và tạo đơn ký gửi cá thể
           if (localStorage.getItem("careForm") && paymentData.formType === 'careForm') {
-            console.log("Bắt đầu tạo đơn ký gửi cho cá thể...");
-            const res = await addFish(paymentData); // Gọi API để thêm sản phẩm cá thể
-
+            const res = await addFish(paymentData);
             if (res && res.data) {
               productID = res.data.productID;
               paymentData.productID = productID;
-              console.log(
-                "Thêm sản phẩm cá thể thành công, productID:",
-                productID
-              );
 
-              // Tạo đơn ký gửi cho sản phẩm cá thể
-              console.log(paymentData)
               const res1 = await createConsignment(paymentData);
-              if (res1) {
-                console.log("Tạo đơn ký gửi cá thể thành công");
-              } else {
-                throw new Error("Tạo đơn ký gửi cá thể thất bại");
-              }
+              if (!res1) throw new Error("Tạo đơn ký gửi cá thể thất bại");
             } else {
               throw new Error("Thêm sản phẩm cá thể thất bại");
             }
           }
 
-          // Kiểm tra và tạo đơn ký gửi cho combo
+          // Kiểm tra và tạo đơn ký gửi combo
           if (localStorage.getItem("careFormCombo") && paymentData.formType === 'careFormCombo') {
-            console.log("Bắt đầu tạo đơn ký gửi cho combo...");
-            const res = await AddFishCombo(paymentData); // Gọi API để thêm combo sản phẩm
-
+            const res = await AddFishCombo(paymentData);
             if (res && res.data) {
               productComboID = res.data.productComboID;
               paymentData.productComboID = productComboID;
-              console.log(
-                "Thêm sản phẩm combo thành công, productComboID:",
-                productComboID
-              );
 
-              // Tạo đơn ký gửi cho combo
               const res1 = await createConsignment(paymentData);
-              if (res1) {
-                console.log("Tạo đơn ký gửi combo thành công");
-              } else {
-                throw new Error("Tạo đơn ký gửi combo thất bại");
-              }
+              if (!res1) throw new Error("Tạo đơn ký gửi combo thất bại");
             } else {
               throw new Error("Thêm sản phẩm combo thất bại");
             }
           }
 
-          // Nếu đến đây mà không có lỗi nào, nghĩa là đơn ký gửi đã thành công
-          // Tiến hành cập nhật số dư tài khoản
+          // Tính toán thời gian nhận và hết hạn bằng thời gian UTC
+          const dateReceived = getCurrentDateInUTC(); // Lấy ngày xác nhận
+          const dateExpiration = format(addDays(new Date(), paymentData.duration), "yyyy-MM-dd");
+
+          paymentData.dateReceived = dateReceived;
+          paymentData.dateExpiration = dateExpiration;
+
+          // Cập nhật số dư tài khoản
           const newBalance = user.accountBalance - carePackage?.price;
-          console.log(newBalance)
           const updatedUser = { ...user, accountBalance: newBalance };
-          console.log("Updated user balance:", updatedUser);
-          const updateUserapi = await editUser(updatedUser)
-          if(updateUserapi){  
-              console.log("Đã trừ tiền")
+          const updateUserapi = await editUser(updatedUser);
+          if (updateUserapi) {
+            console.log("Đã trừ tiền");
           }
 
           // Xóa localStorage sau khi thanh toán thành công
-          if (localStorage.getItem("careForm")) {
-            localStorage.removeItem("careForm");
-            console.log("careForm đã bị xóa");
-          }
-          if (localStorage.getItem("careFormCombo")) {
-            localStorage.removeItem("careFormCombo");
-            console.log("careFormCombo đã bị xóa");
-          }
+          localStorage.removeItem("careForm");
+          localStorage.removeItem("careFormCombo");
 
           toast.success("Thanh toán thành công");
+          navigate("/consignmentSuccess");
         } catch (error) {
-          console.error(
-            "Lỗi khi thực hiện thanh toán hoặc tạo đơn ký gửi:",
-            error.message || error
-          );
-          toast.error(
-            "Có lỗi xảy ra trong quá trình thanh toán hoặc tạo đơn ký gửi."
-          );
+          console.error("Lỗi khi thực hiện thanh toán:", error.message || error);
+          toast.error("Có lỗi xảy ra trong quá trình thanh toán.");
         }
-
-        toast.success("Thanh toán thành công");
-        navigation("/consignmentSuccess");
       } else {
-        console.log("Không đủ tiền");
         toast.error("Không đủ tiền trong tài khoản.");
       }
     }
   };
 
-  const navigation = useNavigate();
+  const navigate = useNavigate();
+
   return (
     <div className="consignment-payment">
       <Card className="pay-form-container">
         <Box sx={{ marginBottom: "3rem" }}>
-          <Button
-            variant="contained"
-            className="back-button"
-            onClick={() => navigation(-1)}
-          >
+          <Button variant="contained" className="back-button" onClick={() => navigate(-1)}>
             Trở lại
           </Button>
         </Box>
@@ -176,9 +144,7 @@ function PaymentPage() {
             <Grid2 xs={6} className="pay-form-box">
               <Box>
                 <Typography variant="h4">Thanh toán</Typography>
-                <Typography variant="body1">
-                  {carePackage?.packageName}
-                </Typography>
+                <Typography variant="body1">{carePackage?.packageName}</Typography>
               </Box>
               <Box>
                 <Typography variant="body1">Tổng cộng</Typography>
@@ -191,20 +157,17 @@ function PaymentPage() {
               <Box>
                 <Typography variant="h4">Chi phí thành phần</Typography>
                 <Typography variant="body1">
-                  {new Intl.NumberFormat("vi-VN").format(carePackage?.price)}
-                  VNĐ
+                  {new Intl.NumberFormat("vi-VN").format(carePackage?.price)} VNĐ
                 </Typography>
               </Box>
               <Box>
                 <Typography variant="body1">
-                  {new Intl.NumberFormat("vi-VN").format(carePackage?.price)}
-                  VNĐ
+                  {new Intl.NumberFormat("vi-VN").format(carePackage?.price)} VNĐ
                 </Typography>
               </Box>
               <Box>
                 <Typography variant="h5">
-                  {new Intl.NumberFormat("vi-VN").format(carePackage?.price)}
-                  VNĐ
+                  {new Intl.NumberFormat("vi-VN").format(carePackage?.price)} VNĐ
                 </Typography>
               </Box>
             </Grid2>
@@ -213,19 +176,13 @@ function PaymentPage() {
           <Grid2 container>
             <FormControl fullWidth>
               <FormLabel>Hình thức thanh toán</FormLabel>
-              <RadioGroup
-                defaultValue="Ví cửa hàng"
-                value={paymentMethod}
-                onChange={handlePaymentMethodChange}
-              >
+              <RadioGroup defaultValue="Ví cửa hàng" value={paymentMethod} onChange={handlePaymentMethodChange}>
                 <FormControlLabel
                   value="Ví cửa hàng"
                   control={<Radio />}
                   label={
                     <span style={{ display: "flex", flexDirection: "row" }}>
-                      <WalletIcon
-                        style={{ marginTop: "8px", marginRight: "8px" }}
-                      />
+                      <WalletIcon style={{ marginTop: "8px", marginRight: "8px" }} />
                       Ví cửa hàng
                     </span>
                   }
