@@ -135,7 +135,8 @@ function SellForm({ isOnline }) {
         consignmentType: "Ký gửi để bán",
         price: data.desiredPrice,
         salePrice: data.desiredPrice,
-        reason: "",
+        reason: 'Vui lòng mang cá đến trang trại để hoàn thành thủ tục',
+        formType:'sellForm',
         consignmentDate: format(new Date(), "yyyy-MM-dd"),
       };
 

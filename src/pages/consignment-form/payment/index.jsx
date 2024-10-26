@@ -67,7 +67,7 @@ function PaymentPage() {
           let productComboID = null;
 
           // Kiểm tra và tạo đơn ký gửi cá thể
-          if (localStorage.getItem("careForm")) {
+          if (localStorage.getItem("careForm") && paymentData.formType === 'careForm') {
             console.log("Bắt đầu tạo đơn ký gửi cho cá thể...");
             const res = await addFish(paymentData); // Gọi API để thêm sản phẩm cá thể
 
@@ -93,7 +93,7 @@ function PaymentPage() {
           }
 
           // Kiểm tra và tạo đơn ký gửi cho combo
-          if (localStorage.getItem("careFormCombo")) {
+          if (localStorage.getItem("careFormCombo") && paymentData.formType === 'careFormCombo') {
             console.log("Bắt đầu tạo đơn ký gửi cho combo...");
             const res = await AddFishCombo(paymentData); // Gọi API để thêm combo sản phẩm
 

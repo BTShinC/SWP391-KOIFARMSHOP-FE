@@ -63,7 +63,7 @@ function SellPayment() {
         let generateProductComboID = null;
 
         // Check if sellForm is in localStorage (individual fish)
-        if (localStorage.getItem("sellForm")) {
+        if (localStorage.getItem("sellForm")&& finalData.formType === 'sellForm') {
           localStorage.removeItem("sellForm");
           console.log("SellForm đã bị xóa");
 
@@ -78,7 +78,7 @@ function SellPayment() {
         }
 
         // Check if sellFormCombo is in localStorage (fish combo)
-        if (localStorage.getItem("sellFormCombo")) {
+        if (localStorage.getItem("sellFormCombo") && finalData.formType === 'sellFormCombo') {
           localStorage.removeItem("sellFormCombo");
           console.log("sellFormCombo đã bị xóa");
 

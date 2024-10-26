@@ -125,6 +125,7 @@ function CareForm({ carePackage }) {
       farmName: "",
       consignmentDate: consignmentDate,
       total: carePackage?.price,
+      formType :'careForm',
       duration : 30,
     };
     console.log(

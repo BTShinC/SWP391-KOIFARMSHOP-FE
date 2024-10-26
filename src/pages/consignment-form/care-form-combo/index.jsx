@@ -102,6 +102,7 @@ function CareFormCombo({ carePackage }) {
       farmName: "",
       consignmentDate: consignmentDate,
       today : today,
+      formType :'careFormCombo',
       total: carePackage?.price,
       duration : 30,
     };

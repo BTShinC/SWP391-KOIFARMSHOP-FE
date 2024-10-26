@@ -10,7 +10,7 @@ import {
   refundConsignmentSell,
 } from "../../service/userService";
 import { addDays, format } from "date-fns";
-import './index.scss'
+import "./index.scss";
 ChangeStatusConsignment.propTypes = {
   data: PropTypes.object.isRequired,
   productID: PropTypes.string,
@@ -64,6 +64,12 @@ function ChangeStatusConsignment({
   const handleInProgress = async () => {
     try {
       let { consignmentType } = formValue;
+      let reasonForm;
+      if (formValue.consignmentType === "chăm sóc") {
+        reasonForm = "Cá của mấy khách iu đã được chăm sóc đến tận kẽ răng";
+      } else {
+        reasonForm = "Cá đã bán thành công";
+      }
 
       let updatedConsignmentStatus =
         consignmentType === "chăm sóc" ? "Đang chăm sóc" : "Đang tiến hành";
@@ -75,7 +81,7 @@ function ChangeStatusConsignment({
       const updatedFormValue = {
         ...formValue,
         dateReceived: currentDate,
-        reason : "Đang chăm sóc cá cho các khách iu",
+        reason: reasonForm,
         dateExpiration: dateExpiration,
         status: updatedConsignmentStatus,
       };
@@ -93,10 +99,18 @@ function ChangeStatusConsignment({
   };
   const currentDate = format(new Date(), "yyyy-MM-dd");
   const handleComplete = async () => {
+    let reasonForm;
+    if (formValue.consignmentType === "chăm sóc") {
+      reasonForm =
+        "Cá của mấy khách iu đã được chăm sóc đến tận kẽ răng. Vui lòng kiểm tra thường xuyên để cập nhật tình hình cá";
+    } else {
+      reasonForm =
+        "Cá đang được đăng để bán. Vui lòng kiểm tra thường xuyên để cập nhật tình hình cá";
+    }
     const updatedFormValue = {
       ...formValue,
       status: "Hoàn tất",
-      reason:"Cá của mấy khách iu đã được chăm sóc đến tận kẽ răng",
+      reason: reasonForm,
       saleDate: currentDate,
     };
 
@@ -213,7 +227,8 @@ function ChangeStatusConsignment({
 
       // Xác định xem có phải là combo không và cập nhật tên sản phẩm
       const isCombo = !!productComboID;
-      const productName = productData.breed +"+"+ updatedFormValue.consignmentID;
+      const productName =
+        productData.breed + "+" + updatedFormValue.consignmentID;
 
       const productRes = await updateProductStatus(
         productName,
@@ -252,6 +267,10 @@ function ChangeStatusConsignment({
       return "Hoàn tất chăm sóc";
     }
     return "Hết hàng";
+  };
+
+  const handleReturn = () => {
+    console.log(formValue);
   };
 
   const handleShowButton = () => {
@@ -295,6 +314,12 @@ function ChangeStatusConsignment({
                 Hoàn tất
               </Button>
             )}
+            {formValue.status === "Đang tiến hành" &&
+              formValue.consignmentType === "Ký gửi để bán" && (
+                <Button className="custom-button" onClick={handleReturn}>
+                  Hoàn cá
+                </Button>
+              )}
             {formValue.status === "Hoàn tất" &&
               formValue.consignmentType === "Ký gửi để bán" && (
                 <>

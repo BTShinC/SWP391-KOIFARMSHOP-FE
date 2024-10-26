@@ -206,7 +206,7 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
                 <td>
                   {new Intl.NumberFormat("vi-VN").format(
                     consignment?.total || 0
-                  )}{" "}
+                  )}
                   VNĐ
                 </td>
                 <td>{consignment.consignmentType}</td>
@@ -323,14 +323,14 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
                   </a>
                 )}
                 <p>
-                  <strong>Tên sản phẩm:</strong>{" "}
+                  <strong>Tên sản phẩm:</strong>
                   {productDetails.productName || productDetails.comboName}
                 </p>
                 <p>
                   <strong>Mô tả:</strong> {productDetails.description || "N/A"}
                 </p>
                 <p>
-                  <strong>Gói chăm sóc:</strong>{" "}
+                  <strong>Gói chăm sóc:</strong>
                   {productDetails.carePackageID || "N/A"}
                 </p>
                 {!productDetails.carePackageID && (
@@ -344,7 +344,7 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
                         : "Không có giá"}
                     </p>
                     <p>
-                      <strong>Tình hình chăm sóc:</strong>{" "}
+                      <strong>Tình hình chăm sóc:</strong>
                       {productDetails.reason || "N/A"}
                     </p>
                   </>

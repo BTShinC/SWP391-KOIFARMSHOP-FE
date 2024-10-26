@@ -129,7 +129,8 @@ function SellFormCombo({ isOnline }) {
         status: "Chờ xác nhận",
         comboName: uuidv4(),
         salePrice: data.desiredPrice,
-        reason: "",
+        reason: 'Vui lòng mang cá đến trang trại để hoàn thành thủ tục',
+        formType:'sellFormCombo',
         consignmentDate: consignmentDate,
       };
 
