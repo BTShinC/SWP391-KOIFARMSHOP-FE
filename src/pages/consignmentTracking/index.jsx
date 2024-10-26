@@ -6,7 +6,7 @@ import api from "../../config/api";
 import "./index.scss";
 import {
   editUser,
-  // fetchCarePackageByID,
+  fetchCarePackageByID,
   fetchProductById,
   fetchProductComboById,
   refundConsignmentSell,

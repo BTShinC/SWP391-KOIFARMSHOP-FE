@@ -250,6 +250,17 @@ const refundConsignmentSell = async (consignmentID) => {
   }
 };
 
+const fetchCarePackageByID = async (carePackageID) =>{
+  try {
+    const response = await api.get(`carePackages/${carePackageID}`);
+    console.log(response.data);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 // const updateOrder = async (id, data) => {
 //   try {
 //     const response = await api.put(`orders/${id}`, data);
@@ -341,4 +352,5 @@ export {
   fetchOrders,
   fetchOrderDetails,
   updateOrderStatus,
+  fetchCarePackageByID
 };

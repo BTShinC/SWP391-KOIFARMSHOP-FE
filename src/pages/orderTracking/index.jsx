@@ -253,6 +253,20 @@ function OrderTracking() {
               status: "Hết hàng"
             };
             await api.put(`/product/${detail.productID}`, updatedProduct);
+            // Check consignmentType and update consignment if needed
+            if (productResponse.data.consignmentType === "Ký gửi để bán") {
+              const consignmentResponse = await api.get(`/consignments`);
+              const consignments = consignmentResponse.data;
+              const consignment = consignments.find(c => c.productID === detail.productID);
+
+              if (consignment) {
+                const updatedConsignment = {
+                  ...consignment,
+                  status: "Hoàn tất"
+                };
+                await api.put(`/consignments/${consignment.consignmentID}`, updatedConsignment);
+              }
+            }
           } else if (detail.productComboID) {
             const comboResponse = await api.get(`/productcombo/${detail.productComboID}`);
             const updatedCombo = {
@@ -260,6 +274,20 @@ function OrderTracking() {
               status: "Hết hàng"
             };
             await api.put(`/productcombo/${detail.productComboID}`, updatedCombo);
+            // Check consignmentType and update consignment if needed
+            if (comboResponse.data.consignmentType === "Ký gửi để bán") {
+              const consignmentResponse = await api.get(`/consignments`);
+              const consignments = consignmentResponse.data;
+              const consignment = consignments.find(c => c.productComboID === detail.productComboID);
+
+              if (consignment) {
+                const updatedConsignment = {
+                  ...consignment,
+                  status: "Đã bán"
+                };
+                await api.put(`/consignments/${consignment.consignmentID}`, updatedConsignment);
+              }
+            }
           }
         }));
       }
