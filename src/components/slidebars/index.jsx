@@ -131,7 +131,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         {user && ( // Show logout link only if user is logged in
           <li>
             <Link to="/wallet" onClick={onClose}>
-              Nạp tiền
+              Ví tiền
             </Link>
           </li>
         )}

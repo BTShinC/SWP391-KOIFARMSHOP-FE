@@ -312,6 +312,25 @@ const updateOrderStatus = async (orderID, status, accountID, date) => {
   }
 };
 
+const withdrawMoney = async (data) => {
+  try {
+    const response = await api.post("AccountWithdrawal/create", {
+      date: new Date().toISOString(),
+      pricesend: data.amount,
+      accountID: data.accountID,
+      account_number: data.accountNumber,
+      account_holder_name: data.accountHolderName,
+      bank_branch: data.bankBranch,
+      bank_name: data.bankName
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error withdrawing money:", error);
+    throw error;
+  }
+};
+
 export {
   Register,
   ChangePassword,
@@ -341,4 +360,5 @@ export {
   fetchOrders,
   fetchOrderDetails,
   updateOrderStatus,
+  withdrawMoney,
 };
