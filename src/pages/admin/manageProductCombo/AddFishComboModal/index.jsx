@@ -25,9 +25,9 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
     image1: "",
     image2: "",
     price: 1,
-    consignmentType: "",
+    consignmentType: "Trang trại đăng bán",
     desiredPrice: 1,
-    type: "",
+    type: "Trang trại",
     status: "Còn hàng",
     age: 1,
     sex: "Đực",
@@ -263,11 +263,19 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
             <input
               className="form-control"
               name="type"
-              value="Trang trại"
-              onChange={handleChange}
-              readOnly
-              required
-            ></input>
+              value={formValue.type}
+              readOnly // Không cần onChange nếu giá trị này không thay đổi
+            />
+          </div>
+
+          <div>
+            <label className="form-label">Loại hình ký gửi:</label>
+            <input
+              className="form-control"
+              name="consignmentType"
+              value={formValue.consignmentType}
+              readOnly // Không cần onChange nếu giá trị này không thay đổi
+            />
           </div>
 
           {/* Hiển thị cả hai input khi type là Ký gửi */}

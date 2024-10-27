@@ -13,6 +13,7 @@ import {
   addFish,
   AddFishCombo,
   createConsignment,
+  createTransaction,
   editUser,
 } from "../../../../service/userService";
 
@@ -21,6 +22,7 @@ function SellPayment() {
   const navigate = useNavigate();
   const location = useLocation();
   const finalData = location.state;
+
   // Hàm tính toán phí chăm sóc dựa trên các tiêu chí
   const countFee = () => {
     let fee = 0;
@@ -54,91 +56,112 @@ function SellPayment() {
 
   const fee = countFee();
 
-  // Hàm xử lý thanh toán
-  const handlePayment = async () => {
-    try {
-      // First, check if the user has enough balance
-      if (user.accountBalance >= fee) {
-        let generateProductID = null;
-        let generateProductComboID = null;
+  // Hàm lấy ngày giờ UTC
 
-        // Check if sellForm is in localStorage (individual fish)
-        if (localStorage.getItem("sellForm")) {
-          localStorage.removeItem("sellForm");
-          console.log("SellForm đã bị xóa");
+  const currentDate = new Date().toISOString();
 
-          // Try adding the fish
-          const res = await addFish(finalData);
-          if (res) {
-            console.log("Thành công thêm cá");
-            generateProductID = res.data.productID;
-          } else {
-            throw new Error("Failed to add fish");
-          }
-        }
+// Hàm xử lý thanh toán
+const handlePayment = async () => {
+  try {
+    // Kiểm tra số dư tài khoản
+    if (user.accountBalance >= fee) {
+      let generateProductID = null;
+      let generateProductComboID = null;
 
-        // Check if sellFormCombo is in localStorage (fish combo)
-        if (localStorage.getItem("sellFormCombo")) {
-          localStorage.removeItem("sellFormCombo");
-          console.log("sellFormCombo đã bị xóa");
+      // Kiểm tra và thêm cá đơn
+      if (
+        localStorage.getItem("sellForm") &&
+        finalData.formType === "sellForm"
+      ) {
+        localStorage.removeItem("sellForm");
+        console.log("SellForm đã bị xóa");
 
-          // Try adding the fish combo
-          const res = await AddFishCombo(finalData);
-          if (res) {
-            console.log("Thành công thêm combo cá");
-            generateProductComboID = res.data.productComboID;
-          } else {
-            throw new Error("Failed to add fish combo");
-          }
-        }
-
-        // Construct the consignment object based on product or product combo
-        const consignment = {
-          ...finalData,
-          saleDate: null,
-          salePrice: finalData?.price,
-          dateReceived: null,
-          dateExpiration: null,
-          status: "Chờ xác nhận",
-          accountID: user?.accountID,
-          productID: generateProductID,
-          productComboID: generateProductComboID,
-          total: fee,
-        };
-
-        console.log("consignment =>", consignment);
-
-        // Try creating the consignment
-        const consignmentRes = await createConsignment(consignment);
-        if (!consignmentRes) {
-          throw new Error("Failed to create consignment");
-        }
-        console.log("Thành công tạo đơn ký gửi");
-
-        // If everything is successful, deduct the balance
-        const newBalance = user?.accountBalance - fee;
-        const updatedUser = { ...user, accountBalance: newBalance };
-
-        // Update the user's balance
-        const updateUserapi = await editUser(updatedUser);
-        if (updateUserapi) {
-          console.log("Đã trừ tiền");
+        const res = await addFish(finalData);
+        if (res) {
+          console.log("Thành công thêm cá");
+          generateProductID = res.data.productID;
         } else {
-          throw new Error("Failed to update user balance");
+          throw new Error("Thêm cá thất bại");
         }
-        
-        // Show success message after all operations succeed
-        toast.success("Thanh toán thành công");
-        navigate("/consignmentSuccess")
-      } else {
-        // Show error if the user doesn't have enough balance
-        toast.error("Không đủ tiền để thanh toán");
       }
-    } catch (error) {
-      console.error("Error in handlePayment:", error);
-      toast.error("Có lỗi xảy ra trong quá trình thanh toán");
+
+      // Kiểm tra và thêm combo cá
+      if (
+        localStorage.getItem("sellFormCombo") &&
+        finalData.formType === "sellFormCombo"
+      ) {
+        localStorage.removeItem("sellFormCombo");
+        console.log("sellFormCombo đã bị xóa");
+
+        const res = await AddFishCombo(finalData);
+        if (res) {
+          console.log("Thành công thêm combo cá");
+          generateProductComboID = res.data.productComboID;
+        } else {
+          throw new Error("Thêm combo cá thất bại");
+        }
+      }
+
+      // Tạo đối tượng consignment với thông tin đơn ký gửi
+      const consignment = {
+        ...finalData,
+        saleDate: null,
+        consignmentDate: currentDate,
+        salePrice: finalData?.price,
+        status: "Chờ xác nhận",
+        accountID: user?.accountID,
+        productID: generateProductID,
+        productComboID: generateProductComboID,
+        total: fee,
+      };
+
+      console.log("consignment =>", consignment);
+
+      // Tạo đơn ký gửi
+      const consignmentRes = await createConsignment(consignment);
+      if (!consignmentRes) {
+        throw new Error("Tạo đơn ký gửi thất bại");
+      }
+      console.log("Thành công tạo đơn ký gửi");
+
+      // Trừ tiền và cập nhật số dư tài khoản
+      const newBalance = user?.accountBalance - fee;
+      const updatedUser = { ...user, accountBalance: newBalance };
+
+
+      const updateUserapi = await editUser(updatedUser);
+      if (updateUserapi) {
+        console.log("Đã trừ tiền");
+      } else {
+        throw new Error("Cập nhật số dư tài khoản thất bại");
+      }
+
+      // Tạo transaction
+      const transactionData = {
+        accountID: user.accountID,
+        price: fee,
+        date: new Date(),
+        description: `Phí đơn ${consignmentRes.data.consignmentID}`,
+      };
+
+      const transactionRes = await createTransaction(transactionData);
+      if (transactionRes) {
+        toast.success("Thanh toán thành công");
+        navigate('/consignmentSuccess')
+      } else {
+        throw new Error("Lưu transaction thất bại");
+      }
+
+    } else {
+      // Thông báo lỗi nếu không đủ số dư
+      toast.error("Không đủ tiền để thanh toán");
     }
-  };
+  } catch (error) {
+    console.error("Error in handlePayment:", error);
+    toast.error("Có lỗi xảy ra trong quá trình thanh toán");
+  }
+};
+
 
   return (
     <div className="consignment-payment">

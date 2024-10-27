@@ -183,6 +183,16 @@ const fetchAllCarePackages = async () => {
     throw error;
   }
 };
+const fetchCarePackageByID = async (carePackageID) => {
+  try {
+    const response = await api.get(`carePackages/${carePackageID}`);
+    console.log(response.data);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 const createConsignment = async (data) => {
   try {
     const response = await api.post(`consignments`, data);
@@ -228,21 +238,62 @@ const updateConsignmentStatus = async (id, status, saleDate = null) => {
 const updateConsignmentByID = async (data) => {
   try {
     console.log("Dữ liệu gửi lên API:", data); // Log dữ liệu trước khi gọi API
-    const response = await api.put(`/consignments/${data.consignmentID}`, data);
+    const response = await api.put(`consignments/${data.consignmentID}`, data);
+    console.log("Phản hồi từ API:", response.data); // Log phản hồi của API
     return response;
   } catch (error) {
     if (error.response) {
-      console.error("Lỗi từ phía server:", error.response.data); // Log phản hồi chi tiết từ server
+      // Lỗi từ server trả về
+      console.error("Lỗi từ phía server:", error.response.data);
+      console.error("Status code:", error.response.status); // Mã trạng thái HTTP
+    } else if (error.request) {
+      // Lỗi do không nhận được phản hồi từ server
+      console.error("Không có phản hồi từ server:", error.request);
     } else {
+      // Lỗi khác
       console.error("Lỗi khi gọi API:", error.message);
     }
     return null;
   }
 };
 
+const createCareDetail = async (data) => {
+  try {
+    console.log("Dữ liệu gửi lên API:", data); // Log dữ liệu trước khi gọi API
+
+    const response = await api.post(`/care-details`, data);
+
+    console.log("Phản hồi từ API:", response.data); // Log phản hồi từ API nếu thành công
+    return response;
+  } catch (error) {
+    if (error.response) {
+      // Lỗi từ phía server (ví dụ 4xx hoặc 5xx)
+      console.error("Lỗi từ phía server:", error.response.data); // Log phản hồi chi tiết từ server
+    } else if (error.request) {
+      // Không nhận được phản hồi từ server
+      console.error("Không nhận được phản hồi từ server:", error.request);
+    } else {
+      // Lỗi xảy ra khi thiết lập yêu cầu
+      console.error("Lỗi khi gọi API:", error.message);
+    }
+    return null; // Trả về null để biểu thị lỗi
+  }
+};
+
 const refundConsignmentSell = async (consignmentID) => {
   try {
     const response = await api.post(`/refund/${consignmentID}`);
+    return response;
+  } catch (error) {
+    console.error("Lỗi khi gọi API:", error);
+    return null;
+  }
+};
+
+
+const refundConsignmentTotal = async (consignmentID) => {
+  try {
+    const response = await api.post(`refund/refundall/${consignmentID}`);
     return response;
   } catch (error) {
     console.error("Lỗi khi gọi API:", error);
@@ -260,6 +311,7 @@ const fetchCarePackageByID = async (carePackageID) =>{
     throw error;
   }
 }
+
 
 // const updateOrder = async (id, data) => {
 //   try {
@@ -323,6 +375,18 @@ const updateOrderStatus = async (orderID, status, accountID, date) => {
   }
 };
 
+const createTransaction = async (data) => {
+  try {
+    const response = await api.post(`transactions/create`,data);
+    console.log(response.data);
+    return response.data; // Trả về dữ liệu từ API
+  } catch (error) {
+    console.error("Error fetching order details:", error);
+    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+  }
+};
+
+
 const withdrawMoney = async (data) => {
   try {
     const response = await api.post("AccountWithdrawal/create", {
@@ -380,7 +444,9 @@ export {
   AddFishCombo,
   fetchProductComboById,
   fetchAllCarePackages,
+  fetchCarePackageByID,
   createConsignment,
+  createCareDetail,
   fetchAllConsignment,
   updateConsignmentStatus,
   updateConsignmentByID,
@@ -390,6 +456,8 @@ export {
   fetchOrders,
   fetchOrderDetails,
   updateOrderStatus,
+  refundConsignmentTotal,
+  createTransaction
   fetchCarePackageByID,
   withdrawMoney,
   fetchAllWithdrawals,

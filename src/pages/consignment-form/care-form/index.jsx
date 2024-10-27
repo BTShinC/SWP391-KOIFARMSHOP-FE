@@ -117,14 +117,15 @@ function CareForm({ carePackage }) {
       accountID: user?.accountID,
       price: carePackage?.price,
       type: "Ký gửi",
-      consignmentType: "chăm sóc",
+      consignmentType: "Ký gửi chăm sóc",
       status: "Chờ xác nhận",
       desiredPrice: carePackage?.price,
       productName: uuidv4(),
-      reason: "",
+      reason: "Vui lòng mang cá đến trang trại để hoàn tất thủ tục ký gửi chăm sóc",
       farmName: "",
       consignmentDate: consignmentDate,
       total: carePackage?.price,
+      formType :'careForm',
       duration : 30,
     };
     console.log(

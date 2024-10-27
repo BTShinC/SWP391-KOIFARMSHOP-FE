@@ -9,15 +9,15 @@ function ConsignmentCarousel() {
   const slides = [
     {
       backgroundImage:
-        "url('/public/images/ho-ca-koi-ngoai-troi-1024x640.jpg')", // Hình nền slide 1
+        "url('/images/ho-ca-koi-ngoai-troi-1024x640.jpg')", // Hình nền slide 1
       buttonLabel: "Ký gửi ngay",
     },
     {
-      backgroundImage: "url('/public/images/banner-JPD.jpg')", // Hình nền slide 2
+      backgroundImage: "url('/images/banner-JPD.jpg')", // Hình nền slide 2
       buttonLabel: "Ký gửi ngay",
     },
     {
-      backgroundImage: "url('/public/images/banner-SAKURA.jpg')", // Thêm hình nền mới
+      backgroundImage: "url('/images/banner-SAKURA.jpg')", // Thêm hình nền mới
       buttonLabel: "Ký gửi ngay",
     },
   ];
