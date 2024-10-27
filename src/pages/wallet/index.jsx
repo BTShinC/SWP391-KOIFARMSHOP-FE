@@ -9,6 +9,7 @@ import api from "../../config/api";
 import { withdrawMoney } from "../../service/userService";
 import { Button, Form, Input, Modal } from "antd";
 import CurrencyInput from "../../components/CurrencyInput/CurrencyInput";
+import { Description } from "@mui/icons-material";
 
 function WalletPage() {
   const [amount, setAmount] = useState("");
@@ -117,6 +118,7 @@ function WalletPage() {
           accountID: accountId,
           price: totalAmount,
           date: new Date().toISOString(), // Add the current date
+          description: "Nạp tiền vaò ví", // Add a description
         },
         {
           headers: {
@@ -319,6 +321,7 @@ function WalletPage() {
               <th>Mã giao dịch</th>
               <th>Số tiền</th>
               <th>Ngày giao dịch</th>
+              <th>Nội dung</th>
             </tr>
           </thead>
           <tbody>
@@ -335,6 +338,7 @@ function WalletPage() {
                     : "Chưa xác định"}
                 </td>{" "}
                 {/* Display date or a placeholder */}
+                <td>{transaction.description}</td> {/* Display description */}
               </tr>
             ))}
           </tbody>

@@ -40,7 +40,8 @@ import VnpayResponsePage from "./components/vnpay";
 import CheckoutPage from "./pages/checkout";
 import OrderSuccess from "./pages/orderSuccess";
 import ConsignmentSuccess from "./pages/consignmentSuccess";
-import DashboardPage from "./pages/dashboard";
+import DashboardPage from "./pages/admin/dashboard";
+import ManageContact from "./pages/admin/manageContact";
 
 function App() {
   const router = createBrowserRouter([
@@ -214,6 +215,11 @@ function App() {
       path: "/manageTransaction",
       element: <ManageTransactions />,
     },
+    {
+      path: "/manageContact",
+      element: <ManageContact />,
+    },
+
     {
       path: "/blog/:id",
       element: <BlogDetail />,

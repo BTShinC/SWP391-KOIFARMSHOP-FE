@@ -343,11 +343,21 @@ function OrderTracking() {
           }
         }));
       }
-
-
+    
       message.success("Đã hủy đơn hàng!");
       const refundAmount = selectedOrder.discountedTotal + 200000; // Refund the total amount + 200,000 VND shipping fee
       await updateAccountBalance(user.accountID, refundAmount);//refund to user account
+      await api.post(
+        "/transactions/create",
+        {
+          // Use the api instance
+          accountID: user.accountID,
+          price: refundAmount, 
+          date: new Date().toISOString(), // Add the current date
+          description: `Hoàn tiền đơn hàng ${selectedOrder.orderID} (Hủy đơn) `, // Add a description
+        },
+   
+      );
       message.success(`Đã hoàn trả ${refundAmount} VND cho bạn!`);
 
       // Update the order status locally
