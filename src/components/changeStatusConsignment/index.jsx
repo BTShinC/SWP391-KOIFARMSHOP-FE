@@ -11,7 +11,7 @@ import {
   refundConsignmentTotal,
   createTransaction,
 } from "../../service/userService";
-import { addDays } from "date-fns";
+// import { addDays } from "date-fns";
 import "./index.scss";
 
 ChangeStatusConsignment.propTypes = {
@@ -64,10 +64,15 @@ function ChangeStatusConsignment({
     }
   };
 
+  // const formatDateWithTimezone = (date) => {
+  //   const isoString = date.toISOString(); // ISO format with "Z" at the end
+  //   return isoString.replace("Z", "+00:00"); // Replace "Z" with "+00:00"
+  // };
+
   const handleInProgress = async () => {
     try {
       let reasonForm;
-      if (formValue.consignmentType === "chăm sóc") {
+      if (formValue.consignmentType === "Ký gửi chăm sóc") {
         reasonForm =
           "Cá của mấy khách iu đã được chăm sóc đến tận kẽ răng. Vui lòng kiểm tra thường xuyên để cập nhật tình hình cá";
       } else {
@@ -76,15 +81,17 @@ function ChangeStatusConsignment({
       }
 
       let updatedConsignmentStatus =
-        formValue.consignmentType === "chăm sóc"
+        formValue.consignmentType === "Ký gửi chăm sóc"
           ? "Đang chăm sóc"
           : "Đang tiến hành";
 
-      // const currentDate = new Date().toISOString();
-      // const dateExpiration = addDays(
-      //   new Date(),
-      //   formValue.duration
-      // ).toISOString();
+      // Tạo đối tượng Date
+      // const dateReceived = new Date(); // Ngày hiện tại
+      // const dateExpiration = addDays(dateReceived, formValue.duration); // Tính toán ngày hết hạn
+
+      // // Chuyển đổi thành định dạng "2024-10-27T14:46:43.343+00:00"
+      // const dateReceivedFormatted = formatDateWithTimezone(dateReceived);
+      // const dateExpirationFormatted = formatDateWithTimezone(dateExpiration);
 
       // Kiểm tra dữ liệu trước khi gửi lên server
       if (!formValue.consignmentID || !formValue.duration) {
@@ -94,15 +101,16 @@ function ChangeStatusConsignment({
         return;
       }
 
+      // Chuẩn bị dữ liệu cập nhật
       const updatedFormValue = {
         ...formValue,
         reason: reasonForm,
-        // dateReceived: currentDate,
-        // dateExpiration: dateExpiration,
+        // dateReceived: dateReceivedFormatted, // Dạng "2024-10-27T14:46:43.343+00:00"
+        // dateExpiration: dateExpirationFormatted, // Dạng "2024-10-27T14:46:43.343+00:00"
         status: updatedConsignmentStatus,
       };
 
-      console.log("Cập nhật dữ liệu:", updatedFormValue); // Log để kiểm tra dữ liệu
+      console.log("Cập nhật dữ liệu:", updatedFormValue);
       await updateConsignmentAndProduct(updatedFormValue);
 
       if (onChange) {
@@ -117,7 +125,7 @@ function ChangeStatusConsignment({
   const handleComplete = async () => {
     let reasonForm;
     const currentDate = new Date().toISOString();
-
+    console.log(formValue.consignmentType);
     if (formValue.consignmentType === "Ký gửi chăm sóc") {
       reasonForm = "Cá của các khách iu đã được chăm sóc đến từng kẽ răng";
     } else {
@@ -293,7 +301,7 @@ function ChangeStatusConsignment({
 
       const isCombo = !!updatedFormValue.productComboID;
       const productName =
-        productData.breed + "+" + "("+updatedFormValue.consignmentID+")";
+        productData.breed + "+" + "(" + updatedFormValue.consignmentID + ")";
 
       // Cập nhật trạng thái của sản phẩm
       const productRes = await updateProductStatus(

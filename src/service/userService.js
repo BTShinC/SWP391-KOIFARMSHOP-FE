@@ -183,16 +183,7 @@ const fetchAllCarePackages = async () => {
     throw error;
   }
 };
-const fetchCarePackageByID = async (carePackageID) => {
-  try {
-    const response = await api.get(`carePackages/${carePackageID}`);
-    console.log(response.data);
-    return response;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
+
 const createConsignment = async (data) => {
   try {
     const response = await api.post(`consignments`, data);
@@ -264,6 +255,28 @@ const createCareDetail = async (data) => {
     const response = await api.post(`/care-details`, data);
 
     console.log("Phản hồi từ API:", response.data); // Log phản hồi từ API nếu thành công
+    return response;
+  } catch (error) {
+    if (error.response) {
+      // Lỗi từ phía server (ví dụ 4xx hoặc 5xx)
+      console.error("Lỗi từ phía server:", error.response.data); // Log phản hồi chi tiết từ server
+    } else if (error.request) {
+      // Không nhận được phản hồi từ server
+      console.error("Không nhận được phản hồi từ server:", error.request);
+    } else {
+      // Lỗi xảy ra khi thiết lập yêu cầu
+      console.error("Lỗi khi gọi API:", error.message);
+    }
+    return null; // Trả về null để biểu thị lỗi
+  }
+};
+
+
+const fetchAllCareDetail = async (consignmentID) => {
+  try {
+    const response = await api.post(`/care-details/consignment/${consignmentID}` );
+
+    console.log("Phản hồi từ API:", response.data);
     return response;
   } catch (error) {
     if (error.response) {
@@ -386,6 +399,17 @@ const createTransaction = async (data) => {
   }
 };
 
+const fetchTransactionsByID = async (accountID) =>{
+  try {
+    const response = await api.get(`transactions/account/${accountID}`);
+    console.log(response.data);
+    return response; // Trả về dữ liệu từ API
+  } catch (error) {
+    console.error("Error fetching order details:", error);
+    throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
+  }
+}
+
 
 const withdrawMoney = async (data) => {
   try {
@@ -447,6 +471,7 @@ export {
   fetchCarePackageByID,
   createConsignment,
   createCareDetail,
+  fetchAllCareDetail,
   fetchAllConsignment,
   updateConsignmentStatus,
   updateConsignmentByID,
@@ -457,8 +482,8 @@ export {
   fetchOrderDetails,
   updateOrderStatus,
   refundConsignmentTotal,
-  createTransaction
-  fetchCarePackageByID,
+  createTransaction, 
+  fetchTransactionsByID,
   withdrawMoney,
   fetchAllWithdrawals,
   updateWithdrawalStatus,

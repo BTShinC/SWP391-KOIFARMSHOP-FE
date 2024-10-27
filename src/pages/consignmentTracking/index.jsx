@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Card, Spin, message, Collapse, Table, Tabs, Modal } from "antd";
+import {
+  Card,
+  Spin,
+  message,
+  Collapse,
+  Table,
+  Tabs,
+  Modal,
+  Button,
+} from "antd";
 
 import { addDays, format } from "date-fns";
 import api from "../../config/api";
@@ -10,6 +19,7 @@ import {
   editComboInfo,
   editFishInfo,
   editUser,
+  fetchAllCareDetail,
   fetchCarePackageByID,
   fetchProductById,
   fetchProductComboById,
@@ -26,6 +36,9 @@ function ConsignmentTracking() {
   const [consignmentDetailsMap, setConsignmentDetailsMap] = useState({});
   const [refreshKey, setRefreshKey] = useState(0); // State để lưu key và cập nhật khi có thay đổi
   const [loading, setLoading] = useState(true);
+  const [isCombo, setIsCombo] = useState(false);
+  const [selectedCareDetail, setSelectedCareDetail] = useState(null); // Dữ liệu để hiển thị modal
+  const [isModalVisible, setIsModalVisible] = useState(false); // Trạng thái của modal
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -60,7 +73,6 @@ function ConsignmentTracking() {
         console.log("Product Response:", productResponse.data); // Log product response
         image = productResponse.data.image;
       } else if (productComboID) {
-
         const comboResponse = await api.get(
           `/productcombo/get/${productComboID}`
         );
@@ -123,7 +135,7 @@ function ConsignmentTracking() {
       render: (text, record) => record.productID || record.productComboID,
     },
     {
-      title: "Ngày gửi",
+      title: "Ngày đặt đơn",
       dataIndex: "consignmentDate",
       key: "consignmentDate",
       render: (dateString) => {
@@ -136,6 +148,7 @@ function ConsignmentTracking() {
       dataIndex: "dateReceived",
       key: "dateReceived",
       render: (dateString) => {
+        if (!dateString) return "N/A"; // Kiểm tra nếu giá trị null hoặc undefined
         const date = new Date(dateString);
         return date.toLocaleDateString();
       },
@@ -145,6 +158,7 @@ function ConsignmentTracking() {
       dataIndex: "dateExpiration",
       key: "dateExpiration",
       render: (dateString) => {
+        if (!dateString) return "N/A"; // Kiểm tra nếu giá trị null hoặc undefined
         const date = new Date(dateString);
         return date.toLocaleDateString();
       },
@@ -161,42 +175,50 @@ function ConsignmentTracking() {
       title: "Thao tác",
       key: "action",
       render: (text, record) => {
-        // Kiểm tra nếu trạng thái là "Hoàn tất", sẽ hiện nút Gia hạn
-        if (record.status === "Hoàn tất") {
-          return (
+        return (
+          <>
+            {/* Nút "Xem tình hình cá" luôn hiển thị */}
             <button
               className="btn-edit-consignment"
-              onClick={() =>
-                handleExtendConsignment(
-                  record,
-                  record.productID,
-                  record.productComboID
-                )
-              }
+              onClick={() => handleViewCareFish(record)}
             >
-              Gia hạn
+              Xem tình hình cá
             </button>
-          );
-        }
-        // Nếu trạng thái khác "Chờ xác nhận" và "Hoàn tất", sẽ hiện nút Rút cá
-        if (record.status !== "Chờ xác nhận" && record.status !== "Hoàn tất") {
-          return (
-            <button
-              className="btn-edit-consignment"
-              onClick={() =>
-                handleReturnCareFish(
-                  record,
-                  record.productID,
-                  record.productComboID
-                )
-              }
-            >
-              Rút cá
-            </button>
-          );
-        }
 
-        return null; // Trả về null nếu không thỏa mãn điều kiện nào
+            {/* Nút "Gia hạn" chỉ hiển thị khi trạng thái là "Hoàn tất" */}
+            {record.status === "Hoàn tất" && (
+              <button
+                className="btn-edit-consignment"
+                onClick={() =>
+                  handleExtendConsignment(
+                    record,
+                    record.productID,
+                    record.productComboID
+                  )
+                }
+              >
+                Gia hạn
+              </button>
+            )}
+
+            {/* Nút "Rút cá" chỉ hiển thị khi trạng thái khác "Chờ xác nhận" và "Hoàn tất" */}
+            {record.status !== "Chờ xác nhận" &&
+              record.status !== "Hoàn tất" && (
+                <button
+                  className="btn-edit-consignment"
+                  onClick={() =>
+                    handleReturnCareFish(
+                      record,
+                      record.productID,
+                      record.productComboID
+                    )
+                  }
+                >
+                  Rút cá
+                </button>
+              )}
+          </>
+        );
       },
     },
   ];
@@ -222,7 +244,13 @@ function ConsignmentTracking() {
       key: "productId",
       render: (text, record) => record.productID || record.productComboID,
     },
-    { title: "Giá bán", dataIndex: "salePrice", key: "salePrice" },
+    {
+      title: "Giá bán",
+      dataIndex: "salePrice",
+      key: "salePrice",
+      render: (salePrice) =>
+        `${new Intl.NumberFormat("vi-VN").format(salePrice)}VNĐ`,
+    },
     {
       title: "Ngày bán",
       dataIndex: "saleDate",
@@ -282,113 +310,131 @@ function ConsignmentTracking() {
   ];
   // Gia hạn gói chăm sóc
 
-  const handleOk = async (record) => {
-    console.log(
-      "Gia hạn consignment:",
-      record,
-      record.productComboID,
-      record.productID
-    );
+  const handleOk = async (record, fee) => {
+    try {
+      console.log(
+        "Gia hạn consignment:",
+        record,
+        record.productComboID,
+        record.productID
+      );
 
-    // Lấy ngày hiện tại và ngày hết hạn
-    const currentDate = new Date();
-    const dateExpiration = addDays(currentDate, record.duration);
+      // Lấy ngày hiện tại và ngày hết hạn
+      const consignmentDate = record.dateExpiration;
+      const dateExpiration = addDays(consignmentDate, record.duration);
 
-    let carePackageID;
+      // **Check account balance before proceeding**
+      if (user.accountBalance < fee) {
+        message.error("Số dư tài khoản không đủ để gia hạn.");
+        return; // Stop execution if balance is insufficient
+      }
+
+      // Cập nhật thông tin record nếu đủ số dư
+      const updateRecord = {
+        ...record,
+        consignmentDate: format(consignmentDate, "dd-MM-yyyy"),
+        dateReceived: format(consignmentDate, "dd-MM-yyyy"),
+        dateExpiration: format(dateExpiration, "dd-MM-yyyy"),
+        status: "Đang chăm sóc",
+        total: record.total + fee,
+        reason: "Cá của khách iu đang được tiếp tục được chăm sóc",
+      };
+      console.log("updateRecord ===>", updateRecord);
+
+      // Gọi API song song: cập nhật consignment và cập nhật số dư người dùng
+      const [extendConsignmentRes, updateUserRes] = await Promise.all([
+        updateConsignmentByID(updateRecord), // Update consignment
+        editUser({ ...user, accountBalance: user.accountBalance - fee }), // Deduct fee from user's balance
+      ]);
+
+      if (extendConsignmentRes && updateUserRes) {
+        // Tạo transaction
+        const transactionData = {
+          accountID: user.accountID,
+          price: fee,
+          date: new Date(),
+          description: `Phí gia hạn đơn ${record.consignmentID}`,
+        };
+
+        const transactionRes = await createTransaction(transactionData); // Record transaction
+        if (transactionRes) {
+          toast.success("Thanh toán thành công");
+        } else {
+          throw new Error("Lưu transaction thất bại");
+        }
+
+        message.success("Gia hạn thành công");
+        setRefreshKey((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.error("Lỗi khi gia hạn consignment:", error);
+      message.error("Đã xảy ra lỗi trong quá trình gia hạn.");
+    }
+  };
+
+  const handleExtendConsignment = async (record) => {
+    console.log(record);
+
+    let carePackageID = null;
     let fee = 0;
-
-    // Kiểm tra nếu có productID hoặc productComboID
+    let selectedProduct = null;
     if (record.productID || record.productComboID) {
       try {
-        // Gọi API song song để lấy product và care package (nếu cần)
+        // Fetch product and product combo in parallel
         const [productRes, productComboRes] = await Promise.all([
           record.productID ? fetchProductById(record.productID) : null,
-
           record.productComboID
             ? fetchProductComboById(record.productComboID)
             : null,
         ]);
 
-
-        // Lấy carePackageID từ product hoặc combo product
+        // Determine whether to use the product or combo and set isCombo accordingly
         if (productRes) {
+          selectedProduct = productRes;
           carePackageID = productRes.carePackageID;
+          setIsCombo(false); // It's a single product, not a combo
         } else if (productComboRes) {
+          selectedProduct = productComboRes;
           carePackageID = productComboRes.carePackageID;
+          setIsCombo(true); // It's a combo
         }
 
-        // Gọi API lấy thông tin care package và xử lý fee nếu có carePackageID
+        // Fetch care package details if carePackageID is found
         if (carePackageID) {
           const carePackageRes = await fetchCarePackageByID(carePackageID);
           if (carePackageRes) {
-            fee = carePackageRes?.data?.price || 0; // Lấy giá trị fee từ care package
+            fee = carePackageRes?.data?.price || 0; // Get fee from care package
           }
         }
 
-        // Cập nhật thông tin record
-        const updateRecord = {
-          ...record,
-          consignmentDate: format(currentDate, "yyyy-MM-dd"),
-          dateReceived: format(currentDate, "yyyy-MM-dd"),
-          dateExpiration: format(dateExpiration, "yyyy-MM-dd"),
-
-          status: "Đang chăm sóc",
-          total: record.total + fee,
-          reason: "Cá của khách iu đang được tiếp tục được chăm sóc",
-        };
-        console.log("updateRecord ===>", updateRecord);
-
-        // Kiểm tra số dư tài khoản và gia hạn nếu đủ
-        if (user.accountBalance >= fee) {
-          // Gọi API song song: cập nhật consignment và cập nhật số dư người dùng
-          const [extendConsignmentRes, updateUserRes] = await Promise.all([
-            updateConsignmentByID(updateRecord),
-            editUser({ ...user, accountBalance: user.accountBalance - fee }),
-          ]);
-
-          if (extendConsignmentRes && updateUserRes) {
-            // Tạo transaction
-            const transactionData = {
-              accountID: user.accountID,
-              price: fee,
-              date: new Date(),
-              description: `Phí gia hạn đơn ${record.consignmentID}`,
-            };
-
-            const transactionRes = await createTransaction(transactionData);
-            if (transactionRes) {
-              toast.success("Thanh toán thành công");
-            } else {
-              throw new Error("Lưu transaction thất bại");
-            }
-
-            message.success("Gia hạn thành công");
-          }
-        } else {
-          message.error("Số dư tài khoản không đủ để gia hạn.");
-        }
+        // Show confirmation modal with fee and product/combo information
+        Modal.confirm({
+          title: "Bạn có chắc chắn muốn gia hạn?",
+          content: (
+            <div>
+              <p>
+                Tên sản phẩm:
+                {selectedProduct.name || selectedProduct.comboName}
+              </p>
+              <p>Loại: {isCombo ? "Combo" : "Sản phẩm đơn"}</p>
+              {/* Display combo or product */}
+              <p>Tổng phí gia hạn: {fee} VND</p>
+              <p>Bạn có chắc chắn muốn tiếp tục không?</p>
+            </div>
+          ),
+          okText: "Xác nhận",
+          cancelText: "Hủy",
+          onOk: () => handleOk(record, fee, selectedProduct, isCombo), // Pass isCombo to handleOk
+        });
       } catch (error) {
-        console.error("Lỗi khi gia hạn consignment:", error);
-        message.error("Đã xảy ra lỗi trong quá trình gia hạn.");
+        console.error("Lỗi khi xử lý gia hạn consignment:", error);
+        message.error("Đã xảy ra lỗi trong quá trình lấy thông tin gia hạn.");
       }
     } else {
       message.error("Không tìm thấy productID hoặc productComboID.");
     }
   };
 
-
-  const handleExtendConsignment = (record) => {
-    console.log(record);
-    Modal.confirm({
-      title: "Bạn có chắc chắn muốn gia hạn?",
-      content: `Tổng phí gia hạn sẽ là ${record.total} VND. Bạn có chắc chắn muốn tiếp tục không?`,
-      okText: "Xác nhận",
-      cancelText: "Hủy",
-      onOk: () => handleOk(record), // Gọi hàm handleOk khi người dùng nhấn OK
-
-    });
-  };
-  
   // Thay đổi trạng thái cá
   const handleChangeStatus = async (consignment, productID, productComboID) => {
     try {
@@ -444,28 +490,24 @@ function ConsignmentTracking() {
 
       const refund = await refundConsignmentTotal(consignment.consignmentID);
 
-
       if (userRes && refund) {
         message.success(`Hoàn tiền thành công: ${refundAmount} VND`);
-        setRefreshKey((prev) => prev + 1); // Cập nhật trạng thái để refresh dữ liệu
+        setRefreshKey((prev) => prev + 1);
       } else {
         message.error("Không thể hoàn tiền vào ví của bạn.");
         return;
       }
-
 
       // Cập nhật trạng thái của consignment
       const updatedConsignment = {
         ...consignment,
         status: "Đã hủy",
         total: 0, // Xóa giá trị total sau khi hoàn tiền
-
       };
 
       const consignmentRes = await updateConsignmentByID(updatedConsignment);
       if (consignmentRes) {
         message.success(`Cập nhật trạng thái đơn ký gửi thành công.`);
-
 
         // Tạo transaction để lưu lại lịch sử hoàn tiền
         const transactionData = {
@@ -480,7 +522,6 @@ function ConsignmentTracking() {
           message.success("Lưu transaction thành công");
         } else {
           message.error("Lưu transaction thất bại.");
-
         }
 
         // Cập nhật trạng thái sản phẩm sau khi đơn ký gửi đã hủy
@@ -587,6 +628,20 @@ function ConsignmentTracking() {
     }
   };
 
+  const handleViewCareFish = async (record) => {
+    let careDetailRes = await fetchAllCareDetail(record.consignmentID);
+    if (careDetailRes) {
+      setSelectedCareDetail(careDetailRes.data);
+    }
+    setSelectedCareDetail([]);
+    setIsModalVisible(true); // Hiển thị modal
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false); // Đóng modal
+    setSelectedCareDetail(null); // Reset dữ liệu
+  };
+
   return (
     <div className="consignment-tracking-page-wrapper">
       <div className="consignment-tracking-page">
@@ -659,6 +714,31 @@ function ConsignmentTracking() {
             </TabPane>
           </Tabs>
         )}
+        {/* Modal hiển thị chi tiết tình hình chăm sóc */}
+        <Modal
+          title="Chi tiết tình hình chăm sóc"
+          visible={isModalVisible}
+          onCancel={handleCancel}
+          footer={[
+            <Button key="close" onClick={handleCancel}>
+              Đóng
+            </Button>,
+          ]}
+        >
+          {selectedCareDetail && selectedCareDetail.length > 0 ? (
+            <Collapse accordion>
+              {selectedCareDetail.map((detail, index) => (
+                <Panel header={`Cập nhật ${index + 1}`} key={index}>
+                  <p>Ngày cập nhật: {detail.updateDate}</p>
+                  <p>Tình trạng: {detail.status}</p>
+                  <p>Ghi chú: {detail.notes}</p>
+                </Panel>
+              ))}
+            </Collapse>
+          ) : (
+            <p>Không có chi tiết chăm sóc nào được tìm thấy.</p>
+          )}
+        </Modal>
       </div>
     </div>
   );

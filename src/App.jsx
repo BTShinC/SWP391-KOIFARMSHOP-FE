@@ -41,6 +41,7 @@ import CheckoutPage from "./pages/checkout";
 import OrderSuccess from "./pages/orderSuccess";
 import ConsignmentSuccess from "./pages/consignmentSuccess";
 import DashboardPage from "./pages/dashboard";
+import OwnTransaction from "./pages/ownTransaction";
 
 function App() {
   const router = createBrowserRouter([
@@ -183,7 +184,11 @@ function App() {
         {
           path: "/consignmentSuccess",
           element: <ConsignmentSuccess />,
-        }
+        },
+        {
+          path: "/ownTransaction", 
+          element: <OwnTransaction />,
+        }      
       ],
     },
     {
