@@ -4,7 +4,7 @@ import { clearCart } from "../redux/features/createSlice";
 import { Button, message, Divider } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../config/api"; // Import the api instance
-import "./index.scss"; 
+import "./index.scss";
 
 function CheckoutPage() {
   const user = useSelector((state) => state.user);
@@ -23,7 +23,7 @@ function CheckoutPage() {
       const subtotal = cartItems.reduce((total, item) => total + item.price, 0);
       setTotalAmount(subtotal);
       if (subtotal >= 2000000) {
-        const discountAmount = subtotal * 0.05; 
+        const discountAmount = subtotal * 0.05;
         setDiscount(discountAmount);
       } else {
         setDiscount(0);
@@ -72,8 +72,7 @@ function CheckoutPage() {
         .map((item) => item.productComboID);
 
       if (accountBalance >= finalPrice) {
-        await deductAccountBalance(user.accountID, finalPrice); 
-        const promotionID = totalAmount >= 2000000 ? "PM001" : null;
+        await deductAccountBalance(user.accountID, finalPrice);
 
         const params = new URLSearchParams({
           accountID: user.accountID,
@@ -81,17 +80,32 @@ function CheckoutPage() {
           ...(productComboIDs.length > 0 && {
             productComboIDs: productComboIDs.join(","),
           }),
-          promotionID // Add promotionID if it exists
         });
 
+        if (totalAmount >= 2000000) {
+          params.append("promotionID", "PM001");
+        }
+
         console.log("Query Parameters:", params.toString());
-        const orderResponse = await api.post(`/orders/makeOrder?${params.toString()}`); 
-        console.log("Value send to API: ", {params}, { promotionID }) ;
+        const orderResponse = await api.post(`/orders/makeOrder?${params.toString()}`);
+        console.log("Value sent to API: ", { params });
         console.log("Order Response:", orderResponse.data);
 
         dispatch(clearCart());
         message.success("Đơn hàng của bạn đã được đặt thành công!");
         navigate("/orderSuccess");
+
+        await api.post(
+          "/transactions/create",
+          {
+            // Use the api instance
+            accountID: user.accountID,
+            price: totalAmount,
+            date: new Date().toISOString(), // Add the current date
+            description: `Thanh toán đơn hàng ${orderResponse.data.orderID} `, // Add a description
+          },
+     
+        );
 
         let countdown = 3;
         const countdownInterval = setInterval(() => {

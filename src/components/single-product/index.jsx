@@ -135,12 +135,12 @@ function SingleProduct() {
                   className="thumbnail"
                 />
                 <Image
-                  src={product.image}
+                  src={product.image1}
                   alt="Thumbnail 2"
                   className="thumbnail"
                 />
                 <Image
-                  src={product.image}
+                  src={product.image2}
                   alt="Thumbnail 3"
                   className="thumbnail"
                 />

@@ -3,7 +3,7 @@ import "./index.scss";
 import { CloseOutlined, ShoppingOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { setCartItems, removeFromCart} from "../../pages/redux/features/createSlice";
+import { setCartItems, removeFromCart } from "../../pages/redux/features/createSlice";
 import { useEffect, useState } from "react";
 import { deleteCartItem, fetchCartItems } from "../../service/userService";
 
@@ -16,43 +16,43 @@ const ShoppingCart = ({ onClose }) => {
   // useEffect(() => {
   //   console.log("Current account:", account);
 
-    // const loadCartItems = async () => {
-    //   if (account && account.accountID) {
-    //     try {
-    //       setLoading(true);
-    //       const items = await fetchCartItems(account.accountID);
-    //       dispatch(setCartItems(items));
-    //     } catch (error) {
-    //       console.error("Failed to load cart items:", error);
-    //       message.error("Không thể tải giỏ hàng");
-    //     } finally {
-    //       setLoading(false);
-    //     }
-    //   } else {
-    //     console.log("No account ID available");
-    //     setLoading(false);
-    //   }
-    // };
+  // const loadCartItems = async () => {
+  //   if (account && account.accountID) {
+  //     try {
+  //       setLoading(true);
+  //       const items = await fetchCartItems(account.accountID);
+  //       dispatch(setCartItems(items));
+  //     } catch (error) {
+  //       console.error("Failed to load cart items:", error);
+  //       message.error("Không thể tải giỏ hàng");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   } else {
+  //     console.log("No account ID available");
+  //     setLoading(false);
+  //   }
+  // };
 
-    const loadCartItems = async () => {
+  const loadCartItems = async () => {
 
-      if (account && account.accountID) {
+    if (account && account.accountID) {
 
-        try {
-          setLoading(true);
-          const items = await fetchCartItems(account.accountID);
-          dispatch(setCartItems(items));
-        } catch (error) {
-          console.error("Failed to load cart items:", error);
-          message.error("Không thể tải giỏ hàng");
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        console.log("No account ID available");
+      try {
+        setLoading(true);
+        const items = await fetchCartItems(account.accountID);
+        dispatch(setCartItems(items));
+      } catch (error) {
+        console.error("Failed to load cart items:", error);
+        message.error("Không thể tải giỏ hàng");
+      } finally {
         setLoading(false);
       }
-    };
+    } else {
+      console.log("No account ID available");
+      setLoading(false);
+    }
+  };
 
 
   //   loadCartItems();
@@ -147,7 +147,11 @@ const ShoppingCart = ({ onClose }) => {
           <Button type="default">Giỏ hàng</Button>
         </Link>
         <Link to="/checkout">
-          <Button type="primary">Thanh toán</Button>
+          <Button
+          disabled={cartItems.length === 0} // Disable button if cart is empty
+          type="primary">Thanh toán
+            
+          </Button>
         </Link>
       </div>
     </Modal>

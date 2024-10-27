@@ -1,12 +1,11 @@
-// src/components/single-product-combo/SingleProductCombo.jsx
 import "./index.scss";
 import { Link, useParams } from "react-router-dom";
-import { Button, Typography, Image, Divider } from "antd";
+import { Button, Typography, Image, Divider, message } from "antd";
 import { useState, useEffect } from "react";
 import Carousel from "../carousel";
-import { fetchProductComboById, addToCartAPI } from "../../service/userService"; // Adjust the import based on your service
+import { fetchProductComboById, addToCartAPI } from "../../service/userService";
 import { useDispatch, useSelector } from "react-redux";
-import ShoppingCart from "../shopping-cart"; // Import ShoppingCart component
+import ShoppingCart from "../shopping-cart";
 
 const { Title, Text } = Typography;
 
@@ -17,7 +16,6 @@ function SingleProductCombo() {
   const [cartItems, setCartItems] = useState([]); // State to store cart items
   const dispatch = useDispatch(); // Initialize dispatch
   const user = useSelector((state) => state.user);
-
 
   // Fetch product combo from backend when component mounts
   useEffect(() => {
@@ -43,9 +41,8 @@ function SingleProductCombo() {
   };
 
   const handleAddToCart = async () => {
-    
     try {
-      if (!user.accountID) {
+      if (!user || !user.accountID) {
         console.error("Account information is missing");
         return;
       }
@@ -76,6 +73,7 @@ function SingleProductCombo() {
       setCartVisible(true); // Show the cart after adding
     } catch (error) {
       console.error("Error adding to cart:", error.response?.data || error.message);
+      message.error("Sản phẩm đã hết hàng.");
     }
   };
 
@@ -95,6 +93,23 @@ function SingleProductCombo() {
         {productCombo && (
           <>
             <div className="image-gallery">
+              <div className="thumbnail-container">
+                <Image
+                  src={productCombo.image}
+                  alt="Thumbnail 1"
+                  className="thumbnail"
+                />
+                <Image
+                  src={productCombo.image1}
+                  alt="Thumbnail 2"
+                  className="thumbnail"
+                />
+                <Image
+                  src={productCombo.image2}
+                  alt="Thumbnail 3"
+                  className="thumbnail"
+                />
+              </div>
               <Image
                 src={productCombo.image}
                 alt="Main Product Combo"
@@ -121,7 +136,7 @@ function SingleProductCombo() {
                 </div>
               ) : (
                 <div style={{paddingLeft: "10rem", paddingTop: "3rem"}}>
-                <Text style={{ fontSize: "Large",fontWeight: "Bold", color: "red" }}>Sản phẩm hết hàng</Text>
+                  <Text style={{ fontSize: "Large", fontWeight: "Bold", color: "red" }}>Sản phẩm hết hàng</Text>
                 </div>
               )}
 
