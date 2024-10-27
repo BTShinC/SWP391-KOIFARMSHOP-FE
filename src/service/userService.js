@@ -420,7 +420,8 @@ const withdrawMoney = async (data) => {
       account_number: data.accountNumber,
       account_holder_name: data.accountHolderName,
       bank_branch: data.bankBranch,
-      bank_name: data.bankName
+      bank_name: data.bankName,
+      description: data.description
     });
     console.log(response.data);
     return response.data;
@@ -481,9 +482,9 @@ export {
   fetchOrders,
   fetchOrderDetails,
   updateOrderStatus,
-  refundConsignmentTotal,
-  createTransaction, 
+  refundConsignmentTotal, 
   fetchTransactionsByID,
+  createTransaction,
   withdrawMoney,
   fetchAllWithdrawals,
   updateWithdrawalStatus,

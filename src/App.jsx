@@ -40,8 +40,10 @@ import VnpayResponsePage from "./components/vnpay";
 import CheckoutPage from "./pages/checkout";
 import OrderSuccess from "./pages/orderSuccess";
 import ConsignmentSuccess from "./pages/consignmentSuccess";
-import DashboardPage from "./pages/dashboard";
 import OwnTransaction from "./pages/ownTransaction";
+import DashboardPage from "./pages/admin/dashboard";
+
+
 
 function App() {
   const router = createBrowserRouter([
