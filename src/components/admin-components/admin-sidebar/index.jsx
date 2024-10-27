@@ -18,6 +18,7 @@ function AdminSideBar() {
             src="/public/images/logo.svg"
             alt="Logo"
             className="sidebar__logo"
+            onClick={() => handleNavigation("/")}
           />
         </div>
         <div
@@ -84,10 +85,9 @@ function AdminSideBar() {
           <span>Quản lý giao dịch</span>
         </div>
         <div
-          className={`sidebar__item ${
-            location.pathname === "/reports" ? "active" : ""
-          }`}
-          onClick={() => handleNavigation("/reports")}
+          className={`sidebar__item ${location.pathname === "/reports" ? "active" : ""
+            }`}
+          onClick={() => handleNavigation("/dashboard")}
         >
           <span className="sidebar__icon">⌘</span>
           <span>Báo cáo và thống kê</span>

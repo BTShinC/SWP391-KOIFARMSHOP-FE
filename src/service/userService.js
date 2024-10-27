@@ -166,7 +166,7 @@ const AddFishCombo = async (data) => {
 };
 const fetchProductComboById = async (id) => {
   try {
-    const response = await api.get(`productcombo/${id}`);
+    const response = await api.get(`productcombo/get/${id}`);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -249,6 +249,17 @@ const refundConsignmentSell = async (consignmentID) => {
     return null;
   }
 };
+
+const fetchCarePackageByID = async (carePackageID) =>{
+  try {
+    const response = await api.get(`carePackages/${carePackageID}`);
+    console.log(response.data);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
 
 // const updateOrder = async (id, data) => {
 //   try {
@@ -379,7 +390,9 @@ export {
   fetchOrders,
   fetchOrderDetails,
   updateOrderStatus,
+  fetchCarePackageByID,
   withdrawMoney,
   fetchAllWithdrawals,
   updateWithdrawalStatus,
+
 };
