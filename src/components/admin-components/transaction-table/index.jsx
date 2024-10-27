@@ -4,7 +4,7 @@ import { Pagination } from "@mui/material"; // Ensure you have @mui/material ins
 import { useState } from "react";
 import EditTransactionModal from "../../../pages/admin/manageTransactions/EditTransactionModal";
 
-const TransactionTable = ({ columns, transactionData, title, onChange }) => {
+const TransactionTable = ({ columns, transactionData, title, onChange,onUpdateStatus }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -23,6 +23,12 @@ const TransactionTable = ({ columns, transactionData, title, onChange }) => {
     // Call your API to update the transaction here
     // After updating, you might want to refresh the transaction data
     await onChange(); // Refresh the data after update
+  };
+
+  const handleUpdateStatus = async (id) => {
+    if (onUpdateStatus) {
+      await onUpdateStatus(id);
+    }
   };
 
   // Calculate the data to display
@@ -44,26 +50,32 @@ const TransactionTable = ({ columns, transactionData, title, onChange }) => {
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((transaction, index) => (
-            <tr key={transaction.transactionID || index}>
-              <td>{transaction.transactionID}</td>
-              <td>{transaction.accountID}</td>
-              <td>{transaction.price} VND</td>
-              <td>{new Date(transaction.date).toLocaleDateString()}</td>
-              <td>{transaction.status}</td>
-              <td>
-                {transaction.image ? (
-                  <img src={transaction.image} alt="Transaction" style={{ maxWidth: "50px", borderRadius: "5px" }} />
-                ) : (
-                  "No Image"
-                )}
-              </td>
-              <td>
+        {currentItems.map((transaction, index) => (
+          <tr key={transaction.transactionID || transaction.accountWithdrawalId || index}>
+            <td>{transaction.transactionID || transaction.accountWithdrawalId}</td>
+            <td>{transaction.accountID}</td>
+            <td>{transaction.price || transaction.pricesend} VND</td>
+            <td>{new Date(transaction.date).toLocaleDateString()}</td>
+            <td>{transaction.status}</td>
+            <td>
+              {transaction.image ? (
+                <img src={transaction.image} alt="Transaction" style={{ maxWidth: "50px", borderRadius: "5px" }} />
+              ) : transaction.bank_name ? (
+                `${transaction.bank_name} - ${transaction.account_number}`
+              ) : (
+                "No Image"
+              )}
+            </td>
+            <td>
+              {onUpdateStatus && transaction.status !== "Hoàn tất" ? (
+                <button onClick={() => onUpdateStatus(transaction.accountWithdrawalId)}>Hoàn tất</button>
+              ) : (
                 <button onClick={() => handleEditClick(transaction)}>Chỉnh sửa</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+              )}
+            </td>
+          </tr>
+        ))}
+      </tbody>
       </table>
       <Pagination
         style={{
@@ -95,6 +107,7 @@ TransactionTable.propTypes = {
   columns: PropTypes.arrayOf(PropTypes.string).isRequired,
   title: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
+  onUpdateStatus: PropTypes.func,  // Thêm dòng này
 };
 
 export default TransactionTable;

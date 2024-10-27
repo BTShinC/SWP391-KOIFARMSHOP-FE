@@ -330,6 +330,25 @@ const withdrawMoney = async (data) => {
     throw error;
   }
 };
+const fetchAllWithdrawals = async () => {
+  try {
+    const response = await api.get("AccountWithdrawal/all");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching withdrawals:", error);
+    throw error;
+  }
+};
+
+const updateWithdrawalStatus = async (accountWithdrawalId) => {
+  try {
+    const response = await api.put(`AccountWithdrawal/update/${accountWithdrawalId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating withdrawal status:", error);
+    throw error;
+  }
+};
 
 export {
   Register,
@@ -361,4 +380,6 @@ export {
   fetchOrderDetails,
   updateOrderStatus,
   withdrawMoney,
+  fetchAllWithdrawals,
+  updateWithdrawalStatus,
 };
