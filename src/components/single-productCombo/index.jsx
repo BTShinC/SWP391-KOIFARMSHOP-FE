@@ -16,6 +16,8 @@ function SingleProductCombo() {
   const [cartVisible, setCartVisible] = useState(false); // State to manage cart visibility
   const [cartItems, setCartItems] = useState([]); // State to store cart items
   const dispatch = useDispatch(); // Initialize dispatch
+  const user = useSelector((state) => state.user);
+
 
   // Fetch product combo from backend when component mounts
   useEffect(() => {
@@ -41,8 +43,7 @@ function SingleProductCombo() {
   };
 
   const handleAddToCart = async () => {
-    const user = useSelector((state) => state.user);
-
+    
     try {
       if (!user.accountID) {
         console.error("Account information is missing");
