@@ -32,9 +32,6 @@ export default function Carousel({ slidesPerView = 4 }) {
     loadProducts();
   }, []);
 
-
-  
-
   return (
     <>
       <Swiper

@@ -26,8 +26,8 @@ function SingleProduct() {
   const { id } = useParams(); // Lấy productId từ URL
   const [product, setProduct] = useState(null); // State để lưu thông tin sản phẩm
   const dispatch = useDispatch(); // Khởi tạo dispatch
-  // console.log("Current account:", account);
-  // console.log("Current ID:", account.accountID);
+  console.log("Current account:", account);
+  console.log("Current ID:", account.accountID);
 
   useEffect(() => {
 
