@@ -124,7 +124,7 @@ function FishTable({
                 </td>
                 <td>{fish.status}</td>
                 <td className="btn-container">
-                  {fish.status === "Còn hàng" && (
+                  {fish.status === "Còn hàng" && fish.type === 'Trang trại' && (
                     <Checkbox
                       checked={fish.status === "Hết hàng"}
                       onChange={() => handleChangeStatus(fish)}

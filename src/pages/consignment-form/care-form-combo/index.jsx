@@ -93,7 +93,7 @@ function CareFormCombo({ carePackage }) {
       comboName: uuidv4(),
       type: "Ký gửi",
       accountID: user?.accountID,
-      consignmentType: "chăm sóc",
+      consignmentType: "Ký gửi chăm sóc",
       carePackageID: carePackage?.carePackageID,
       price: carePackage?.price,
       status: "Chờ xác nhận",

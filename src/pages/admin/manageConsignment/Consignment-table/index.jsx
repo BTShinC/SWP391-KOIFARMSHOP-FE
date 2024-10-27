@@ -227,24 +227,30 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
                   >
                     Xem chi tiết
                   </Button>
-                  {consignment.consignmentType === "chăm sóc" && (
-                    <Button
-                      onClick={() => handleOpenUpdateModal(consignment)}
-                      style={{ marginLeft: "10px" }}
-                    >
-                      Cập nhật tình hình
-                    </Button>
-                  )}
-                  <ChangeStatusConsignment
-                    data={consignment}
-                    consignmentID={consignment.consignmentID}
-                    productID={consignment.productID}
-                    productComboID={consignment.productComboID}
-                    onChangeStatus={(newStatus) =>
-                      handleStatusChange(consignment.consignmentID, newStatus)
-                    }
-                    onChange={onChange}
-                  />
+                  {consignment.consignmentType === "chăm sóc" &&
+                    consignment.status === "Đang chăm sóc" && (
+                      <Button
+                        onClick={() => handleOpenUpdateModal(consignment)}
+                        style={{ marginLeft: "10px" }}
+                      >
+                        Cập nhật tình hình
+                      </Button>
+                    )}
+                  {(consignment.consignmentType === "chăm sóc" &&
+                    consignment.status !== "Hoàn tất") ||
+                  (consignment.consignmentType !== "chăm sóc" &&
+                    consignment.status !== "Đã hoàn tiền" && consignment.status !== "Đã hủy") ? (
+                    <ChangeStatusConsignment
+                      data={consignment}
+                      consignmentID={consignment.consignmentID}
+                      productID={consignment.productID}
+                      productComboID={consignment.productComboID}
+                      onChangeStatus={(newStatus) =>
+                        handleStatusChange(consignment.consignmentID, newStatus)
+                      }
+                      onChange={onChange}
+                    />
+                  ) : null}
                 </td>
               </tr>
             </React.Fragment>

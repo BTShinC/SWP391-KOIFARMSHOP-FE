@@ -4,7 +4,7 @@ import './index.scss';
 function PricingTable() {
   return (
     <div className="pricing-table">
-      <h1>Bảng Giá Dịch Vụ Ký Gửi Cá Koi</h1>
+      <h1>Bảng Giá Dịch Vụ Ký Gửi Bán Cá Koi</h1>
       <p>
         Các mức phí được tính dựa trên số lượng cá, kích thước cá và thời gian ký gửi.
         Vui lòng tham khảo bảng giá dưới đây để biết thêm chi tiết.

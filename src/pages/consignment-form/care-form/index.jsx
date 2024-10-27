@@ -117,7 +117,7 @@ function CareForm({ carePackage }) {
       accountID: user?.accountID,
       price: carePackage?.price,
       type: "Ký gửi",
-      consignmentType: "chăm sóc",
+      consignmentType: "Ký gửi chăm sóc",
       status: "Chờ xác nhận",
       desiredPrice: carePackage?.price,
       productName: uuidv4(),

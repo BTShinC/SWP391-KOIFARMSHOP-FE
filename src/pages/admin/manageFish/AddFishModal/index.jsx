@@ -29,11 +29,11 @@ function AddFishModal({ title, visible, onClose, onChange }) {
     image2: "",
     price: 1,
     certificate: "",
-    type: "",
+    type: "Trang trại",
     quantity: 1,
     status: "Còn hàng",
     desiredPrice: 1,
-    consignmentType: "",
+    consignmentType: "Trang trại đăng bán",
   };
 
   const [formValue, setFormValue] = useState(initFormValue);
@@ -43,7 +43,6 @@ function AddFishModal({ title, visible, onClose, onChange }) {
     image2: [],
   });
   const [certificateList, setCertificateList] = useState([]);
-
 
   const handleChange = (event) => {
     const { value, name } = event.target;
@@ -95,7 +94,7 @@ function AddFishModal({ title, visible, onClose, onChange }) {
           .then((url) => {
             setFormValue((prevFormValue) => ({
               ...prevFormValue,
-              [key]: url, 
+              [key]: url,
             }));
           })
           .catch((error) => {
@@ -335,23 +334,20 @@ function AddFishModal({ title, visible, onClose, onChange }) {
             <input
               className="form-control"
               name="type"
-              value="Trang trại"
-              onChange={handleChange}
-              readOnly
-            >
-            </input>
+              value={formValue.type}
+              readOnly // Không cần onChange nếu giá trị này không thay đổi
+            />
           </div>
-            <div>
-              <label className="form-label">Loại hình ký gửi:</label>
-              <input
-                className="form-control"
-                name="consignmentType"
-                value="Trang trại đăng bán"
-                onChange={handleChange}
-                readOnly
-                required
-              />
-            </div>
+
+          <div>
+            <label className="form-label">Loại hình ký gửi:</label>
+            <input
+              className="form-control"
+              name="consignmentType"
+              value={formValue.consignmentType}
+              readOnly // Không cần onChange nếu giá trị này không thay đổi
+            />
+          </div>
           {/* {formValue.consignmentType === "Ký gửi để bán" && (
             <>
               <div>
@@ -381,18 +377,18 @@ function AddFishModal({ title, visible, onClose, onChange }) {
             </>
           )} */}
           {/* {formValue.consignmentType !== "Ký gửi để bán" && ( */}
-            <div>
-              <label className="form-label">Giá:</label>
-              <input
-                className="form-control"
-                type="number"
-                name="price"
-                min={1}
-                value={formValue.price}
-                onChange={handleChange}
-                required
-              />
-            </div>
+          <div>
+            <label className="form-label">Giá:</label>
+            <input
+              className="form-control"
+              type="number"
+              name="price"
+              min={1}
+              value={formValue.price}
+              onChange={handleChange}
+              required
+            />
+          </div>
           {/* )} */}
         </div>
       </form>
