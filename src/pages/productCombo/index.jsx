@@ -40,7 +40,7 @@ function ProductComboPage() {
         .filter(combo =>
             combo.comboName &&
             combo.comboName.toLowerCase().includes(searchTerm.toLowerCase()) &&
-            combo.consignmentType !== "chăm sóc"
+            combo.consignmentType !== "chăm sóc" && combo.status === "Còn hàng"
         )
         .sort((a, b) => {
             if (a.status === "Còn hàng" && b.status !== "Còn hàng") return -1;

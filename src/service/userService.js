@@ -80,7 +80,7 @@ const addFish = async (data) => {
 
 const fetchProductById = async (id) => {
   try {
-    const response = await api.get(`product/${id}`); // Adjust the endpoint based on your API structure
+    const response = await api.get(`product/get/${id}`); // Adjust the endpoint based on your API structure
     return response.data; // Return the product data
   } catch (error) {
     console.error("Error fetching product by ID:", error);
@@ -166,7 +166,7 @@ const AddFishCombo = async (data) => {
 };
 const fetchProductComboById = async (id) => {
   try {
-    const response = await api.get(`productcombo/${id}`);
+    const response = await api.get(`productcombo/get/${id}`);
     return response.data;
   } catch (error) {
     console.error(error);

@@ -50,11 +50,11 @@ function ConsignmentTracking() {
     try {
       let image = null;
       if (productID) {
-        const productResponse = await api.get(`/product/${productID}`);
+        const productResponse = await api.get(`/product/get/${productID}`);
         console.log("Product Response:", productResponse.data); // Log product response
         image = productResponse.data.image;
       } else if (productComboID) {
-        const comboResponse = await api.get(`/productcombo/${productComboID}`);
+        const comboResponse = await api.get(`/productcombo/get/${productComboID}`);
         console.log("Product Combo Response:", comboResponse.data); // Log product combo response
         image = comboResponse.data.image;
       }

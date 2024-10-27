@@ -37,7 +37,7 @@ function ProductPage() {
         .filter(product =>
             product.productName &&
             product.productName.toLowerCase().includes(searchTerm.toLowerCase()) &&
-            product.consignmentType !== "chăm sóc"
+            product.consignmentType !== "chăm sóc" && product.status === "Còn hàng"
         )
         .sort((a, b) => {
             if (a.status === "Còn hàng" && b.status !== "Còn hàng") return -1;

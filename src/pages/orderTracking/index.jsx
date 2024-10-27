@@ -87,7 +87,7 @@ function OrderTracking() {
           try {
             if (detail.productID) {
               console.log(`Fetching product with ID: ${detail.productID}`);
-              const productResponse = await api.get(`/product/${detail.productID}`);
+              const productResponse = await api.get(`/product/get/${detail.productID}`);
               console.log(`Product data received for ${detail.productID}:`, productResponse.data);
 
               if (!productResponse.data) {
@@ -105,7 +105,7 @@ function OrderTracking() {
               return updatedDetail;
             } else if (detail.productComboID) {
               console.log(`Fetching combo with ID: ${detail.productComboID}`);
-              const comboResponse = await api.get(`/productcombo/${detail.productComboID}`);
+              const comboResponse = await api.get(`/productcombo/get/${detail.productComboID}`);
               console.log(`Combo data received for ${detail.productComboID}:`, comboResponse.data);
 
               if (!comboResponse.data) {
@@ -247,7 +247,7 @@ function OrderTracking() {
       if (orderDetails) {
         await Promise.all(orderDetails.map(async (detail) => {
           if (detail.productID) {
-            const productResponse = await api.get(`/product/${detail.productID}`);
+            const productResponse = await api.get(`/product/get/${detail.productID}`);
             const updatedProduct = {
               ...productResponse.data,
               status: "Hết hàng"
@@ -262,13 +262,14 @@ function OrderTracking() {
               if (consignment) {
                 const updatedConsignment = {
                   ...consignment,
-                  status: "Hoàn tất"
+                  status: "Hoàn tất",
+                  saleDate: new Date().toISOString(), // Add the current date
                 };
                 await api.put(`/consignments/${consignment.consignmentID}`, updatedConsignment);
               }
             }
           } else if (detail.productComboID) {
-            const comboResponse = await api.get(`/productcombo/${detail.productComboID}`);
+            const comboResponse = await api.get(`/productcombo/get/${detail.productComboID}`);
             const updatedCombo = {
               ...comboResponse.data,
               status: "Hết hàng"
@@ -283,7 +284,8 @@ function OrderTracking() {
               if (consignment) {
                 const updatedConsignment = {
                   ...consignment,
-                  status: "Đã bán"
+                  status: "Đã bán",
+                  saleDate: new Date().toISOString(), // Add the current date
                 };
                 await api.put(`/consignments/${consignment.consignmentID}`, updatedConsignment);
               }
@@ -325,14 +327,14 @@ function OrderTracking() {
       if (orderDetails) {
         await Promise.all(orderDetails.map(async (detail) => {
           if (detail.productID) {
-            const productResponse = await api.get(`/product/${detail.productID}`);
+            const productResponse = await api.get(`/product/get/${detail.productID}`);
             const updatedProduct = {
               ...productResponse.data,
               status: "Còn hàng"
             };
             await api.put(`/product/${detail.productID}`, updatedProduct);
           } else if (detail.productComboID) {
-            const comboResponse = await api.get(`/productcombo/${detail.productComboID}`);
+            const comboResponse = await api.get(`/productcombo/get/${detail.productComboID}`);
             const updatedCombo = {
               ...comboResponse.data,
               status: "Còn hàng"
