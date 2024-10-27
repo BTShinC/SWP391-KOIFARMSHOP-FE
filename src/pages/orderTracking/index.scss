@@ -58,16 +58,16 @@
     }
   
     .order-header {
+      align-items: flex-start; 
       display: flex;
       justify-content: space-between;
-      align-items: center;
       flex-wrap: wrap;
   
       span {
+        width: 20vw;
+
+
         margin-right: 20px;
-        flex: 1 1 auto; /* Allow flex items to grow and shrink */
-        min-width: 0; /* Prevent overflow */
-        white-space: nowrap; /* Prevent text wrapping */
         overflow: hidden; /* Hide overflow */
         text-overflow: ellipsis; /* Add ellipsis for overflow text */
       }

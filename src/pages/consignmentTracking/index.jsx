@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Card, Spin, message, Collapse, Table, Tabs, Modal } from "antd";
+
 import { addDays, format } from "date-fns";
 import api from "../../config/api";
 import "./index.scss";
@@ -59,9 +60,11 @@ function ConsignmentTracking() {
         console.log("Product Response:", productResponse.data); // Log product response
         image = productResponse.data.image;
       } else if (productComboID) {
+
         const comboResponse = await api.get(
           `/productcombo/get/${productComboID}`
         );
+
         console.log("Product Combo Response:", comboResponse.data); // Log product combo response
         image = comboResponse.data.image;
       }
@@ -278,6 +281,7 @@ function ConsignmentTracking() {
     },
   ];
   // Gia hạn gói chăm sóc
+
   const handleOk = async (record) => {
     console.log(
       "Gia hạn consignment:",
@@ -299,10 +303,12 @@ function ConsignmentTracking() {
         // Gọi API song song để lấy product và care package (nếu cần)
         const [productRes, productComboRes] = await Promise.all([
           record.productID ? fetchProductById(record.productID) : null,
+
           record.productComboID
             ? fetchProductComboById(record.productComboID)
             : null,
         ]);
+
 
         // Lấy carePackageID từ product hoặc combo product
         if (productRes) {
@@ -325,6 +331,7 @@ function ConsignmentTracking() {
           consignmentDate: format(currentDate, "yyyy-MM-dd"),
           dateReceived: format(currentDate, "yyyy-MM-dd"),
           dateExpiration: format(dateExpiration, "yyyy-MM-dd"),
+
           status: "Đang chăm sóc",
           total: record.total + fee,
           reason: "Cá của khách iu đang được tiếp tục được chăm sóc",
@@ -354,6 +361,7 @@ function ConsignmentTracking() {
             } else {
               throw new Error("Lưu transaction thất bại");
             }
+
             message.success("Gia hạn thành công");
           }
         } else {
@@ -368,6 +376,7 @@ function ConsignmentTracking() {
     }
   };
 
+
   const handleExtendConsignment = (record) => {
     console.log(record);
     Modal.confirm({
@@ -376,9 +385,10 @@ function ConsignmentTracking() {
       okText: "Xác nhận",
       cancelText: "Hủy",
       onOk: () => handleOk(record), // Gọi hàm handleOk khi người dùng nhấn OK
+
     });
   };
-
+  
   // Thay đổi trạng thái cá
   const handleChangeStatus = async (consignment, productID, productComboID) => {
     try {
@@ -431,7 +441,9 @@ function ConsignmentTracking() {
       const updatedUser = { ...user, accountBalance: updatedUserBalance };
 
       const userRes = await editUser(updatedUser);
+
       const refund = await refundConsignmentTotal(consignment.consignmentID);
+
 
       if (userRes && refund) {
         message.success(`Hoàn tiền thành công: ${refundAmount} VND`);
@@ -441,16 +453,19 @@ function ConsignmentTracking() {
         return;
       }
 
+
       // Cập nhật trạng thái của consignment
       const updatedConsignment = {
         ...consignment,
         status: "Đã hủy",
         total: 0, // Xóa giá trị total sau khi hoàn tiền
+
       };
 
       const consignmentRes = await updateConsignmentByID(updatedConsignment);
       if (consignmentRes) {
         message.success(`Cập nhật trạng thái đơn ký gửi thành công.`);
+
 
         // Tạo transaction để lưu lại lịch sử hoàn tiền
         const transactionData = {
@@ -465,6 +480,7 @@ function ConsignmentTracking() {
           message.success("Lưu transaction thành công");
         } else {
           message.error("Lưu transaction thất bại.");
+
         }
 
         // Cập nhật trạng thái sản phẩm sau khi đơn ký gửi đã hủy

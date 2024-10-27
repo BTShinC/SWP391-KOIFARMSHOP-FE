@@ -32,9 +32,18 @@ function ProductPage() {
     }, []);
 
     // Filter products based on search term
-    const filteredProducts = fishData.filter(product =>
-        product.productName && product.productName.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // Filter products based on search term and consignmentType
+    const filteredProducts = fishData
+        .filter(product =>
+            product.productName &&
+            product.productName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+            product.consignmentType !== "chăm sóc" && product.status === "Còn hàng"
+        )
+        .sort((a, b) => {
+            if (a.status === "Còn hàng" && b.status !== "Còn hàng") return -1;
+            if (a.status !== "Còn hàng" && b.status === "Còn hàng") return 1;
+            return 0;
+        });
 
     const indexOfLastProduct = currentPage * itemsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - itemsPerPage;

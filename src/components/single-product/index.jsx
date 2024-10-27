@@ -12,6 +12,7 @@ const { Title, Text } = Typography;
 function SingleProduct() {
   const [cartVisible, setCartVisible] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+  const account = useSelector((state) => state.user);
 
 
   const formatCurrency = (amount) => {
@@ -25,8 +26,8 @@ function SingleProduct() {
   const { id } = useParams(); // Lấy productId từ URL
   const [product, setProduct] = useState(null); // State để lưu thông tin sản phẩm
   const dispatch = useDispatch(); // Khởi tạo dispatch
-  // console.log("Current account:", account);
-  // console.log("Current ID:", account.accountID);
+  console.log("Current account:", account);
+  console.log("Current ID:", account.accountID);
 
   useEffect(() => {
 
@@ -52,7 +53,7 @@ function SingleProduct() {
   }, [product]);
 
   const handleAddToCart = async () => {
-    const account = useSelector((state) => state.user);
+    
     try {
       if (!account || !account.accountID) {
         console.error("Account information is missing");
@@ -171,7 +172,9 @@ function SingleProduct() {
                   </Button>
                 </div>
               ) : (
-                <Text style={{ color: "red" }}>Sản phẩm hết hàng</Text>
+                <div style={{paddingLeft: "10rem", paddingTop: "3rem"}}>
+                <Text style={{ fontSize: "Large",fontWeight: "Bold", color: "red" }}>Sản phẩm hết hàng</Text>
+                </div>
               )}
               <div className="divider-wrapper">
                 <Divider />

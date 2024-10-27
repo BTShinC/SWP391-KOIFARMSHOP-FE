@@ -290,6 +290,7 @@ const refundConsignmentSell = async (consignmentID) => {
   }
 };
 
+
 const refundConsignmentTotal = async (consignmentID) => {
   try {
     const response = await api.post(`refund/refundall/${consignmentID}`);
@@ -299,6 +300,19 @@ const refundConsignmentTotal = async (consignmentID) => {
     return null;
   }
 };
+
+const fetchCarePackageByID = async (carePackageID) =>{
+  try {
+    const response = await api.get(`carePackages/${carePackageID}`);
+    console.log(response.data);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+
 // const updateOrder = async (id, data) => {
 //   try {
 //     const response = await api.put(`orders/${id}`, data);
@@ -360,6 +374,7 @@ const updateOrderStatus = async (orderID, status, accountID, date) => {
     throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
   }
 };
+
 const createTransaction = async (data) => {
   try {
     const response = await api.post(`transactions/create`,data);
@@ -370,6 +385,46 @@ const createTransaction = async (data) => {
     throw error; // Ném lỗi ra ngoài để xử lý trong hàm gọi
   }
 };
+
+
+const withdrawMoney = async (data) => {
+  try {
+    const response = await api.post("AccountWithdrawal/create", {
+      date: new Date().toISOString(),
+      pricesend: data.amount,
+      accountID: data.accountID,
+      account_number: data.accountNumber,
+      account_holder_name: data.accountHolderName,
+      bank_branch: data.bankBranch,
+      bank_name: data.bankName
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error withdrawing money:", error);
+    throw error;
+  }
+};
+const fetchAllWithdrawals = async () => {
+  try {
+    const response = await api.get("AccountWithdrawal/all");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching withdrawals:", error);
+    throw error;
+  }
+};
+
+const updateWithdrawalStatus = async (accountWithdrawalId) => {
+  try {
+    const response = await api.put(`AccountWithdrawal/update/${accountWithdrawalId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating withdrawal status:", error);
+    throw error;
+  }
+};
+
 export {
   Register,
   ChangePassword,
@@ -403,4 +458,9 @@ export {
   updateOrderStatus,
   refundConsignmentTotal,
   createTransaction
+  fetchCarePackageByID,
+  withdrawMoney,
+  fetchAllWithdrawals,
+  updateWithdrawalStatus,
+
 };

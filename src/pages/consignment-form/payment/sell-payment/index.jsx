@@ -128,6 +128,7 @@ const handlePayment = async () => {
       const newBalance = user?.accountBalance - fee;
       const updatedUser = { ...user, accountBalance: newBalance };
 
+
       const updateUserapi = await editUser(updatedUser);
       if (updateUserapi) {
         console.log("Đã trừ tiền");
