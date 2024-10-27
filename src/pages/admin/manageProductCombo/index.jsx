@@ -34,8 +34,9 @@ function ManageProductCombo() {
     "Mã lô cá",
     "Các giống cá",
     "Kích thước trung bình",
-    "Tình trạng sức khỏe",
+    "Hình thức",
     "Số lượng",
+    "Giá bán",
     "Trạng thái",
     "Thao tác",
   ];

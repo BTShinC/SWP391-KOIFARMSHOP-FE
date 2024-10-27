@@ -12,6 +12,7 @@ const { Title, Text } = Typography;
 function SingleProduct() {
   const [cartVisible, setCartVisible] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+  const account = useSelector((state) => state.user);
 
 
   const formatCurrency = (amount) => {
@@ -52,7 +53,7 @@ function SingleProduct() {
   }, [product]);
 
   const handleAddToCart = async () => {
-    const account = useSelector((state) => state.user);
+    
     try {
       if (!account || !account.accountID) {
         console.error("Account information is missing");

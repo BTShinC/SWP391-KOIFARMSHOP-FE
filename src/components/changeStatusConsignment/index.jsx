@@ -1,20 +1,22 @@
-import { Button, Modal, message } from "antd";
+import { Button, Input, Modal, message } from "antd";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import {
-  updateConsignmentStatus,
   fetchProductComboById,
   fetchProductById,
   editFishInfo,
   editComboInfo,
+  updateConsignmentByID,
+  refundConsignmentSell,
 } from "../../service/userService";
+import { addDays, format } from "date-fns";
 
 ChangeStatusConsignment.propTypes = {
   data: PropTypes.object.isRequired,
   productID: PropTypes.string,
   productComboID: PropTypes.string,
   consignmentID: PropTypes.string.isRequired,
-  onChange:PropTypes.func
+  onChange: PropTypes.func,
 };
 
 function ChangeStatusConsignment({
@@ -22,7 +24,7 @@ function ChangeStatusConsignment({
   productID,
   productComboID,
   consignmentID,
-  onChange
+  onChange,
 }) {
   const [isShowButton, setIsShowButton] = useState(false);
   const [formValue, setFormValue] = useState({
@@ -31,7 +33,11 @@ function ChangeStatusConsignment({
     productComboID,
     consignmentID,
   });
+  const [cancelReason, setCancelReason] = useState(""); // Lưu trữ lý do hủy
+  const [isReasonInvalid, setIsReasonInvalid] = useState(false); // Kiểm tra xem lý do có hợp lệ không
   const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false);
+
+  // Hàm cập nhật trạng thái sản phẩm
   const updateProductStatus = async (
     productData,
     isCombo = false,
@@ -52,103 +58,111 @@ function ChangeStatusConsignment({
     }
   };
 
-  const handleChangeStatus = async (newStatus) => {
+  const handleInProgress = async () => {
     try {
-      // Cập nhật trạng thái của consignment
-      const consignmentRes = await updateConsignmentStatus(
-        consignmentID,
-        newStatus
-      );
+      let { consignmentType } = formValue;
 
-      if (consignmentRes) {
-        message.success(
-          `Trạng thái của đơn ký gửi đã được cập nhật thành ${newStatus}`
-        );
-        let productData = null;
+      let updatedConsignmentStatus =
+        consignmentType === "chăm sóc" ? "Đang chăm sóc" : "Đang tiến hành";
+      let currentDate = format(new Date(), "yyyy-MM-dd");
+      const dateExpiration = format(addDays(new Date(), formValue.duration), "yyyy-MM-dd");
+      const updatedFormValue = {
+        ...formValue,
+        dateReceived: currentDate,
+        dateExpiration: dateExpiration,
+        status: updatedConsignmentStatus,
+      };
 
-        if (newStatus === "Đang tiến hành" || newStatus === "Hoàn tất") {
-          const updatedStatus =
-            newStatus === "Đang tiến hành" ? "Còn hàng" : "Hết hàng";
+      await updateConsignmentAndProduct(updatedFormValue);
 
-          if (productID) {
-            productData = await fetchProductById(productID);
-          } else if (productComboID) {
-            productData = await fetchProductComboById(productComboID);
-          }
-
-          if (productData) {
-            const productRes = await updateProductStatus(
-              productData,
-              !!productComboID,
-              updatedStatus
-            );
-            if (productRes) {
-              message.success(
-                `Trạng thái sản phẩm đã được cập nhật thành ${updatedStatus}.`
-              );
-            } else {
-              message.error("Cập nhật trạng thái sản phẩm thất bại.");
-            }
-          } else {
-            message.error("Không tìm thấy dữ liệu sản phẩm.");
-          }
-        }
-
-        // Cập nhật trạng thái trong formValue
-        setFormValue((prevFormValue) => ({
-          ...prevFormValue,
-          status: newStatus === "Hoàn tất" ? "Hoàn tất" : "Đang tiến hành",
-        }));
+      // Gọi lại onChange sau khi trạng thái thay đổi
+      if (onChange) {
         onChange();
-      } else {
-        message.error("Cập nhật trạng thái đơn ký gửi thất bại.");
       }
     } catch (error) {
-      console.error(
-        "Lỗi khi cập nhật trạng thái:",
-        error.response || error.message
-      );
+      console.error("Error in handleInProgress:", error);
       message.error("Có lỗi xảy ra khi cập nhật trạng thái.");
     }
   };
+  const currentDate = format(new Date(), "yyyy-MM-dd");
+  const handleComplete = async () => {
+    const updatedFormValue = {
+      ...formValue,
+      status: "Hoàn tất",
+      saleDate: currentDate,
+    };
 
-  // Hàm mở modal xác nhận xóa khi nhấn "Đã hủy"
-  const handleDeleteConfirmation = () => {
-    setIsConfirmModalVisible(true);
+    await updateConsignmentAndProduct(updatedFormValue);
+
+    // Gọi lại onChange sau khi trạng thái thay đổi
+    if (onChange) {
+      onChange();
+    }
+  };
+
+  const handleRefund = async () => {
+    const updatedFormValue = {
+      ...formValue,
+      status: "Đã hoàn tiền",
+    };
+
+    await updateConsignmentAndProduct(updatedFormValue);
+
+    // Thực hiện hoàn tiền
+    const refundRes = await refundConsignmentSell(updatedFormValue);
+    if (refundRes) {
+      message.success("Hoàn tiền thành công.");
+    } else {
+      message.error("Hoàn tiền thất bại.");
+    }
+
+    // Gọi lại onChange sau khi trạng thái thay đổi
+    if (onChange) {
+      onChange();
+    }
   };
 
   const handleDelete = async () => {
-    try {
-      let updateRes;
+    if (!cancelReason) {
+      setIsReasonInvalid(true); // Đánh dấu lỗi nếu lý do bị bỏ trống
+      return; // Không cho phép hủy nếu không có lý do
+    }
 
+    try {
       // Lấy dữ liệu combo nếu có productComboID
       if (productComboID) {
-        updateRes = await fetchProductComboById(productComboID);
-        console.log("Fetched combo response:", updateRes); // Kiểm tra toàn bộ phản hồi từ API
-
+        const updateRes = await fetchProductComboById(productComboID);
         if (updateRes) {
-          // Cập nhật trạng thái combo
-          updateRes.status = "Đã hủy"; // Cập nhật trạng thái
-          console.log("Updating combo with status:", updateRes); // Kiểm tra dữ liệu trước khi gọi API cập nhật
-
-          const result = await editComboInfo(updateRes);
-          console.log("Update combo response:", result); // Kiểm tra phản hồi từ API cập nhật
-        } else {
-          console.error("Không lấy được dữ liệu combo từ API.");
+          updateRes.status = "Đã hủy";
+          await editComboInfo(updateRes);
         }
       }
 
-      // Sau khi cập nhật sản phẩm/combo, cập nhật trạng thái của consignment
-      const consignmentUpdateRes = await updateConsignmentStatus(
-        consignmentID,
-        "Đã hủy"
+      const updatedFormValue = {
+        ...formValue,
+        status: "Đã hủy",
+        reason: cancelReason, // Cập nhật lý do hủy
+      };
+
+      const consignmentUpdateRes = await updateConsignmentByID(
+        updatedFormValue
       );
+
       if (consignmentUpdateRes) {
+        setFormValue(updatedFormValue); // Cập nhật state với trạng thái và lý do hủy mới
+
         message.success("Cập nhật trạng thái đơn ký gửi thành công.");
-        setFormValue((prevFormValue) => ({
-          ...prevFormValue,
-          status: "Đã hủy",
-        }));
+
+        // Thực hiện hoàn tiền (nếu cần thiết)
+        const refund = await refundConsignmentSell(consignmentID);
+        if (refund) {
+          message.success("Hoàn tiền thành công.");
+        }
+
+        // Gọi lại onChange sau khi trạng thái thay đổi
+        if (onChange) {
+          setTimeout(onChange, 0);
+        }
       } else {
         message.error("Cập nhật trạng thái consignment thất bại.");
       }
@@ -158,6 +172,72 @@ function ChangeStatusConsignment({
     } finally {
       setIsConfirmModalVisible(false); // Đóng modal sau khi xử lý
     }
+  };
+
+  // Hàm cập nhật consignment và sản phẩm
+  const updateConsignmentAndProduct = async (updatedFormValue) => {
+    try {
+      const consignmentRes = await updateConsignmentByID(updatedFormValue);
+      if (!consignmentRes) {
+        message.error("Cập nhật trạng thái đơn ký gửi thất bại.");
+        return;
+      }
+      message.success(
+        `Trạng thái của đơn ký gửi đã được cập nhật thành ${updatedFormValue.status}`
+      );
+
+      // Cập nhật trạng thái sản phẩm
+      const updatedProductStatus = getUpdatedProductStatus(
+        updatedFormValue.status,
+        updatedFormValue.consignmentType
+      );
+      const productData = productID
+        ? await fetchProductById(productID)
+        : productComboID
+        ? await fetchProductComboById(productComboID)
+        : null;
+
+      if (!productData) {
+        message.error("Không tìm thấy dữ liệu sản phẩm.");
+        return;
+      }
+
+      const isCombo = !!productComboID;
+      const productRes = await updateProductStatus(
+        productData,
+        isCombo,
+        updatedProductStatus
+      );
+      if (!productRes) {
+        message.error("Cập nhật trạng thái sản phẩm thất bại.");
+      }
+
+      // Cập nhật formValue trong state
+      setFormValue(updatedFormValue);
+
+      // Gọi lại onChange nếu được truyền từ props
+      if (onChange) {
+        onChange();
+      }
+    } catch (error) {
+      console.error("Lỗi khi cập nhật consignment và sản phẩm:", error);
+      message.error("Có lỗi xảy ra khi cập nhật trạng thái.");
+    }
+  };
+
+  // Hàm phụ để xác định trạng thái sản phẩm dựa trên trạng thái consignment
+  const getUpdatedProductStatus = (consignmentStatus, consignmentType) => {
+    if (consignmentStatus === "Đang chăm sóc") {
+      return "Đang chăm sóc";
+    } else if (consignmentStatus === "Đang tiến hành") {
+      return "Còn hàng";
+    } else if (
+      consignmentStatus === "Hoàn tất" &&
+      consignmentType === "chăm sóc"
+    ) {
+      return "Hoàn tất chăm sóc";
+    }
+    return "Hết hàng";
   };
 
   const handleShowButton = () => {
@@ -180,24 +260,38 @@ function ChangeStatusConsignment({
           <div className="change-status-button">
             {formValue.status === "Chờ xác nhận" && (
               <>
-                <Button className="custom-button__transport" onClick={() => handleChangeStatus("Đang tiến hành")}>
+                <Button
+                  className="custom-button__transport"
+                  onClick={handleInProgress}
+                >
                   Xác nhận
                 </Button>
                 <Button
                   type="primary"
                   danger
-                  onClick={handleDeleteConfirmation}
+                  onClick={() => setIsConfirmModalVisible(true)}
                 >
                   Hủy đơn
                 </Button>
               </>
             )}
-
-            {formValue.status === "Đang tiến hành" && (
-              <Button className="custom-button" onClick={() => handleChangeStatus("Hoàn tất")}>
+            {(formValue.status === "Đang tiến hành" ||
+              formValue.status === "Đang chăm sóc") && (
+              <Button className="custom-button" onClick={handleComplete}>
                 Hoàn tất
               </Button>
             )}
+            {formValue.status === "Hoàn tất" &&
+              formValue.consignmentType === "Ký gửi để bán" && (
+                <>
+                  <Button
+                    className="custom-button__transport"
+                    onClick={handleRefund}
+                  >
+                    Hoàn tiền
+                  </Button>
+                </>
+              )}
           </div>
         </div>
       )}
@@ -211,9 +305,18 @@ function ChangeStatusConsignment({
         okText="Xác nhận"
         cancelText="Hủy bỏ"
       >
-        <p>
-          Bạn có chắc chắn muốn hủy đơn và xóa sản phẩm hoặc combo sản phẩm?
-        </p>
+        <p>Bạn có chắc chắn muốn hủy đơn này?</p>
+        <Input
+          placeholder="Vui lòng nhập lý do hủy đơn"
+          value={cancelReason}
+          onChange={(e) => {
+            setCancelReason(e.target.value);
+            setIsReasonInvalid(false);
+          }}
+        />
+        {isReasonInvalid && (
+          <p style={{ color: "red" }}>Lý do hủy đơn không được để trống.</p>
+        )}
       </Modal>
     </div>
   );

@@ -63,7 +63,6 @@ export default function Carousel({ slidesPerView = 4 }) {
 }
 
 const HoverCard = ({ imgSrc, title, price, id}) => {
-  console.log("Product ID:", id);
   
   return (
     <Link to={`/singleproduct/${id}`} className="hover-card">

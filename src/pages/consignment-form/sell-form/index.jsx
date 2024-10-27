@@ -21,7 +21,13 @@ import SellFormCombo from "../sell-form-combo";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-function SellForm() {
+import { format } from "date-fns";
+import PropTypes from "prop-types";
+
+SellForm.propTypes = {
+  isOnline: PropTypes.bool,
+};
+function SellForm({ isOnline }) {
   const {
     register,
     handleSubmit,
@@ -55,7 +61,7 @@ function SellForm() {
   const navigation = useNavigate();
   // Nếu người dùng chọn ký gửi bán lô thì render component khác
   if (isBatchSell) {
-    return <SellFormCombo />;
+    return <SellFormCombo isOnline = {isOnline} />;
   }
 
   // Preview ảnh khi chọn
@@ -111,11 +117,11 @@ function SellForm() {
       return [];
     }
   };
-
+  const consignmentDate = format(new Date(), "yyyy-MM-dd");
   // Xử lý submit form
   const onSubmit = async (data) => {
-    const uploadedImages = await uploadFilesToFirebase(fileList); // Upload file hình ảnh cá KOI
-    const uploadedCerts = await uploadFilesToFirebase(certFileList); // Upload file chứng nhận
+    const uploadedImages = await uploadFilesToFirebase(fileList);
+    const uploadedCerts = await uploadFilesToFirebase(certFileList);
     const finalData = {
       ...data,
       productName: uuidv4(),
@@ -127,6 +133,9 @@ function SellForm() {
       type: "Ký gửi",
       consignmentType: "Ký gửi để bán",
       price: data.desiredPrice,
+      salePrice:data.desiredPrice,
+      reason: "",
+      consignmentDate: consignmentDate,
     };
 
     console.log(
@@ -158,8 +167,7 @@ function SellForm() {
           {/* Nút Quay lại */}
           <Button
             onClick={() => {
-              console.log("Quay lại");
-              window.history.back();
+              navigation(-1);
             }}
             className="back-button"
           >
@@ -176,7 +184,7 @@ function SellForm() {
         </Grid>
         <Box>
           <Typography variant="h2" className="title-typography">
-            Ký gửi bán cá thể ONLINE
+          Ký gửi bán cá thể {isOnline ? "ONLINE" : "OFFLINE"}
           </Typography>
         </Box>
 
@@ -226,7 +234,25 @@ function SellForm() {
               />
             )}
           </Grid>
-
+          {isOnline && (
+            <Grid item xs={12}>
+              <TextField
+                {...register("farmName", {
+                  required: "Vui lòng nhập đường dẫn trang trại của bạn",
+                  pattern: {
+                    value: /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/,
+                    message:
+                      "Vui lòng nhập một đường dẫn hợp lệ (bắt đầu bằng http hoặc https)",
+                  },
+                })}
+                label="Đường dẫn trang trại của bạn"
+                type="url"
+                fullWidth
+                error={!!errors.farmName}
+                helperText={errors.farmName?.message}
+              />
+            </Grid>
+          )}
           <Grid item xs={12}>
             <TextField
               {...register("breed", { required: "Vui lòng nhập giống cá" })}
@@ -242,7 +268,7 @@ function SellForm() {
                 required: "Vui lòng nhập tuổi cá",
                 min: 1,
               })}
-              label="Số tháng tuổi"
+              label="Số năm tuổi"
               fullWidth
               type="number"
               error={!!errors.age}
@@ -279,14 +305,14 @@ function SellForm() {
           <Grid item xs={12}>
             <TextField
               label="Số ngày dự định ký gửi"
-              {...register("day", {
+              {...register("duration", {
                 required: "Vui lòng nhập số ngày dự định ký gửi",
               })}
               fullWidth
               type="number"
               inputProps={{ min: 1 }}
-              error={!!errors.day}
-              helperText={errors.day?.message}
+              error={!!errors.duration}
+              helperText={errors.duration?.message}
               className="highlighted-textfield"
             />
           </Grid>
@@ -387,6 +413,7 @@ function SellForm() {
             <TextField
               {...register("description")}
               label="Ghi chú"
+              defaultValue="không"
               fullWidth
               error={!!errors.description}
               helperText={errors.description?.message}

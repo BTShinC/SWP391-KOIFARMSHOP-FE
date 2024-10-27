@@ -8,7 +8,14 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-function SellFormCombo() {
+import { format } from "date-fns";
+import PropTypes from "prop-types";
+
+SellFormCombo.propTypes = {
+  isOnline: PropTypes.bool,
+};
+
+function SellFormCombo({ isOnline }) {
   const {
     register,
     handleSubmit,
@@ -67,8 +74,8 @@ function SellFormCombo() {
     });
 
     try {
-      const uploadedFiles = await Promise.all(uploadPromises); // Chờ tất cả các file được upload
-      return uploadedFiles; // Trả về danh sách file đã upload
+      const uploadedFiles = await Promise.all(uploadPromises);
+      return uploadedFiles;
     } catch (error) {
       console.error("Error uploading files:", error);
       return [];
@@ -76,7 +83,8 @@ function SellFormCombo() {
   };
   // Xử lý submit form
   const onSubmit = async (data) => {
-    const uploadedImages = await uploadFilesToFirebase(fileList); // Upload file hình ảnh cá KOI
+    const uploadedImages = await uploadFilesToFirebase(fileList);
+    const consignmentDate = format(new Date(), "yyyy-MM-dd");
     const finalData = {
       ...data,
       image: uploadedImages[0]?.url,
@@ -85,8 +93,11 @@ function SellFormCombo() {
       type: "Ký gửi",
       consignmentType: "Ký gửi để bán",
       price: data.desiredPrice,
-      status:"Chờ xác nhận",
-      comboName:uuidv4()
+      status: "Chờ xác nhận",
+      comboName: uuidv4(),
+      salePrice: data.desiredPrice,
+      reason: "",
+      consignmentDate: consignmentDate,
     };
     console.log(
       "Form data with uploaded images and certifications:",
@@ -126,7 +137,7 @@ function SellFormCombo() {
         </Grid>
         <Box>
           <Typography variant="h2" className="title-typography">
-            Ký gửi theo lô ONLINE
+            Ký gửi theo lô {isOnline ? "Online" : "Offline"}
           </Typography>
         </Box>
         <Grid container spacing={4}>
@@ -152,6 +163,25 @@ function SellFormCombo() {
               />
             )}
           </Grid>
+          {isOnline && (
+            <Grid item xs={12}>
+              <TextField
+                {...register("farmName", {
+                  required: "Vui lòng nhập đường dẫn trang trại của bạn",
+                  pattern: {
+                    value: /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/,
+                    message:
+                      "Vui lòng nhập một đường dẫn hợp lệ (bắt đầu bằng http hoặc https)",
+                  },
+                })}
+                label="Đường dẫn trang trại của bạn"
+                type="url"
+                fullWidth
+                error={!!errors.farmName}
+                helperText={errors.farmName?.message}
+              />
+            </Grid>
+          )}
           <Grid item xs={12}>
             <TextField
               {...register("breed", { required: "Vui lòng nhập giống cá" })}
@@ -202,14 +232,14 @@ function SellFormCombo() {
           <Grid item xs={12}>
             <TextField
               label="Số ngày dự định ký gửi"
-              {...register("day", {
+              {...register("duration", {
                 required: "Vui lòng nhập số ngày dự định ký gửi",
               })}
               fullWidth
               type="number"
               inputProps={{ min: 1 }}
-              error={!!errors.day}
-              helperText={errors.day?.message}
+              error={!!errors.duration}
+              helperText={errors.duration?.message}
               className="highlighted-textfield"
             />
           </Grid>
@@ -274,6 +304,7 @@ function SellFormCombo() {
               {...register("description")}
               label="Ghi chú"
               fullWidth
+              defaultValue="không"
               error={!!errors.description}
               helperText={errors.description?.message}
             />
