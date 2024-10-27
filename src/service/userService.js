@@ -323,6 +323,44 @@ const updateOrderStatus = async (orderID, status, accountID, date) => {
   }
 };
 
+const withdrawMoney = async (data) => {
+  try {
+    const response = await api.post("AccountWithdrawal/create", {
+      date: new Date().toISOString(),
+      pricesend: data.amount,
+      accountID: data.accountID,
+      account_number: data.accountNumber,
+      account_holder_name: data.accountHolderName,
+      bank_branch: data.bankBranch,
+      bank_name: data.bankName
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error withdrawing money:", error);
+    throw error;
+  }
+};
+const fetchAllWithdrawals = async () => {
+  try {
+    const response = await api.get("AccountWithdrawal/all");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching withdrawals:", error);
+    throw error;
+  }
+};
+
+const updateWithdrawalStatus = async (accountWithdrawalId) => {
+  try {
+    const response = await api.put(`AccountWithdrawal/update/${accountWithdrawalId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating withdrawal status:", error);
+    throw error;
+  }
+};
+
 export {
   Register,
   ChangePassword,
@@ -353,4 +391,8 @@ export {
   fetchOrderDetails,
   updateOrderStatus,
   fetchCarePackageByID
+  withdrawMoney,
+  fetchAllWithdrawals,
+  updateWithdrawalStatus,
+
 };

@@ -6,7 +6,9 @@ import { toast } from "react-toastify"; // Import toast for notifications
 import { useSelector } from "react-redux";
 
 import api from "../../config/api";
-
+import { withdrawMoney } from "../../service/userService";
+import { Button, Form, Input, Modal } from "antd";
+import CurrencyInput from "../../components/CurrencyInput/CurrencyInput";
 
 function WalletPage() {
   const [amount, setAmount] = useState("");
@@ -15,28 +17,32 @@ function WalletPage() {
   const [accountBalance, setAccountBalance] = useState(0); // State for account balance
   const user = useSelector((state) => state.user);
   console.log("Current user:", user);
+  const [isWithdrawModalVisible, setIsWithdrawModalVisible] = useState(false);
+  const [withdrawForm] = Form.useForm();
 
-  const token = localStorage.getItem("token");
-  const headers = { Authorization: `Bearer ${token}` };
+  const handleWithdrawalClick = () => {
+    setIsWithdrawModalVisible(true);
+  };
+
+  const handleWithdrawalCancel = () => {
+    setIsWithdrawModalVisible(false);
+    withdrawForm.resetFields();
+  };
 
   // Function to fetch transaction history
   const fetchTransactionHistory = async () => {
     if (!user || !user.accountID) {
-
       console.error("User or account information is missing");
       return;
     }
 
-
     const apiUrl = `/transactions/account/${user.accountID}`; // Use relative path with api instance
     try {
-        const response = await api.get(apiUrl, {
-});
-        setTransactions(response.data); // Assuming response.data contains the transaction history
-
+      const response = await api.get(apiUrl, {});
+      setTransactions(response.data); // Assuming response.data contains the transaction history
     } catch (error) {
-        console.error("Error fetching transaction history:", error);
-        toast.error("Failed to load transaction history.");
+      console.error("Error fetching transaction history:", error);
+      toast.error("Failed to load transaction history.");
     }
   };
 
@@ -89,7 +95,6 @@ function WalletPage() {
       return;
     }
 
-
     const accountId = user.accountID; // Sửa từ accountId thành accountID
     console.log("Account ID:", accountId);
 
@@ -104,7 +109,6 @@ function WalletPage() {
         price: totalAmount,
         date: currentDate,
       });
-
 
       const response = await api.post(
         "/transactions/create",
@@ -121,7 +125,6 @@ function WalletPage() {
           },
         }
       );
-
 
       // Redirect to VNPAY link
       const vnpayLink = response.data; // Assuming response.data contains the VNPAY link
@@ -142,7 +145,10 @@ function WalletPage() {
       };
 
       // Sử dụng api instance để gửi phản hồi
-      const apiResponse = await api.post(`/transactions/vnpay/response`, transactionResponse); // Sử dụng đường dẫn tương đối với api instance
+      const apiResponse = await api.post(
+        `/transactions/vnpay/response`,
+        transactionResponse
+      ); // Sử dụng đường dẫn tương đối với api instance
       console.log("API Response:", apiResponse.data); // Kiểm tra xem có nhận được phản hồi không
     } catch (error) {
       console.error("Error adding transaction:", error);
@@ -154,6 +160,29 @@ function WalletPage() {
     setSelectedLevel(null); // Đặt lại cấp độ đã chọn
   };
 
+  const handleWithdrawal = async (values) => {
+    try {
+      const response = await withdrawMoney({
+        amount: parseFloat(values.amount),
+        accountID: user.accountID,
+        accountNumber: values.accountNumber,
+        accountHolderName: values.accountHolderName,
+        bankBranch: values.bankBranch,
+        bankName: values.bankName,
+      });
+      console.log(response);
+
+      if (response) {
+        toast.success("Yêu cầu rút tiền đã được gửi thành công!");
+        fetchTransactionHistory();
+        setIsWithdrawModalVisible(false);
+        withdrawForm.resetFields();
+      }
+    } catch (error) {
+      console.error("Error withdrawing money:", error);
+      toast.error("Có lỗi xảy ra khi rút tiền. Vui lòng thử lại sau.");
+    }
+  };
   // Sort transactions by transactionID in descending order
   const sortedTransactions = transactions.sort((a, b) => {
     return b.transactionID.localeCompare(a.transactionID); // Sort by transactionID
@@ -163,7 +192,10 @@ function WalletPage() {
     <div className="wallet-page-wrapper">
       <div className="wallet-page">
         <div className="account-balance">
-          <h2 className="balance-number">Số dư tài khoản: <br/>{accountBalance.toLocaleString('vi-VN')} VND</h2>
+          <h2 className="balance-number">
+            Số dư tài khoản: <br />
+            {accountBalance.toLocaleString("vi-VN")} VND
+          </h2>
         </div>
         <div className="amount-selection">
           <h2>Vui lòng chọn số tiền cần nạp</h2>
@@ -207,6 +239,77 @@ function WalletPage() {
         <button className="confirm-button" onClick={handleTransactionConfirm}>
           Xác nhận
         </button>
+        <Button
+          onClick={handleWithdrawalClick}
+          type="primary"
+          className="confirm-button"
+        >
+          Rút tiền
+        </Button>
+        <Modal
+          title="Rút tiền"
+          visible={isWithdrawModalVisible}
+          onCancel={handleWithdrawalCancel}
+          footer={null}
+        >
+          <Form
+            form={withdrawForm}
+            onFinish={handleWithdrawal}
+            layout="vertical"
+          >
+             <Form.Item
+            name="amount"
+            label="Số tiền rút"
+            rules={[{ required: true, message: 'Vui lòng nhập số tiền rút' }]}
+          >
+            <CurrencyInput />
+          </Form.Item>
+            <Form.Item
+              name="accountNumber"
+              label="Số tài khoản"
+              rules={[
+                { required: true, message: "Vui lòng nhập số tài khoản" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="accountHolderName"
+              label="Tên chủ tài khoản"
+              rules={[
+                { required: true, message: "Vui lòng nhập tên chủ tài khoản" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="bankBranch"
+              label="Chi nhánh ngân hàng"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập chi nhánh ngân hàng",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="bankName"
+              label="Tên ngân hàng"
+              rules={[
+                { required: true, message: "Vui lòng nhập tên ngân hàng" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Xác nhận rút tiền
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
 
         {/* Transaction History Table */}
         <h2>Lịch sử giao dịch</h2>
@@ -223,7 +326,8 @@ function WalletPage() {
               <tr key={transaction.transactionID}>
                 {" "}
                 {/* Use transactionID as the key */}
-                <td>{transaction.transactionID}</td> {/* Display transactionID */}
+                <td>{transaction.transactionID}</td>{" "}
+                {/* Display transactionID */}
                 <td>{transaction.price} VND</td> {/* Display price */}
                 <td>
                   {transaction.date

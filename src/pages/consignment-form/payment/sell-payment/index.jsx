@@ -126,9 +126,10 @@ function SellPayment() {
         } else {
           throw new Error("Failed to update user balance");
         }
-
+        
         // Show success message after all operations succeed
         toast.success("Thanh toán thành công");
+        navigate("/consignmentSuccess")
       } else {
         // Show error if the user doesn't have enough balance
         toast.error("Không đủ tiền để thanh toán");
