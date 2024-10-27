@@ -44,7 +44,7 @@ function ConsignmentSell() {
             </Typography>
             <Button
               className="button-outline"
-              onClick={() => console.log("Clicked on 'Tìm hiểu thêm Online'")}
+              onClick={() => navigate('/about')}
             >
               Tìm hiểu thêm
             </Button>
@@ -80,7 +80,7 @@ function ConsignmentSell() {
             </Typography>
             <Button
               className="button-outline"
-              onClick={() => console.log("Clicked on 'Tìm hiểu thêm Offline'")}
+              onClick={() => navigate('/about')}
             >
               Tìm hiểu thêm
             </Button>

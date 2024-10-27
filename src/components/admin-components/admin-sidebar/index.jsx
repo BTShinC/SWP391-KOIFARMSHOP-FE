@@ -9,7 +9,6 @@ function AdminSideBar() {
   const handleNavigation = (path) => {
     navigate(path);
   };
-  
 
   return (
     <>
@@ -19,59 +18,67 @@ function AdminSideBar() {
             src="/public/images/logo.svg"
             alt="Logo"
             className="sidebar__logo"
+            onClick={() => handleNavigation("/")}
           />
         </div>
         <div
-          className={`sidebar__item ${location.pathname === "/admin" ? "active" : ""
-            }`}
+          className={`sidebar__item ${
+            location.pathname === "/admin" ? "active" : ""
+          }`}
           onClick={() => handleNavigation("/admin")}
         >
           <span className="sidebar__icon">⌘</span>
           <span>Hồ sơ khách hàng</span>
         </div>
         <div
-          className={`sidebar__item ${location.pathname === "/managefish" ? "active" : ""
-            }`}
+          className={`sidebar__item ${
+            location.pathname === "/managefish" ? "active" : ""
+          }`}
           onClick={() => handleNavigation("/managefish")}
         >
           <span className="sidebar__icon">⌘</span>
           <span>Quản lý giống cá </span>
         </div>
         <div
-          className={`sidebar__item ${location.pathname === "/manageProductCombo" ? "active" : ""
-            }`}
+          className={`sidebar__item ${
+            location.pathname === "/manageProductCombo" ? "active" : ""
+          }`}
           onClick={() => handleNavigation("/manageProductCombo")}
         >
           <span className="sidebar__icon">⌘</span>
           <span>Quản lý lô cá </span>
         </div>
         <div
-          className={`sidebar__item ${location.pathname === "/manageConsignment" ? "active" : ""
-            }`}
+          className={`sidebar__item ${
+            location.pathname === "/manageConsignment" ? "active" : ""
+          }`}
           onClick={() => handleNavigation("/manageConsignment")}
         >
           <span className="sidebar__icon">⌘</span>
           <span> Quản lý ký gửi</span>
         </div>
         <div
-          className={`sidebar__item ${location.pathname === "/manageOrder" ? "active" : ""
-            }`}
+          className={`sidebar__item ${
+            location.pathname === "/manageOrder" ? "active" : ""
+          }`}
           onClick={() => handleNavigation("/manageOrder")}
         >
           <span className="sidebar__icon">⌘</span>
           <span>Quản lý đơn hàng</span>
         </div>
         <div
-          className={`sidebar__item ${location.pathname === "/members" ? "active" : ""
-            }`}
+          className={`sidebar__item ${
+            location.pathname === "/members" ? "active" : ""
+          }`}
           onClick={() => handleNavigation("/members")}
         >
           <span className="sidebar__icon">⌘</span>
           <span>Thành viên</span>
         </div>
         <div
-          className={`sidebar__item ${location.pathname === "/manageTransaction" ? "active" : ""
-            }`}
+          className={`sidebar__item ${
+            location.pathname === "/manageTransaction" ? "active" : ""
+          }`}
           onClick={() => handleNavigation("/manageTransaction")}
         >
           <span className="sidebar__icon">⌘</span>
@@ -80,10 +87,10 @@ function AdminSideBar() {
         <div
           className={`sidebar__item ${location.pathname === "/reports" ? "active" : ""
             }`}
-          onClick={() => handleNavigation("/reports")}
+          onClick={() => handleNavigation("/dashboard")}
         >
           <span className="sidebar__icon">⌘</span>
-          <span> Báo cáo và thống kê</span>
+          <span>Báo cáo và thống kê</span>
         </div>
         <div
           className="sidebar__logout"

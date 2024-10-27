@@ -1,0 +1,38 @@
+.pricing-table {
+    padding: 2rem;
+    text-align: center;
+  
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+  
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: #555;
+    }
+  
+    .table {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      border-collapse: collapse;
+  
+      th, td {
+        padding: 1rem;
+        border: 1px solid #ccc;
+        font-size: 1.1rem;
+      }
+  
+      th {
+        background-color: #f7f7f7;
+        font-weight: bold;
+      }
+  
+      td {
+        background-color: #fafafa;
+      }
+    }
+  }
+  
