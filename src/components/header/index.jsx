@@ -61,7 +61,7 @@ function Header() {
             <UserAvatar onClick={toggleSidebar}></UserAvatar>
           </li>
           <li>
-            <Link to="/admin">
+            <Link>
               <SearchOutlined />
             </Link>
           </li>

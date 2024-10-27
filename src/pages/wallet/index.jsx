@@ -367,7 +367,7 @@ function WalletPage() {
               <th>Mã giao dịch</th>
               <th>Số tiền</th>
               <th>Ngày giao dịch</th>
-              <th>Mô tả</th>
+              <th>Nội dung</th>
             </tr>
           </thead>
           <tbody>
