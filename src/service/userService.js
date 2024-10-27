@@ -390,7 +390,7 @@ export {
   fetchOrders,
   fetchOrderDetails,
   updateOrderStatus,
-  fetchCarePackageByID
+  fetchCarePackageByID,
   withdrawMoney,
   fetchAllWithdrawals,
   updateWithdrawalStatus,
