@@ -130,6 +130,13 @@ const Sidebar = ({ isOpen, onClose }) => {
         )}
         {user && ( // Show logout link only if user is logged in
           <li>
+            <Link to="/ownTransaction" onClick={onClose}>
+              Lịch sử giao dịch
+            </Link>
+          </li>
+        )}
+        {user && ( // Show logout link only if user is logged in
+          <li>
             <Link to="/wallet" onClick={onClose}>
               Ví tiền
             </Link>
