@@ -298,7 +298,7 @@ const DashboardPage = () => {
               <Row gutter={16} style={{ marginTop: 20 }}>
                 <Col span={12}>
                   <Card title="Doanh thu">
-                    <h4 style={{ marginBottom: "20px" }}>Chọn khoảng thời gian</h4>
+                    <h4 style={{ marginBottom: "20px", color:"#1C4ED8"}}>Chọn khoảng thời gian</h4>
                     <DatePicker.RangePicker
                       onChange={handleDateRangeChange}
                       style={{ width: "100%", marginBottom: "20px" }}

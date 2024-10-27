@@ -30,50 +30,53 @@ function WalletPage() {
   };
 
   // Function to fetch transaction history
-  const fetchTransactionHistory = async () => {
-    if (!user || !user.accountID) {
-      console.error("User or account information is missing");
-      return;
-    }
+const fetchTransactionHistory = async () => {
+  if (!user || !user.accountID) {
+    console.error("User or account information is missing");
+    return;
+  }
 
-    try {
-      // Fetch regular transactions
-      const transactionsResponse = await api.get(
-        `/transactions/account/${user.accountID}`
-      );
+  try {
+    // Fetch regular transactions (nạp tiền)
+    const transactionsResponse = await api.get(
+      `/transactions/account/${user.accountID}`
+    );
 
-      // Fetch withdrawal history
-      const withdrawalsResponse = await api.get(
-        `/AccountWithdrawal/account/${user.accountID}`
-      );
+    // Fetch withdrawal history (rút tiền)
+    const withdrawalsResponse = await api.get(
+      `/AccountWithdrawal/account/${user.accountID}`
+    );
 
-      // Combine and sort all transactions
-      const allTransactions = [
-        ...transactionsResponse.data,
-        ...withdrawalsResponse.data.map((withdrawal) => ({
-          ...withdrawal,
-          transactionID: withdrawal.accountWithdrawalId,
-          price: -withdrawal.pricesend, // Use negative value for withdrawals
-          date: withdrawal.date,
-          description:
-            withdrawal.description ||
-            `Rút tiền: ${withdrawal.pricesend.toLocaleString()} VND - ${
-              withdrawal.bankName
-            } - ${withdrawal.accountNumber}`,
-        })),
-      ];
+    // Combine and sort all transactions
+    const allTransactions = [
+      // Chỉ lấy các giao dịch nạp tiền
+      ...transactionsResponse.data.map(transaction => ({
+        ...transaction,
+        type: 'deposit',
+        description: `Nạp tiền vào ví: ${transaction.price.toLocaleString()} VND`
+      })),
+      // Lấy các giao dịch rút tiền
+      ...withdrawalsResponse.data.map((withdrawal) => ({
+        ...withdrawal,
+        transactionID: withdrawal.accountWithdrawalId,
+        price: -withdrawal.pricesend, // Use negative value for withdrawals
+        date: withdrawal.date,
+        type: 'withdraw',
+        description: `Rút tiền: ${withdrawal.pricesend.toLocaleString()} VND - ${withdrawal.bank_name}`,
+      })),
+    ];
 
-      // Sort combined transactions by date, most recent first
-      const sortedTransactions = allTransactions.sort(
-        (a, b) => new Date(b.date) - new Date(a.date)
-      );
+    // Sort combined transactions by date, most recent first
+    const sortedTransactions = allTransactions.sort(
+      (a, b) => new Date(b.date) - new Date(a.date)
+    );
 
-      setTransactions(sortedTransactions);
-    } catch (error) {
-      console.error("Error fetching transaction history:", error);
-      toast.error("Failed to load transaction history.");
-    }
-  };
+    setTransactions(sortedTransactions);
+  } catch (error) {
+    console.error("Error fetching transaction history:", error);
+    toast.error("Failed to load transaction history.");
+  }
+};
 
   // Fetch account balance from API when the component mounts
   useEffect(() => {
@@ -360,7 +363,7 @@ function WalletPage() {
         </Modal>
 
         {/* Transaction History Table */}
-        <h2>Lịch sử giao dịch</h2>
+        <h2>Lịch sử của Ví tiền</h2>
         <table className="transaction-history-table">
           <thead>
             <tr>
