@@ -1,95 +1,95 @@
 .consignment-tracking-page {
-    max-width: 80vw;
-    margin: 0 auto;
-    background-color: #f9f9f9;
+  max-width: 80vw;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+
+
+  .btn-edit-consignment {
+    background-color: #f9f1e7;
+    color: black;
+    border: 1px solid #d4c8b2;
+    padding: 0.5rem;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+
+    &:hover {
+      background-color: #e9e1d7;
+    }
+  }
+
+  .consignment-tab{
+      font-size: medium;
+  }
+
+  h1 {
+    color: #B88E2F;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .ant-tabs-nav {
+    margin-bottom: 20px;
+  }
+
+  .ant-collapse {
+    background-color: #FFF;
+    border: 1px solid #E7E7E7;
     border-radius: 8px;
- 
-  
-    .btn-edit-consignment {
-      background-color: #f9f1e7;
-      color: black;
-      border: 1px solid #d4c8b2;
-      padding: 0.5rem;
-      font-weight: 500;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-bottom: 1rem;
-      margin-top: 1rem;
-  
-      &:hover {
-        background-color: #e9e1d7;
-      }
+  }
+
+  .ant-collapse-item {
+    border-bottom: 1px solid #E7E7E7;
+  }
+
+  .order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+
+    span {
+      margin-right: 20px;
     }
 
-    .consignment-tab{
-        font-size: medium;
+    .status {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: bold;
+
+      &.đang-xử-lý { background-color: #FFF2CC; color: #D6A100; }
+      &.đã-giao-hàng { background-color: #D4EDDA; color: #155724; }
+      &.đã-hủy { background-color: #F8D7DA; color: #721C24; }
     }
-  
-    h1 {
+  }
+
+  .order-details {
+    margin-top: 20px;
+
+    h3 {
       color: #B88E2F;
-      margin-bottom: 20px;
-      text-align: center;
+      margin-bottom: 10px;
     }
-  
-    .ant-tabs-nav {
-      margin-bottom: 20px;
+
+    .ant-table-thead > tr > th {
+      background-color: #F9F1E7;
+      color: #B88E2F;
     }
-  
-    .ant-collapse {
-      background-color: #FFF;
-      border: 1px solid #E7E7E7;
-      border-radius: 8px;
-    }
-  
-    .ant-collapse-item {
+
+    .ant-table-tbody > tr > td {
       border-bottom: 1px solid #E7E7E7;
     }
-  
-    .order-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-  
-      span {
-        margin-right: 20px;
-      }
-  
-      .status {
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-weight: bold;
-  
-        &.đang-xử-lý { background-color: #FFF2CC; color: #D6A100; }
-        &.đã-giao-hàng { background-color: #D4EDDA; color: #155724; }
-        &.đã-hủy { background-color: #F8D7DA; color: #721C24; }
-      }
-    }
-  
-    .order-details {
-      margin-top: 20px;
-  
-      h3 {
-        color: #B88E2F;
-        margin-bottom: 10px;
-      }
-  
-      .ant-table-thead > tr > th {
-        background-color: #F9F1E7;
-        color: #B88E2F;
-      }
-  
-      .ant-table-tbody > tr > td {
-        border-bottom: 1px solid #E7E7E7;
-      }
-  
-      img {
-        object-fit: contain; 
-      }
+
+    img {
+      object-fit: contain; 
     }
   }
-  
-  .consignment-tracking-page-wrapper {
-    padding-top: 5vh;
-    padding-bottom: 5vh;
-  }
+}
+
+.consignment-tracking-page-wrapper {
+  padding-top: 5vh;
+  padding-bottom: 5vh;
+}

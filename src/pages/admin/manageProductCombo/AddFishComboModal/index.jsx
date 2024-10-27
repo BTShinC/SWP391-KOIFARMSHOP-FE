@@ -25,16 +25,20 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
     image1: "",
     image2: "",
     price: 1,
-    consignmentType: "",
+    consignmentType: "Trang trại đăng bán",
     desiredPrice: 1,
-    type: "",
+    type: "Trang trại",
     status: "Còn hàng",
     age: 1,
     sex: "Đực",
   };
 
   const [formValue, setFormValue] = useState(initFormValue);
-  const [fileList, setFileList] = useState({ image: [], image1: [], image2: [] });
+  const [fileList, setFileList] = useState({
+    image: [],
+    image1: [],
+    image2: [],
+  });
 
   const handleChange = (event) => {
     const { value, name } = event.target;
@@ -42,6 +46,7 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
       let updatedValue = { ...prevValue, [name]: value };
 
       // Nếu loại là "Trang trại", gán giá trị price cho desiredPrice
+      updatedValue.type = "Trang trại"; // Đảm bảo luôn là "Trang trại"
       if (updatedValue.type === "Trang trại") {
         updatedValue.desiredPrice = updatedValue.price;
       }
@@ -90,6 +95,7 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
 
   const handleOk = async () => {
     // Xử lý lưu thông tin
+    console.log(formValue);
     try {
       let res = await AddFishCombo(formValue);
       if (res) {
@@ -123,7 +129,9 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
                 listType="picture-card"
                 className="image-uploader"
                 fileList={fileList.image}
-                onChange={({ fileList }) => handleUploadChange({ fileList }, "image")}
+                onChange={({ fileList }) =>
+                  handleUploadChange({ fileList }, "image")
+                }
                 beforeUpload={() => false}
                 required
               >
@@ -144,7 +152,9 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
                 listType="picture-card"
                 className="image-uploader"
                 fileList={fileList.image1}
-                onChange={({ fileList }) => handleUploadChange({ fileList }, "image1")}
+                onChange={({ fileList }) =>
+                  handleUploadChange({ fileList }, "image1")
+                }
                 beforeUpload={() => false}
                 required
               >
@@ -165,7 +175,9 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
                 listType="picture-card"
                 className="image-uploader"
                 fileList={fileList.image2}
-                onChange={({ fileList }) => handleUploadChange({ fileList }, "image2")}
+                onChange={({ fileList }) =>
+                  handleUploadChange({ fileList }, "image2")
+                }
                 beforeUpload={() => false}
                 required
               >
@@ -248,21 +260,26 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
           </div>
           <div>
             <label className="form-label">Loại:</label>
-            <select
+            <input
               className="form-control"
               name="type"
               value={formValue.type}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Chọn loại</option>
-              <option value="Ký gửi">Ký gửi</option>
-              <option value="Trang trại">Trang trại</option>
-            </select>
+              readOnly // Không cần onChange nếu giá trị này không thay đổi
+            />
+          </div>
+
+          <div>
+            <label className="form-label">Loại hình ký gửi:</label>
+            <input
+              className="form-control"
+              name="consignmentType"
+              value={formValue.consignmentType}
+              readOnly // Không cần onChange nếu giá trị này không thay đổi
+            />
           </div>
 
           {/* Hiển thị cả hai input khi type là Ký gửi */}
-          {formValue.type === "Ký gửi" && (
+          {/* {formValue.type === "Ký gửi" && (
             <>
               <div>
                 <label className="form-label">Giá mong muốn:</label>
@@ -289,23 +306,20 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
                 />
               </div>
             </>
-          )}
+          )} */}
 
-          {/* Chỉ hiển thị giá nếu loại là Trang trại */}
-          {formValue.type === "Trang trại" && (
-            <div>
-              <label className="form-label">Giá:</label>
-              <input
-                className="form-control"
-                type="number"
-                name="price"
-                min={1}
-                value={formValue.price}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          )}
+          <div>
+            <label className="form-label">Giá:</label>
+            <input
+              className="form-control"
+              type="number"
+              name="price"
+              min={1}
+              value={formValue.price}
+              onChange={handleChange}
+              required
+            />
+          </div>
         </div>
       </form>
     </Modal>

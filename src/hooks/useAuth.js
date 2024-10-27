@@ -14,11 +14,11 @@ const useAuth = () => {
     const token = localStorage.getItem("token");
     if (token) {
       // Giả sử bạn có một cách để lấy accountId từ token hoặc từ localStorage
-      const accountId = localStorage.getItem("accountID"); // Lưu accountId khi đăng nhập thành công
+      const accountID = localStorage.getItem("accountID"); // Lưu accountId khi đăng nhập thành công
 
       const fetchUserData = async () => {
         try {
-          const response = await api.get(`account/${accountId}`, {
+          const response = await api.get(`account/${accountID}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },

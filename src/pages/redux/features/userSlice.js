@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = null; // Trạng thái ban đầu là null
+const initialState = null;
 
 export const userSlice = createSlice({
   name: "user",
@@ -20,6 +20,7 @@ export const userSlice = createSlice({
         address: action.payload.address,
         roleName: action.payload.roleName,
       };
+
 
     },
   },

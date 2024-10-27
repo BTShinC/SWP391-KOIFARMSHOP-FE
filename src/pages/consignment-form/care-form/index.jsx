@@ -117,10 +117,16 @@ function CareForm({ carePackage }) {
       accountID: user?.accountID,
       price: carePackage?.price,
       type: "Ký gửi",
-      consignmentType: "chăm sóc",
+      consignmentType: "Ký gửi chăm sóc",
       status: "Chờ xác nhận",
-      desiredPrice:carePackage?.price,
+      desiredPrice: carePackage?.price,
       productName: uuidv4(),
+      reason: "Vui lòng mang cá đến trang trại để hoàn tất thủ tục ký gửi chăm sóc",
+      farmName: "",
+      consignmentDate: consignmentDate,
+      total: carePackage?.price,
+      formType :'careForm',
+      duration : 30,
     };
     console.log(
       "Form data with uploaded images and certifications cá thể:",
@@ -157,16 +163,23 @@ function CareForm({ carePackage }) {
       <div style={{ marginTop: 8 }}>Upload</div>
     </button>
   );
-
-  const getTodayDate = () => {
-    return format(new Date(), "yyyy-MM-dd");
+  const consignmentDate = format(new Date(), "yyyy-MM-dd");
+  const getTodayAndThreeDaysLater = () => {
+    const today = format(new Date(), "dd/MM/yyyy"); // Ngày hôm nay
+    const threeDaysLater = format(addDays(new Date(), 3), "dd/MM/yyyy"); // 3 ngày sau
+    return { today, threeDaysLater };
   };
-
-  const getTodayDatePlus30Days = () => {
+  const getTodayDatePlus30DaysAndThreeDaysLater = () => {
     const today = new Date();
-    const futureDate = addDays(today, 30);
-    return format(futureDate, "yyyy-MM-dd");
+    const todayPlus30Days = format(addDays(today, 30), "dd/MM/yyyy"); // 30 ngày sau
+    const threeDaysAfter30Days = format(addDays(today, 33), "dd/MM/yyyy"); // 33 ngày sau (3 ngày sau 30 ngày)
+
+    return { todayPlus30Days, threeDaysAfter30Days };
   };
+
+  const { today, threeDaysLater } = getTodayAndThreeDaysLater();
+  const { todayPlus30Days, threeDaysAfter30Days } =
+    getTodayDatePlus30DaysAndThreeDaysLater();
 
   const navigation = useNavigate();
 
@@ -422,7 +435,7 @@ function CareForm({ carePackage }) {
               <TextField
                 label="Thời gian dự kiến nhận cá"
                 fullWidth
-                value={getTodayDate()}
+                value={`Từ ${today} tới ${threeDaysLater}`}
                 disabled
                 className="highlighted-textfield"
                 InputLabelProps={{
@@ -434,7 +447,7 @@ function CareForm({ carePackage }) {
               <TextField
                 label="Thời gian dự kiến nhận lại cá"
                 fullWidth
-                value={getTodayDatePlus30Days()}
+                value={`Từ ${todayPlus30Days} tới ${threeDaysAfter30Days}`}
                 disabled
                 className="highlighted-textfield"
                 InputLabelProps={{
@@ -456,7 +469,7 @@ function CareForm({ carePackage }) {
           {/* Nút Submit */}
           <Grid item xs={12} style={{ textAlign: "center", marginTop: "2rem" }}>
             <Button type="submit" className="submit-form-btn">
-              Xác nhận thông tin
+              Xác nhận thông tin        
             </Button>
           </Grid>
         </Grid>

@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 
 CareFormCombo.propTypes = {
-  carePackage: PropTypes.object.isRequired,  // Truyền carePackage qua props
+  carePackage: PropTypes.object.isRequired, // Truyền carePackage qua props
 };
 
 function CareFormCombo({ carePackage }) {
@@ -31,12 +31,23 @@ function CareFormCombo({ carePackage }) {
   // Lấy thông tin user từ Redux
   const user = useSelector((state) => state?.user);
 
-  const getTodayDate = () => format(new Date(), "yyyy-MM-dd");
-
-  const getTodayDatePlus30Days = () => {
-    const futureDate = addDays(new Date(), 30);
-    return format(futureDate, "yyyy-MM-dd");
+  const consignmentDate = format(new Date(), "yyyy-MM-dd");
+  const getTodayAndThreeDaysLater = () => {
+    const today = format(new Date(), "dd/MM/yyyy");
+    const threeDaysLater = format(addDays(new Date(), 3), "dd/MM/yyyy"); 
+    return { today, threeDaysLater };
   };
+  const getTodayDatePlus30DaysAndThreeDaysLater = () => {
+    const today = new Date();
+    const todayPlus30Days = format(addDays(today, 30), "dd/MM/yyyy"); 
+    const threeDaysAfter30Days = format(addDays(today, 33), "dd/MM/yyyy"); 
+
+    return { todayPlus30Days, threeDaysAfter30Days };
+  };
+
+  const { today, threeDaysLater } = getTodayAndThreeDaysLater();
+  const { todayPlus30Days, threeDaysAfter30Days } =
+    getTodayDatePlus30DaysAndThreeDaysLater();
 
   // Preview ảnh khi chọn
   const handlePreview = useCallback(async (file) => {
@@ -71,9 +82,9 @@ function CareFormCombo({ carePackage }) {
   }, []);
 
   // Xử lý submit form
-  const onSubmit = useCallback(async (data) => {
+  const onSubmit = async (data) => {
     const uploadedImages = await uploadFilesToFirebase(fileList);
-
+  
     const finalData = {
       ...data,
       image: uploadedImages[0]?.url,
@@ -82,17 +93,24 @@ function CareFormCombo({ carePackage }) {
       comboName: uuidv4(),
       type: "Ký gửi",
       accountID: user?.accountID,
-      consignmentType: "chăm sóc",
+      consignmentType: "Ký gửi chăm sóc",
       carePackageID: carePackage?.carePackageID,
       price: carePackage?.price,
       status: "Chờ xác nhận",
       desiredPrice: carePackage?.price,
+      reason: "Vui lòng mang cá đến trang trại để hoàn tất thủ tục ký gửi chăm sóc",
+      farmName: "",
+      consignmentDate: consignmentDate,
+      today : today,
+      formType :'careFormCombo',
+      total: carePackage?.price,
+      duration : 30,
     };
-
+  
     console.log("Form data with uploaded images:", finalData);
     localStorage.setItem("careFormCombo", JSON.stringify(finalData));
     navigate("/consignmentPayment", { state: finalData });
-  }, [fileList, user, carePackage, navigate, uploadFilesToFirebase]);
+  };
 
   // Nút upload ảnh
   const uploadButton = (
@@ -173,7 +191,9 @@ function CareFormCombo({ carePackage }) {
                 error={!!errors.size}
                 helperText={errors.size?.message}
                 InputProps={{
-                  endAdornment: <InputAdornment position="end">cm</InputAdornment>,
+                  endAdornment: (
+                    <InputAdornment position="end">cm</InputAdornment>
+                  ),
                 }}
               />
             </Grid>
@@ -291,7 +311,7 @@ function CareFormCombo({ carePackage }) {
               <TextField
                 label="Thời gian dự kiến nhận cá"
                 fullWidth
-                value={getTodayDate()}
+                value={`Từ ${today} tới ${threeDaysLater}`}
                 disabled
                 className="highlighted-textfield"
                 InputLabelProps={{
@@ -303,7 +323,7 @@ function CareFormCombo({ carePackage }) {
               <TextField
                 label="Thời gian dự kiến nhận lại cá"
                 fullWidth
-                value={getTodayDatePlus30Days()}
+                value={`Từ ${todayPlus30Days} tới ${threeDaysAfter30Days}`}
                 disabled
                 className="highlighted-textfield"
                 InputLabelProps={{

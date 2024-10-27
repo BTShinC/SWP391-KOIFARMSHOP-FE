@@ -8,7 +8,15 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-function SellFormCombo() {
+import { format } from "date-fns";
+import PropTypes from "prop-types";
+import { toast } from "react-toastify";
+import imageCompression from "browser-image-compression";
+SellFormCombo.propTypes = {
+  isOnline: PropTypes.bool,
+};
+
+function SellFormCombo({ isOnline }) {
   const {
     register,
     handleSubmit,
@@ -49,17 +57,33 @@ function SellFormCombo() {
     setFileList(newFileList);
   };
 
+  // Hàm nén ảnh
+  const compressImage = async (file) => {
+    const options = {
+      maxSizeMB: 1, // Giới hạn kích thước ảnh (MB)
+      maxWidthOrHeight: 1024, // Giới hạn chiều dài hoặc rộng
+      useWebWorker: true, // Sử dụng WebWorker để cải thiện hiệu suất
+    };
+    try {
+      const compressedFile = await imageCompression(file, options);
+      return compressedFile;
+    } catch (error) {
+      console.error("Error compressing image:", error);
+      return file; // Nếu nén thất bại, sử dụng file gốc
+    }
+  };
+
   // Upload ảnh và chứng nhận lên Firebase
   const uploadFilesToFirebase = async (files) => {
-    const uploadPromises = files.map((fileObj) => {
-      const file = fileObj.originFileObj;
-      const storageRef = ref(storage, `upload/${file.name}`); // Tạo reference trong Firebase Storage
+    const uploadPromises = files.map(async (fileObj) => {
+      const compressedFile = await compressImage(fileObj.originFileObj); // Nén ảnh trước khi upload
+      const storageRef = ref(storage, `upload/${compressedFile.name}`);
 
-      return uploadBytes(storageRef, file)
-        .then(() => getDownloadURL(storageRef)) // Lấy URL sau khi upload
+      return uploadBytes(storageRef, compressedFile)
+        .then(() => getDownloadURL(storageRef))
         .then((downloadURL) => ({
-          name: file.name,
-          url: downloadURL, // Trả về URL của file sau khi upload
+          name: compressedFile.name,
+          url: downloadURL,
         }))
         .catch((error) => {
           console.error("Error uploading file:", error);
@@ -67,33 +91,60 @@ function SellFormCombo() {
     });
 
     try {
-      const uploadedFiles = await Promise.all(uploadPromises); // Chờ tất cả các file được upload
-      return uploadedFiles; // Trả về danh sách file đã upload
+      const uploadedFiles = await Promise.all(uploadPromises);
+      return uploadedFiles.filter(Boolean); // Loại bỏ những file upload thất bại
     } catch (error) {
       console.error("Error uploading files:", error);
       return [];
     }
   };
+
   // Xử lý submit form
   const onSubmit = async (data) => {
-    const uploadedImages = await uploadFilesToFirebase(fileList); // Upload file hình ảnh cá KOI
-    const finalData = {
-      ...data,
-      image: uploadedImages[0]?.url,
-      image1: uploadedImages[1]?.url,
-      image2: uploadedImages[2]?.url,
-      type: "Ký gửi",
-      consignmentType: "Ký gửi để bán",
-      price: data.desiredPrice,
-      status:"Chờ xác nhận",
-      comboName:uuidv4()
-    };
-    console.log(
-      "Form data with uploaded images and certifications:",
-      finalData
-    );
-    localStorage.setItem("sellFormCombo", JSON.stringify(finalData));
-    navigation("/consignmentSellPayment", { state: finalData });
+    try {
+      // Kiểm tra số lượng ảnh
+      if (fileList.length < 3) {
+        toast.error("Vui lòng upload đủ 3 hình ảnh");
+        return;
+      }
+
+      // Bắt đầu upload ảnh song song
+      const uploadedImages = await uploadFilesToFirebase(fileList);
+
+      // Kiểm tra xem tất cả ảnh có được upload thành công không
+      if (uploadedImages.length < 3) {
+        toast.error("Vui lòng đảm bảo tất cả hình ảnh được upload thành công");
+        return;
+      }
+
+      const consignmentDate = format(new Date(), "yyyy-MM-dd");
+      const finalData = {
+        ...data,
+        image: uploadedImages[0]?.url,
+        image1: uploadedImages[1]?.url,
+        image2: uploadedImages[2]?.url,
+        type: "Ký gửi",
+        consignmentType: "Ký gửi để bán",
+        price: data.desiredPrice,
+        status: "Chờ xác nhận",
+        comboName: uuidv4(),
+        salePrice: data.desiredPrice,
+        reason: 'Vui lòng mang cá đến trang trại để hoàn thành thủ tục',
+        formType:'sellFormCombo',
+        consignmentDate: consignmentDate,
+      };
+
+      console.log("Form data with uploaded images:", finalData);
+
+      // Lưu dữ liệu vào localStorage
+      localStorage.setItem("sellFormCombo", JSON.stringify(finalData));
+
+      // Điều hướng đến trang tiếp theo
+      navigation("/consignmentSellPayment", { state: finalData });
+    } catch (error) {
+      console.error("Error in form submission:", error);
+      toast.error("Có lỗi xảy ra trong quá trình xử lý form");
+    }
   };
 
   // Nút upload ảnh và chứng nhận
@@ -126,7 +177,7 @@ function SellFormCombo() {
         </Grid>
         <Box>
           <Typography variant="h2" className="title-typography">
-            Ký gửi theo lô ONLINE
+            Ký gửi theo lô {isOnline ? "Online" : "Offline"}
           </Typography>
         </Box>
         <Grid container spacing={4}>
@@ -139,7 +190,7 @@ function SellFormCombo() {
               onChange={handleChange}
               beforeUpload={() => false} // Tắt tự động upload
             >
-              {fileList.length >= 4 ? null : uploadButton}
+              {fileList.length >= 3 ? null : uploadButton}
             </Upload>
             {previewImage && (
               <Image
@@ -152,6 +203,25 @@ function SellFormCombo() {
               />
             )}
           </Grid>
+          {isOnline && (
+            <Grid item xs={12}>
+              <TextField
+                {...register("farmName", {
+                  required: "Vui lòng nhập đường dẫn trang trại của bạn",
+                  pattern: {
+                    value: /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/,
+                    message:
+                      "Vui lòng nhập một đường dẫn hợp lệ (bắt đầu bằng http hoặc https)",
+                  },
+                })}
+                label="Đường dẫn trang trại của bạn"
+                type="url"
+                fullWidth
+                error={!!errors.farmName}
+                helperText={errors.farmName?.message}
+              />
+            </Grid>
+          )}
           <Grid item xs={12}>
             <TextField
               {...register("breed", { required: "Vui lòng nhập giống cá" })}
@@ -190,10 +260,14 @@ function SellFormCombo() {
               label="Giá bán mong đợi"
               {...register("desiredPrice", {
                 required: "Vui lòng nhập giá bạn mong muốn",
+                min: {
+                  value: 500000,
+                  message: "Giá bán mong đợi phải lớn hơn 500,000",
+                },
               })}
               fullWidth
               type="number"
-              inputProps={{ min: 1 }}
+              inputProps={{ min: 500000 }}
               error={!!errors.desiredPrice}
               helperText={errors.desiredPrice?.message}
               className="highlighted-textfield"
@@ -202,14 +276,14 @@ function SellFormCombo() {
           <Grid item xs={12}>
             <TextField
               label="Số ngày dự định ký gửi"
-              {...register("day", {
+              {...register("duration", {
                 required: "Vui lòng nhập số ngày dự định ký gửi",
               })}
               fullWidth
               type="number"
               inputProps={{ min: 1 }}
-              error={!!errors.day}
-              helperText={errors.day?.message}
+              error={!!errors.duration}
+              helperText={errors.duration?.message}
               className="highlighted-textfield"
             />
           </Grid>
@@ -274,6 +348,7 @@ function SellFormCombo() {
               {...register("description")}
               label="Ghi chú"
               fullWidth
+              defaultValue="không"
               error={!!errors.description}
               helperText={errors.description?.message}
             />

@@ -7,6 +7,7 @@ import { FilterOutlined, SearchOutlined, SwapOutlined } from "@ant-design/icons"
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { fetchAllProduct } from "../../service/userService";
+import api from "../../config/api";
 
 function ProductPage() {
     const [fishData, setFishData] = useState([]);
@@ -18,7 +19,7 @@ function ProductPage() {
     // Fetch fish data from the API
     async function fetchFish() {
         try {
-            const response = await axios.get("http://103.90.227.69:8080/api/product/getall");
+            const response = await api.get("http://103.90.227.69:8080/api/product/getall");
             console.log(response.data);
             setFishData(response.data);
         } catch (error) {
@@ -31,9 +32,18 @@ function ProductPage() {
     }, []);
 
     // Filter products based on search term
-    const filteredProducts = fishData.filter(product =>
-        product.productName && product.productName.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // Filter products based on search term and consignmentType
+    const filteredProducts = fishData
+        .filter(product =>
+            product.productName &&
+            product.productName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+            product.consignmentType !== "chăm sóc" && product.status === "Còn hàng"
+        )
+        .sort((a, b) => {
+            if (a.status === "Còn hàng" && b.status !== "Còn hàng") return -1;
+            if (a.status !== "Còn hàng" && b.status === "Còn hàng") return 1;
+            return 0;
+        });
 
     const indexOfLastProduct = currentPage * itemsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - itemsPerPage;

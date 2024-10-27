@@ -29,11 +29,11 @@ function AddFishModal({ title, visible, onClose, onChange }) {
     image2: "",
     price: 1,
     certificate: "",
-    type: "",
+    type: "Trang trại",
     quantity: 1,
     status: "Còn hàng",
     desiredPrice: 1,
-    consignmentType: "",
+    consignmentType: "Trang trại đăng bán",
   };
 
   const [formValue, setFormValue] = useState(initFormValue);
@@ -44,16 +44,14 @@ function AddFishModal({ title, visible, onClose, onChange }) {
   });
   const [certificateList, setCertificateList] = useState([]);
 
-  // Function to handle form value changes
   const handleChange = (event) => {
     const { value, name } = event.target;
 
     setFormValue((prevValue) => {
       let updatedValue = { ...prevValue, [name]: value };
 
-      // Check if price is being changed and desiredPrice is not updated
       if (name === "price" && !prevValue.desiredPriceChanged) {
-        updatedValue.desiredPrice = value; // Sync desiredPrice with price
+        updatedValue.desiredPrice = value;
       }
 
       // Mark desiredPrice as changed if user edits it
@@ -65,7 +63,6 @@ function AddFishModal({ title, visible, onClose, onChange }) {
     });
   };
 
-  // Update consignment type based on selected type
   useEffect(() => {
     if (formValue.type === "Ký gửi") {
       setFormValue((prevValue) => ({
@@ -97,7 +94,7 @@ function AddFishModal({ title, visible, onClose, onChange }) {
           .then((url) => {
             setFormValue((prevFormValue) => ({
               ...prevFormValue,
-              [key]: url, // Assign the URL to the corresponding image field
+              [key]: url,
             }));
           })
           .catch((error) => {
@@ -334,32 +331,24 @@ function AddFishModal({ title, visible, onClose, onChange }) {
           </div>
           <div>
             <label className="form-label">Loại:</label>
-            <select
+            <input
               className="form-control"
               name="type"
               value={formValue.type}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Chọn loại</option>
-              <option value="Ký gửi">Ký gửi</option>
-              <option value="Trang trại">Trang trại</option>
-            </select>
+              readOnly // Không cần onChange nếu giá trị này không thay đổi
+            />
           </div>
-          {formValue.type === "Ký gửi" && (
-            <div>
-              <label className="form-label">Loại hình ký gửi:</label>
-              <input
-                className="form-control"
-                name="consignmentType"
-                value={formValue.consignmentType}
-                onChange={handleChange}
-                readOnly
-                required
-              />
-            </div>
-          )}
-          {formValue.consignmentType === "Ký gửi để bán" && (
+
+          <div>
+            <label className="form-label">Loại hình ký gửi:</label>
+            <input
+              className="form-control"
+              name="consignmentType"
+              value={formValue.consignmentType}
+              readOnly // Không cần onChange nếu giá trị này không thay đổi
+            />
+          </div>
+          {/* {formValue.consignmentType === "Ký gửi để bán" && (
             <>
               <div>
                 <label className="form-label">Giá khách hàng mong muốn :</label>
@@ -386,21 +375,21 @@ function AddFishModal({ title, visible, onClose, onChange }) {
                 />
               </div>
             </>
-          )}
-          {formValue.consignmentType !== "Ký gửi để bán" && (
-            <div>
-              <label className="form-label">Giá:</label>
-              <input
-                className="form-control"
-                type="number"
-                name="price"
-                min={1}
-                value={formValue.price}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          )}
+          )} */}
+          {/* {formValue.consignmentType !== "Ký gửi để bán" && ( */}
+          <div>
+            <label className="form-label">Giá:</label>
+            <input
+              className="form-control"
+              type="number"
+              name="price"
+              min={1}
+              value={formValue.price}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          {/* )} */}
         </div>
       </form>
     </Modal>

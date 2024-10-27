@@ -35,11 +35,12 @@ import CarePackageList from "./pages/consignment/carePackage-list";
 import PaymentPage from "./pages/consignment-form/payment";
 import SellPayment from "./pages/consignment-form/payment/sell-payment";
 import OrderTracking from "./pages/orderTracking";
-
 import ConsignmentTracking from "./pages/consignmentTracking";
 import VnpayResponsePage from "./components/vnpay";
 import CheckoutPage from "./pages/checkout";
-
+import OrderSuccess from "./pages/orderSuccess";
+import ConsignmentSuccess from "./pages/consignmentSuccess";
+import DashboardPage from "./pages/dashboard";
 
 function App() {
   const router = createBrowserRouter([
@@ -96,6 +97,10 @@ function App() {
         {
           path: "/about",
           element: <AboutPage />,
+        },
+        {
+          path: "/consignmentTracking",
+          element: <ConsignmentTracking />,
         },
         {
           path: "/blog",
@@ -170,6 +175,15 @@ function App() {
           path: "/checkout",
           element: <CheckoutPage />,
         },
+
+        {
+          path: "/orderSuccess",
+          element: <OrderSuccess />,
+        },
+        {
+          path: "/consignmentSuccess",
+          element: <ConsignmentSuccess />,
+        }
       ],
     },
     {
@@ -204,6 +218,10 @@ function App() {
       path: "/blog/:id",
       element: <BlogDetail />,
     },
+    {
+      path: "/dashboard",
+      element: <DashboardPage />,
+    }
   ]);
 
   return <RouterProvider router={router} />;

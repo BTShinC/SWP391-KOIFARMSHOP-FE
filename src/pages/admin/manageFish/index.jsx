@@ -7,7 +7,10 @@ import FishTable from "../../../components/admin-components/fish-table";
 import EditFishModal from "./EditFishModal";
 import AddFishModal from "./AddFishModal";
 import { Pagination } from "@mui/material";
-import { fetchAllProduct, fetchAllConsignment } from "../../../service/userService";
+import {
+  fetchAllProduct,
+  fetchAllConsignment,
+} from "../../../service/userService";
 import "./index.scss";
 
 const { Option } = Select;
@@ -16,7 +19,7 @@ const columns = [
   "Mã Sản Phẩm",
   "Giống Loài",
   "Kích Thước",
-  "Giới Tính",
+  "Hình thức",
   "Giá",
   "Trạng thái",
   "Thao tác",
@@ -81,13 +84,23 @@ function ManageFish() {
     },
     [searchValue, filterType, statusFilter, sortOrder]
   );
+  useEffect(() => {
+    applyFilters(fishData);
+  }, [
+    fishData,
+    searchValue,
+    filterType,
+    statusFilter,
+    sortOrder,
+    applyFilters,
+  ]);
 
   const getAllProduct = useCallback(async () => {
     try {
       let res = await fetchAllProduct();
       if (res && res.data) {
         setFishData(res.data);
-        applyFilters(res.data); 
+        applyFilters(res.data);
       }
     } catch (error) {
       console.log(error);
@@ -101,22 +114,18 @@ function ManageFish() {
 
   const handleSearch = (value) => {
     setSearchValue(value);
-    applyFilters(fishData);
   };
 
   const handleBreedFilter = (value) => {
     setFilterType(value);
-    applyFilters(fishData);
   };
 
   const handleStatusFilter = (value) => {
     setStatusFilter(value);
-    applyFilters(fishData);
   };
 
   const handlePriceFilter = (order) => {
     setSortOrder(order);
-    applyFilters(fishData);
   };
 
   const handleDataChange = () => {
@@ -158,6 +167,7 @@ function ManageFish() {
             <Option value="Showa">Showa</Option>
             <Option value="Snake">Snake</Option>
             <Option value="Tancho">Tancho</Option>
+            <Option value="Karashi">Karashi</Option>
           </Select>
 
           <Select
@@ -168,6 +178,7 @@ function ManageFish() {
             <Option value="all">Tất cả</Option>
             <Option value="Chờ xác nhận">Chờ xác nhận</Option>
             <Option value="Đang chăm sóc">Đang chăm sóc</Option>
+            <Option value="Hoàn tất chăm sóc">Hoàn tất chăm sóc</Option>
             <Option value="Còn hàng">Còn hàng</Option>
             <Option value="Hết hàng">Hết hàng</Option>
           </Select>

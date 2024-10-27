@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Card, Pagination, Input, Button, Dropdown, Menu } from "antd";
 import Meta from "antd/es/card/Meta";
 import { FilterOutlined } from "@ant-design/icons";
-import axios from "axios";
+import api from "../../config/api";
 import { Link } from "react-router-dom";
 
 function ProductComboPage() {
@@ -14,17 +14,17 @@ function ProductComboPage() {
     const itemsPerPage = 12;
     const formatCurrency = (amount) => {
         return new Intl.NumberFormat('vi-VN', {
-          style: 'decimal',
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 0,
+            style: 'decimal',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
         }).format(amount);
-      };
-    
+    };
+
 
     // Fetch product combo data from the API
     async function fetchComboData() {
         try {
-            const response = await axios.get("http://103.90.227.69:8080/api/productcombo");
+            const response = await api.get("/productcombo/getall");
             setComboData(response.data);
         } catch (error) {
             console.error("Error fetching product combo data:", error);
@@ -36,9 +36,17 @@ function ProductComboPage() {
     }, []);
 
     // Filter product combos based on search term
-    const filteredCombos = comboData.filter(combo =>
-        combo.comboName.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredCombos = comboData
+        .filter(combo =>
+            combo.comboName &&
+            combo.comboName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+            combo.consignmentType !== "chăm sóc" && combo.status === "Còn hàng"
+        )
+        .sort((a, b) => {
+            if (a.status === "Còn hàng" && b.status !== "Còn hàng") return -1;
+            if (a.status !== "Còn hàng" && b.status === "Còn hàng") return 1;
+            return 0;
+        });
 
     const indexOfLastCombo = currentPage * itemsPerPage;
     const indexOfFirstCombo = indexOfLastCombo - itemsPerPage;

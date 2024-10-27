@@ -18,6 +18,7 @@ function SingleProductCombo() {
   const dispatch = useDispatch(); // Initialize dispatch
   const user = useSelector((state) => state.user);
 
+
   // Fetch product combo from backend when component mounts
   useEffect(() => {
     const loadProductCombo = async () => {
@@ -42,20 +43,21 @@ function SingleProductCombo() {
   };
 
   const handleAddToCart = async () => {
+    
     try {
-      if (user.accountID) {
+      if (!user.accountID) {
         console.error("Account information is missing");
         return;
       }
 
       console.log("Sending to API:", {
-        accountId: user.accountID,
-        productId: productCombo.productComboID // Use productComboID
+        accountID: user.accountID,
+        productID: productCombo.productComboID // Use productComboID
       });
 
       const response = await addToCartAPI({
-        accountId: user.accountID,
-        productId: productCombo.productComboID // Use productComboID
+        accountID: user.accountID,
+        productID: productCombo.productComboID // Use productComboID
       });
       console.log("Added to cart successfully:", response);
 
@@ -63,7 +65,7 @@ function SingleProductCombo() {
       setCartItems((prevItems) => [
         ...prevItems,
         {
-          productid: productCombo.productComboID,
+          productID: productCombo.productComboID,
           comboName: productCombo.comboName,
           price: productCombo.price,
           image: productCombo.image,
@@ -110,12 +112,18 @@ function SingleProductCombo() {
               <Text>Giống: {productCombo.breed}</Text>
               <Text>Số lượng: {productCombo.quantity}</Text>
               <Text>Kích thước: {productCombo.size} cm</Text>
-              <div className="action-buttons">
-                <Link to="/shoppingcart">
-                  <Button type="default" className="buy-button">Mua ngay</Button>
-                </Link>
-                <Button onClick={handleAddToCart} className="buy-button">Thêm vào giỏ hàng</Button>
-              </div>
+              {productCombo.status === "Còn hàng" ? (
+                <div className="action-buttons">
+                  <Button className="buy-button">Mua ngay</Button>
+                  <Button onClick={handleAddToCart} className="buy-button">
+                    Thêm vào giỏ hàng
+                  </Button>
+                </div>
+              ) : (
+                <div style={{paddingLeft: "10rem", paddingTop: "3rem"}}>
+                <Text style={{ fontSize: "Large",fontWeight: "Bold", color: "red" }}>Sản phẩm hết hàng</Text>
+                </div>
+              )}
 
               <div className="divider-wrapper">
                 <Divider />
