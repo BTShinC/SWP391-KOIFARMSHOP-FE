@@ -37,7 +37,7 @@ function ConsignmentTracking() {
   const [refreshKey, setRefreshKey] = useState(0); // State để lưu key và cập nhật khi có thay đổi
   const [loading, setLoading] = useState(true);
   const [isCombo, setIsCombo] = useState(false);
-  const [selectedCareDetail, setSelectedCareDetail] = useState(null); // Dữ liệu để hiển thị modal
+  const [selectedCareDetail, setSelectedCareDetail] = useState([]); // Dữ liệu để hiển thị modal
   const [isModalVisible, setIsModalVisible] = useState(false); // Trạng thái của modal
   const user = useSelector((state) => state.user);
 
@@ -632,8 +632,9 @@ function ConsignmentTracking() {
     let careDetailRes = await fetchAllCareDetail(record.consignmentID);
     if (careDetailRes) {
       setSelectedCareDetail(careDetailRes.data);
+    } else {
+      setSelectedCareDetail([]);
     }
-    setSelectedCareDetail([]);
     setIsModalVisible(true); // Hiển thị modal
   };
 
@@ -641,7 +642,7 @@ function ConsignmentTracking() {
     setIsModalVisible(false); // Đóng modal
     setSelectedCareDetail(null); // Reset dữ liệu
   };
-
+  console.log(selectedCareDetail);
   return (
     <div className="consignment-tracking-page-wrapper">
       <div className="consignment-tracking-page">
@@ -729,9 +730,23 @@ function ConsignmentTracking() {
             <Collapse accordion>
               {selectedCareDetail.map((detail, index) => (
                 <Panel header={`Cập nhật ${index + 1}`} key={index}>
-                  <p>Ngày cập nhật: {detail.updateDate}</p>
-                  <p>Tình trạng: {detail.status}</p>
-                  <p>Ghi chú: {detail.notes}</p>
+                  <p>
+                    Ngày cập nhật:{" "}
+                    {new Date(detail.updateDate).toLocaleDateString()}
+                  </p>
+
+                  <p>Tình trạng: {detail.description}</p>
+                  {detail.images && (
+                    <img
+                      src={detail.images}
+                      alt={`Hình ảnh cập nhật ${index + 1}`}
+                      style={{
+                        width: "100%",
+                        maxWidth: "200px",
+                        height: "auto",
+                      }}
+                    />
+                  )}
                 </Panel>
               ))}
             </Collapse>

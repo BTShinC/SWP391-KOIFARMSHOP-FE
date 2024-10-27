@@ -274,7 +274,7 @@ const createCareDetail = async (data) => {
 
 const fetchAllCareDetail = async (consignmentID) => {
   try {
-    const response = await api.post(`/care-details/consignment/${consignmentID}` );
+    const response = await api.get(`/care-details/consignment/${consignmentID}` );
 
     console.log("Phản hồi từ API:", response.data);
     return response;
