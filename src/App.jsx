@@ -40,7 +40,9 @@ import VnpayResponsePage from "./components/vnpay";
 import CheckoutPage from "./pages/checkout";
 import OrderSuccess from "./pages/orderSuccess";
 import ConsignmentSuccess from "./pages/consignmentSuccess";
+import OwnTransaction from "./pages/ownTransaction";
 import DashboardPage from "./pages/admin/dashboard";
+
 
 
 function App() {
@@ -184,7 +186,11 @@ function App() {
         {
           path: "/consignmentSuccess",
           element: <ConsignmentSuccess />,
-        }
+        },
+        {
+          path: "/ownTransaction", 
+          element: <OwnTransaction />,
+        }      
       ],
     },
     {
