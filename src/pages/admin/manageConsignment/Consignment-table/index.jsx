@@ -227,7 +227,7 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
                   >
                     Xem chi tiết
                   </Button>
-                  {consignment.consignmentType === "chăm sóc" &&
+                  {consignment.consignmentType === "Ký gửi chăm sóc" &&
                     consignment.status === "Đang chăm sóc" && (
                       <Button
                         onClick={() => handleOpenUpdateModal(consignment)}
@@ -236,9 +236,9 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
                         Cập nhật tình hình
                       </Button>
                     )}
-                  {(consignment.consignmentType === "chăm sóc" &&
+                  {(consignment.consignmentType === "Ký gửi chăm sóc" &&
                     consignment.status !== "Hoàn tất") ||
-                  (consignment.consignmentType !== "chăm sóc" &&
+                  (consignment.consignmentType !== "Ký gửi chăm sóc" &&
                     consignment.status !== "Đã hoàn tiền" && consignment.status !== "Đã hủy") ? (
                     <ChangeStatusConsignment
                       data={consignment}

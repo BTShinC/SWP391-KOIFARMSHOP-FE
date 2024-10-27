@@ -115,7 +115,7 @@ function PaymentPage() {
           // Tạo transaction
           const transactionData = {
             accountID: user.accountID,
-            price: paymentData.price,
+            price: -paymentData.price,
             date: new Date(),
             description: `Phí đơn ${consignmentID}`, // Sử dụng consignmentID từ res1
           };

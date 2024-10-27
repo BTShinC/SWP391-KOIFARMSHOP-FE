@@ -139,7 +139,7 @@ const handlePayment = async () => {
       // Tạo transaction
       const transactionData = {
         accountID: user.accountID,
-        price: fee,
+        price: -fee,
         date: new Date(),
         description: `Phí đơn ${consignmentRes.data.consignmentID}`,
       };

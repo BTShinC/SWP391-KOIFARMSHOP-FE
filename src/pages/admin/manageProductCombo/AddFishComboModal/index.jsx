@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Modal, Upload } from "antd";
+import { message, Modal, Upload } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import PropTypes from "prop-types";
 import { storage } from "/src/firebase.js";
@@ -100,12 +100,13 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
       let res = await AddFishCombo(formValue);
       if (res) {
         onChange();
+        message.success("Thêm lô thành công")
         console.log("Thành công");
+        setFormValue(initFormValue)
       }
     } catch (error) {
       console.log(error);
     }
-
     onClose(); // Đóng modal sau khi cập nhật
   };
 
