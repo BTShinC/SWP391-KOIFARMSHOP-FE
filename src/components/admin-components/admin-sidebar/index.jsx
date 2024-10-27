@@ -85,6 +85,14 @@ function AdminSideBar() {
           <span>Quản lý giao dịch</span>
         </div>
         <div
+          className={`sidebar__item ${location.pathname === "/manageContact" ? "active" : ""
+            }`}
+          onClick={() => handleNavigation("/manageContact")}
+        >
+          <span className="sidebar__icon">⌘</span>
+          <span>Quản lý câu hỏi</span>
+        </div>
+        <div
           className={`sidebar__item ${location.pathname === "/reports" ? "active" : ""
             }`}
           onClick={() => handleNavigation("/dashboard")}

@@ -9,6 +9,7 @@ import api from "../../config/api";
 import { withdrawMoney } from "../../service/userService";
 import { Button, Form, Input, Modal } from "antd";
 import CurrencyInput from "../../components/CurrencyInput/CurrencyInput";
+import { Description } from "@mui/icons-material";
 
 function WalletPage() {
   const [amount, setAmount] = useState("");
@@ -30,21 +31,53 @@ function WalletPage() {
   };
 
   // Function to fetch transaction history
-  const fetchTransactionHistory = async () => {
-    if (!user || !user.accountID) {
-      console.error("User or account information is missing");
-      return;
-    }
+const fetchTransactionHistory = async () => {
+  if (!user || !user.accountID) {
+    console.error("User or account information is missing");
+    return;
+  }
 
-    const apiUrl = `/transactions/account/${user.accountID}`; // Use relative path with api instance
-    try {
-      const response = await api.get(apiUrl, {});
-      setTransactions(response.data); // Assuming response.data contains the transaction history
-    } catch (error) {
-      console.error("Error fetching transaction history:", error);
-      toast.error("Failed to load transaction history.");
-    }
-  };
+  try {
+    // Fetch regular transactions (nạp tiền)
+    const transactionsResponse = await api.get(
+      `/transactions/account/${user.accountID}`
+    );
+
+    // Fetch withdrawal history (rút tiền)
+    const withdrawalsResponse = await api.get(
+      `/AccountWithdrawal/account/${user.accountID}`
+    );
+
+    // Combine and sort all transactions
+    const allTransactions = [
+      // Chỉ lấy các giao dịch nạp tiền
+      ...transactionsResponse.data.map(transaction => ({
+        ...transaction,
+        type: 'deposit',
+        description: `Nạp tiền vào ví: ${transaction.price.toLocaleString()} VND`
+      })),
+      // Lấy các giao dịch rút tiền
+      ...withdrawalsResponse.data.map((withdrawal) => ({
+        ...withdrawal,
+        transactionID: withdrawal.accountWithdrawalId,
+        price: -withdrawal.pricesend, // Use negative value for withdrawals
+        date: withdrawal.date,
+        type: 'withdraw',
+        description: `Rút tiền: ${withdrawal.pricesend.toLocaleString()} VND - ${withdrawal.bank_name}`,
+      })),
+    ];
+
+    // Sort combined transactions by date, most recent first
+    const sortedTransactions = allTransactions.sort(
+      (a, b) => new Date(b.date) - new Date(a.date)
+    );
+
+    setTransactions(sortedTransactions);
+  } catch (error) {
+    console.error("Error fetching transaction history:", error);
+    toast.error("Failed to load transaction history.");
+  }
+};
 
   // Fetch account balance from API when the component mounts
   useEffect(() => {
@@ -104,27 +137,36 @@ function WalletPage() {
     const currentDate = new Date().toISOString();
 
     try {
+      // Tạo đối tượng transactionData
+      const transactionData = {
+        accountID: user.accountID,
+        price: totalAmount,
+        date: new Date(),
+        description: `Nạp tiền vào ví: ${totalAmount.toLocaleString()} VND`,
+      };
       console.log("Data to send:", {
         accountID: accountId,
         price: totalAmount,
         date: currentDate,
       });
 
-      const response = await api.post(
-        "/transactions/create",
-        {
-          // Use the api instance
-          accountID: accountId,
-          price: totalAmount,
-          date: new Date().toISOString(), // Add the current date
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+
+      // const response = await api.post(
+      //   "/transactions/create",
+      //   {
+      //     // Use the api instance
+      //     accountID: accountId,
+      //     price: totalAmount,
+      //     date: new Date().toISOString(), // Add the current date
+      //   },
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${token}`,
+      //       "Content-Type": "application/json",
+      //     },
+      //   }
+      // );
+      const response = await api.post("/transactions/create", transactionData);
 
       // Redirect to VNPAY link
       const vnpayLink = response.data; // Assuming response.data contains the VNPAY link
@@ -162,13 +204,24 @@ function WalletPage() {
 
   const handleWithdrawal = async (values) => {
     try {
+      const withdrawalAmount = parseFloat(values.amount);
+
+      if (withdrawalAmount <= 0 || withdrawalAmount > accountBalance) {
+        toast.error("Số tiền rút không hợp lệ hoặc vượt quá số dư");
+        return;
+      }
+      const description = `Rút tiền: ${withdrawalAmount.toLocaleString()} VND - ${
+        values.bankName
+      }`;
+
       const response = await withdrawMoney({
-        amount: parseFloat(values.amount),
+        amount: withdrawalAmount,
         accountID: user.accountID,
         accountNumber: values.accountNumber,
         accountHolderName: values.accountHolderName,
         bankBranch: values.bankBranch,
         bankName: values.bankName,
+        description: description,
       });
       console.log(response);
 
@@ -257,13 +310,13 @@ function WalletPage() {
             onFinish={handleWithdrawal}
             layout="vertical"
           >
-             <Form.Item
-            name="amount"
-            label="Số tiền rút"
-            rules={[{ required: true, message: 'Vui lòng nhập số tiền rút' }]}
-          >
-            <CurrencyInput />
-          </Form.Item>
+            <Form.Item
+              name="amount"
+              label="Số tiền rút"
+              rules={[{ required: true, message: "Vui lòng nhập số tiền rút" }]}
+            >
+              <CurrencyInput />
+            </Form.Item>
             <Form.Item
               name="accountNumber"
               label="Số tài khoản"
@@ -312,29 +365,31 @@ function WalletPage() {
         </Modal>
 
         {/* Transaction History Table */}
-        <h2>Lịch sử giao dịch</h2>
+        <h2>Lịch sử của Ví tiền</h2>
         <table className="transaction-history-table">
           <thead>
             <tr>
               <th>Mã giao dịch</th>
               <th>Số tiền</th>
               <th>Ngày giao dịch</th>
+              <th>Nội dung</th>
             </tr>
           </thead>
           <tbody>
-            {sortedTransactions.map((transaction) => (
-              <tr key={transaction.transactionID}>
-                {" "}
-                {/* Use transactionID as the key */}
-                <td>{transaction.transactionID}</td>{" "}
-                {/* Display transactionID */}
-                <td>{transaction.price} VND</td> {/* Display price */}
+            {transactions.map((transaction) => (
+              <tr
+                key={
+                  transaction.transactionID || transaction.accountWithdrawalId
+                }
+              >
                 <td>
-                  {transaction.date
-                    ? new Date(transaction.date).toLocaleDateString()
-                    : "Chưa xác định"}
-                </td>{" "}
-                {/* Display date or a placeholder */}
+                  {transaction.transactionID || transaction.accountWithdrawalId}
+                </td>
+                <td className={transaction.price < 0 ? "negative" : "positive"}>
+                  {transaction.price.toLocaleString()} VND
+                </td>
+                <td>{new Date(transaction.date).toLocaleDateString()}</td>
+                <td>{transaction.description}</td>
               </tr>
             ))}
           </tbody>
