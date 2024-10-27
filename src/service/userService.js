@@ -183,16 +183,6 @@ const fetchAllCarePackages = async () => {
     throw error;
   }
 };
-const fetchCarePackageByID = async (carePackageID) => {
-  try {
-    const response = await api.get(`carePackages/${carePackageID}`);
-    console.log(response.data);
-    return response;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
 const createConsignment = async (data) => {
   try {
     const response = await api.post(`consignments`, data);
@@ -457,8 +447,7 @@ export {
   fetchOrderDetails,
   updateOrderStatus,
   refundConsignmentTotal,
-  createTransaction
-  fetchCarePackageByID,
+  createTransaction,
   withdrawMoney,
   fetchAllWithdrawals,
   updateWithdrawalStatus,
