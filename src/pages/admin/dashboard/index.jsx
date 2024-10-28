@@ -57,7 +57,8 @@ const DashboardPage = () => {
         );
         const accountAllResponse = await api.get("report/accountall");
         const topBreedsResponse = await api.get("report/top5-breeds");
-        const orderResponse = await api.get("/orders");
+        const orderResponse = await api.get("/product/getall"); //khi nao api order song thi chinh lai
+                                                                //nhet cai api order chet vao la bi hu ca page
         const { startDate, endDate } = getCurrentMonthDates();
         const revenueResponse = await api.get("revenue/calculate", {
           params: { startDate, endDate },
