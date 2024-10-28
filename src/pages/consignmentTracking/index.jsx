@@ -9,6 +9,7 @@ import {
   Tabs,
   Modal,
   Button,
+  Input,
 } from "antd";
 
 import { addDays, format } from "date-fns";
@@ -176,30 +177,48 @@ function ConsignmentTracking() {
       key: "action",
       render: (text, record) => {
         return (
-          <>
+          <div className="btn-container">
             {/* Nút "Xem tình hình cá" luôn hiển thị */}
-            <button
-              className="btn-edit-consignment"
-              onClick={() => handleViewCareFish(record)}
-            >
-              Xem tình hình cá
-            </button>
-
-            {/* Nút "Gia hạn" chỉ hiển thị khi trạng thái là "Hoàn tất" */}
-            {record.status === "Hoàn tất" && (
+            {record.status != "Chờ xác nhận" && (
               <button
                 className="btn-edit-consignment"
-                onClick={() =>
-                  handleExtendConsignment(
-                    record,
-                    record.productID,
-                    record.productComboID
-                  )
-                }
+                onClick={() => handleViewCareFish(record)}
               >
-                Gia hạn
+                Xem tình hình cá
               </button>
             )}
+            {/* Nút "Gia hạn" chỉ hiển thị khi trạng thái là "Hoàn tất" */}
+            {(() => {
+              const currentDate = new Date(); // Ngày hiện tại
+              const expirationDate = new Date(record.dateExpiration); // Ngày đáo hạn
+
+              // Tính ngày trước 3 ngày so với ngày đáo hạn
+              const threeDaysBeforeExpiration = new Date(expirationDate);
+              threeDaysBeforeExpiration.setDate(expirationDate.getDate() - 3);
+
+              // So sánh ngày hiện tại với ngày trước 3 ngày
+              if (
+                currentDate >= threeDaysBeforeExpiration &&
+                currentDate < expirationDate
+              ) {
+                return (
+                  <button
+                    className="btn-edit-consignment"
+                    onClick={() =>
+                      handleExtendConsignment(
+                        record,
+                        record.productID,
+                        record.productComboID
+                      )
+                    }
+                  >
+                    Gia hạn
+                  </button>
+                );
+              }
+
+              return null;
+            })()}
 
             {/* Nút "Rút cá" chỉ hiển thị khi trạng thái khác "Chờ xác nhận" và "Hoàn tất" */}
             {record.status !== "Chờ xác nhận" &&
@@ -217,7 +236,7 @@ function ConsignmentTracking() {
                   Rút cá
                 </button>
               )}
-          </>
+          </div>
         );
       },
     },
@@ -252,6 +271,16 @@ function ConsignmentTracking() {
         `${new Intl.NumberFormat("vi-VN").format(salePrice)}VNĐ`,
     },
     {
+      title: "Ngày hết hạn",
+      dataIndex: "dateExpiration",
+      key: "dateExpiration",
+      render: (dateString) => {
+        if (!dateString) return "N/A"; // Kiểm tra nếu giá trị null hoặc undefined
+        const date = new Date(dateString);
+        return date.toLocaleDateString();
+      },
+    },
+    {
       title: "Ngày bán",
       dataIndex: "saleDate",
       key: "saleDate",
@@ -278,9 +307,17 @@ function ConsignmentTracking() {
       render: (text, record) => {
         const consignmentDate = new Date(record.consignmentDate);
         const currentDate = new Date();
+        const expirationDate = new Date(record.dateExpiration);
+
         const daysDifference = Math.floor(
           (currentDate - consignmentDate) / (1000 * 60 * 60 * 24)
         );
+
+        // Tính ngày trước 3 ngày so với ngày đáo hạn
+        const threeDaysBeforeExpiration = new Date(expirationDate);
+        threeDaysBeforeExpiration.setDate(expirationDate.getDate() - 3);
+
+        // Hiển thị nút "Rút cá" nếu trạng thái là "Chờ xác nhận" và đã qua 3 ngày
         if (record.status === "Chờ xác nhận" && daysDifference >= 3) {
           return (
             <button
@@ -296,11 +333,27 @@ function ConsignmentTracking() {
               Rút cá
             </button>
           );
-        } else if (record.status === "Chờ xác nhận" && daysDifference < 3) {
-          // If less than 3 days, disable the button and show a warning
+        }
+        // Hiển thị thông báo chờ nếu dưới 3 ngày để rút cá
+        else if (record.status === "Chờ xác nhận" && daysDifference < 3) {
           return (
             <button className="btn-edit-consignment" disabled>
               Chờ thêm {3 - daysDifference} ngày để rút
+            </button>
+          );
+        }
+        // Nếu còn 3 ngày trước ngày đáo hạn thì hiển thị nút "Gia hạn"
+        else if (
+          currentDate >= threeDaysBeforeExpiration &&
+          currentDate < expirationDate &&
+          record.status !== "Hoàn tất"
+        ) {
+          return (
+            <button
+              className="btn-edit-consignment"
+              onClick={() => info(record)}
+            >
+              Gia hạn
             </button>
           );
         }
@@ -312,39 +365,44 @@ function ConsignmentTracking() {
 
   const handleOk = async (record, fee) => {
     try {
-      console.log(
-        "Gia hạn consignment:",
-        record,
-        record.productComboID,
-        record.productID
-      );
+      console.log("Gia hạn consignment:", record);
 
       // Lấy ngày hiện tại và ngày hết hạn
-      const consignmentDate = record.dateExpiration;
-      const dateExpiration = addDays(consignmentDate, record.duration);
-
-      // **Check account balance before proceeding**
+      const consignmentDate = new Date(record.dateExpiration).toISOString();
+      const dateExpiration = addDays(
+        consignmentDate,
+        record.duration
+      ).toISOString();
+      let reason = null;
+      let status = null;
       if (user.accountBalance < fee) {
         message.error("Số dư tài khoản không đủ để gia hạn.");
-        return; // Stop execution if balance is insufficient
+        return;
       }
 
+      if (record.consignmentType === "Ký gửi chăm sóc") {
+        reason = "Cá của khách iu đang được tiếp tục được chăm sóc";
+        status = "Đang chăm sóc";
+      }else{
+        reason = "Cá đang được đăng để bán. Vui lòng kiểm tra thường xuyên để cập nhật tình hình cá";
+        status = "Đang tiến hành";
+      }
       // Cập nhật thông tin record nếu đủ số dư
       const updateRecord = {
         ...record,
-        consignmentDate: format(consignmentDate, "dd-MM-yyyy"),
-        dateReceived: format(consignmentDate, "dd-MM-yyyy"),
-        dateExpiration: format(dateExpiration, "dd-MM-yyyy"),
-        status: "Đang chăm sóc",
+        consignmentDate: consignmentDate,
+        dateReceived: format(new Date(), "yyyy-MM-dd"),
+        dateExpiration: dateExpiration,
+        status: status,
         total: record.total + fee,
-        reason: "Cá của khách iu đang được tiếp tục được chăm sóc",
+        reason: reason,
       };
       console.log("updateRecord ===>", updateRecord);
 
       // Gọi API song song: cập nhật consignment và cập nhật số dư người dùng
       const [extendConsignmentRes, updateUserRes] = await Promise.all([
-        updateConsignmentByID(updateRecord), // Update consignment
-        editUser({ ...user, accountBalance: user.accountBalance - fee }), // Deduct fee from user's balance
+        updateConsignmentByID(updateRecord),
+        editUser({ ...user, accountBalance: user.accountBalance - fee }),
       ]);
 
       if (extendConsignmentRes && updateUserRes) {
@@ -372,15 +430,16 @@ function ConsignmentTracking() {
     }
   };
 
-  const handleExtendConsignment = async (record) => {
+  const handleExtendConsignment = async (record, days) => {
     console.log(record);
 
     let carePackageID = null;
+    let carePackage = null;
     let fee = 0;
     let selectedProduct = null;
+
     if (record.productID || record.productComboID) {
       try {
-        // Fetch product and product combo in parallel
         const [productRes, productComboRes] = await Promise.all([
           record.productID ? fetchProductById(record.productID) : null,
           record.productComboID
@@ -388,37 +447,48 @@ function ConsignmentTracking() {
             : null,
         ]);
 
-        // Determine whether to use the product or combo and set isCombo accordingly
         if (productRes) {
           selectedProduct = productRes;
           carePackageID = productRes.carePackageID;
-          setIsCombo(false); // It's a single product, not a combo
+          setIsCombo(false);
         } else if (productComboRes) {
           selectedProduct = productComboRes;
           carePackageID = productComboRes.carePackageID;
-          setIsCombo(true); // It's a combo
+          setIsCombo(true);
         }
 
-        // Fetch care package details if carePackageID is found
         if (carePackageID) {
           const carePackageRes = await fetchCarePackageByID(carePackageID);
           if (carePackageRes) {
-            fee = carePackageRes?.data?.price || 0; // Get fee from care package
+            fee = carePackageRes?.data?.price || 0;
+            carePackage = carePackageRes?.data;
           }
         }
+        if (record.consignmentType === "Ký gửi để bán" && days) {
+          let finalData = {
+            ...productRes,
+            duration: days,
+          };
+          fee = countFee(finalData);
+        }
 
-        // Show confirmation modal with fee and product/combo information
         Modal.confirm({
           title: "Bạn có chắc chắn muốn gia hạn?",
           content: (
             <div>
+              <p>Tên sản phẩm: {carePackage?.packageName}</p>
+              {record.consignmentType === "Ký gửi chăm sóc" && (
+                <p>Loại: {isCombo ? "Chăm sóc lô" : "Chăm sóc cá thể"}</p>
+              )}
+              {record.consignmentType === "Ký gửi để bán" && (
+                <p>Loại: {isCombo ? "Ký gửi bán lô" : "Ký gửi bán cá thể"}</p>
+              )}
               <p>
-                Tên sản phẩm:
-                {selectedProduct.name || selectedProduct.comboName}
+                Tổng phí gia hạn:{" "}
+                <strong>
+                  {new Intl.NumberFormat("vi-VN").format(fee)} VNĐ
+                </strong>
               </p>
-              <p>Loại: {isCombo ? "Combo" : "Sản phẩm đơn"}</p>
-              {/* Display combo or product */}
-              <p>Tổng phí gia hạn: {fee} VND</p>
               <p>Bạn có chắc chắn muốn tiếp tục không?</p>
             </div>
           ),
@@ -642,7 +712,65 @@ function ConsignmentTracking() {
     setIsModalVisible(false); // Đóng modal
     setSelectedCareDetail(null); // Reset dữ liệu
   };
-  console.log(selectedCareDetail);
+
+  const countFee = (finalData) => {
+    let fee = 0;
+
+    if (finalData?.quantity) {
+      if (finalData?.quantity <= 10 && finalData?.size <= 40) {
+        fee = finalData?.duration * 20000;
+      } else if (finalData?.quantity <= 20 && finalData?.size <= 40) {
+        fee = finalData?.duration * 40000;
+      } else if (finalData?.quantity <= 10 && finalData?.size > 40) {
+        fee = finalData?.duration * 60000;
+      } else {
+        fee = finalData?.duration * 90000;
+      }
+    } else {
+      if (finalData.size <= 40) {
+        fee =
+          finalData?.duration <= 60
+            ? 50000 * finalData?.duration
+            : 25000 * finalData?.duration;
+      } else {
+        fee =
+          finalData?.duration <= 60
+            ? 90000 * finalData?.duration
+            : 70000 * finalData?.duration;
+      }
+    }
+
+    return fee;
+  };
+
+  const info = (record) => {
+    let days = 0; // Sử dụng biến cục bộ
+
+    Modal.info({
+      title: "Gia hạn dịch vụ ký gửi bán",
+      centered: true, // Căn giữa Modal
+      content: (
+        <div>
+          <p>Vui lòng nhập số ngày cần gia hạn:</p>
+          <Input
+            type="number"
+            min={1}
+            placeholder="Nhập số ngày"
+            defaultValue={days}
+            onChange={(e) => {
+              days = e.target.value;
+              console.log("Ngày cần gia hạn: ", days);
+            }}
+          />
+        </div>
+      ),
+      onOk() {
+        console.log("Số ngày cần gia hạn khi nhấn OK: ", days);
+        handleExtendConsignment(record, days);
+      },
+    });
+  };
+
   return (
     <div className="consignment-tracking-page-wrapper">
       <div className="consignment-tracking-page">
@@ -731,7 +859,7 @@ function ConsignmentTracking() {
               {selectedCareDetail.map((detail, index) => (
                 <Panel header={`Cập nhật ${index + 1}`} key={index}>
                   <p>
-                    Ngày cập nhật:{" "}
+                    Ngày cập nhật:
                     {new Date(detail.updateDate).toLocaleDateString()}
                   </p>
 
@@ -754,6 +882,7 @@ function ConsignmentTracking() {
             <p>Không có chi tiết chăm sóc nào được tìm thấy.</p>
           )}
         </Modal>
+        {/* Modal để người dùng nhập ngày muốn gia hạn */}
       </div>
     </div>
   );
