@@ -11,7 +11,7 @@ import {
   refundConsignmentTotal,
   createTransaction,
 } from "../../service/userService";
-// import { addDays } from "date-fns";
+import { addDays, format } from "date-fns";
 import "./index.scss";
 
 ChangeStatusConsignment.propTypes = {
@@ -64,11 +64,6 @@ function ChangeStatusConsignment({
     }
   };
 
-  // const formatDateWithTimezone = (date) => {
-  //   const isoString = date.toISOString(); // ISO format with "Z" at the end
-  //   return isoString.replace("Z", "+00:00"); // Replace "Z" with "+00:00"
-  // };
-
   const handleInProgress = async () => {
     try {
       let reasonForm;
@@ -86,27 +81,18 @@ function ChangeStatusConsignment({
           : "Đang tiến hành";
 
       // Tạo đối tượng Date
-      // const dateReceived = new Date(); // Ngày hiện tại
-      // const dateExpiration = addDays(dateReceived, formValue.duration); // Tính toán ngày hết hạn
+      const dateReceived = new Date(); // Ngày hiện tại
+      const dateExpiration = addDays(dateReceived, formValue.duration); 
 
-      // // Chuyển đổi thành định dạng "2024-10-27T14:46:43.343+00:00"
-      // const dateReceivedFormatted = formatDateWithTimezone(dateReceived);
-      // const dateExpirationFormatted = formatDateWithTimezone(dateExpiration);
-
-      // Kiểm tra dữ liệu trước khi gửi lên server
-      if (!formValue.consignmentID || !formValue.duration) {
-        message.error(
-          "Thiếu dữ liệu quan trọng như consignmentID hoặc duration."
-        );
-        return;
-      }
+      const dateReceivedFormatted =  format(dateReceived, 'yyyy-MM-dd');
+      const dateExpirationFormatted =  format(dateExpiration, 'yyyy-MM-dd')
 
       // Chuẩn bị dữ liệu cập nhật
       const updatedFormValue = {
         ...formValue,
         reason: reasonForm,
-        // dateReceived: dateReceivedFormatted, // Dạng "2024-10-27T14:46:43.343+00:00"
-        // dateExpiration: dateExpirationFormatted, // Dạng "2024-10-27T14:46:43.343+00:00"
+        dateReceived: dateReceivedFormatted,
+        dateExpiration: dateExpirationFormatted,
         status: updatedConsignmentStatus,
       };
 
@@ -273,7 +259,7 @@ function ChangeStatusConsignment({
     try {
       // Gọi API để cập nhật consignment
       const consignmentRes = await updateConsignmentByID(updatedFormValue);
-      if (!consignmentRes || consignmentRes.status !== 200) {
+      if (!consignmentRes) {
         message.error("Cập nhật trạng thái đơn ký gửi thất bại.");
         return;
       }
@@ -311,7 +297,7 @@ function ChangeStatusConsignment({
         updatedProductStatus
       );
 
-      if (!productRes || productRes.status !== 200) {
+      if (!productRes) {
         message.error("Cập nhật trạng thái sản phẩm thất bại.");
       }
 
