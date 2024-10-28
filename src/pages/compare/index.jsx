@@ -22,8 +22,8 @@ function ComparePage() {
     // Fetch fish details for P001 and P002 when the page is first accessed
     const fetchInitialFishes = async () => {
       try {
-        const fish1Response = await api.get(`/product/P001`);
-        const fish2Response = await api.get(`/product/P002`);
+        const fish1Response = await api.get(`/product/get/P001`);
+        const fish2Response = await api.get(`/product/get/P002`);
         setSelectedFishes([fish1Response.data, fish2Response.data]);
       } catch (error) {
         console.error("Error fetching initial fish details:", error);
@@ -74,7 +74,7 @@ return (
                             <p><strong>Đặc điểm tính cách:</strong> {selectedFishes[0].personalityTrait}</p>
                             <p><strong>Nguồn gốc:</strong> {selectedFishes[0].origin}</p>
                             <p><strong>Mô tả:</strong> {selectedFishes[0].description}</p>
-                            <p><strong>Giá:</strong> {selectedFishes[0].price} VND</p>
+                            <p><strong>Giá:</strong> {formatCurrency(selectedFishes[0].price)} VND</p>
                             <div className="comparepage-button-wrapper">
                                 <Button className="comparepage-button" onClick={() => removeFish(0)}><DeleteOutlined />Xóa</Button>
                                 <Link to={`/singleproduct/${selectedFishes[0].productID}`}>
@@ -99,7 +99,7 @@ return (
                             <p><strong>Đặc điểm tính cách:</strong> {selectedFishes[1].personalityTrait}</p>
                             <p><strong>Nguồn gốc:</strong> {selectedFishes[1].origin}</p>
                             <p><strong>Mô tả:</strong> {selectedFishes[1].description}</p>
-                            <p><strong>Giá:</strong> {selectedFishes[1].price} VND</p>
+                            <p><strong>Giá:</strong> {formatCurrency(selectedFishes[1].price)} VND</p>
                             <div className="comparepage-button-wrapper">
                                 <Button className="comparepage-button" onClick={() => removeFish(1)}><DeleteOutlined />Xóa</Button>
                                 <Link to={`/singleproduct/${selectedFishes[0].productID}`}>
