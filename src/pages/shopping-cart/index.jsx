@@ -121,7 +121,11 @@ function ShoppingCartPage() {
           <span style={{ color: "#B88E2F" }}>{subtotal.toLocaleString("vi-VN")} VNĐ</span>
         </div>
         <Link to="/checkout">
-          <Button style={{ backgroundColor: "#F9F1E7" }} className="checkout-button">
+        <Button
+            style={{ backgroundColor: "#F9F1E7" }}
+            className="checkout-button"
+            disabled={cartItems.length === 0} // Disable button if cart is empty
+          >
             Thanh Toán
           </Button>
         </Link>

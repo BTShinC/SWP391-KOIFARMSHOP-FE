@@ -40,8 +40,11 @@ import VnpayResponsePage from "./components/vnpay";
 import CheckoutPage from "./pages/checkout";
 import OrderSuccess from "./pages/orderSuccess";
 import ConsignmentSuccess from "./pages/consignmentSuccess";
+
+import ManageContact from "./pages/admin/manageContact";
 import OwnTransaction from "./pages/ownTransaction";
 import DashboardPage from "./pages/admin/dashboard";
+
 
 
 
@@ -221,6 +224,11 @@ function App() {
       path: "/manageTransaction",
       element: <ManageTransactions />,
     },
+    {
+      path: "/manageContact",
+      element: <ManageContact />,
+    },
+
     {
       path: "/blog/:id",
       element: <BlogDetail />,

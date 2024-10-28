@@ -9,6 +9,7 @@ import api from "../../config/api";
 import { withdrawMoney } from "../../service/userService";
 import { Button, Form, Input, Modal } from "antd";
 import CurrencyInput from "../../components/CurrencyInput/CurrencyInput";
+import { Description } from "@mui/icons-material";
 
 function WalletPage() {
   const [amount, setAmount] = useState("");
@@ -148,6 +149,7 @@ const fetchTransactionHistory = async () => {
         price: totalAmount,
         date: currentDate,
       });
+
 
       // const response = await api.post(
       //   "/transactions/create",
