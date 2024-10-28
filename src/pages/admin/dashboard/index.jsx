@@ -56,7 +56,8 @@ const DashboardPage = () => {
         const accountCustomerResponse = await api.get("/report/accountcustomer");
         const accountAllResponse = await api.get("report/accountall");
         const topBreedsResponse = await api.get("report/top5-breeds");
-        const orderResponse = await api.get("/orders");
+        const orderResponse = await api.get("/product/getall"); //khi nao api order song thi chinh lai
+                                                                //nhet cai api order chet vao la bi hu ca page
         const { startDate, endDate } = getCurrentMonthDates();
         const revenueResponse = await api.get("revenue/calculate", {
           params: { startDate, endDate },
@@ -87,7 +88,7 @@ const DashboardPage = () => {
   }, []);
 
   const productConsignmentTypeData = {
-    labels: ["Trang trại đăng bán", "Ký gửi để bán", "chăm sóc"],
+    labels: ["Trang trại đăng bán", "Ký gửi để bán", "Ký gửi chăm sóc"],
     datasets: [
       {
         label: "Sản phẩm",
@@ -99,7 +100,7 @@ const DashboardPage = () => {
             (product) => product.consignmentType === "Ký gửi để bán"
           ).length,
           productData.filter(
-            (product) => product.consignmentType === "chăm sóc"
+            (product) => product.consignmentType === "Ký gửi chăm sóc"
           ).length,
         ],
         backgroundColor: ["#36A2EB", "#FFCE56", "#FF6384"],
@@ -108,7 +109,7 @@ const DashboardPage = () => {
   };
 
   const productComboConsignmentTypeData = {
-    labels: ["Trang trại đăng bán", "Ký gửi để bán", "chăm sóc"],
+    labels: ["Trang trại đăng bán", "Ký gửi để bán", "Ký gửi chăm sóc"],
     datasets: [
       {
         label: "Combo sản phẩm",
@@ -120,7 +121,7 @@ const DashboardPage = () => {
             (combo) => combo.consignmentType === "Ký gửi để bán"
           ).length,
           productComboData.filter(
-            (combo) => combo.consignmentType === "chăm sóc"
+            (combo) => combo.consignmentType === "Ký gửi chăm sóc"
           ).length,
         ],
         backgroundColor: ["#36A2EB", "#FFCE56", "#FF6384"],
@@ -284,11 +285,11 @@ const DashboardPage = () => {
                             }
                           </p>
                           <p style={{ fontWeight: "normal" }}>
-                            <XFilled style={{ color: "#FF6384" }} /> chăm sóc:{" "}
+                            <XFilled style={{ color: "#FF6384" }} /> Ký gửi chăm sóc:{" "}
                             {
                               productData.filter(
                                 (product) =>
-                                  product.consignmentType === "chăm sóc"
+                                  product.consignmentType === "Ký gửi chăm sóc"
                               ).length
                             }
                           </p>
@@ -331,7 +332,7 @@ const DashboardPage = () => {
                             sóc:{" "}
                             {
                               productComboData.filter(
-                                (combo) => combo.consignmentType === "chăm sóc"
+                                (combo) => combo.consignmentType === "Ký gửi chăm sóc"
                               ).length
                             }
                           </p>
