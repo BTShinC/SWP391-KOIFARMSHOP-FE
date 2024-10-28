@@ -1,10 +1,17 @@
 .carousel {
     width: 80%;
     object-fit: cover;
+    height: 60vh;
+
+    .swipper{
+      width: 100%;
+      margin-top: 30px;
+    }
     .hover-card {
       position: relative;
       text-decoration: none;
       width: 10vw;
+      height: 25vh;
     
       .ant-card {
         background-color: white;

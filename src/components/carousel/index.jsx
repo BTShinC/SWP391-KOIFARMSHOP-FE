@@ -5,16 +5,19 @@ import "swiper/css/pagination";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import "./index.scss";
 import { Autoplay, Pagination } from "swiper/modules";
-import { Button, Card } from "antd";
+import { Button, Card, message } from "antd";
 import { Link } from "react-router-dom";
 
 import PropTypes from "prop-types";
-import { fetchAllProduct } from "../../service/userService";
+import { addToCartAPI, fetchAllProduct } from "../../service/userService";
+import { addToCart } from "../../pages/redux/features/createSlice";
+import { useSelector } from "react-redux";
 
 const { Meta } = Card;
 
 export default function Carousel({ slidesPerView = 4 }) {
   const [products, setProducts] = useState([]);
+  
 
 
   useEffect(() => {
@@ -22,8 +25,11 @@ export default function Carousel({ slidesPerView = 4 }) {
     const loadProducts = async () => {
       try {
         const response = await fetchAllProduct();
-        console.log(response.data);
-        setProducts(response.data); // Assuming response.data contains the product array
+        const filteredProducts = response.data.filter(
+          product => product.status === "Còn hàng" && product.consignmentType !== "chăm sóc"
+        );
+        console.log(filteredProducts);
+        setProducts(filteredProducts); // Assuming response.data contains the product array
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -31,6 +37,9 @@ export default function Carousel({ slidesPerView = 4 }) {
 
     loadProducts();
   }, []);
+
+
+  
 
   return (
     <>
@@ -44,7 +53,7 @@ export default function Carousel({ slidesPerView = 4 }) {
         modules={[Pagination, Autoplay]}
         className="carousel" 
       >
-        {products.map((product) => (
+        {products && products.map((product) =>  (
           <SwiperSlide key={product.productID} className="swipper">
             <HoverCard
               imgSrc={product.image}
@@ -60,6 +69,26 @@ export default function Carousel({ slidesPerView = 4 }) {
 }
 
 const HoverCard = ({ imgSrc, title, price, id}) => {
+  const account = useSelector((state) => state.user);
+
+  const handleAddToCart = async () => {
+    try {
+      if (!account) {
+        message.warning("Vui lòng đăng nhập để thêm vào giỏ hàng!");
+        return;
+      }
+
+      await addToCartAPI({
+        accountID: account.accountID,
+        productID: id,
+      });
+      
+      message.success("Đã thêm vào giỏ hàng!");
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      message.error("Không thể thêm vào giỏ hàng!");
+    }
+  };
   
   return (
     <Link to={`/singleproduct/${id}`} className="hover-card">
@@ -70,8 +99,8 @@ const HoverCard = ({ imgSrc, title, price, id}) => {
       >
         <Meta title={title} description={`${price} VND`} />
         <div className="hover-info">
-          <Button type="primary" icon={<ShoppingCartOutlined />}>
-            Add to Cart
+          <Button type="primary" icon={<ShoppingCartOutlined />} onClick={handleAddToCart}>
+            Thêm giỏ hàng
           </Button>
         </div>
       </Card>
