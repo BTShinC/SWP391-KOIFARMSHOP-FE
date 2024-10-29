@@ -295,7 +295,7 @@ const fetchAllCareDetail = async (consignmentID) => {
 
 const refundConsignmentSell = async (consignmentID) => {
   try {
-    const response = await api.post(`/refund/${consignmentID}`);
+    const response = await api.post(`refund/${consignmentID}`);
     return response;
   } catch (error) {
     console.error("Lỗi khi gọi API:", error);

@@ -1,5 +1,5 @@
-import './index.scss'
-import PricingTable from './PricingTable';
+import "./index.scss";
+import PricingTable from "./PricingTable";
 function AboutPage() {
   return (
     <div>
@@ -44,7 +44,9 @@ function AboutPage() {
           </p>
           <h2 className="subtitle">Quy định ký gửi</h2>
           <ul className="rules">
-            <li>Cá ký gửi phải có giấy chứng nhận nguồn gốc rõ ràng (cá thể).</li>
+            <li>
+              Cá ký gửi phải có giấy chứng nhận nguồn gốc rõ ràng (cá thể).
+            </li>
             <li>Cá Koi phải có tình trạng sức khỏe tốt trước khi ký gửi.</li>
             <li>Thời gian ký gửi tối thiểu là 15 ngày.</li>
             <li>
@@ -90,13 +92,13 @@ function AboutPage() {
                   KOIFISH để chăm sóc và đăng bán.
                 </li>
                 <li>
-                  <strong>Ký gửi chăm sóc:</strong> Đối với dịch vụ ký gửi
-                  chăm sóc, khách hàng có thể mang cá đến KOIFISH hoặc nếu bạn
-                  ký gửi chăm sóc online, đội ngũ nhân viên của chúng tôi sẽ đến
-                  trang trại của bạn để kiểm tra tình trạng sức khỏe của cá. Sau
-                  khi hoàn tất kiểm tra, cá của bạn sẽ được đưa về KOIFISH và
-                  chăm sóc theo các yêu cầu của bạn. KOIFISH cam kết sẽ chăm sóc
-                  cá của bạn theo những tiêu chuẩn cao nhất và thông báo thường
+                  <strong>Ký gửi chăm sóc:</strong> Đối với dịch vụ ký gửi chăm
+                  sóc, khách hàng có thể mang cá đến KOIFISH hoặc nếu bạn ký gửi
+                  chăm sóc online, đội ngũ nhân viên của chúng tôi sẽ đến trang
+                  trại của bạn để kiểm tra tình trạng sức khỏe của cá. Sau khi
+                  hoàn tất kiểm tra, cá của bạn sẽ được đưa về KOIFISH và chăm
+                  sóc theo các yêu cầu của bạn. KOIFISH cam kết sẽ chăm sóc cá
+                  của bạn theo những tiêu chuẩn cao nhất và thông báo thường
                   xuyên về tình trạng sức khỏe của cá trong suốt quá trình chăm
                   sóc..
                 </li>
@@ -108,13 +110,28 @@ function AboutPage() {
             </li>
             <li>Bước 5: Nhận cá lại sau khi hoàn tất thời gian ký gửi.</li>
           </ul>
-
+          <h2 className="subtitle">Lưu ý quan trọng</h2>
+          <div className="important-note">
+            <h3>Ký gửi bán</h3>
+            <p>
+              Bạn chỉ có thể rút đơn ký gửi bán nếu đơn của bạn vẫn chưa được
+              KOIFISH xem xét sau 3 ngày và sẽ không được rút cá trong quá trình
+              đã đăng lên bán . Tiền hoa hồng sẽ là 20% so với giá đã được phê
+              duyệt từ shop.
+            </p>
+            <h3>Ký gửi chăm sóc</h3>
+            <p>
+              Khi xác nhận rút cá trong quá trình đang chăm sóc, shop sẽ cần từ
+              1 đến 3 ngày để chuẩn bị và chi phí chăm sóc sẽ không được hoàn
+              lại.
+            </p>
+          </div>
           <p className="content">
             Với dịch vụ ký gửi tại Koifish, chúng tôi cam kết cá của bạn sẽ được
             chăm sóc kỹ lưỡng và tận tâm. Hãy liên hệ ngay để biết thêm chi tiết
             về dịch vụ.
           </p>
-          <PricingTable/>
+          <PricingTable />
         </div>
       </div>
     </div>

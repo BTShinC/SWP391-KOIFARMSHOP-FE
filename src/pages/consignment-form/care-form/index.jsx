@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+import { toast } from "react-toastify";
 
 CareForm.propTypes = {
   carePackage: PropTypes.object.isRequired,
@@ -105,6 +106,10 @@ function CareForm({ carePackage }) {
 
   // Xử lý submit form
   const onSubmit = async (data) => {
+    if (fileList.length < 3 && certFileList.length < 1) {
+      toast.error("Vui lòng upload đủ 3 hình ảnh và 1 chứng nhận");
+      return;
+    }
     const uploadedImages = await uploadFilesToFirebase(fileList);
     const uploadedCerts = await uploadFilesToFirebase(certFileList);
 
@@ -165,14 +170,14 @@ function CareForm({ carePackage }) {
   );
   const consignmentDate = format(new Date(), "yyyy-MM-dd");
   const getTodayAndThreeDaysLater = () => {
-    const today = format(new Date(), "dd/MM/yyyy"); // Ngày hôm nay
-    const threeDaysLater = format(addDays(new Date(), 3), "dd/MM/yyyy"); // 3 ngày sau
+    const today = format(new Date(), "dd/MM/yyyy"); 
+    const threeDaysLater = format(addDays(new Date(), 3), "dd/MM/yyyy"); 
     return { today, threeDaysLater };
   };
   const getTodayDatePlus30DaysAndThreeDaysLater = () => {
     const today = new Date();
-    const todayPlus30Days = format(addDays(today, 30), "dd/MM/yyyy"); // 30 ngày sau
-    const threeDaysAfter30Days = format(addDays(today, 33), "dd/MM/yyyy"); // 33 ngày sau (3 ngày sau 30 ngày)
+    const todayPlus30Days = format(addDays(today, 30), "dd/MM/yyyy"); 
+    const threeDaysAfter30Days = format(addDays(today, 33), "dd/MM/yyyy"); 
 
     return { todayPlus30Days, threeDaysAfter30Days };
   };
@@ -408,10 +413,7 @@ function CareForm({ carePackage }) {
               <TextField
                 label="Tổng chi phí"
                 fullWidth
-                value={new Intl.NumberFormat("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
-                }).format(carePackage?.price || 0)}
+                value={new Intl.NumberFormat("vi-VN").format(carePackage?.price || 0)}
                 disabled
                 className="highlighted-textfield"
                 InputLabelProps={{

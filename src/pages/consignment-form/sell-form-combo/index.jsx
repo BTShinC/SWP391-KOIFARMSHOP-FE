@@ -2,8 +2,8 @@ import { Button, TextField, Grid, Box, Typography } from "@mui/material";
 import { Upload, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { storage } from "../../../firebase"; // Đảm bảo bạn đã cấu hình đúng Firebase
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage"; // Firebase storage functions
+import { storage } from "../../../firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -11,7 +11,6 @@ import { v4 as uuidv4 } from "uuid";
 import { format } from "date-fns";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
-import imageCompression from "browser-image-compression";
 SellFormCombo.propTypes = {
   isOnline: PropTypes.bool,
 };
@@ -20,6 +19,7 @@ function SellFormCombo({ isOnline }) {
   const {
     register,
     handleSubmit,
+    trigger,
     formState: { errors },
     setValue,
   } = useForm();
@@ -57,32 +57,16 @@ function SellFormCombo({ isOnline }) {
     setFileList(newFileList);
   };
 
-  // Hàm nén ảnh
-  const compressImage = async (file) => {
-    const options = {
-      maxSizeMB: 1, // Giới hạn kích thước ảnh (MB)
-      maxWidthOrHeight: 1024, // Giới hạn chiều dài hoặc rộng
-      useWebWorker: true, // Sử dụng WebWorker để cải thiện hiệu suất
-    };
-    try {
-      const compressedFile = await imageCompression(file, options);
-      return compressedFile;
-    } catch (error) {
-      console.error("Error compressing image:", error);
-      return file; // Nếu nén thất bại, sử dụng file gốc
-    }
-  };
-
   // Upload ảnh và chứng nhận lên Firebase
   const uploadFilesToFirebase = async (files) => {
     const uploadPromises = files.map(async (fileObj) => {
-      const compressedFile = await compressImage(fileObj.originFileObj); // Nén ảnh trước khi upload
-      const storageRef = ref(storage, `upload/${compressedFile.name}`);
+      const file = fileObj.originFileObj;
+      const storageRef = ref(storage, `upload/${file.name}`);
 
-      return uploadBytes(storageRef, compressedFile)
+      return uploadBytes(storageRef, file)
         .then(() => getDownloadURL(storageRef))
         .then((downloadURL) => ({
-          name: compressedFile.name,
+          name: file.name,
           url: downloadURL,
         }))
         .catch((error) => {
@@ -270,6 +254,9 @@ function SellFormCombo({ isOnline }) {
               inputProps={{ min: 500000 }}
               error={!!errors.desiredPrice}
               helperText={errors.desiredPrice?.message}
+              onChange={()=>{
+                trigger('desiredPrice')
+              }}
               className="highlighted-textfield"
             />
           </Grid>

@@ -11,6 +11,7 @@ import { addDays, format } from "date-fns";
 import InputAdornment from "@mui/material/InputAdornment";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+import { toast } from "react-toastify";
 
 CareFormCombo.propTypes = {
   carePackage: PropTypes.object.isRequired, // Truyền carePackage qua props
@@ -83,6 +84,10 @@ function CareFormCombo({ carePackage }) {
 
   // Xử lý submit form
   const onSubmit = async (data) => {
+    if (fileList.length < 3) {
+      toast.error("Vui lòng upload đủ 3 hình ảnh");
+      return;
+    }
     const uploadedImages = await uploadFilesToFirebase(fileList);
   
     const finalData = {
