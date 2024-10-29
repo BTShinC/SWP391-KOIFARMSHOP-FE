@@ -100,12 +100,6 @@ function AdminSideBar() {
           <span className="sidebar__icon">⌘</span>
           <span>Báo cáo và thống kê</span>
         </div>
-        <div
-          className="sidebar__logout"
-          onClick={() => handleNavigation("/logout")}
-        >
-          <span>Đăng xuất</span>
-        </div>
       </div>
     </>
   );

@@ -284,11 +284,11 @@ const DashboardPage = () => {
                             }
                           </p>
                           <p style={{ fontWeight: "normal" }}>
-                            <XFilled style={{ color: "#FF6384" }} /> chăm sóc:{" "}
+                            <XFilled style={{ color: "#FF6384" }} /> Ký gửi chăm sóc:{" "}
                             {
                               productData.filter(
                                 (product) =>
-                                  product.consignmentType === "chăm sóc"
+                                  product.consignmentType === "Ký gửi chăm sóc"
                               ).length
                             }
                           </p>
@@ -331,7 +331,7 @@ const DashboardPage = () => {
                             sóc:{" "}
                             {
                               productComboData.filter(
-                                (combo) => combo.consignmentType === "chăm sóc"
+                                (combo) => combo.consignmentType === "Ký gửi chăm sóc"
                               ).length
                             }
                           </p>
