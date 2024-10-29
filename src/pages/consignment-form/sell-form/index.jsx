@@ -33,6 +33,7 @@ function SellForm({ isOnline }) {
     register,
     handleSubmit,
     setValue,
+    trigger,
     formState: { errors },
   } = useForm();
 
@@ -97,13 +98,13 @@ function SellForm({ isOnline }) {
   const uploadFilesToFirebase = async (files) => {
     const uploadPromises = files.map((fileObj) => {
       const file = fileObj.originFileObj;
-      const storageRef = ref(storage, `upload/${file.name}`); // Tạo reference trong Firebase Storage
+      const storageRef = ref(storage, `upload/${file.name}`);
 
       return uploadBytes(storageRef, file)
-        .then(() => getDownloadURL(storageRef)) // Lấy URL sau khi upload
+        .then(() => getDownloadURL(storageRef))
         .then((downloadURL) => ({
           name: file.name,
-          url: downloadURL, // Trả về URL của file sau khi upload
+          url: downloadURL,
         }))
         .catch((error) => {
           console.error("Error uploading file:", error);
@@ -111,8 +112,8 @@ function SellForm({ isOnline }) {
     });
 
     try {
-      const uploadedFiles = await Promise.all(uploadPromises); // Chờ tất cả các file được upload
-      return uploadedFiles; // Trả về danh sách file đã upload
+      const uploadedFiles = await Promise.all(uploadPromises); 
+      return uploadedFiles;
     } catch (error) {
       console.error("Error uploading files:", error);
       return [];
@@ -120,12 +121,10 @@ function SellForm({ isOnline }) {
   };
   const onSubmit = async (data) => {
     try {
-      // Kiểm tra dữ liệu form trước khi bắt đầu upload
-      if (!data || !data.desiredPrice || data.desiredPrice < 500000) {
-        toast.error("Giá bán mong đợi phải lớn hơn 500,000");
+      if (fileList.length < 3 && certFileList < 1 ) {
+        toast.error("Vui lòng upload đủ 3 hình ảnh và 1 chứng nhận");
         return;
       }
-
       // Chuẩn bị dữ liệu trước khi upload (không phụ thuộc vào upload)
       const finalData = {
         ...data,
@@ -319,6 +318,9 @@ function SellForm({ isOnline }) {
               inputProps={{ min: 500000 }}
               error={!!errors.desiredPrice}
               helperText={errors.desiredPrice?.message}
+              onChange={() => {
+              trigger("desiredPrice");
+            }}
               className="highlighted-textfield"
             />
           </Grid>

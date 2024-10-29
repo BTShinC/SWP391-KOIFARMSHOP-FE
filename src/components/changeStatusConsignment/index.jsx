@@ -133,6 +133,12 @@ function ChangeStatusConsignment({
 
   const handleRefund = async () => {
     try {
+      console.log(formValue.consignmentID)
+      // Thực hiện hoàn tiền
+      const refundRes = await refundConsignmentSell(formValue.consignmentID);
+      if (refundRes) {
+        message.success(`Hoàn tiền thành công.${refundRes.data}`);
+      }
       // Cập nhật trạng thái consignment
       const updatedFormValue = {
         ...formValue,
@@ -147,14 +153,6 @@ function ChangeStatusConsignment({
 
       if (consignmentRes) {
         message.success("Cập nhật trạng thái đơn ký thành công.");
-      }
-
-      // Thực hiện hoàn tiền
-      const refundRes = await refundConsignmentSell(
-        updatedFormValue.consignmentID
-      );
-      if (refundRes) {
-        message.success(`Hoàn tiền thành công.${refundRes.data}`);
       }
 
       // Tạo transaction cho lịch sử hoàn tiền
