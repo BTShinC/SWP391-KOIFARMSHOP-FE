@@ -251,12 +251,12 @@ function CareFormCombo({ carePackage }) {
               <TextField
                 label="Họ và tên"
                 fullWidth
-                value={user.fullName}
+                value={user?.fullName}
                 InputLabelProps={{
                   shrink: true,
                 }}
-                error={!!errors.fullName}
-                helperText={errors.fullName?.message}
+                error={!!errors?.fullName}
+                helperText={errors?.fullName?.message}
               />
             </Grid>
 
@@ -264,12 +264,12 @@ function CareFormCombo({ carePackage }) {
               <TextField
                 label="Email"
                 fullWidth
-                value={user.email}
+                value={user?.email}
                 InputLabelProps={{
                   shrink: true,
                 }}
-                error={!!errors.email}
-                helperText={errors.email?.message}
+                error={!!errors?.email}
+                helperText={errors?.email?.message}
               />
             </Grid>
 
@@ -280,9 +280,9 @@ function CareFormCombo({ carePackage }) {
                 InputLabelProps={{
                   shrink: true,
                 }}
-                value={user.phoneNumber}
-                error={!!errors.phoneNumber}
-                helperText={errors.phoneNumber?.message}
+                value={user?.phoneNumber}
+                error={!!errors?.phoneNumber}
+                helperText={errors?.phoneNumber?.message}
               />
             </Grid>
 
@@ -347,7 +347,7 @@ function CareFormCombo({ carePackage }) {
             </Grid>
             <input
               type="hidden"
-              value={user.accountID}
+              value={user?.accountID}
               {...register("accountID")}
             />
           </Grid>

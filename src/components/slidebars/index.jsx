@@ -27,20 +27,23 @@ const Sidebar = ({ isOpen, onClose }) => {
   const navigate = useNavigate(); // Sử dụng useNavigate để điều hướng
 
      // Fetch account balance from API when the component mounts
-     useEffect(() => {
-      const fetchAccountBalance = async () => {
-        if (user.accountID) {
-          try {
-            const response = await api.get(`/account/${user.accountID}`);
-            setAccountBalance(response.data.accountBalance); // Set the fetched balance
-          } catch (error) {
-            console.error("Error fetching account balance:", error);
-          }
-        }
-      };
-  
+     // Tạo hàm riêng để fetch balance
+  const fetchAccountBalance = async () => {
+    if (user?.accountID) {
+      try {
+        const response = await api.get(`/account/${user.accountID}`);
+        setAccountBalance(response.data.accountBalance);
+      } catch (error) {
+        console.error("Error fetching account balance:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
       fetchAccountBalance();
-    }, [user]);
+    }
+  }, [isOpen, user?.accountID]); // Thêm isOpen vào dependencies
 
   const handleLogout = async () => {
     try {
