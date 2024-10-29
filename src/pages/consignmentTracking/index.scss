@@ -6,22 +6,22 @@
 
   .btn-container {
     display: flex;
-    justify-content: space-between; // Căn nút đều ra 2 bên container
-    gap: 1rem; // Khoảng cách giữa các nút
+    justify-content: space-between; 
+    gap: 1rem;
 
     .btn {
-      padding: 0.75rem 1.5rem; // Padding để tạo không gian thoải mái cho nút
+      padding: 0.75rem 1.5rem; 
       border: none;
-      border-radius: 8px; // Bo tròn góc
-      font-size: 1rem; // Kích thước font vừa phải
+      border-radius: 8px; 
+      font-size: 1rem; 
       font-weight: bold;
       cursor: pointer;
-      transition: all 0.3s ease; // Hiệu ứng khi hover
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); // Đổ bóng nhẹ cho nút
+      transition: all 0.3s ease; 
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); 
 
       &:hover {
-        transform: translateY(-2px); // Khi hover nút sẽ nâng lên một chút
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); // Tăng đổ bóng khi hover
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
       }
     }
   }

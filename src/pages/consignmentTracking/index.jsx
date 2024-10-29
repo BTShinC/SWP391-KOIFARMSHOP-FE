@@ -198,7 +198,8 @@ function ConsignmentTracking() {
               // So sánh ngày hiện tại với ngày trước 3 ngày
               if (
                 currentDate >= threeDaysBeforeExpiration &&
-                currentDate < expirationDate
+                currentDate < expirationDate && 
+                record.status === 'Đang chăm sóc'
               ) {
                 return (
                   <button
@@ -220,8 +221,7 @@ function ConsignmentTracking() {
             })()}
 
             {/* Nút "Rút cá" chỉ hiển thị khi trạng thái khác "Chờ xác nhận" và "Hoàn tất" */}
-            {record.status !== "Chờ xác nhận" &&
-              record.status !== "Hoàn tất" && (
+            {record.status === 'Đang chăm sóc' && (
                 <button
                   className="btn-edit-consignment"
                   onClick={() => warning(record)}
@@ -339,7 +339,7 @@ function ConsignmentTracking() {
          if (
           currentDate >= threeDaysBeforeExpiration &&
           currentDate < expirationDate &&
-          record.status !== "Hoàn tất"
+          record.status === 'Đang tiến hành'
         ) {
           return (
             <button
