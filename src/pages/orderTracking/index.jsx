@@ -27,6 +27,9 @@ function OrderTracking() {
   const [feedbackDescription, setFeedbackDescription] = useState("");
   const [feedbackImage, setFeedbackImage] = useState(null);
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
+  const [isViewFeedbackModalVisible, setIsViewFeedbackModalVisible] = useState(false);
+  const [viewFeedback, setViewFeedback] = useState(null);
+
 
   const user = useSelector((state) => state.user);
   console.log("Current user:", user);
@@ -39,7 +42,7 @@ function OrderTracking() {
 
   const [feedbackFormValue, setFeedbackFormValue] = useState(initFeedbackFormValue);
   const [feedbackFileList, setFeedbackFileList] = useState([]);
-  
+
 
   useEffect(() => {
     if (user && user.accountID) {
@@ -60,7 +63,25 @@ function OrderTracking() {
         const bNumber = parseInt(b.orderID.replace('O', ''), 10);
         return bNumber - aNumber; // Sort in descending order
       });
-      setOrders(sortedOrders);
+
+      // Check for feedback for each order
+      const ordersWithFeedback = await Promise.all(sortedOrders.map(async (order) => {
+        try {
+          const feedbackResponse = await api.get(`/feedback/order/${order.orderID}`);
+          return {
+            ...order,
+            feedbackSubmitted: feedbackResponse.data ? true : false,
+          };
+        } catch (error) {
+          console.error(`Error fetching feedback for order ${order.orderID}:`, error);
+          return {
+            ...order,
+            feedbackSubmitted: false,
+          };
+        }
+      }));
+
+      setOrders(ordersWithFeedback);
     } catch (error) {
       if (error.response) {
         console.error("Error data:", error.response.data);
@@ -398,9 +419,21 @@ function OrderTracking() {
     setSelectedOrder(order);
     setFeedbackFormValue(prev => ({
       ...prev,
-      orderID: order.orderID // Thêm orderID của đơn hàng được chọn
+      orderID: order.orderID
     }));
     setIsFeedbackModalVisible(true);
+  };
+
+  const showViewFeedbackModal = async (order) => {
+    try {
+      const response = await api.get(`/feedback/order/${order.orderID}`);
+      console.log("Feedback response:", response.data); // Log the response
+      setViewFeedback(response.data);
+      setIsViewFeedbackModalVisible(true);
+    } catch (error) {
+      console.error("Error fetching feedback:", error);
+      message.error("Có lỗi xảy ra khi lấy phản hồi!");
+    }
   };
 
   const handleFeedbackCancel = () => {
@@ -439,25 +472,30 @@ function OrderTracking() {
 
   const handleFeedbackSubmit = async () => {
     if (!feedbackFormValue.description || !feedbackFormValue.image) {
+      console.log("Feedback form value:", feedbackFormValue);
       message.error("Vui lòng điền đầy đủ thông tin và tải lên hình ảnh!");
       return;
     }
-  
+
     try {
-      console.log("feedback", feedbackFormValue); // Bây giờ sẽ có đủ orderID
       await api.post("feedback", feedbackFormValue);
-      
       message.success("Cảm ơn bạn đã phản hồi!");
       setIsFeedbackModalVisible(false);
       setFeedbackFormValue(initFeedbackFormValue);
       setFeedbackFileList([]);
       setFeedbackSubmitted(true);
+
+      // Update the order status locally to indicate feedback submitted
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order.orderID === selectedOrder.orderID ? { ...order, feedbackSubmitted: true } : order
+        )
+      );
     } catch (error) {
       console.error("Error submitting feedback:", error);
       message.error("Có lỗi xảy ra khi gửi phản hồi!");
     }
   };
-
   return (
     <div className="order-tracking-page-wrapper" style={{ margin: 50 }}>
       <div className="order-tracking-page">
@@ -504,15 +542,24 @@ function OrderTracking() {
                             >
                               Đã nhận hàng
                             </Button>
-                            <Button
-                              type="primary"
-                              onClick={() => showFeedbackModal(order)}
-                              style={{ marginLeft: '10px' }}
-                            >
-                              Phản hồi
-                            </Button>
+                            {order.feedbackSubmitted ? (
+                              <Button
+                                type="primary"
+                                onClick={() => showViewFeedbackModal(order)}
+                                style={{ marginLeft: '10px' }}
+                              >
+                                Đã phản hồi
+                              </Button>
+                            ) : (
+                              <Button
+                                type="primary"
+                                onClick={() => showFeedbackModal(order)}
+                                style={{ marginLeft: '10px' }}
+                              >
+                                Phản hồi
+                              </Button>
+                            )}
                           </>
-
                         )}
                         {order.status === "Đang xử lý" && (
                           <Button
@@ -664,6 +711,28 @@ function OrderTracking() {
               </div>
             )}
           </Upload>
+        </Modal>
+        <Modal
+          className="custom-modal"
+          title="Xem phản hồi"
+          visible={isViewFeedbackModalVisible}
+          onCancel={() => setIsViewFeedbackModalVisible(false)}
+          footer={[
+            <Button key="close" onClick={() => setIsViewFeedbackModalVisible(false)}>
+              Đóng
+            </Button>,
+          ]}
+        >
+          {viewFeedback ? (
+            <>
+              
+              <p><strong>Hình ảnh:</strong></p>
+              <img src={viewFeedback.image} alt="Feedback" style={{ width: '20%'}} />
+              <p style={{paddingTop: 20}}><strong>Mô tả:</strong> {viewFeedback.description}</p>
+            </>
+          ) : (
+            <Spin />
+          )}
         </Modal>
       </div>
     </div>
