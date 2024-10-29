@@ -35,7 +35,6 @@ function Body() {
           <ul className="image-list">
             {koiImages.map((koi) => (
               <li key={koi.id}>
-               
                   {" "}
                   {/* Chỉnh sửa ở đây */}
                   <Card
@@ -44,7 +43,6 @@ function Body() {
                   >
                     <Meta title={koi.title} />
                   </Card>
-             
               </li>
             ))}
           </ul>

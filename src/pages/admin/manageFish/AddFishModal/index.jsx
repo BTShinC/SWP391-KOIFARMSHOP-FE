@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { storage } from "/src/firebase.js";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import { addFish } from "../../../../service/userService";
+import { toast } from "react-toastify";
 
 AddFishModal.propTypes = {
   title: PropTypes.string.isRequired,
@@ -131,6 +132,7 @@ function AddFishModal({ title, visible, onClose, onChange }) {
       if (res) {
         onChange();
         console.log("Thành công");
+        toast.success("Thêm cá thành công");
       }
     } catch (error) {
       console.log(error);

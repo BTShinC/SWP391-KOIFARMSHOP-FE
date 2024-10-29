@@ -12,6 +12,7 @@ function ConsignmentForm() {
   console.log("carePackage", carePackage);
 
   const [isOnline, setIsOnline] = useState(null);
+  
 
   // Use useEffect to avoid direct state updates inside the render
   useEffect(() => {
@@ -25,7 +26,9 @@ function ConsignmentForm() {
   const user = useSelector((state) => state.user);
   console.log(user);
 
-  if (!user) {
+ const token = localStorage.getItem("token");
+  
+  if (!token) {
     return <Navigate to="/login" replace />;
   }
 

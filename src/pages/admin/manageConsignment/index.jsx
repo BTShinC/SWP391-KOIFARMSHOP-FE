@@ -113,13 +113,13 @@ function ManageConsignment() {
           >
             <Option value="all">Tất cả</Option>
             <Option value="Ký gửi để bán">Ký gửi để bán</Option>
-            <Option value="chăm sóc">Chăm sóc</Option>
+            <Option value="chăm sóc">Ký gửi chăm sóc</Option>
           </Select>
 
-          <DatePicker
+          {/* <DatePicker
             placeholder="Lọc theo ngày đáo hạn"
             onChange={handleExpiryDateChange}
-          />
+          /> */}
         </div>
 
         {/* Consignment table */}
