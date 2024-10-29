@@ -283,7 +283,7 @@ function ChangeStatusConsignment({
 
       const isCombo = !!updatedFormValue.productComboID;
       const productName =
-        productData.breed + "+" + "(" + updatedFormValue.consignmentID + ")";
+        productData.breed + "(" + updatedFormValue.consignmentID + ")";
 
       // Cập nhật trạng thái của sản phẩm
       const productRes = await updateProductStatus(

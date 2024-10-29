@@ -349,6 +349,7 @@ const fetchCarePackageByID = async (carePackageID) =>{
 const fetchOrders = async () => {
   try {
     const response = await api.get("orders"); // Gọi API để lấy danh sách đơn hàng
+    console.log(response.data); 
     return response.data; // Trả về dữ liệu từ API
   } catch (error) {
     console.error("Error fetching orders:", error);
