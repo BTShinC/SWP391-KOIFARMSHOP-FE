@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Modal, Upload } from "antd";
+import { InputNumber, Modal, Upload } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import PropTypes from "prop-types";
 import { storage } from "/src/firebase.js";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import { addFish } from "../../../../service/userService";
+import { toast } from "react-toastify";
 
 AddFishModal.propTypes = {
   title: PropTypes.string.isRequired,
@@ -131,6 +132,7 @@ function AddFishModal({ title, visible, onClose, onChange }) {
       if (res) {
         onChange();
         console.log("Thành công");
+        toast.success("Thêm cá thành công");
       }
     } catch (error) {
       console.log(error);
@@ -379,13 +381,23 @@ function AddFishModal({ title, visible, onClose, onChange }) {
           {/* {formValue.consignmentType !== "Ký gửi để bán" && ( */}
           <div>
             <label className="form-label">Giá:</label>
-            <input
+            <InputNumber
               className="form-control"
-              type="number"
-              name="price"
-              min={1}
+              min={0}
               value={formValue.price}
-              onChange={handleChange}
+              formatter={(value) =>
+                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+              }
+              parser={(value) => value.replace(/\./g, "")}
+              onChange={(value) => {
+                handleChange({
+                  target: {
+                    name: "price",
+                    value: value || 0,
+                  },
+                });
+              }}
+              style={{ width: "100%" }}
               required
             />
           </div>

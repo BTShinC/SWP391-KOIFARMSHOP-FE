@@ -228,15 +228,15 @@ const updateConsignmentStatus = async (id, status, saleDate = null) => {
 
 const updateConsignmentByID = async (data) => {
   try {
-    console.log("Dữ liệu gửi lên API:", data); // Log dữ liệu trước khi gọi API
+    console.log("Dữ liệu gửi lên API:", data);
     const response = await api.put(`consignments/${data.consignmentID}`, data);
-    console.log("Phản hồi từ API:", response.data); // Log phản hồi của API
+    console.log("Phản hồi từ API:", response.data); 
     return response;
   } catch (error) {
     if (error.response) {
       // Lỗi từ server trả về
       console.error("Lỗi từ phía server:", error.response.data);
-      console.error("Status code:", error.response.status); // Mã trạng thái HTTP
+      console.error("Status code:", error.response.status);
     } else if (error.request) {
       // Lỗi do không nhận được phản hồi từ server
       console.error("Không có phản hồi từ server:", error.request);
@@ -254,12 +254,12 @@ const createCareDetail = async (data) => {
 
     const response = await api.post(`/care-details`, data);
 
-    console.log("Phản hồi từ API:", response.data); // Log phản hồi từ API nếu thành công
+    console.log("Phản hồi từ API:", response.data);
     return response;
   } catch (error) {
     if (error.response) {
       // Lỗi từ phía server (ví dụ 4xx hoặc 5xx)
-      console.error("Lỗi từ phía server:", error.response.data); // Log phản hồi chi tiết từ server
+      console.error("Lỗi từ phía server:", error.response.data); 
     } else if (error.request) {
       // Không nhận được phản hồi từ server
       console.error("Không nhận được phản hồi từ server:", error.request);
@@ -295,7 +295,7 @@ const fetchAllCareDetail = async (consignmentID) => {
 
 const refundConsignmentSell = async (consignmentID) => {
   try {
-    const response = await api.post(`/refund/${consignmentID}`);
+    const response = await api.post(`refund/${consignmentID}`);
     return response;
   } catch (error) {
     console.error("Lỗi khi gọi API:", error);

@@ -12,6 +12,8 @@ import koi2 from "swp391-koifarmshop-fe/public/images/koi2.svg";
 import koi3 from "swp391-koifarmshop-fe/public/images/koi3.svg";
 import koi4 from "swp391-koifarmshop-fe/public/images/koi4.svg";
 import Carousel from "../../../components/carousel";
+import CarouselCombo from "../../../components/carousel/CarouselCombo";
+
 
 function Body() {
   const koiImages = [
@@ -33,7 +35,6 @@ function Body() {
           <ul className="image-list">
             {koiImages.map((koi) => (
               <li key={koi.id}>
-                <Link to="/singleproduct">
                   {" "}
                   {/* Chỉnh sửa ở đây */}
                   <Card
@@ -42,7 +43,6 @@ function Body() {
                   >
                     <Meta title={koi.title} />
                   </Card>
-                </Link>
               </li>
             ))}
           </ul>
@@ -63,7 +63,7 @@ function Body() {
 
       <div className="body__carousel lo">
         <h2>Mua lô</h2>
-        <Carousel />
+        <CarouselCombo />
         <div className="more-button-container">
           {" "}
           {/* Thêm thẻ div này */}

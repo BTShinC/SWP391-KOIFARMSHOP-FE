@@ -95,9 +95,11 @@ function ContactPage() {
                                         name="contact"
                                         value={formValue.contact}
                                         onChange={handleChange}
-                                        placeholder="Thông tin liên hệ"
+                                        placeholder="Số điện thoại"
                                         className="form-control"
                                         required
+                                        pattern="\d{10}"
+                                        title="Số điện thoại phải là 10 chữ số"
                                     />
                                 </Form.Item>
                                 <Form.Item className="form-label">

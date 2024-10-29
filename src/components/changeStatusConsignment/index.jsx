@@ -11,7 +11,7 @@ import {
   refundConsignmentTotal,
   createTransaction,
 } from "../../service/userService";
-// import { addDays } from "date-fns";
+import { addDays, format } from "date-fns";
 import "./index.scss";
 
 ChangeStatusConsignment.propTypes = {
@@ -64,11 +64,6 @@ function ChangeStatusConsignment({
     }
   };
 
-  // const formatDateWithTimezone = (date) => {
-  //   const isoString = date.toISOString(); // ISO format with "Z" at the end
-  //   return isoString.replace("Z", "+00:00"); // Replace "Z" with "+00:00"
-  // };
-
   const handleInProgress = async () => {
     try {
       let reasonForm;
@@ -85,31 +80,20 @@ function ChangeStatusConsignment({
           ? "Đang chăm sóc"
           : "Đang tiến hành";
 
-      // Tạo đối tượng Date
-      // const dateReceived = new Date(); // Ngày hiện tại
-      // const dateExpiration = addDays(dateReceived, formValue.duration); // Tính toán ngày hết hạn
+      // Tạo đối tượng Date hiện tại
+      const currentDate = format(new Date(), "yyyy-MM-dd");
+      const dateExpiration = addDays(currentDate, formValue.duration);
 
-      // // Chuyển đổi thành định dạng "2024-10-27T14:46:43.343+00:00"
-      // const dateReceivedFormatted = formatDateWithTimezone(dateReceived);
-      // const dateExpirationFormatted = formatDateWithTimezone(dateExpiration);
-
-      // Kiểm tra dữ liệu trước khi gửi lên server
-      if (!formValue.consignmentID || !formValue.duration) {
-        message.error(
-          "Thiếu dữ liệu quan trọng như consignmentID hoặc duration."
-        );
-        return;
-      }
+      const dateExpirationFormatted = dateExpiration.toISOString(); 
 
       // Chuẩn bị dữ liệu cập nhật
       const updatedFormValue = {
         ...formValue,
         reason: reasonForm,
-        // dateReceived: dateReceivedFormatted, // Dạng "2024-10-27T14:46:43.343+00:00"
-        // dateExpiration: dateExpirationFormatted, // Dạng "2024-10-27T14:46:43.343+00:00"
+        dateReceived: currentDate,
+        dateExpiration: dateExpirationFormatted,
         status: updatedConsignmentStatus,
       };
-
       console.log("Cập nhật dữ liệu:", updatedFormValue);
       await updateConsignmentAndProduct(updatedFormValue);
 
@@ -149,6 +133,12 @@ function ChangeStatusConsignment({
 
   const handleRefund = async () => {
     try {
+      console.log(formValue.consignmentID)
+      // Thực hiện hoàn tiền
+      const refundRes = await refundConsignmentSell(formValue.consignmentID);
+      if (refundRes) {
+        message.success(`Hoàn tiền thành công.${refundRes.data}`);
+      }
       // Cập nhật trạng thái consignment
       const updatedFormValue = {
         ...formValue,
@@ -165,18 +155,10 @@ function ChangeStatusConsignment({
         message.success("Cập nhật trạng thái đơn ký thành công.");
       }
 
-      // Thực hiện hoàn tiền
-      const refundRes = await refundConsignmentSell(
-        updatedFormValue.consignmentID
-      );
-      if (refundRes) {
-        message.success("Hoàn tiền thành công.");
-      }
-
       // Tạo transaction cho lịch sử hoàn tiền
       const transactionData = {
         accountID: updatedFormValue.accountID,
-        price: updatedFormValue.salePrice * 0.8,
+        price: +updatedFormValue.salePrice * 0.8,
         date: new Date(),
         description: `Hoàn tiền đơn ${updatedFormValue.consignmentID}`,
       };
@@ -273,7 +255,7 @@ function ChangeStatusConsignment({
     try {
       // Gọi API để cập nhật consignment
       const consignmentRes = await updateConsignmentByID(updatedFormValue);
-      if (!consignmentRes || consignmentRes.status !== 200) {
+      if (!consignmentRes) {
         message.error("Cập nhật trạng thái đơn ký gửi thất bại.");
         return;
       }
@@ -311,7 +293,7 @@ function ChangeStatusConsignment({
         updatedProductStatus
       );
 
-      if (!productRes || productRes.status !== 200) {
+      if (!productRes) {
         message.error("Cập nhật trạng thái sản phẩm thất bại.");
       }
 
@@ -352,7 +334,7 @@ function ChangeStatusConsignment({
 
   const handleReturnFish = async () => {
     let reasonForm =
-      "Đã hết thời hạn ký gửi nhưng cá vẫn chưa được bán . Chúng tôi sẽ hoàn trả lại cá cho bạn";
+      "Đã hết thời hạn ký gửi nhưng cá vẫn chưa được bán . Vui lòng đến KOIFISH để nhận lại cá";
     const currentDate = new Date().toISOString();
 
     const updatedFormValue = {
@@ -366,6 +348,30 @@ function ChangeStatusConsignment({
 
     if (onChange) {
       onChange();
+    }
+  };
+
+  const handleCareReturn = async () => {
+    try {
+      // Chuẩn bị dữ liệu để cập nhật trạng thái consignment
+      const updatedConsignmentData = {
+        ...formValue,
+        status: "Chuẩn bị hoàn tất",
+        reason: "Khách hàng đến cửa hàng để nhận lại cá",
+      };
+      console.log(updatedConsignmentData);
+      // Gửi yêu cầu cập nhật trạng thái consignment
+      const consignmentRes = await updateConsignmentByID(
+        updatedConsignmentData
+      );
+      if (!consignmentRes)
+        throw new Error("Cập nhật trạng thái đơn ký gửi thất bại");
+      message.success("Cập nhật trạng thái đơn ký gửi thành công");
+      if (onChange) {
+        onChange();
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -410,6 +416,16 @@ function ChangeStatusConsignment({
             {formValue.status === "Đang chăm sóc" && (
               <Button className="custom-button" onClick={handleComplete}>
                 Hoàn tất
+              </Button>
+            )}
+            {formValue.status === "Yêu cầu hoàn trả" && (
+              <Button className="custom-button" onClick={handleCareReturn}>
+                Chuẩn bị hoàn tất
+              </Button>
+            )}
+            {formValue.status === "Chuẩn bị hoàn tất" && (
+              <Button className="custom-button" onClick={handleComplete}>
+                Xác nhận hoàn cá
               </Button>
             )}
             {formValue.status === "Hoàn tất" &&

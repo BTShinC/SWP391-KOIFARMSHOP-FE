@@ -5,7 +5,14 @@ import Meta from 'antd/es/card/Meta';
 import axios from 'axios'; // Added axios
 import "./index.scss";
 
-
+const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('vi-VN', {
+        style: 'decimal',
+      currency: 'VND',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount).replace(/,/g, '.');
+  };
 
 
 const SelectFishModal = ({ visible, onClose, onSelect }) => {
@@ -28,8 +35,12 @@ const SelectFishModal = ({ visible, onClose, onSelect }) => {
         fetchFish(); // Fetch fish data on component mount
     }, []);
 
-    const filteredFish = fishData.filter(fish =>
-        fish.productName && fish.productName.toLowerCase().includes(searchTerm.toLowerCase()) // Updated filter
+    const filteredFish = fishData
+    .filter(fish =>
+        fish.productName &&
+        fish.productName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        fish.consignmentType !== "chăm sóc" &&
+        fish.status === "Còn hàng"
     );
 
     const handleSelect = (fish) => {
@@ -72,9 +83,9 @@ const SelectFishModal = ({ visible, onClose, onSelect }) => {
                                 description={
                                     <div>
                                         <p>Giống: {fish.breed}</p>
-                                        <p>Kích thước: {fish.size}</p>
+                                        <p>Kích thước: {fish.size}cm</p>
                                         <p>Giới tính: {fish.sex}</p>
-                                        <p className="price">Giá: {fish.price} VND</p>
+                                        <p className="price">Giá: {formatCurrency(fish.price)} VND</p>
                                     </div>
                                 } 
                             />

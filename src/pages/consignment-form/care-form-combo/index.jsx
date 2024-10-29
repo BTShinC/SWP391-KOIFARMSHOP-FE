@@ -11,6 +11,7 @@ import { addDays, format } from "date-fns";
 import InputAdornment from "@mui/material/InputAdornment";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+import { toast } from "react-toastify";
 
 CareFormCombo.propTypes = {
   carePackage: PropTypes.object.isRequired, // Truyền carePackage qua props
@@ -83,6 +84,10 @@ function CareFormCombo({ carePackage }) {
 
   // Xử lý submit form
   const onSubmit = async (data) => {
+    if (fileList.length < 3) {
+      toast.error("Vui lòng upload đủ 3 hình ảnh");
+      return;
+    }
     const uploadedImages = await uploadFilesToFirebase(fileList);
   
     const finalData = {
@@ -246,12 +251,12 @@ function CareFormCombo({ carePackage }) {
               <TextField
                 label="Họ và tên"
                 fullWidth
-                value={user.fullName}
+                value={user?.fullName}
                 InputLabelProps={{
                   shrink: true,
                 }}
-                error={!!errors.fullName}
-                helperText={errors.fullName?.message}
+                error={!!errors?.fullName}
+                helperText={errors?.fullName?.message}
               />
             </Grid>
 
@@ -259,12 +264,12 @@ function CareFormCombo({ carePackage }) {
               <TextField
                 label="Email"
                 fullWidth
-                value={user.email}
+                value={user?.email}
                 InputLabelProps={{
                   shrink: true,
                 }}
-                error={!!errors.email}
-                helperText={errors.email?.message}
+                error={!!errors?.email}
+                helperText={errors?.email?.message}
               />
             </Grid>
 
@@ -275,9 +280,9 @@ function CareFormCombo({ carePackage }) {
                 InputLabelProps={{
                   shrink: true,
                 }}
-                value={user.phoneNumber}
-                error={!!errors.phoneNumber}
-                helperText={errors.phoneNumber?.message}
+                value={user?.phoneNumber}
+                error={!!errors?.phoneNumber}
+                helperText={errors?.phoneNumber?.message}
               />
             </Grid>
 
@@ -342,7 +347,7 @@ function CareFormCombo({ carePackage }) {
             </Grid>
             <input
               type="hidden"
-              value={user.accountID}
+              value={user?.accountID}
               {...register("accountID")}
             />
           </Grid>

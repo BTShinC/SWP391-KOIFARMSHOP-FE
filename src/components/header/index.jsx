@@ -60,11 +60,11 @@ function Header() {
           <li>
             <UserAvatar onClick={toggleSidebar}></UserAvatar>
           </li>
-          <li>
+          {/* <li>
             <Link>
               <SearchOutlined />
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link to="/shoppingcart">
               <ShoppingCartOutlined />
