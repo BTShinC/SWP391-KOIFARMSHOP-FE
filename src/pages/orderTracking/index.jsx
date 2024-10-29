@@ -31,10 +31,10 @@ function OrderTracking() {
   const user = useSelector((state) => state.user);
   console.log("Current user:", user);
   const initFeedbackFormValue = {
+    accountID: user?.accountID || "",
     description: "",
-    accountID: user.accountID,
-    orderID: "",
     image: "",
+    orderID: "" // Thêm orderID vào đây
   };
 
   const [feedbackFormValue, setFeedbackFormValue] = useState(initFeedbackFormValue);
@@ -396,6 +396,10 @@ function OrderTracking() {
 
   const showFeedbackModal = (order) => {
     setSelectedOrder(order);
+    setFeedbackFormValue(prev => ({
+      ...prev,
+      orderID: order.orderID // Thêm orderID của đơn hàng được chọn
+    }));
     setIsFeedbackModalVisible(true);
   };
 
@@ -438,9 +442,11 @@ function OrderTracking() {
       message.error("Vui lòng điền đầy đủ thông tin và tải lên hình ảnh!");
       return;
     }
-
+  
     try {
-      await api.post("/feedback", feedbackFormValue);
+      console.log("feedback", feedbackFormValue); // Bây giờ sẽ có đủ orderID
+      await api.post("feedback", feedbackFormValue);
+      
       message.success("Cảm ơn bạn đã phản hồi!");
       setIsFeedbackModalVisible(false);
       setFeedbackFormValue(initFeedbackFormValue);
