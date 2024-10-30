@@ -1,6 +1,6 @@
 import { Button, Form, Input } from "antd";
 import { ChangePassword } from "../../../service/userService";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ForgotPassword from "..";
 import { toast } from "react-toastify";
 
@@ -9,6 +9,7 @@ function RecoveryPassword() {
 
   // Lấy token từ query parameter
   const token = new URLSearchParams(location.search).get("token");
+  const navigate = useNavigate();
 
   const handleRecoveryPassword = async (value) => {
     console.log(value);
@@ -22,6 +23,7 @@ function RecoveryPassword() {
       const result = await ChangePassword(data);
       console.log("Password reset successful:", result);
       toast.success("Khôi phục mật khẩu thành công!", 2);
+      navigate("/login");
     } catch (error) {
       console.log("Lỗi khôi phục mật khẩu:", error);
       toast.error("Khôi phục mật khẩu thất bại!", 2);
@@ -35,7 +37,7 @@ function RecoveryPassword() {
       </div>
       <div className="forgot-password__container">
         <div style={{ marginBottom: "1rem" }}>
-          <img src="/public/images/logo.svg" alt="Logo" style={{ maxWidth: "100px" }} />
+          <img src="images/logo.svg" alt="Logo" style={{ maxWidth: "100px" }} />
         </div>
         <Form
           labelCol={{

@@ -88,7 +88,7 @@ function AdminSideBar() {
           <span>Quản lý giao dịch</span>
         </div>
         <div
-
+          className={`sidebar__item ${
             location.pathname === "/manageFeedback" ? "active" : ""
           }`}
           onClick={() => handleNavigation("/manageFeedback")}
