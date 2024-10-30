@@ -24,7 +24,6 @@ import { v4 as uuidv4 } from "uuid";
 import { format } from "date-fns";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
-import { formatCurrency } from '../../../utils/formatters';
 
 SellForm.propTypes = {
   isOnline: PropTypes.bool,
@@ -134,13 +133,14 @@ function SellForm({ isOnline }) {
         status: "Chờ xác nhận",
         type: "Ký gửi",
         consignmentType: "Ký gửi để bán",
-        price: parseFloat(data.desiredPrice.replace(/,/g, "")),
-        salePrice: parseFloat(data.desiredPrice.replace(/,/g, "")),
+        price: parseFloat(data.desiredPrice.replace(/\./g, "").replace(",", ".")),
+        salePrice: parseFloat(data.desiredPrice.replace(/\./g, "").replace(",", ".")), 
         reason: "Vui lòng mang cá đến trang trại để hoàn thành thủ tục",
         formType: "sellForm",
         consignmentDate: format(new Date(), "yyyy-MM-dd"),
-        desiredPrice: parseFloat(data.desiredPrice.replace(/,/g, ""))
-      };
+        desiredPrice: parseFloat(data.desiredPrice.replace(/\./g, "").replace(",", ".")),
+    };
+    
 
       console.log(finalData);
 
@@ -318,22 +318,22 @@ function SellForm({ isOnline }) {
                   message: "Giá bán mong đợi phải lớn hơn 500,000",
                 },
                 validate: (value) =>
-                  !isNaN(parseInt(value.replace(/,/g, ""), 10)) ||
+                  !isNaN(parseInt(value.replace(/\./g, ""), 10)) ||
                   "Vui lòng nhập số hợp lệ",
               })}
               fullWidth
               type="text"
-              inputProps={{ inputMode: "numeric", pattern: "[0-9,]*" }}
+              inputProps={{ inputMode: "numeric", pattern: "[0-9.]*" }} // Chấp nhận số và dấu chấm
               error={!!errors.desiredPrice}
               helperText={errors.desiredPrice?.message}
               value={
                 getValues("desiredPrice")
                   ?.toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || ""
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ".") || ""
               }
               onChange={(e) => {
-                const rawValue = e.target.value.replace(/,/g, ""); // Loại bỏ dấu phẩy
-                setValue("desiredPrice", rawValue); // Cập nhật giá trị mà không có dấu phẩy
+                const rawValue = e.target.value.replace(/\./g, ""); // Loại bỏ dấu chấm
+                setValue("desiredPrice", rawValue); // Cập nhật giá trị mà không có dấu chấm
                 trigger("desiredPrice"); // Kiểm tra lại trường này
               }}
               className="highlighted-textfield"
