@@ -339,7 +339,7 @@ function ChangeStatusConsignment({
 
     const updatedFormValue = {
       ...formValue,
-      status: "Hoàn trả",
+      status: "Hoàn trả ",
       reason: reasonForm,
       saleDate: currentDate,
     };

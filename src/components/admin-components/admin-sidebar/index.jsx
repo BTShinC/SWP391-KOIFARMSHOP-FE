@@ -1,9 +1,13 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import "./index.scss";
+import { useSelector } from "react-redux";
 
 function AdminSideBar() {
   const location = useLocation();
   const navigate = useNavigate();
+
+  const user = useSelector((state) => state?.user);
+  // Hàm điều hướng khi người dùng nhấp vào các mục
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -14,7 +18,7 @@ function AdminSideBar() {
       <div className="admin-sidebar">
         <div className="sidebar__logo-container">
           <img
-            src="/public/images/logo.svg"
+            src="/images/logo.svg"
             alt="Logo"
             className="sidebar__logo"
             onClick={() => handleNavigation("/")}
@@ -84,7 +88,7 @@ function AdminSideBar() {
           <span>Quản lý giao dịch</span>
         </div>
         <div
-          className={`sidebar__item ${
+
             location.pathname === "/manageFeedback" ? "active" : ""
           }`}
           onClick={() => handleNavigation("/manageFeedback")}
@@ -94,6 +98,7 @@ function AdminSideBar() {
         </div>
         <div
           className={`sidebar__item ${
+
             location.pathname === "/manageContact" ? "active" : ""
           }`}
           onClick={() => handleNavigation("/manageContact")}
@@ -101,15 +106,19 @@ function AdminSideBar() {
           <span className="sidebar__icon">⌘</span>
           <span>Quản lý câu hỏi</span>
         </div>
-        <div
-          className={`sidebar__item ${
-            location.pathname === "/reports" ? "active" : ""
-          }`}
-          onClick={() => handleNavigation("/dashboard")}
-        >
-          <span className="sidebar__icon">⌘</span>
-          <span>Báo cáo và thống kê</span>
-        </div>
+
+        {user && user?.roleName === "Admin" && (
+          <div
+            className={`sidebar__item ${
+              location.pathname === "/reports" ? "active" : ""
+            }`}
+            onClick={() => handleNavigation("/dashboard")}
+          >
+            <span className="sidebar__icon">⌘</span>
+            <span>Báo cáo và thống kê</span>
+          </div>
+        )}
+
       </div>
     </>
   );

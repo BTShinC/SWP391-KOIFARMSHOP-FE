@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { message, Modal, Upload } from "antd";
+import { InputNumber, message, Modal, Upload } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import PropTypes from "prop-types";
 import { storage } from "/src/firebase.js";
@@ -308,16 +308,25 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
               </div>
             </>
           )} */}
-
           <div>
             <label className="form-label">Giá:</label>
-            <input
+            <InputNumber
               className="form-control"
-              type="number"
-              name="price"
-              min={1}
+              min={0}
               value={formValue.price}
-              onChange={handleChange}
+              formatter={(value) =>
+                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+              }
+              parser={(value) => value.replace(/\./g, "")}
+              onChange={(value) => {
+                handleChange({
+                  target: {
+                    name: "price",
+                    value: value || 0,
+                  },
+                });
+              }}
+              style={{ width: "100%" }}
               required
             />
           </div>
