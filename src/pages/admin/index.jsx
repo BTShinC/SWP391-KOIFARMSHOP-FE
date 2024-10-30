@@ -13,6 +13,7 @@ const columns = [
   "Địa chỉ",
   "Email",
   "Số điện thoại",
+  "Vai trò",
   "Số dư ví",
   "Thao tác",
 ];
@@ -76,7 +77,7 @@ const Admin = () => {
       <div className="admin-content">
         <AdminHeader />
         <h1 className="content__title">Trang quản lý</h1>
-        <AdminFilter onSearch={handleSearch} buttonText="Thêm mới người dùng" />
+        <AdminFilter onSearch={handleSearch}/>
         <AdminTable
           data={filteredUserData}
           columns={columns}

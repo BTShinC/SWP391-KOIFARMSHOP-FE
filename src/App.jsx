@@ -44,9 +44,7 @@ import ConsignmentSuccess from "./pages/consignmentSuccess";
 import ManageContact from "./pages/admin/manageContact";
 import OwnTransaction from "./pages/ownTransaction";
 import DashboardPage from "./pages/admin/dashboard";
-
-
-
+import AdminRoute from "./components/admin-components/admin-route";
 
 function App() {
   const router = createBrowserRouter([
@@ -191,42 +189,42 @@ function App() {
           element: <ConsignmentSuccess />,
         },
         {
-          path: "/ownTransaction", 
+          path: "/ownTransaction",
           element: <OwnTransaction />,
-        }      
+        },
       ],
     },
     {
       path: "/admin",
-      element: <Admin />,
+      element: <AdminRoute element={<Admin />} />,
     },
     {
       path: "/managefish",
-      element: <ManageFish />,
+      element: <AdminRoute element={<ManageFish />} />,
     },
     {
       path: "/manageOrder",
-      element: <ManageOrder />,
+      element: <AdminRoute element={<ManageOrder />} />,
     },
     {
       path: "/members",
-      element: <AdminMembers />,
+      element: <AdminRoute element={<AdminMembers />} />,
     },
     {
       path: "/manageConsignment",
-      element: <ManageConsignment />,
+      element: <AdminRoute element={<ManageConsignment />} />,
     },
     {
       path: "/manageProductCombo",
-      element: <ManageProductCombo />,
+      element: <AdminRoute element={<ManageProductCombo />} />,
     },
     {
       path: "/manageTransaction",
-      element: <ManageTransactions />,
+      element: <AdminRoute element={<ManageTransactions />} />,
     },
     {
       path: "/manageContact",
-      element: <ManageContact />,
+      element: <AdminRoute element={<ManageContact />} />,
     },
 
     {
@@ -235,10 +233,9 @@ function App() {
     },
     {
       path: "/dashboard",
-      element: <DashboardPage />,
-    }
+      element: <AdminRoute element={<DashboardPage />} />,
+    },
   ]);
-
   return <RouterProvider router={router} />;
 }
 

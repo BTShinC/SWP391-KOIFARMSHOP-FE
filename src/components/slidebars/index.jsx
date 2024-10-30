@@ -94,7 +94,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               </p>
             </div>
             {user &&
-              user.roleName === "Admin" && ( // Show admin button if user is an admin
+              user.roleName === "Admin" || user.roleName === "Staff" && ( 
                 <li>
                   <Link to="/admin" onClick={onClose}>
                     <Button className="adminpage-button" type="primary">Quản lý</Button>
