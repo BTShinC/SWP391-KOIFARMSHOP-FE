@@ -21,12 +21,12 @@ const columns = [
 ];
 
 function ManageConsignment() {
-  const [koiConsignmentData, setKoiConsignmentData] = useState([]); // Dữ liệu thô từ API
-  const [filteredData, setFilteredData] = useState([]); // Dữ liệu đã lọc để hiển thị
-  const [filterType, setFilterType] = useState("all"); // Bộ lọc loại ký gửi
-  const [statusFilter, setStatusFilter] = useState("all"); // Bộ lọc trạng thái
-  const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại cho phân trang
-  const itemsPerPage = 8; // Số mục trên mỗi trang
+  const [koiConsignmentData, setKoiConsignmentData] = useState([]); 
+  const [filteredData, setFilteredData] = useState([]); 
+  const [filterType, setFilterType] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all"); 
+  const [currentPage, setCurrentPage] = useState(1); 
+  const itemsPerPage = 8; 
 
   // Lấy tất cả dữ liệu ký gửi khi component được mount
   useEffect(() => {
