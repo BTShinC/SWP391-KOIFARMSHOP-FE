@@ -128,6 +128,12 @@ const fetchTransactionHistory = async () => {
       return;
     }
 
+    // Check if the total amount exceeds the limit of 21,474,836
+    if (totalAmount > 21474836) {
+      toast.error("Số tiền tối đa là 21.474.836 VND"); // Notify for maximum amount alert
+      return;
+    }
+
     const accountId = user.accountID; // Sửa từ accountId thành accountID
     console.log("Account ID:", accountId);
 
@@ -252,6 +258,7 @@ const fetchTransactionHistory = async () => {
         </div>
         <div className="amount-selection">
           <h2>Vui lòng chọn số tiền cần nạp</h2>
+          
           <div className="button-group">
             <button
               className="fixed-ammount-button"
@@ -289,6 +296,7 @@ const fetchTransactionHistory = async () => {
           {amount && <p>{vnNum2Words(amount)} VND</p>}{" "}
           {/* Display amount in words using vn-num2words */}
         </div>
+        <p>Lưu ý: Số tiền tối đa là 21.474.836 VND vì chính sách của các ngân hàng!</p>
         <button className="confirm-button" onClick={handleTransactionConfirm}>
           Xác nhận
         </button>
