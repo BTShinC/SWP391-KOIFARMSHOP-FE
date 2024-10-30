@@ -34,7 +34,7 @@ function OrderTracking() {
   const user = useSelector((state) => state.user);
   console.log("Current user:", user);
   const initFeedbackFormValue = {
-    accountID: user?.accountID || "",
+    accountID: user?.accountID,
     description: "",
     image: "",
     orderID: "" // Thêm orderID vào đây

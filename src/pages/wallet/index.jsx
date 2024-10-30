@@ -114,90 +114,48 @@ const fetchTransactionHistory = async () => {
 
   const handleTransactionConfirm = async () => {
     const totalAmount = amount || selectedLevel;
-
+  
     const token = localStorage.getItem("token");
     console.log(token);
     if (!token) {
       toast.error("Bạn cần đăng nhập để thực hiện giao dịch.");
       return;
     }
-
+  
     // Check if the total amount is less than 100,000
     if (totalAmount < 100000) {
       toast.error("Số tiền tối thiểu là 100.000 VND"); // Notify for minimum amount alert
       return;
     }
-
+  
     const accountId = user.accountID; // Sửa từ accountId thành accountID
     console.log("Account ID:", accountId);
-
+  
     console.log("Total Amount (Price):", totalAmount); // Log the total amount
-
-    // Get the current date in ISO format
-    const currentDate = new Date().toISOString();
-
+  
     try {
       // Tạo đối tượng transactionData
       const transactionData = {
         accountID: user.accountID,
         price: totalAmount,
         date: new Date(),
-        description: `Nạp tiền vào ví: ${totalAmount.toLocaleString()} VND`,
+        description: `Xử lý nạp tiền vào ví: ${totalAmount.toLocaleString()} VND`,
       };
-      console.log("Data to send:", {
-        accountID: accountId,
-        price: totalAmount,
-        date: currentDate,
-      });
-
-
-      // const response = await api.post(
-      //   "/transactions/create",
-      //   {
-      //     // Use the api instance
-      //     accountID: accountId,
-      //     price: totalAmount,
-      //     date: new Date().toISOString(), // Add the current date
-      //   },
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${token}`,
-      //       "Content-Type": "application/json",
-      //     },
-      //   }
-      // );
-      const response = await api.post("/transactions/create", transactionData);
-
+      console.log("Data to send:", transactionData);
+  
       // Redirect to VNPAY link
+      const response = await api.post("/transactions/create", transactionData);
       const vnpayLink = response.data; // Assuming response.data contains the VNPAY link
-      const transactionId = response.data.vnp_TxnRef; // Lấy ID giao dịch từ phản hồi
       window.location.href = vnpayLink; // Chuyển hướng đến liên kết VNPAY
-
+  
       toast.success("Đã xác nhận giao dịch! Vui lòng chờ cập nhật."); // Thông báo thành công
       console.log("Response from API:", vnpayLink); // Ghi log dữ liệu phản hồi
-
-      // Lấy lịch sử giao dịch đã cập nhật
-      fetchTransactionHistory(); // Làm mới lịch sử giao dịch
-
-      // Gửi phản hồi giao dịch đến API sau khi thanh toán thành công
-      const transactionResponse = {
-        vnp_TxnRef: transactionId, // Sử dụng ID giao dịch thực tế từ phản hồi
-        vnp_ResponseCode: "00", // Thay thế bằng mã phản hồi thực tế
-        vnp_Amount: totalAmount.toString(), // Chuyển đổi số tiền thành chuỗi
-      };
-
-      // Sử dụng api instance để gửi phản hồi
-      const apiResponse = await api.post(
-        `/transactions/vnpay/response`,
-        transactionResponse
-      ); // Sử dụng đường dẫn tương đối với api instance
-      console.log("API Response:", apiResponse.data); // Kiểm tra xem có nhận được phản hồi không
     } catch (error) {
       console.error("Error adding transaction:", error);
       const errorMessage = error.response?.data?.message || "Có lỗi xảy ra."; // Lấy thông báo lỗi từ server
       toast.error("Giao dịch thất bại: " + errorMessage); // Thông báo thất bại với thông báo lỗi
     }
-
+  
     setAmount(""); // Đặt lại số tiền sau khi xác nhận
     setSelectedLevel(null); // Đặt lại cấp độ đã chọn
   };
@@ -280,14 +238,14 @@ const fetchTransactionHistory = async () => {
               10.000.000 VND
             </button>
           </div>
-          <input
+          {/* <input
             type="number"
             value={amount}
             onChange={handleAmountChange}
             placeholder="Nhập số tiền mong muốn"
           />
           {amount && <p>{vnNum2Words(amount)} VND</p>}{" "}
-          {/* Display amount in words using vn-num2words */}
+          Display amount in words using vn-num2words */}
         </div>
         <button className="confirm-button" onClick={handleTransactionConfirm}>
           Xác nhận
