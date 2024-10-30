@@ -89,12 +89,8 @@ function ManageConsignment() {
   const statusOptions =
     filterType === "Ký gửi để bán"
       ? [
-          { value: "Chờ xác nhận", label: "Chờ xác nhận" },
           { value: "Đang tiến hành", label: "Đang tiến hành" },
-          { value: "Hoàn tất", label: "Hoàn tất" },
-          { value: "Yêu cầu gia hạn", label: "Yêu cầu gia hạn" },
           { value: "Đã hoàn tiền", label: "Đã hoàn tiền" },
-          { value: "Đã hủy", label: "Đã hủy" },
         ]
       : [
           { value: "Chờ xác nhận", label: "Chờ xác nhận" },
