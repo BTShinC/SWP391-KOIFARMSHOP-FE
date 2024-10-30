@@ -35,6 +35,7 @@ const AdminTable = ({ columns, data, title, ModalComponent, onChange }) => {
               <td>{row.address}</td>
               <td>{row.email}</td>
               <td>{row.phoneNumber}</td>
+              <td>{row.roleName}</td>
               <td>{row.accountBalance}</td>
               <td>
                 {ModalComponent && (

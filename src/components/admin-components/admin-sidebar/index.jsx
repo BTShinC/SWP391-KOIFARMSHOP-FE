@@ -1,10 +1,11 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import "./index.scss";
+import { useSelector } from "react-redux";
 
 function AdminSideBar() {
   const location = useLocation();
-  const navigate = useNavigate(); // Sử dụng hook useNavigate để điều hướng
-
+  const navigate = useNavigate();
+  const user = useSelector((state) => state?.user);
   // Hàm điều hướng khi người dùng nhấp vào các mục
   const handleNavigation = (path) => {
     navigate(path);
@@ -85,21 +86,25 @@ function AdminSideBar() {
           <span>Quản lý giao dịch</span>
         </div>
         <div
-          className={`sidebar__item ${location.pathname === "/manageContact" ? "active" : ""
-            }`}
+          className={`sidebar__item ${
+            location.pathname === "/manageContact" ? "active" : ""
+          }`}
           onClick={() => handleNavigation("/manageContact")}
         >
           <span className="sidebar__icon">⌘</span>
           <span>Quản lý câu hỏi</span>
         </div>
-        <div
-          className={`sidebar__item ${location.pathname === "/reports" ? "active" : ""
+        {user && user?.roleName === "Admin" && (
+          <div
+            className={`sidebar__item ${
+              location.pathname === "/reports" ? "active" : ""
             }`}
-          onClick={() => handleNavigation("/dashboard")}
-        >
-          <span className="sidebar__icon">⌘</span>
-          <span>Báo cáo và thống kê</span>
-        </div>
+            onClick={() => handleNavigation("/dashboard")}
+          >
+            <span className="sidebar__icon">⌘</span>
+            <span>Báo cáo và thống kê</span>
+          </div>
+        )}
       </div>
     </>
   );

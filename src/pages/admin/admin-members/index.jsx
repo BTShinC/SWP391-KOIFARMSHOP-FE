@@ -14,6 +14,7 @@ const columns = [
   "Email",
   "Số điện thoại",
   "Địa chỉ",
+  "Vai trò",
   "Số dư ví",
   "Thao tác",
 ];
@@ -30,15 +31,20 @@ function AdminMembers() {
     try {
       let res = await fetchAllUser();
       if (res && res.data) {
-        const customers = res.data.filter(
-          (user) => user.roleName === "Admin"
-        );
+        const customers = res.data
+          .filter((user) => user.roleName !== "Customer")
+          .sort((a, b) => {
+            if (a.roleName === "Staff" && b.roleName === "Admin") return 1;
+            if (a.roleName === "Admin" && b.roleName === "Staff") return -1;
+            return 0;
+          });
         setUserData(customers);
       }
     } catch (error) {
       console.log(error);
     }
   };
+
 
   // Search users by name
   const handleSearch = (value) => {

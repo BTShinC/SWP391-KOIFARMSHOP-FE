@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { storage } from "/src/firebase.js"; // Đảm bảo đường dẫn đúng đến file cấu hình Firebase
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import { editUser } from "../../../service/userService";
+import { useSelector } from "react-redux";
 
 ModalEditUser.propTypes = {
   title: PropTypes.string.isRequired,
@@ -37,7 +38,7 @@ function ModalEditUser({ title, userData, className = "", onChange }) {
       email: userData.email,
       accountBalance: userData.accountBalance,
       address: userData.address,
-      image: userData.image, 
+      image: userData.image,
       roleName: userData.roleName,
     });
   }, [userData]);
@@ -75,7 +76,7 @@ function ModalEditUser({ title, userData, className = "", onChange }) {
   };
 
   const handleOk = async () => {
-    let imageUrl = formValue.image; 
+    let imageUrl = formValue.image;
 
     if (fileList.length > 0 && fileList[0].originFileObj) {
       // If there's a new image to upload, upload it to Firebase
@@ -108,6 +109,7 @@ function ModalEditUser({ title, userData, className = "", onChange }) {
     setOpen(false);
   };
 
+  const user = useSelector((state) => state.user);
   return (
     <>
       <Button
@@ -235,19 +237,26 @@ function ModalEditUser({ title, userData, className = "", onChange }) {
                       disabled
                     />
                   </div>
-                  <label className="form-label">Vai trò:</label>
-                  <select
-                    className="form-control"
-                    onChange={handleChange}
-                    type="number"
-                    name="roleName"
-                    value={formValue.roleName}
-                  >
-                    <option value="">Chọn vai trò</option>{" "}
-                    {/* Giá trị mặc định */}
-                    <option value="Admin">Quản trị viên</option>
-                    <option value="Customer">Khách hàng</option>
-                  </select>
+                  {user &&
+                    user?.roleName ===
+                      "Admin" &&(
+                        <>
+                          <label className="form-label">Vai trò:</label>
+                          <select
+                            className="form-control"
+                            onChange={handleChange}
+                            type="number"
+                            name="roleName"
+                            value={formValue.roleName}
+                          >
+                            <option value="">Chọn vai trò</option>
+                            {/* Giá trị mặc định */}
+                            <option value="Admin">Quản trị viên</option>
+                            <option value="Staff">Nhân viên</option>
+                            <option value="Customer">Khách hàng</option>
+                          </select>
+                        </>
+                      )}
                 </div>
               )
             )}
