@@ -44,7 +44,10 @@ import ConsignmentSuccess from "./pages/consignmentSuccess";
 import ManageContact from "./pages/admin/manageContact";
 import OwnTransaction from "./pages/ownTransaction";
 import DashboardPage from "./pages/admin/dashboard";
+
 import AdminRoute from "./components/admin-components/admin-route";
+
+import ManageFeedback from "./pages/admin/manageFeedback";
 
 function App() {
   const router = createBrowserRouter([
@@ -213,6 +216,10 @@ function App() {
     {
       path: "/manageConsignment",
       element: <AdminRoute element={<ManageConsignment />} />,
+    },
+    {
+      path: "/manageFeedback",
+      element: <ManageFeedback />,
     },
     {
       path: "/manageProductCombo",

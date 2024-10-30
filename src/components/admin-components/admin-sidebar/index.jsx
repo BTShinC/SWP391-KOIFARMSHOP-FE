@@ -5,8 +5,10 @@ import { useSelector } from "react-redux";
 function AdminSideBar() {
   const location = useLocation();
   const navigate = useNavigate();
+
   const user = useSelector((state) => state?.user);
   // Hàm điều hướng khi người dùng nhấp vào các mục
+
   const handleNavigation = (path) => {
     navigate(path);
   };
@@ -86,7 +88,17 @@ function AdminSideBar() {
           <span>Quản lý giao dịch</span>
         </div>
         <div
+
+            location.pathname === "/manageFeedback" ? "active" : ""
+          }`}
+          onClick={() => handleNavigation("/manageFeedback")}
+        >
+          <span className="sidebar__icon">⌘</span>
+          <span>Quản lý phản hồi</span>
+        </div>
+        <div
           className={`sidebar__item ${
+
             location.pathname === "/manageContact" ? "active" : ""
           }`}
           onClick={() => handleNavigation("/manageContact")}
@@ -94,6 +106,7 @@ function AdminSideBar() {
           <span className="sidebar__icon">⌘</span>
           <span>Quản lý câu hỏi</span>
         </div>
+
         {user && user?.roleName === "Admin" && (
           <div
             className={`sidebar__item ${
@@ -105,6 +118,7 @@ function AdminSideBar() {
             <span>Báo cáo và thống kê</span>
           </div>
         )}
+
       </div>
     </>
   );
