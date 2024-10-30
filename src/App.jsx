@@ -44,6 +44,7 @@ import ConsignmentSuccess from "./pages/consignmentSuccess";
 import ManageContact from "./pages/admin/manageContact";
 import OwnTransaction from "./pages/ownTransaction";
 import DashboardPage from "./pages/admin/dashboard";
+import ManageFeedback from "./pages/admin/manageFeedback";
 
 
 
@@ -215,6 +216,10 @@ function App() {
     {
       path: "/manageConsignment",
       element: <ManageConsignment />,
+    },
+    {
+      path: "/manageFeedback",
+      element: <ManageFeedback />,
     },
     {
       path: "/manageProductCombo",
