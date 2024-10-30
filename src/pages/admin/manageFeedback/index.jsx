@@ -9,6 +9,7 @@ function ManageFeedback({data}) {
   const [selectedFeedback, setSelectedFeedback] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [processingFeedbacks, setProcessingFeedbacks] = useState(new Set());
   useEffect(() => {
     fetchFeedbacks();
   }, []);
@@ -42,6 +43,7 @@ function ManageFeedback({data}) {
 
   const handleRefund = async (feedback) => {
   try {
+    setProcessingFeedbacks(prev => new Set(prev).add(feedback.feedbackID));
     // Bước 1: Lấy chi tiết đơn hàng để có total
     const orderDetailsResponse = await api.get(`orders-details/order/${feedback.orderID}`);
     console.log("Order Details Response:", orderDetailsResponse.data);
@@ -201,16 +203,19 @@ function ManageFeedback({data}) {
           onCancel={() => setIsModalVisible(false)}
           footer={[
             <Button key="cancel" onClick={() => setIsModalVisible(false)}>
-              Đóng
-            </Button>,
-            <Button
-              key="refund"
-              type="primary"
-              onClick={() => handleRefund(selectedFeedback)}
-              disabled={selectedFeedback?.status === 'Đã xử lý'}
-            >
-              Hoàn tiền
-            </Button>,
+            Đóng
+          </Button>,
+          <Button
+            key="refund"
+            type="primary"
+            onClick={() => handleRefund(selectedFeedback)}
+            disabled={processingFeedbacks.has(selectedFeedback?.feedbackID)}
+            loading={processingFeedbacks.has(selectedFeedback?.feedbackID)}
+          >
+            {processingFeedbacks.has(selectedFeedback?.feedbackID) 
+              ? 'Đã hoàn tiền' 
+              : 'Hoàn tiền'}
+          </Button>,
           ]}
         >
           {selectedFeedback && (

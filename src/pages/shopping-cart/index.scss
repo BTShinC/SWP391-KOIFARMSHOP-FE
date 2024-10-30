@@ -29,17 +29,11 @@
 
         /* Make sure product column is wider */
         span:first-child {
-          flex: 1.7;
+          flex: 0.2;
           text-align: left;
         }
 
-        span:nth-child(2){
-            flex: 1.2;
-        }
-
-        span:nth-child(3){
-            flex: 0.5;
-        }
+       
       }
     }
 
