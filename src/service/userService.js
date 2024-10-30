@@ -2,7 +2,7 @@ import api from "../config/api";
 
 const Register = async (data) => {
   try {
-    const response = await api.post("Register", data);
+    const response = await api.post("authen/Register", data);
     return response.data; // Trả về dữ liệu từ API nếu cần
   } catch (error) {
     console.error("Error registering:", error);
@@ -12,7 +12,7 @@ const Register = async (data) => {
 
 const ChangePassword = async (data) => {
   try {
-    const response = await api.post("reset", data);
+    const response = await api.post("authen/reset", data);
     return response;
   } catch (error) {
     console.error(error);
@@ -22,7 +22,7 @@ const ChangePassword = async (data) => {
 
 const sendEmailToRecoveryPassword = async (data) => {
   try {
-    const response = await api.post("forgot", data);
+    const response = await api.post("authen/forgot", data);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -32,7 +32,7 @@ const sendEmailToRecoveryPassword = async (data) => {
 
 const fetchAllUser = async () => {
   try {
-    const response = await api.get("account");
+    const response = await api.get("authen/account");
     return response;
   } catch (error) {
     console.error(error);

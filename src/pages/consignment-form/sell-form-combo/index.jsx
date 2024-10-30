@@ -20,6 +20,7 @@ function SellFormCombo({ isOnline }) {
     register,
     handleSubmit,
     trigger,
+    getValues,
     formState: { errors },
     setValue,
   } = useForm();
@@ -250,12 +251,19 @@ function SellFormCombo({ isOnline }) {
                 },
               })}
               fullWidth
-              type="number"
-              inputProps={{ min: 500000 }}
+              type="text"
+              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }} 
               error={!!errors.desiredPrice}
               helperText={errors.desiredPrice?.message}
-              onChange={()=>{
-                trigger('desiredPrice')
+              value={
+                getValues("desiredPrice")
+                  ?.toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || ""
+              }
+              onChange={(e) => {
+                const rawValue = e.target.value.replace(/,/g, ""); 
+                setValue("desiredPrice", rawValue); 
+                trigger("desiredPrice"); 
               }}
               className="highlighted-textfield"
             />

@@ -16,7 +16,7 @@ function AdminSideBar() {
       <div className="admin-sidebar">
         <div className="sidebar__logo-container">
           <img
-            src="/public/images/logo.svg"
+            src="/images/logo.svg"
             alt="Logo"
             className="sidebar__logo"
             onClick={() => handleNavigation("/")}

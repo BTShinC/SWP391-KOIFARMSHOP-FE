@@ -34,6 +34,7 @@ function SellForm({ isOnline }) {
     handleSubmit,
     setValue,
     trigger,
+    getValues,
     formState: { errors },
   } = useForm();
 
@@ -112,7 +113,7 @@ function SellForm({ isOnline }) {
     });
 
     try {
-      const uploadedFiles = await Promise.all(uploadPromises); 
+      const uploadedFiles = await Promise.all(uploadPromises);
       return uploadedFiles;
     } catch (error) {
       console.error("Error uploading files:", error);
@@ -121,7 +122,7 @@ function SellForm({ isOnline }) {
   };
   const onSubmit = async (data) => {
     try {
-      if (fileList.length < 3 && certFileList < 1 ) {
+      if (fileList.length < 3 && certFileList < 1) {
         toast.error("Vui lòng upload đủ 3 hình ảnh và 1 chứng nhận");
         return;
       }
@@ -134,8 +135,8 @@ function SellForm({ isOnline }) {
         consignmentType: "Ký gửi để bán",
         price: data.desiredPrice,
         salePrice: data.desiredPrice,
-        reason: 'Vui lòng mang cá đến trang trại để hoàn thành thủ tục',
-        formType:'sellForm',
+        reason: "Vui lòng mang cá đến trang trại để hoàn thành thủ tục",
+        formType: "sellForm",
         consignmentDate: format(new Date(), "yyyy-MM-dd"),
       };
 
@@ -314,13 +315,20 @@ function SellForm({ isOnline }) {
                 },
               })}
               fullWidth
-              type="number"
-              inputProps={{ min: 500000 }}
+              type="text"
+              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }} 
               error={!!errors.desiredPrice}
               helperText={errors.desiredPrice?.message}
-              onChange={() => {
-              trigger("desiredPrice");
-            }}
+              value={
+                getValues("desiredPrice")
+                  ?.toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || ""
+              }
+              onChange={(e) => {
+                const rawValue = e.target.value.replace(/,/g, ""); 
+                setValue("desiredPrice", rawValue); 
+                trigger("desiredPrice"); 
+              }}
               className="highlighted-textfield"
             />
           </Grid>
