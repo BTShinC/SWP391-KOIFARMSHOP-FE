@@ -35,13 +35,13 @@ function CareFormCombo({ carePackage }) {
   const consignmentDate = format(new Date(), "yyyy-MM-dd");
   const getTodayAndThreeDaysLater = () => {
     const today = format(new Date(), "dd/MM/yyyy");
-    const threeDaysLater = format(addDays(new Date(), 3), "dd/MM/yyyy"); 
+    const threeDaysLater = format(addDays(new Date(), 3), "dd/MM/yyyy");
     return { today, threeDaysLater };
   };
   const getTodayDatePlus30DaysAndThreeDaysLater = () => {
     const today = new Date();
-    const todayPlus30Days = format(addDays(today, 30), "dd/MM/yyyy"); 
-    const threeDaysAfter30Days = format(addDays(today, 33), "dd/MM/yyyy"); 
+    const todayPlus30Days = format(addDays(today, 30), "dd/MM/yyyy");
+    const threeDaysAfter30Days = format(addDays(today, 33), "dd/MM/yyyy");
 
     return { todayPlus30Days, threeDaysAfter30Days };
   };
@@ -89,7 +89,7 @@ function CareFormCombo({ carePackage }) {
       return;
     }
     const uploadedImages = await uploadFilesToFirebase(fileList);
-  
+
     const finalData = {
       ...data,
       image: uploadedImages[0]?.url,
@@ -103,15 +103,16 @@ function CareFormCombo({ carePackage }) {
       price: carePackage?.price,
       status: "Chờ xác nhận",
       desiredPrice: carePackage?.price,
-      reason: "Vui lòng mang cá đến trang trại để hoàn tất thủ tục ký gửi chăm sóc",
+      reason:
+        "Vui lòng mang cá đến trang trại để hoàn tất thủ tục ký gửi chăm sóc",
       farmName: "",
       consignmentDate: consignmentDate,
-      today : today,
-      formType :'careFormCombo',
+      today: today,
+      formType: "careFormCombo",
       total: carePackage?.price,
-      duration : 30,
+      duration: 30,
     };
-  
+
     console.log("Form data with uploaded images:", finalData);
     localStorage.setItem("careFormCombo", JSON.stringify(finalData));
     navigate("/consignmentPayment", { state: finalData });
@@ -209,6 +210,10 @@ function CareFormCombo({ carePackage }) {
                   min: {
                     value: 2,
                     message: "Số lượng phải lớn hơn hoặc bằng 2",
+                  },
+                  max: {
+                    value: 20,
+                    message: "Số lượng không được lớn hơn 15",
                   },
                 })}
                 label="Số lượng cá"

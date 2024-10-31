@@ -125,6 +125,11 @@ function AboutPage() {
               1 đến 3 ngày để chuẩn bị và chi phí chăm sóc sẽ không được hoàn
               lại.
             </p>
+            <p>
+              Để chăm sóc tốt nhất cho cá của quý khách tối đa shop chỉ nhận 20
+              cá thể cho gói chăm sóc theo lô. Quý khách lưu ý số lượng trước
+              khi đặt gói chăm sóc.
+            </p>
           </div>
           <p className="content">
             Với dịch vụ ký gửi tại Koifish, chúng tôi cam kết cá của bạn sẽ được

@@ -1,6 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Card, CardContent, Grid, Typography, Button } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Grid,
+  Typography,
+  Button,
+} from "@mui/material";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import { fetchAllCarePackages } from "../../../service/userService";
 import "./index.scss";
@@ -42,10 +49,10 @@ function CarePackageDetail() {
     return <Typography variant="h4">Không tìm thấy sản phẩm</Typography>;
   }
 
-  const handleCareConsignmentFrom = (carePackage,type) => {
-    navigate("/consignmentFrom", { state: { carePackage,type } });
+  const handleCareConsignmentFrom = (carePackage, type) => {
+    navigate("/consignmentFrom", { state: { carePackage, type } });
   };
-  
+
   return (
     <div>
       <Button
@@ -107,10 +114,16 @@ function CarePackageDetail() {
         >
           <CardContent>
             <Typography variant="h4" fontWeight="bold">
-              {data.packageName}
+            {data.packageName} ({data.type})
             </Typography>
+
+            {data.type === "Lô" && (
+              <Typography variant="body1" color="error">
+                Lưu ý: Tối đa 20 cá.
+              </Typography>
+            )}
             <Typography variant="h6" color="primary">
-              Giá: {new Intl.NumberFormat('vi-VN').format(data.price)}  VNĐ
+              Giá: {new Intl.NumberFormat("vi-VN").format(data.price)} VNĐ
             </Typography>
             <Typography variant="body1" gutterBottom>
               {data.description}
