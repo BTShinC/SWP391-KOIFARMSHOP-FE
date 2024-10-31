@@ -165,3 +165,36 @@
   }
   
 }
+
+.order-summary {
+  padding: 20px 0;
+  
+  .no-money-msg {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+
+    .ant-btn {
+      background-color: #B88E2F;
+      color: white;
+      border: none;
+
+      &:hover {
+        background-color: darken(#B88E2F, 10%);
+      }
+    }
+  }
+}
+
+.ant-modal-footer {
+  .ant-btn-primary {
+    background-color: #B88E2F;
+    border-color: #B88E2F;
+
+    &:hover {
+      background-color: darken(#B88E2F, 10%);
+      border-color: darken(#B88E2F, 10%);
+    }
+  }
+}

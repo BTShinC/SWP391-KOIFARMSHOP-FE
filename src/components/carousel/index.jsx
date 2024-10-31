@@ -10,7 +10,6 @@ import { Link } from "react-router-dom";
 
 import PropTypes from "prop-types";
 import { addToCartAPI, fetchAllProduct } from "../../service/userService";
-import { addToCart } from "../../pages/redux/features/createSlice";
 import { useSelector } from "react-redux";
 
 const { Meta } = Card;

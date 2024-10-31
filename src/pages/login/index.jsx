@@ -101,7 +101,7 @@ function LoginPage() {
 
     } catch (err) {
       console.error("Error response from API:", err.response?.data);
-      toast.error(err.response.data);
+      toast.error("Vui lòng kiểm tra lại tên đăng nhập và mật khẩu");
     }
   };
 

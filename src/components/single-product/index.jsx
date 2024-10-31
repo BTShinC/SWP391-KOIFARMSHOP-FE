@@ -1,11 +1,13 @@
 import "./index.scss";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Button, Typography, Image, Divider, message } from "antd";
+import { Button, Typography, Image, Divider, message, Modal } from "antd";
 import Carousel from "../carousel";
 import { useState, useEffect } from "react";
 import ShoppingCart from "../shopping-cart";
 import { addToCartAPI, fetchCartItems, fetchProductById } from "../../service/userService";
 import { useDispatch, useSelector } from "react-redux";
+import { setBuyNowItem } from "../../pages/redux/features/buyNowSlice";
+import api from "../../config/api";
 
 const { Title, Text } = Typography;
 
@@ -29,25 +31,95 @@ function SingleProduct() {
   console.log("Current account:", account);
   console.log("Current ID:", account?.accountID);
 
-  // Trong trang chi tiết sản phẩm, thêm hàm xử lý mua ngay
-const handleBuyNow = () => {
-  const buyNowProduct = {
-    productID: product.productID,
-    name: product.name,
-    price: product.price,
-    quantity: 1,
-    image: product.image,
-    type: "Product"
+  const [isBuyNowModalVisible, setBuyNowModalVisible] = useState(false);
+  const [buyNowLoading, setBuyNowLoading] = useState(false);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [discount, setDiscount] = useState(0);
+  const deliveryFee = 200000;
+  const [finalPrice, setFinalPrice] = useState(0);
+
+  useEffect(() => {
+    if (product) {
+      const subtotal = product.price;
+      setTotalAmount(subtotal);
+      if (subtotal >= 2000000) {
+        const discountAmount = subtotal * 0.05;
+        setDiscount(discountAmount);
+        setFinalPrice(subtotal - discountAmount + deliveryFee);
+      } else {
+        setDiscount(0);
+        setFinalPrice(subtotal + deliveryFee);
+      }
+    }
+  }, [product]);
+
+  const handleBuyNow = async () => {
+    if (!account) {
+      message.warning("Vui lòng đăng nhập để mua hàng!");
+      return;
+    }
+    setBuyNowModalVisible(true);
   };
 
-  // Chuyển đến trang checkout với thông tin sản phẩm
-  navigate('/checkout', {
-    state: {
-      isBuyNow: true,
-      buyNowProduct: buyNowProduct
+  const handleConfirmBuyNow = async () => {
+    if (!account || !product) return;
+
+    setBuyNowLoading(true);
+    try {
+      const balanceResponse = await api.get(`/account/${account.accountID}`);
+      const accountBalance = balanceResponse.data.accountBalance;
+
+      if (accountBalance >= finalPrice) {
+        // Trừ tiền
+        await api.put(`/account/deductBalance/${account.accountID}?amount=${finalPrice}`);
+
+        // Tạo đơn hàng
+        const params = new URLSearchParams({
+          accountID: account.accountID,
+          productIDs: product.productID,
+        });
+
+        if (totalAmount >= 2000000) {
+          params.append("promotionID", "PM001");
+        }
+
+        const orderResponse = await api.post(`/orders/makeOrder?${params.toString()}`);
+
+        // Tạo transaction
+        await api.post("/transactions/create", {
+          accountID: account.accountID,
+          price: finalPrice,
+          date: new Date().toISOString(),
+          description: `Thanh toán đơn hàng ${orderResponse.data.orderID} (Mua ngay)`,
+        });
+
+        message.success("Đặt hàng thành công!");
+        setBuyNowModalVisible(false);
+        
+        // Reload sau 1 giây
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } else {
+        message.info(
+          <div className="no-money-msg">
+            Tài khoản không đủ số dư! Nạp tiền ngay?
+            <Button
+              style={{ marginLeft: "20px" }}
+              onClick={() => navigate("/wallet")}
+            >
+              Nạp tiền
+            </Button>
+          </div>
+        );
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      message.error("Có lỗi xảy ra khi đặt hàng!");
+    } finally {
+      setBuyNowLoading(false);
     }
-  });
-};
+  };
 
   useEffect(() => {
 
@@ -226,6 +298,53 @@ const handleBuyNow = () => {
           onClose={() => setCartVisible(false)}
         />
       )}
+
+      <Modal
+        title="Xác nhận đơn hàng"
+        open={isBuyNowModalVisible}
+        onCancel={() => setBuyNowModalVisible(false)}
+        footer={[
+          <Button key="back" onClick={() => setBuyNowModalVisible(false)}>
+            Hủy
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={buyNowLoading}
+            onClick={handleConfirmBuyNow}
+          >
+            Xác nhận đặt hàng
+          </Button>,
+        ]}
+      >
+        <div className="order-summary">
+          <div style={{ marginBottom: '10px' }}>
+            <span>Tổng tiền hàng:</span>
+            <span style={{ float: 'right' }}>
+              {totalAmount.toLocaleString("vi-VN")} VNĐ
+            </span>
+          </div>
+          <div style={{ marginBottom: '10px' }}>
+            <span>Giảm giá:</span>
+            <span style={{ float: 'right' }}>
+              {discount.toLocaleString("vi-VN")} VNĐ
+            </span>
+          </div>
+          <div style={{ marginBottom: '10px' }}>
+            <span>Phí vận chuyển:</span>
+            <span style={{ float: 'right' }}>
+              {deliveryFee.toLocaleString("vi-VN")} VNĐ
+            </span>
+          </div>
+          <Divider />
+          <div>
+            <strong>Tổng cộng:</strong>
+            <strong style={{ float: 'right', color: "#B88E2F" }}>
+              {finalPrice.toLocaleString("vi-VN")} VNĐ
+            </strong>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
