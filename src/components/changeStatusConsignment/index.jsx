@@ -142,7 +142,7 @@ function ChangeStatusConsignment({
       // Cập nhật trạng thái consignment
       const updatedFormValue = {
         ...formValue,
-        status: "Đã hoàn tiền",
+        status: "Hoàn tất",
         reason:
           "Tiền đã được hoàn lại vào ví của quý khách vui lòng kiểm tra lại nếu có thắc mắc vui lòng liên hệ hotline của KOIFISH",
       };
@@ -339,7 +339,7 @@ function ChangeStatusConsignment({
 
     const updatedFormValue = {
       ...formValue,
-      status: "Hoàn trả ",
+      status: "Hoàn tất ",
       reason: reasonForm,
       saleDate: currentDate,
     };
@@ -404,9 +404,6 @@ function ChangeStatusConsignment({
             )}
             {formValue.status === "Đang tiến hành" && (
               <>
-                <Button className="custom-button" onClick={handleComplete}>
-                  Hoàn tất
-                </Button>
                 <Button className="custom-button" onClick={handleReturnFish}>
                   Hoàn trả
                 </Button>
@@ -428,7 +425,7 @@ function ChangeStatusConsignment({
                 Xác nhận hoàn cá
               </Button>
             )}
-            {formValue.status === "Hoàn tất" &&
+            {formValue.status === "Chưa hoàn tiền" &&
               formValue.consignmentType === "Ký gửi để bán" && (
                 <Button
                   className="custom-button__transport"

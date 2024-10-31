@@ -24,7 +24,8 @@ function ConsignmentSell() {
             component="img"
             alt="Online Consignment"
             height="140"
-            image="/images/a.jpg"
+            image="/images/banner2.webp"
+            style={{ objectFit: 'cover' }}
           />
           <CardContent className="card-content">
             <Button
@@ -59,7 +60,8 @@ function ConsignmentSell() {
             component="img"
             alt="Offline Consignment"
             height="140"
-            image="/images/a.jpg"
+            image="/images/banner2.webp"
+            style={{ objectFit: 'cover' }}
           />
           <CardContent className="card-content">
             <Button

@@ -21,12 +21,12 @@ const columns = [
 ];
 
 function ManageConsignment() {
-  const [koiConsignmentData, setKoiConsignmentData] = useState([]); 
-  const [filteredData, setFilteredData] = useState([]); 
+  const [koiConsignmentData, setKoiConsignmentData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [filterType, setFilterType] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all"); 
-  const [currentPage, setCurrentPage] = useState(1); 
-  const itemsPerPage = 8; 
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
   // Lấy tất cả dữ liệu ký gửi khi component được mount
   useEffect(() => {
@@ -90,13 +90,13 @@ function ManageConsignment() {
     filterType === "Ký gửi để bán"
       ? [
           { value: "Đang tiến hành", label: "Đang tiến hành" },
-          { value: "Đã hoàn tiền", label: "Đã hoàn tiền" },
+          { value: "Chưa hoàn tiền ", label: "Chưa hoàn tiền " },
+          { value: "Hoàn tất ", label: "Hoàn tất" },
         ]
       : [
           { value: "Chờ xác nhận", label: "Chờ xác nhận" },
           { value: "Đang chăm sóc", label: "Đang chăm sóc" },
           { value: "Hoàn tất", label: "Hoàn tất" },
-          { value: "Yêu cầu gia hạn", label: "Yêu cầu gia hạn" },
           { value: "Đã hủy", label: "Đã hủy" },
         ];
 
