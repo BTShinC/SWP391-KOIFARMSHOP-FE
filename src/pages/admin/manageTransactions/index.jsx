@@ -10,9 +10,9 @@ const columns = [
   "Mã Khách hàng",
   "Số tiền",
   "Ngày giao dịch",
-  "Trạng thái",
-  "Bằng chứng chuyển khoản",
-  "Thao tác",
+  "Chi tiết",
+
+
 ];
 const withdrawalColumns = [
   "Mã rút tiền",
