@@ -14,7 +14,7 @@ import api from "../../config/api";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/features/userSlice";
-import api from "../../config/api";
+
 
 
 const firebaseConfig = {
