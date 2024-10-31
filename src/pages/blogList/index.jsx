@@ -21,7 +21,7 @@ import { Box, Button, Pagination } from "@mui/material";
       author: "Trần Thị B",
       date: "2024-09-29",
       image:
-        "https://plus.unsplash.com/premium_photo-1688358602051-44c03bdaf13a?ixlib=rb-4.0.3&q=80&w=1080&auto=format&fit=crop",
+      "https://plus.unsplash.com/premium_photo-1723672584706-42c474c77fd1?q=80&w=1998&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
       id: 3,
@@ -31,7 +31,7 @@ import { Box, Button, Pagination } from "@mui/material";
       author: "Lê Văn C",
       date: "2024-09-28",
       image:
-        "https://plus.unsplash.com/premium_photo-1688848092212-d074fe0a1e1f?ixlib=rb-4.0.3&q=80&w=1080&auto=format&fit=crop",
+      "https://plus.unsplash.com/premium_photo-1723672584706-42c474c77fd1?q=80&w=1998&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
       id: 4,
@@ -41,7 +41,7 @@ import { Box, Button, Pagination } from "@mui/material";
       author: "Hoàng Thị D",
       date: "2024-09-27",
       image:
-        "https://plus.unsplash.com/premium_photo-1688781564943-bb78af8db4bc?ixlib=rb-4.0.3&q=80&w=1080&auto=format&fit=crop",
+      "https://plus.unsplash.com/premium_photo-1723672584706-42c474c77fd1?q=80&w=1998&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
   ];
 

@@ -69,8 +69,7 @@ function ShoppingCartPage() {
           <div className="cart-title-row">
             <span>Sản phẩm</span>
             <span>Giá</span>
-            <span>Số lượng</span>
-            <span>Nội dung</span>
+           
           </div>
         </div>
         {/* Cart Items */}

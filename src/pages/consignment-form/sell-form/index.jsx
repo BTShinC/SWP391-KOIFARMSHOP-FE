@@ -33,6 +33,8 @@ function SellForm({ isOnline }) {
     register,
     handleSubmit,
     setValue,
+    trigger,
+    getValues,
     formState: { errors },
   } = useForm();
 
@@ -97,13 +99,13 @@ function SellForm({ isOnline }) {
   const uploadFilesToFirebase = async (files) => {
     const uploadPromises = files.map((fileObj) => {
       const file = fileObj.originFileObj;
-      const storageRef = ref(storage, `upload/${file.name}`); // Tạo reference trong Firebase Storage
+      const storageRef = ref(storage, `upload/${file.name}`);
 
       return uploadBytes(storageRef, file)
-        .then(() => getDownloadURL(storageRef)) // Lấy URL sau khi upload
+        .then(() => getDownloadURL(storageRef))
         .then((downloadURL) => ({
           name: file.name,
-          url: downloadURL, // Trả về URL của file sau khi upload
+          url: downloadURL,
         }))
         .catch((error) => {
           console.error("Error uploading file:", error);
@@ -111,8 +113,8 @@ function SellForm({ isOnline }) {
     });
 
     try {
-      const uploadedFiles = await Promise.all(uploadPromises); // Chờ tất cả các file được upload
-      return uploadedFiles; // Trả về danh sách file đã upload
+      const uploadedFiles = await Promise.all(uploadPromises);
+      return uploadedFiles;
     } catch (error) {
       console.error("Error uploading files:", error);
       return [];
@@ -120,12 +122,10 @@ function SellForm({ isOnline }) {
   };
   const onSubmit = async (data) => {
     try {
-      // Kiểm tra dữ liệu form trước khi bắt đầu upload
-      if (!data || !data.desiredPrice || data.desiredPrice < 500000) {
-        toast.error("Giá bán mong đợi phải lớn hơn 500,000");
+      if (fileList.length < 3 && certFileList < 1) {
+        toast.error("Vui lòng upload đủ 3 hình ảnh và 1 chứng nhận");
         return;
       }
-
       // Chuẩn bị dữ liệu trước khi upload (không phụ thuộc vào upload)
       const finalData = {
         ...data,
@@ -133,12 +133,16 @@ function SellForm({ isOnline }) {
         status: "Chờ xác nhận",
         type: "Ký gửi",
         consignmentType: "Ký gửi để bán",
-        price: data.desiredPrice,
-        salePrice: data.desiredPrice,
-        reason: 'Vui lòng mang cá đến trang trại để hoàn thành thủ tục',
-        formType:'sellForm',
+        price: parseFloat(data.desiredPrice.replace(/\./g, "").replace(",", ".")),
+        salePrice: parseFloat(data.desiredPrice.replace(/\./g, "").replace(",", ".")), 
+        reason: "Vui lòng mang cá đến trang trại để hoàn thành thủ tục",
+        formType: "sellForm",
         consignmentDate: format(new Date(), "yyyy-MM-dd"),
-      };
+        desiredPrice: parseFloat(data.desiredPrice.replace(/\./g, "").replace(",", ".")),
+    };
+    
+
+      console.log(finalData);
 
       // Lưu thông tin vào localStorage
       localStorage.setItem("sellForm", JSON.stringify(finalData));
@@ -313,12 +317,25 @@ function SellForm({ isOnline }) {
                   value: 500000,
                   message: "Giá bán mong đợi phải lớn hơn 500,000",
                 },
+                validate: (value) =>
+                  !isNaN(parseInt(value.replace(/\./g, ""), 10)) ||
+                  "Vui lòng nhập số hợp lệ",
               })}
               fullWidth
-              type="number"
-              inputProps={{ min: 500000 }}
+              type="text"
+              inputProps={{ inputMode: "numeric", pattern: "[0-9.]*" }} // Chấp nhận số và dấu chấm
               error={!!errors.desiredPrice}
               helperText={errors.desiredPrice?.message}
+              value={
+                getValues("desiredPrice")
+                  ?.toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ".") || ""
+              }
+              onChange={(e) => {
+                const rawValue = e.target.value.replace(/\./g, ""); // Loại bỏ dấu chấm
+                setValue("desiredPrice", rawValue); // Cập nhật giá trị mà không có dấu chấm
+                trigger("desiredPrice"); // Kiểm tra lại trường này
+              }}
               className="highlighted-textfield"
             />
           </Grid>

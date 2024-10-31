@@ -2,8 +2,8 @@ import { Button, TextField, Grid, Box, Typography } from "@mui/material";
 import { Upload, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { storage } from "../../../firebase"; // Đảm bảo bạn đã cấu hình đúng Firebase
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage"; // Firebase storage functions
+import { storage } from "../../../firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -11,7 +11,6 @@ import { v4 as uuidv4 } from "uuid";
 import { format } from "date-fns";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
-import imageCompression from "browser-image-compression";
 SellFormCombo.propTypes = {
   isOnline: PropTypes.bool,
 };
@@ -22,6 +21,8 @@ function SellFormCombo({ isOnline }) {
     handleSubmit,
     formState: { errors },
     setValue,
+    trigger,
+    getValues,
   } = useForm();
 
   useEffect(() => {
@@ -57,32 +58,16 @@ function SellFormCombo({ isOnline }) {
     setFileList(newFileList);
   };
 
-  // Hàm nén ảnh
-  const compressImage = async (file) => {
-    const options = {
-      maxSizeMB: 1, // Giới hạn kích thước ảnh (MB)
-      maxWidthOrHeight: 1024, // Giới hạn chiều dài hoặc rộng
-      useWebWorker: true, // Sử dụng WebWorker để cải thiện hiệu suất
-    };
-    try {
-      const compressedFile = await imageCompression(file, options);
-      return compressedFile;
-    } catch (error) {
-      console.error("Error compressing image:", error);
-      return file; // Nếu nén thất bại, sử dụng file gốc
-    }
-  };
-
   // Upload ảnh và chứng nhận lên Firebase
   const uploadFilesToFirebase = async (files) => {
     const uploadPromises = files.map(async (fileObj) => {
-      const compressedFile = await compressImage(fileObj.originFileObj); // Nén ảnh trước khi upload
-      const storageRef = ref(storage, `upload/${compressedFile.name}`);
+      const file = fileObj.originFileObj;
+      const storageRef = ref(storage, `upload/${file.name}`);
 
-      return uploadBytes(storageRef, compressedFile)
+      return uploadBytes(storageRef, file)
         .then(() => getDownloadURL(storageRef))
         .then((downloadURL) => ({
-          name: compressedFile.name,
+          name: file.name,
           url: downloadURL,
         }))
         .catch((error) => {
@@ -125,13 +110,14 @@ function SellFormCombo({ isOnline }) {
         image2: uploadedImages[2]?.url,
         type: "Ký gửi",
         consignmentType: "Ký gửi để bán",
-        price: data.desiredPrice,
+        price: parseFloat(data.desiredPrice.replace(/\./g, "").replace(",", ".")),
         status: "Chờ xác nhận",
         comboName: uuidv4(),
-        salePrice: data.desiredPrice,
-        reason: 'Vui lòng mang cá đến trang trại để hoàn thành thủ tục',
-        formType:'sellFormCombo',
+        salePrice: parseFloat(data.desiredPrice.replace(/\./g, "").replace(",", ".")), 
+        reason: "Vui lòng mang cá đến trang trại để hoàn thành thủ tục",
+        formType: "sellFormCombo",
         consignmentDate: consignmentDate,
+        desiredPrice: parseFloat(data.desiredPrice.replace(/\./g, "").replace(",", ".")),
       };
 
       console.log("Form data with uploaded images:", finalData);
@@ -256,7 +242,7 @@ function SellFormCombo({ isOnline }) {
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField
+          <TextField
               label="Giá bán mong đợi"
               {...register("desiredPrice", {
                 required: "Vui lòng nhập giá bạn mong muốn",
@@ -264,12 +250,25 @@ function SellFormCombo({ isOnline }) {
                   value: 500000,
                   message: "Giá bán mong đợi phải lớn hơn 500,000",
                 },
+                validate: (value) =>
+                  !isNaN(parseInt(value.replace(/\./g, ""), 10)) ||
+                  "Vui lòng nhập số hợp lệ",
               })}
               fullWidth
-              type="number"
-              inputProps={{ min: 500000 }}
+              type="text"
+              inputProps={{ inputMode: "numeric", pattern: "[0-9.]*" }} // Chấp nhận số và dấu chấm
               error={!!errors.desiredPrice}
               helperText={errors.desiredPrice?.message}
+              value={
+                getValues("desiredPrice")
+                  ?.toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ".") || ""
+              }
+              onChange={(e) => {
+                const rawValue = e.target.value.replace(/\./g, ""); // Loại bỏ dấu chấm
+                setValue("desiredPrice", rawValue); // Cập nhật giá trị mà không có dấu chấm
+                trigger("desiredPrice"); // Kiểm tra lại trường này
+              }}
               className="highlighted-textfield"
             />
           </Grid>

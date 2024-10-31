@@ -1,10 +1,10 @@
 import "./index.scss";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button, Typography, Image, Divider, message } from "antd";
 import Carousel from "../carousel";
 import { useState, useEffect } from "react";
 import ShoppingCart from "../shopping-cart";
-import { addToCartAPI, fetchProductById } from "../../service/userService";
+import { addToCartAPI, fetchCartItems, fetchProductById } from "../../service/userService";
 import { useDispatch, useSelector } from "react-redux";
 
 const { Title, Text } = Typography;
@@ -12,8 +12,8 @@ const { Title, Text } = Typography;
 function SingleProduct() {
   const [cartVisible, setCartVisible] = useState(false);
   const [cartItems, setCartItems] = useState([]);
-  const account = useSelector((state) => state.user);
-
+  const account = useSelector((state) => state?.user);
+  const navigate = useNavigate();
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("vi-VN", {
@@ -27,7 +27,27 @@ function SingleProduct() {
   const [product, setProduct] = useState(null); // State để lưu thông tin sản phẩm
   const dispatch = useDispatch(); // Khởi tạo dispatch
   console.log("Current account:", account);
-  console.log("Current ID:", account.accountID);
+  console.log("Current ID:", account?.accountID);
+
+  // Trong trang chi tiết sản phẩm, thêm hàm xử lý mua ngay
+const handleBuyNow = () => {
+  const buyNowProduct = {
+    productID: product.productID,
+    name: product.name,
+    price: product.price,
+    quantity: 1,
+    image: product.image,
+    type: "Product"
+  };
+
+  // Chuyển đến trang checkout với thông tin sản phẩm
+  navigate('/checkout', {
+    state: {
+      isBuyNow: true,
+      buyNowProduct: buyNowProduct
+    }
+  });
+};
 
   useEffect(() => {
 
@@ -53,56 +73,40 @@ function SingleProduct() {
   }, [product]);
 
   const handleAddToCart = async () => {
-    
     try {
-      if (!account || !account.accountID) {
-        console.error("Account information is missing");
+      if (!account || !account?.accountID) {
+        message.warning("Vui lòng đăng nhập để thêm vào giỏ hàng!");
         return;
       }
 
+      // Fetch current cart items from API
+      const currentCartItems = await fetchCartItems(account.accountID);
+      
       // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-      const existingItem = cartItems.find(
-        (item) => item.productID === product.productID
+      const existingItem = currentCartItems.find(
+        item => item.productID === product.productID
       );
+
       if (existingItem) {
-        message.warning("Sản phẩm đã có trong giỏ hàng.");
-        return; // Không thêm sản phẩm nếu đã có
+        message.warning("Sản phẩm đã có trong giỏ hàng!");
+        return;
       }
 
-      console.log("Sending to API:", {
-        accountID: account.accountID,
-        productID: product.productID,
-      });
-
+      // Nếu sản phẩm chưa có trong giỏ hàng, thêm mới
       const response = await addToCartAPI({
-        accountID: account.accountID,
+        accountID: account?.accountID,
         productID: product.productID,
       });
-      console.log("Added to cart successfully:", response);
 
-      // Fetch product details
-      const productDetails = await fetchProductById(product.productID);
-      console.log("Fetched product details:", productDetails);
+      // Fetch lại giỏ hàng sau khi thêm thành công
+      const updatedCartItems = await fetchCartItems(account.accountID);
+      setCartItems(updatedCartItems);
 
-      // Cập nhật cartItems để hiển thị thông tin sản phẩm
-      setCartItems((prevItems) => [
-        ...prevItems,
-        {
-          productID: product.productID,
-          productName: productDetails.productName,
-          price: productDetails.price,
-          image: productDetails.image,
-          breed: productDetails.breed,
-        },
-      ]);
-
+      message.success("Đã thêm vào giỏ hàng!");
       setCartVisible(true);
     } catch (error) {
-      console.error(
-        "Error adding to cart:",
-        error.response?.data || error.message
-      );
-      message.error("Sản phẩm đã hết hàng.");
+      console.error("Error adding to cart:", error);
+      message.error("Không thể thêm vào giỏ hàng. Sản phẩm đã hết hàng.");
     }
   };
 
@@ -166,7 +170,7 @@ function SingleProduct() {
               <Text>Nguồn gốc: {product.origin}</Text>
               {product.status === "Còn hàng" ? (
                 <div className="action-buttons">
-                  <Button className="buy-button">Mua ngay</Button>
+                  <Button className="buy-button" onClick={handleBuyNow}>Mua ngay</Button>
                   <Button onClick={handleAddToCart} className="buy-button">
                     Thêm vào giỏ hàng
                   </Button>

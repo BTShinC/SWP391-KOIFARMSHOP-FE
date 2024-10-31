@@ -19,29 +19,29 @@ const Sidebar = ({ isOpen, onClose }) => {
     }).format(amount);
   };
 
-
-
   const [accountBalance, setAccountBalance] = useState(0);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch(); // Khai báo useDispatch để sử dụng action
   const navigate = useNavigate(); // Sử dụng useNavigate để điều hướng
 
-     // Fetch account balance from API when the component mounts
-     useEffect(() => {
-      const fetchAccountBalance = async () => {
-        if (user.accountID) {
-          try {
-            const response = await api.get(`/account/${user.accountID}`);
-            setAccountBalance(response.data.accountBalance); // Set the fetched balance
-          } catch (error) {
-            console.error("Error fetching account balance:", error);
-          }
-        }
-      };
-  
-      fetchAccountBalance();
-    }, [user]);
+  // Fetch account balance from API when the component mounts
+  // Tạo hàm riêng để fetch balance
+  const fetchAccountBalance = async () => {
+    if (user?.accountID) {
+      try {
+        const response = await api.get(`/account/${user.accountID}`);
+        setAccountBalance(response.data.accountBalance);
+      } catch (error) {
+        console.error("Error fetching account balance:", error);
+      }
+    }
+  };
 
+  useEffect(() => {
+    if (isOpen) {
+      fetchAccountBalance();
+    }
+  }, [isOpen, user?.accountID]); 
   const handleLogout = async () => {
     try {
       // Gọi API logout nếu backend yêu cầu
@@ -60,7 +60,6 @@ const Sidebar = ({ isOpen, onClose }) => {
       // Có thể hiển thị thông báo lỗi cho người dùng ở đây
     }
   };
-
   return (
     <div className={`sidebar ${isOpen ? "open" : ""}`}>
       <Button
@@ -91,10 +90,12 @@ const Sidebar = ({ isOpen, onClose }) => {
               </p>
             </div>
             {user &&
-              user.roleName === "Admin" && ( // Show admin button if user is an admin
+              (user.roleName === "Admin" || user.roleName === "Staff") && (
                 <li>
                   <Link to="/admin" onClick={onClose}>
-                    <Button className="adminpage-button" type="primary">Quản lý</Button>
+                    <Button className="adminpage-button" type="primary">
+                      Quản lý
+                    </Button>
                   </Link>
                 </li>
               )}

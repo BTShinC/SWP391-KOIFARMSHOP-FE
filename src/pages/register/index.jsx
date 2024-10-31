@@ -28,7 +28,7 @@ function RegisterForm() {
 
   const handleRegister = async (values) => {
     try {
-      await api.post("Register", values);
+      await api.post("/authen/Register", values);
       toast.success("Đăng ký thành công")
       navigate("/login");
     } catch (err) {

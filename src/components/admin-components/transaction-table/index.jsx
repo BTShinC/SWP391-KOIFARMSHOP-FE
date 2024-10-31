@@ -56,23 +56,7 @@ const TransactionTable = ({ columns, transactionData, title, onChange,onUpdateSt
             <td>{transaction.accountID}</td>
             <td>{transaction.price || transaction.pricesend} VND</td>
             <td>{new Date(transaction.date).toLocaleDateString()}</td>
-            <td>{transaction.status}</td>
-            <td>
-              {transaction.image ? (
-                <img src={transaction.image} alt="Transaction" style={{ maxWidth: "50px", borderRadius: "5px" }} />
-              ) : transaction.bank_name ? (
-                `${transaction.bank_name} - ${transaction.account_number}`
-              ) : (
-                "No Image"
-              )}
-            </td>
-            <td>
-              {onUpdateStatus && transaction.status !== "Hoàn tất" ? (
-                <button onClick={() => onUpdateStatus(transaction.accountWithdrawalId)}>Hoàn tất</button>
-              ) : (
-                <button onClick={() => handleEditClick(transaction)}>Chỉnh sửa</button>
-              )}
-            </td>
+            <td>{transaction.description}</td>
           </tr>
         ))}
       </tbody>

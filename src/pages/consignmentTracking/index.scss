@@ -4,6 +4,27 @@
   background-color: #f9f9f9;
   border-radius: 8px;
 
+  .btn-container {
+    display: flex;
+    justify-content: space-between; 
+    gap: 1rem;
+
+    .btn {
+      padding: 0.75rem 1.5rem; 
+      border: none;
+      border-radius: 8px; 
+      font-size: 1rem; 
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease; 
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); 
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+      }
+    }
+  }
 
   .btn-edit-consignment {
     background-color: #f9f1e7;
@@ -21,12 +42,12 @@
     }
   }
 
-  .consignment-tab{
-      font-size: medium;
+  .consignment-tab {
+    font-size: medium;
   }
 
   h1 {
-    color: #B88E2F;
+    color: #b88e2f;
     margin-bottom: 20px;
     text-align: center;
   }
@@ -36,13 +57,13 @@
   }
 
   .ant-collapse {
-    background-color: #FFF;
-    border: 1px solid #E7E7E7;
+    background-color: #fff;
+    border: 1px solid #e7e7e7;
     border-radius: 8px;
   }
 
   .ant-collapse-item {
-    border-bottom: 1px solid #E7E7E7;
+    border-bottom: 1px solid #e7e7e7;
   }
 
   .order-header {
@@ -60,9 +81,18 @@
       border-radius: 4px;
       font-weight: bold;
 
-      &.đang-xử-lý { background-color: #FFF2CC; color: #D6A100; }
-      &.đã-giao-hàng { background-color: #D4EDDA; color: #155724; }
-      &.đã-hủy { background-color: #F8D7DA; color: #721C24; }
+      &.đang-xử-lý {
+        background-color: #fff2cc;
+        color: #d6a100;
+      }
+      &.đã-giao-hàng {
+        background-color: #d4edda;
+        color: #155724;
+      }
+      &.đã-hủy {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
     }
   }
 
@@ -70,21 +100,21 @@
     margin-top: 20px;
 
     h3 {
-      color: #B88E2F;
+      color: #b88e2f;
       margin-bottom: 10px;
     }
 
     .ant-table-thead > tr > th {
-      background-color: #F9F1E7;
-      color: #B88E2F;
+      background-color: #f9f1e7;
+      color: #b88e2f;
     }
 
     .ant-table-tbody > tr > td {
-      border-bottom: 1px solid #E7E7E7;
+      border-bottom: 1px solid #e7e7e7;
     }
 
     img {
-      object-fit: contain; 
+      object-fit: contain;
     }
   }
 }
