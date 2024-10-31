@@ -95,7 +95,7 @@ function CarePackageDetail() {
           <img
             src={mainImage}
             alt="Cá Koi chính"
-            style={{ width: "250px", borderRadius: "8px" }}
+            style={{ width: "600px", borderRadius: "8px" }}
           />
         </Box>
 
