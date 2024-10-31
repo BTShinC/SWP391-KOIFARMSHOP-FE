@@ -1,12 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
-import { Select, Button } from "antd";
+import { Select, Button, Pagination } from "antd"; // Import Pagination từ Ant Design
 import AdminFilter from "../../../components/admin-components/admin-filter";
 import AdminHeader from "../../../components/admin-components/admin-headers";
 import AdminSideBar from "../../../components/admin-components/admin-sidebar";
 import FishTable from "../../../components/admin-components/fish-table";
 import EditFishModal from "./EditFishModal";
 import AddFishModal from "./AddFishModal";
-import { Pagination } from "@mui/material";
 import {
   fetchAllProduct,
   fetchAllConsignment,
@@ -36,7 +35,6 @@ function ManageFish() {
   const itemsPerPage = 8;
   const [consignmentData, setConsignmentData] = useState([]); // Thêm consignmentData
 
-  // Gọi API để lấy consignmentData
   const getConsignmentData = useCallback(async () => {
     try {
       const res = await fetchAllConsignment();
@@ -84,6 +82,7 @@ function ManageFish() {
     },
     [searchValue, filterType, statusFilter, sortOrder]
   );
+
   useEffect(() => {
     applyFilters(fishData);
   }, [
@@ -211,14 +210,20 @@ function ManageFish() {
           consignmentData={consignmentData} // Truyền consignmentData vào FishTable
         />
 
-        {/* Phân trang */}
-        <Pagination
-          count={Math.ceil(filteredFishData.length / itemsPerPage)}
-          page={currentPage}
-          onChange={(event, value) => handlePageChange(value)}
-          color="primary"
-          style={{ textAlign: "center", marginTop: "20px" }}
-        />
+        {/* Phân trang Ant Design */}
+        <div className="pagination-container">
+          <Pagination
+            total={filteredFishData.length}
+            pageSize={itemsPerPage}
+            current={currentPage}
+            onChange={(page) => handlePageChange(page)}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "20px",
+            }}
+          />
+        </div>
       </div>
     </div>
   );

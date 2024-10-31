@@ -126,7 +126,6 @@ function ManageProductCombo() {
             <Option value="Còn hàng">Còn hàng</Option>
             <Option value="Hết hàng">Hết hàng</Option>
             <Option value="Hoàn tất">Hoàn tất</Option>
-            <Option value="Đã hoàn tiền">Đã hoàn tiền</Option>
             <Option value="Đang chăm sóc">Đang chăm sóc</Option>
             <Option value="Hoàn tất chăm sóc">Hoàn tất chăm sóc</Option>
           </Select>
@@ -148,7 +147,14 @@ function ManageProductCombo() {
           onChange={handleOnChange}
         />
         {/* Centered Pagination */}
-        <div className="pagination-container">
+        <div
+          className="pagination-container"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
           <Pagination
             current={currentPage}
             pageSize={pageSize}
