@@ -119,6 +119,11 @@ function AboutPage() {
               đã đăng lên bán . Tiền hoa hồng sẽ là 20% so với giá đã được phê
               duyệt từ shop.
             </p>
+            <p>
+              Sau khi bán hoàn tất tiền sẽ được chuyển vào ví của bạn từ 1 đến 3
+              ngày sau khi bán. Vui lòng kiểm tra ví và lịch sử giao dịch thường
+              xuyên
+            </p>
             <h3>Ký gửi chăm sóc</h3>
             <p>
               Khi xác nhận rút cá trong quá trình đang chăm sóc, shop sẽ cần từ
