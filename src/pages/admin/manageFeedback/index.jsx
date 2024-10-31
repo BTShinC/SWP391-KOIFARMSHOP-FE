@@ -135,11 +135,7 @@ function ManageFeedback({data}) {
       dataIndex: 'orderID',
       key: 'orderID',
     },
-    {
-      title: 'Khách hàng',
-      dataIndex: 'accountID',
-      key: 'accountID',
-    },
+    
     {
       title: 'Nội dung phản hồi',
       dataIndex: 'description',
@@ -157,11 +153,6 @@ function ManageFeedback({data}) {
           onClick={() => window.open(image, '_blank')}
         />
       )
-    },
-    {
-      title: 'Trạng thái',
-      dataIndex: 'status',
-      key: 'status',
     },
     {
       title: 'Thao tác',
@@ -221,7 +212,6 @@ function ManageFeedback({data}) {
           {selectedFeedback && (
             <div>
               <p><strong>Mã đơn hàng:</strong> {selectedFeedback.orderID}</p>
-              <p><strong>Khách hàng:</strong> {selectedFeedback.accountID}</p>
               <p><strong>Nội dung:</strong> {selectedFeedback.description}</p>
               <p><strong>Hình ảnh:</strong></p>
               <img 
