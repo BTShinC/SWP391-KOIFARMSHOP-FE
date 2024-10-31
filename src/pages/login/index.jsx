@@ -58,7 +58,7 @@ function LoginPage() {
 
   const handleLogin = async (values) => {
     try {
-      const response = await api.post("login", values);
+      const response = await api.post("authen/login", values);
       console.log("Values sent to API:", values);
       console.log("Response from API:", response.data);
       // Log the roleName to the console
@@ -106,39 +106,39 @@ function LoginPage() {
   };
 
   // Hàm lưu thông tin người dùng vào database qua API backend
-  const saveUserToDatabase = async (user) => {
-    try {
-      const response = await axios.post("/api/users", {
-        displayName: user.displayName,
-        email: user.email,
-        uid: user.uid,
-      });
+  // const saveUserToDatabase = async (user) => {
+  //   try {
+  //     const response = await axios.post("/api/users", {
+  //       displayName: user.displayName,
+  //       email: user.email,
+  //       uid: user.uid,
+  //     });
 
-      console.log("User saved to DB:", response.data);
-    } catch (error) {
-      console.error("Error saving user to database:", error);
-    }
-  };
+  //     console.log("User saved to DB:", response.data);
+  //   } catch (error) {
+  //     console.error("Error saving user to database:", error);
+  //   }
+  // };
 
-  const loginGoogle = async () => {
-    const googleProvider = new GoogleAuthProvider();
+  // const loginGoogle = async () => {
+  //   const googleProvider = new GoogleAuthProvider();
 
-    try {
-      const response = await signInWithPopup(auth, googleProvider);
-      const user = response.user;
-      console.log("User:", user.displayName);
-      console.log("Email:", user.email);
+  //   try {
+  //     const response = await signInWithPopup(auth, googleProvider);
+  //     const user = response.user;
+  //     console.log("User:", user.displayName);
+  //     console.log("Email:", user.email);
 
-      // Lưu thông tin người dùng vào database
-      await saveUserToDatabase(user);
+  //     // Lưu thông tin người dùng vào database
+  //     await saveUserToDatabase(user);
 
-      // Điều hướng đến trang home
-      navigate("/");
+  //     // Điều hướng đến trang home
+  //     navigate("/");
 
-    } catch (error) {
-      console.error("Error logging in with Google:", error);
-    }
-  };
+  //   } catch (error) {
+  //     console.error("Error logging in with Google:", error);
+  //   }
+  // };
 
   return (
     <div className="login">
@@ -194,7 +194,7 @@ function LoginPage() {
             </Button>
           </Form>
 
-          <button
+          {/* <button
             className="google-login-button"
             onClick={() => {
               console.log("Google login button clicked.");
@@ -203,7 +203,7 @@ function LoginPage() {
           >
             <img src={googleLogo} alt="Google Logo" className="google-logo" />
             Đăng nhập với Google
-          </button>
+          </button> */}
 
           <div className="links">
             <li>

@@ -34,6 +34,7 @@ function SellForm({ isOnline }) {
     handleSubmit,
     setValue,
     trigger,
+    getValues,
     formState: { errors },
   } = useForm();
 
@@ -112,7 +113,7 @@ function SellForm({ isOnline }) {
     });
 
     try {
-      const uploadedFiles = await Promise.all(uploadPromises); 
+      const uploadedFiles = await Promise.all(uploadPromises);
       return uploadedFiles;
     } catch (error) {
       console.error("Error uploading files:", error);
@@ -121,7 +122,7 @@ function SellForm({ isOnline }) {
   };
   const onSubmit = async (data) => {
     try {
-      if (fileList.length < 3 && certFileList < 1 ) {
+      if (fileList.length < 3 && certFileList < 1) {
         toast.error("Vui lòng upload đủ 3 hình ảnh và 1 chứng nhận");
         return;
       }
@@ -132,12 +133,16 @@ function SellForm({ isOnline }) {
         status: "Chờ xác nhận",
         type: "Ký gửi",
         consignmentType: "Ký gửi để bán",
-        price: data.desiredPrice,
-        salePrice: data.desiredPrice,
-        reason: 'Vui lòng mang cá đến trang trại để hoàn thành thủ tục',
-        formType:'sellForm',
+        price: parseFloat(data.desiredPrice.replace(/\./g, "").replace(",", ".")),
+        salePrice: parseFloat(data.desiredPrice.replace(/\./g, "").replace(",", ".")), 
+        reason: "Vui lòng mang cá đến trang trại để hoàn thành thủ tục",
+        formType: "sellForm",
         consignmentDate: format(new Date(), "yyyy-MM-dd"),
-      };
+        desiredPrice: parseFloat(data.desiredPrice.replace(/\./g, "").replace(",", ".")),
+    };
+    
+
+      console.log(finalData);
 
       // Lưu thông tin vào localStorage
       localStorage.setItem("sellForm", JSON.stringify(finalData));
@@ -312,15 +317,25 @@ function SellForm({ isOnline }) {
                   value: 500000,
                   message: "Giá bán mong đợi phải lớn hơn 500,000",
                 },
+                validate: (value) =>
+                  !isNaN(parseInt(value.replace(/\./g, ""), 10)) ||
+                  "Vui lòng nhập số hợp lệ",
               })}
               fullWidth
-              type="number"
-              inputProps={{ min: 500000 }}
+              type="text"
+              inputProps={{ inputMode: "numeric", pattern: "[0-9.]*" }} // Chấp nhận số và dấu chấm
               error={!!errors.desiredPrice}
               helperText={errors.desiredPrice?.message}
-              onChange={() => {
-              trigger("desiredPrice");
-            }}
+              value={
+                getValues("desiredPrice")
+                  ?.toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ".") || ""
+              }
+              onChange={(e) => {
+                const rawValue = e.target.value.replace(/\./g, ""); // Loại bỏ dấu chấm
+                setValue("desiredPrice", rawValue); // Cập nhật giá trị mà không có dấu chấm
+                trigger("desiredPrice"); // Kiểm tra lại trường này
+              }}
               className="highlighted-textfield"
             />
           </Grid>

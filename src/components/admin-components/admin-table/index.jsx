@@ -13,7 +13,7 @@ const AdminTable = ({ columns, data, title, ModalComponent, onChange }) => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-  
+
   return (
     <div className="admin-table">
       <div>
@@ -35,6 +35,11 @@ const AdminTable = ({ columns, data, title, ModalComponent, onChange }) => {
               <td>{row.address}</td>
               <td>{row.email}</td>
               <td>{row.phoneNumber}</td>
+              <td>
+                {row.roleName === "Admin" && <span>Quản trị viên</span>}
+                {row.roleName === "Staff" && <span>Nhân viên</span>}
+                {row.roleName === "Customer" && <span>Khách hàng</span>}
+              </td>
               <td>{row.accountBalance}</td>
               <td>
                 {ModalComponent && (
@@ -42,7 +47,7 @@ const AdminTable = ({ columns, data, title, ModalComponent, onChange }) => {
                     userData={row}
                     title="Chỉnh sửa thông tin"
                     className="modal-edit-user-button"
-                    onChange={onChange} 
+                    onChange={onChange}
                   />
                 )}
               </td>
@@ -55,13 +60,13 @@ const AdminTable = ({ columns, data, title, ModalComponent, onChange }) => {
           display: "flex",
           justifyContent: "center",
           alignContent: "center",
-          margin: "3rem 0", // Thêm margin
+          margin: "3rem 0",
         }}
-        count={Math.ceil(data.length / itemsPerPage)} // Tổng số trang
-        page={currentPage} // Trang hiện tại
-        onChange={handleChangePage} // Hàm xử lý khi thay đổi trang
-        color="primary" // Màu sắc của pagination (có thể tùy chỉnh)
-        shape="rounded" // Hình dạng của pagination
+        count={Math.ceil(data.length / itemsPerPage)} 
+        page={currentPage}
+        onChange={handleChangePage} 
+        color="primary" 
+        shape="rounded" 
       />
     </div>
   );
@@ -72,7 +77,7 @@ AdminTable.propTypes = {
   columns: PropTypes.arrayOf(PropTypes.string).isRequired,
   title: PropTypes.string.isRequired,
   ModalComponent: PropTypes.elementType,
-  onChange: PropTypes.func.isRequired, 
+  onChange: PropTypes.func.isRequired,
 };
 
 export default AdminTable;

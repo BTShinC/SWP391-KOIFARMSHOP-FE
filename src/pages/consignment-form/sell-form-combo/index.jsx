@@ -19,9 +19,10 @@ function SellFormCombo({ isOnline }) {
   const {
     register,
     handleSubmit,
-    trigger,
     formState: { errors },
     setValue,
+    trigger,
+    getValues,
   } = useForm();
 
   useEffect(() => {
@@ -109,13 +110,14 @@ function SellFormCombo({ isOnline }) {
         image2: uploadedImages[2]?.url,
         type: "Ký gửi",
         consignmentType: "Ký gửi để bán",
-        price: data.desiredPrice,
+        price: parseFloat(data.desiredPrice.replace(/\./g, "").replace(",", ".")),
         status: "Chờ xác nhận",
         comboName: uuidv4(),
-        salePrice: data.desiredPrice,
-        reason: 'Vui lòng mang cá đến trang trại để hoàn thành thủ tục',
-        formType:'sellFormCombo',
+        salePrice: parseFloat(data.desiredPrice.replace(/\./g, "").replace(",", ".")), 
+        reason: "Vui lòng mang cá đến trang trại để hoàn thành thủ tục",
+        formType: "sellFormCombo",
         consignmentDate: consignmentDate,
+        desiredPrice: parseFloat(data.desiredPrice.replace(/\./g, "").replace(",", ".")),
       };
 
       console.log("Form data with uploaded images:", finalData);
@@ -240,7 +242,7 @@ function SellFormCombo({ isOnline }) {
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField
+          <TextField
               label="Giá bán mong đợi"
               {...register("desiredPrice", {
                 required: "Vui lòng nhập giá bạn mong muốn",
@@ -248,14 +250,24 @@ function SellFormCombo({ isOnline }) {
                   value: 500000,
                   message: "Giá bán mong đợi phải lớn hơn 500,000",
                 },
+                validate: (value) =>
+                  !isNaN(parseInt(value.replace(/\./g, ""), 10)) ||
+                  "Vui lòng nhập số hợp lệ",
               })}
               fullWidth
-              type="number"
-              inputProps={{ min: 500000 }}
+              type="text"
+              inputProps={{ inputMode: "numeric", pattern: "[0-9.]*" }} // Chấp nhận số và dấu chấm
               error={!!errors.desiredPrice}
               helperText={errors.desiredPrice?.message}
-              onChange={()=>{
-                trigger('desiredPrice')
+              value={
+                getValues("desiredPrice")
+                  ?.toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ".") || ""
+              }
+              onChange={(e) => {
+                const rawValue = e.target.value.replace(/\./g, ""); // Loại bỏ dấu chấm
+                setValue("desiredPrice", rawValue); // Cập nhật giá trị mà không có dấu chấm
+                trigger("desiredPrice"); // Kiểm tra lại trường này
               }}
               className="highlighted-textfield"
             />

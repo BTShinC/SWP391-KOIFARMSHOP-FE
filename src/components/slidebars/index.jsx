@@ -19,15 +19,13 @@ const Sidebar = ({ isOpen, onClose }) => {
     }).format(amount);
   };
 
-
-
   const [accountBalance, setAccountBalance] = useState(0);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch(); // Khai báo useDispatch để sử dụng action
   const navigate = useNavigate(); // Sử dụng useNavigate để điều hướng
 
-     // Fetch account balance from API when the component mounts
-     // Tạo hàm riêng để fetch balance
+  // Fetch account balance from API when the component mounts
+  // Tạo hàm riêng để fetch balance
   const fetchAccountBalance = async () => {
     if (user?.accountID) {
       try {
@@ -43,8 +41,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     if (isOpen) {
       fetchAccountBalance();
     }
-  }, [isOpen, user?.accountID]); // Thêm isOpen vào dependencies
-
+  }, [isOpen, user?.accountID]); 
   const handleLogout = async () => {
     try {
       // Gọi API logout nếu backend yêu cầu
@@ -63,7 +60,6 @@ const Sidebar = ({ isOpen, onClose }) => {
       // Có thể hiển thị thông báo lỗi cho người dùng ở đây
     }
   };
-
   return (
     <div className={`sidebar ${isOpen ? "open" : ""}`}>
       <Button
@@ -94,10 +90,12 @@ const Sidebar = ({ isOpen, onClose }) => {
               </p>
             </div>
             {user &&
-              user.roleName === "Admin" && ( // Show admin button if user is an admin
+              (user.roleName === "Admin" || user.roleName === "Staff") && (
                 <li>
                   <Link to="/admin" onClick={onClose}>
-                    <Button className="adminpage-button" type="primary">Quản lý</Button>
+                    <Button className="adminpage-button" type="primary">
+                      Quản lý
+                    </Button>
                   </Link>
                 </li>
               )}

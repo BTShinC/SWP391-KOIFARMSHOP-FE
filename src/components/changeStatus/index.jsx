@@ -238,7 +238,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import { Button, Modal, message } from "antd";
 import { updateOrderStatus } from "../../service/userService"; // Import API
-import { useSelector } from "react-redux";
+import api from "../../config/api";
 
 ChangeStatus.propTypes = {
   data: PropTypes.shape({
@@ -250,22 +250,62 @@ ChangeStatus.propTypes = {
 function ChangeStatus({ data }) {
   const [showButtons, setShowButtons] = useState(false); // Kiểm soát hiển thị nút
   const [status, setStatus] = useState(data.status); // Trạng thái hiện tại của đơn hàng
-  const accountID = useSelector((state) => state.user?.accountID); // Lấy accountID từ Redux
+  const orderAccountID = data.accountID;
 
   // Xử lý cập nhật trạng thái đơn hàng
-
+  const updateAccountBalance = async (accountID, amount) => {
+    const apiUrl = `/account/updateBalance/${accountID}?amount=${amount}`;
+    try {
+      const response = await api.put(apiUrl); // Use api.put for PUT requests
+      if (!response.ok) {
+        throw new Error("Failed to update account balance");
+      }
+    } catch (error) {
+      console.error("Error updating account balance:", error);
+    }
+  };
   // Xử lý cập nhật trạng thái đơn hàng
   const handleUpdateStatus = async (newStatus) => {
     try {
-      const date = new Date().toISOString(); // Lấy ngày hiện tại ở định dạng ISO
-      await updateOrderStatus(data.orderID, newStatus, accountID, date); // Gọi API cập nhật
-      setStatus(newStatus); // Cập nhật trạng thái mới
+      const date = new Date().toISOString();
+
+      // Nếu trạng thái mới là "Đã hủy", thực hiện hoàn tiền
+      if (newStatus === "Đã hủy") {
+        const refundAmount = data.discountedTotal + 200000;
+  
+        // Log thông tin trước khi gửi request
+        console.log("Request Data:", {
+          endpoint: `account/updateBalance/${orderAccountID}`,
+          body: {
+            accountID: orderAccountID,
+            amount: refundAmount,
+          }
+        });
+        await updateAccountBalance(orderAccountID, refundAmount);
+        // Log response từ API
+        // Tạo transaction
+        const transactionResponse = await api.post("/transactions/create", {
+          accountID: orderAccountID,
+          price: refundAmount,
+          date: date,
+          description: `Hoàn tiền đơn hàng ${data.orderID} (Admin hủy đơn)`
+        });
+  
+        // Log transaction response
+        console.log("Transaction Response:", transactionResponse.data);
+  
+        message.success(`Đã hoàn trả ${refundAmount.toLocaleString()} VND cho khách hàng`);
+      }
+
+      // Cập nhật trạng thái đơn hàng
+      await updateOrderStatus(data.orderID, newStatus, orderAccountID, date);
+      setStatus(newStatus);
       message.success(`Trạng thái cập nhật thành công: ${newStatus}`);
-      setShowButtons(false); // Đóng giao diện cập nhật
-      window.location.reload(); // Reload lại trang sau khi cập nhật thành công
+      setShowButtons(false);
+      // window.location.reload();
     } catch (error) {
       message.error("Lỗi khi cập nhật trạng thái!");
-      console.error("Error updating order status:", error.response?.data || error.message);
+      console.error("Error updating order status:", error);
     }
   };
 
@@ -273,8 +313,9 @@ function ChangeStatus({ data }) {
   const confirmCancel = () => {
     Modal.confirm({
       title: "Bạn có chắc muốn hủy đơn này?",
-      okText: "Yes",
-      cancelText: "No",
+      content: "Hệ thống sẽ hoàn tiền lại cho khách hàng sau khi hủy đơn.",
+      okText: "Đồng ý",
+      cancelText: "Hủy",
       onOk: () => handleUpdateStatus("Đã hủy"),
     });
   };

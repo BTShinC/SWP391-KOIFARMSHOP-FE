@@ -49,7 +49,7 @@ function ConsignmentPackageExample() {
               />
               <CardContent>
                 <Typography variant="h6" gutterBottom>
-                  {product.packageName}
+                  {product.packageName} ({product.type})
                 </Typography>
                 {/* Căn trái phần mô tả */}
                 <Typography

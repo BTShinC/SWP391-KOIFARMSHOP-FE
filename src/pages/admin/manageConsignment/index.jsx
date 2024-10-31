@@ -1,10 +1,9 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import AdminHeader from "../../../components/admin-components/admin-headers";
 import AdminSideBar from "../../../components/admin-components/admin-sidebar";
 import ConsignmentTable from "./Consignment-table";
 import { fetchAllConsignment } from "../../../service/userService";
-import { Pagination, Select, DatePicker } from "antd";
-import moment from "moment";
+import { Pagination, Select } from "antd";
 
 const { Option } = Select;
 
@@ -22,74 +21,84 @@ const columns = [
 ];
 
 function ManageConsignment() {
-  const [koiConsignmentData, setKoiConsignmentData] = useState([]); // Raw data from API
-  const [filteredData, setFilteredData] = useState([]); // Filtered data for display
-  const [filterType, setFilterType] = useState("all"); // Consignment type filter
-  const [expiryDateFilter, setExpiryDateFilter] = useState(null); // Expiry date filter
-  const [currentPage, setCurrentPage] = useState(1); // Current page for pagination
-  const itemsPerPage = 8; // Items per page
+  const [koiConsignmentData, setKoiConsignmentData] = useState([]); 
+  const [filteredData, setFilteredData] = useState([]); 
+  const [filterType, setFilterType] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all"); 
+  const [currentPage, setCurrentPage] = useState(1); 
+  const itemsPerPage = 8; 
 
-  // Fetch all consignment data once on component mount
+  // Lấy tất cả dữ liệu ký gửi khi component được mount
   useEffect(() => {
     getAllConsignment();
   }, []);
 
-  // Fetch all consignment data
+  // Hàm lấy tất cả dữ liệu ký gửi
   const getAllConsignment = async () => {
     try {
       const res = await fetchAllConsignment();
       if (res) {
-        console.log("Data fetched successfully");
-        setKoiConsignmentData(res.data); // Set raw data
-        setFilteredData(res.data); // Initialize filtered data
+        console.log("Lấy dữ liệu thành công");
+        setKoiConsignmentData(res.data); // Gán dữ liệu thô
+        setFilteredData(res.data); // Khởi tạo dữ liệu đã lọc
       }
     } catch (error) {
-      console.error("Error fetching consignment data:", error);
+      console.error("Lỗi khi lấy dữ liệu ký gửi:", error);
     }
   };
 
-  // Apply filtering based on consignment type and expiry date
-  const applyFilters = useCallback(() => {
+  // Áp dụng bộ lọc mỗi khi filterType hoặc statusFilter thay đổi
+  useEffect(() => {
     let filtered = koiConsignmentData;
 
-    // Filter by consignment type
+    // Lọc theo loại ký gửi
     if (filterType !== "all") {
       filtered = filtered.filter((item) => item.consignmentType === filterType);
     }
 
-    // Filter by expiry date
-    if (expiryDateFilter) {
-      filtered = filtered.filter((item) =>
-        moment(item.dateExpiration).isSame(expiryDateFilter, "day")
-      );
+    // Lọc theo trạng thái
+    if (statusFilter !== "all") {
+      filtered = filtered.filter((item) => item.status === statusFilter);
     }
 
-    setFilteredData(filtered); // Update the filtered data
-  }, [filterType, expiryDateFilter, koiConsignmentData]); // Add dependencies
+    setFilteredData(filtered); // Cập nhật dữ liệu đã lọc
+  }, [filterType, statusFilter, koiConsignmentData]); // Cập nhật khi các bộ lọc thay đổi
 
-  // Handle consignment type change
+  // Xử lý khi thay đổi loại ký gửi
   const handleTypeChange = (value) => {
     setFilterType(value);
+    setStatusFilter("all"); // Reset bộ lọc trạng thái khi thay đổi loại ký gửi
   };
 
-  // Handle expiry date change
-  const handleExpiryDateChange = (date) => {
-    setExpiryDateFilter(date);
+  // Xử lý khi thay đổi trạng thái
+  const handleStatusChange = (value) => {
+    setStatusFilter(value);
   };
 
-  // Handle page change for pagination
+  // Xử lý thay đổi trang cho phân trang
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-  // Reapply filters whenever filter type or expiry date changes
-  useEffect(() => {
-    applyFilters();
-  }, [filterType, expiryDateFilter, applyFilters]); // Add dependencies
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
   const totalItems = filteredData.length;
+
+  // Danh sách trạng thái động dựa trên loại ký gửi
+  const statusOptions =
+    filterType === "Ký gửi để bán"
+      ? [
+          { value: "Đang tiến hành", label: "Đang tiến hành" },
+          { value: "Đã hoàn tiền", label: "Đã hoàn tiền" },
+        ]
+      : [
+          { value: "Chờ xác nhận", label: "Chờ xác nhận" },
+          { value: "Đang chăm sóc", label: "Đang chăm sóc" },
+          { value: "Hoàn tất", label: "Hoàn tất" },
+          { value: "Yêu cầu gia hạn", label: "Yêu cầu gia hạn" },
+          { value: "Đã hủy", label: "Đã hủy" },
+        ];
 
   return (
     <div className="admin">
@@ -100,11 +109,12 @@ function ManageConsignment() {
         <AdminHeader />
         <h1 className="content__title">Quản lý ký gửi</h1>
 
-        {/* Filter section */}
+        {/* Phần lọc */}
         <div
           className="filter-container"
           style={{ display: "flex", gap: "20px", marginBottom: "20px" }}
         >
+          {/* Lọc theo loại ký gửi */}
           <Select
             placeholder="Lọc theo hình thức"
             style={{ width: 200 }}
@@ -113,23 +123,34 @@ function ManageConsignment() {
           >
             <Option value="all">Tất cả</Option>
             <Option value="Ký gửi để bán">Ký gửi để bán</Option>
-            <Option value="chăm sóc">Ký gửi chăm sóc</Option>
+            <Option value="Ký gửi chăm sóc">Ký gửi chăm sóc</Option>
           </Select>
 
-          {/* <DatePicker
-            placeholder="Lọc theo ngày đáo hạn"
-            onChange={handleExpiryDateChange}
-          /> */}
+          {/* Lọc theo trạng thái - thay đổi dựa trên loại ký gửi */}
+          <Select
+            placeholder="Lọc theo trạng thái"
+            style={{ width: 200 }}
+            onChange={handleStatusChange}
+            value={statusFilter}
+            defaultValue="all"
+          >
+            <Option value="all">Tất cả</Option>
+            {statusOptions.map((option) => (
+              <Option key={option.value} value={option.value}>
+                {option.label}
+              </Option>
+            ))}
+          </Select>
         </div>
 
-        {/* Consignment table */}
+        {/* Bảng ký gửi */}
         <ConsignmentTable
           columns={columns}
           consignmentData={currentItems}
           onChange={getAllConsignment}
         />
 
-        {/* Pagination */}
+        {/* Phân trang */}
         <Pagination
           total={totalItems}
           current={currentPage}

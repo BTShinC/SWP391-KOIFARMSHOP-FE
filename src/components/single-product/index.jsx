@@ -1,5 +1,5 @@
 import "./index.scss";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button, Typography, Image, Divider, message } from "antd";
 import Carousel from "../carousel";
 import { useState, useEffect } from "react";
@@ -13,7 +13,7 @@ function SingleProduct() {
   const [cartVisible, setCartVisible] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const account = useSelector((state) => state?.user);
-
+  const navigate = useNavigate();
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("vi-VN", {
@@ -28,6 +28,26 @@ function SingleProduct() {
   const dispatch = useDispatch(); // Khởi tạo dispatch
   console.log("Current account:", account);
   console.log("Current ID:", account?.accountID);
+
+  // Trong trang chi tiết sản phẩm, thêm hàm xử lý mua ngay
+const handleBuyNow = () => {
+  const buyNowProduct = {
+    productID: product.productID,
+    name: product.name,
+    price: product.price,
+    quantity: 1,
+    image: product.image,
+    type: "Product"
+  };
+
+  // Chuyển đến trang checkout với thông tin sản phẩm
+  navigate('/checkout', {
+    state: {
+      isBuyNow: true,
+      buyNowProduct: buyNowProduct
+    }
+  });
+};
 
   useEffect(() => {
 
@@ -150,7 +170,7 @@ function SingleProduct() {
               <Text>Nguồn gốc: {product.origin}</Text>
               {product.status === "Còn hàng" ? (
                 <div className="action-buttons">
-                  <Button className="buy-button">Mua ngay</Button>
+                  <Button className="buy-button" onClick={handleBuyNow}>Mua ngay</Button>
                   <Button onClick={handleAddToCart} className="buy-button">
                     Thêm vào giỏ hàng
                   </Button>

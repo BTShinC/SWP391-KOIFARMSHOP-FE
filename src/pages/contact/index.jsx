@@ -10,7 +10,7 @@ const initFormValue = {
     contact: "",
     subject: "",
     message: "",
-    status: "pending"
+    status: "Chờ xử lý"
 };
 
 function ContactPage() {
