@@ -94,7 +94,7 @@ function ChangeStatusConsignment({
         dateExpiration: dateExpirationFormatted,
         status: updatedConsignmentStatus,
       };
-      console.log("Cập nhật dữ liệu:", updatedFormValue);
+console.log("Cập nhật dữ liệu:", updatedFormValue);
       await updateConsignmentAndProduct(updatedFormValue);
 
       if (onChange) {
@@ -142,7 +142,7 @@ function ChangeStatusConsignment({
       // Cập nhật trạng thái consignment
       const updatedFormValue = {
         ...formValue,
-        status: "Hoàn tất",
+        status: "Đã hoàn tiền",
         reason:
           "Tiền đã được hoàn lại vào ví của quý khách vui lòng kiểm tra lại nếu có thắc mắc vui lòng liên hệ hotline của KOIFISH",
       };
@@ -187,7 +187,7 @@ function ChangeStatusConsignment({
       // Hoàn tiền trước
       const refund = await refundConsignmentTotal(consignmentID);
       if (!refund) {
-        message.error("Hoàn tiền thất bại. Không thể cập nhật trạng thái.");
+message.error("Hoàn tiền thất bại. Không thể cập nhật trạng thái.");
         return;
       }
 
@@ -273,7 +273,7 @@ function ChangeStatusConsignment({
       const productData = updatedFormValue.productID
         ? await fetchProductById(updatedFormValue.productID)
         : updatedFormValue.productComboID
-        ? await fetchProductComboById(updatedFormValue.productComboID)
+? await fetchProductComboById(updatedFormValue.productComboID)
         : null;
 
       if (!productData) {
@@ -339,7 +339,7 @@ function ChangeStatusConsignment({
 
     const updatedFormValue = {
       ...formValue,
-      status: "Hoàn tất ",
+      status: "Hoàn trả ",
       reason: reasonForm,
       saleDate: currentDate,
     };
@@ -378,7 +378,7 @@ function ChangeStatusConsignment({
   return (
     <div>
       {!isShowButton ? (
-        <Button onClick={handleShowButton}>Cập nhật trạng thái</Button>
+<Button onClick={handleShowButton}>Cập nhật trạng thái</Button>
       ) : (
         <div className="change-status-button__container">
           <div className="change-status-button__close">
@@ -404,6 +404,9 @@ function ChangeStatusConsignment({
             )}
             {formValue.status === "Đang tiến hành" && (
               <>
+                <Button className="custom-button" onClick={handleComplete}>
+                  Hoàn tất
+                </Button>
                 <Button className="custom-button" onClick={handleReturnFish}>
                   Hoàn trả
                 </Button>
@@ -425,7 +428,7 @@ function ChangeStatusConsignment({
                 Xác nhận hoàn cá
               </Button>
             )}
-            {formValue.status === "Chưa hoàn tiền" &&
+            {formValue.status === "Hoàn tất" &&
               formValue.consignmentType === "Ký gửi để bán" && (
                 <Button
                   className="custom-button__transport"
@@ -462,5 +465,4 @@ function ChangeStatusConsignment({
     </div>
   );
 }
-
 export default ChangeStatusConsignment;

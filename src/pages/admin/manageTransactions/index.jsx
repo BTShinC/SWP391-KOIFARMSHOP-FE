@@ -20,8 +20,8 @@ const withdrawalColumns = [
   "Số tiền",
   "Ngày yêu cầu",
   "Trạng thái",
-  "Thông tin ngân hàng",
-  "Thao tác",
+  // "Thông tin ngân hàng",
+  // "Thao tác",
 ];
 
 const handleSearch = (value) => {

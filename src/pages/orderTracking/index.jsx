@@ -323,7 +323,7 @@ function OrderTracking() {
               if (consignment) {
                 const updatedConsignment = {
                   ...consignment,
-                  status: "Chưa hoàn tiền",
+                  status: "Hoàn tất",
                   saleDate: new Date().toISOString(), // Add the current date
                 };
                 await api.put(`/consignments/${consignment.consignmentID}`, updatedConsignment);
