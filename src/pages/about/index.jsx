@@ -119,11 +119,21 @@ function AboutPage() {
               đã đăng lên bán . Tiền hoa hồng sẽ là 20% so với giá đã được phê
               duyệt từ shop.
             </p>
+            <p>
+              Sau khi bán hoàn tất tiền sẽ được chuyển vào ví của bạn từ 1 đến 3
+              ngày sau khi bán. Vui lòng kiểm tra ví và lịch sử giao dịch thường
+              xuyên
+            </p>
             <h3>Ký gửi chăm sóc</h3>
             <p>
               Khi xác nhận rút cá trong quá trình đang chăm sóc, shop sẽ cần từ
               1 đến 3 ngày để chuẩn bị và chi phí chăm sóc sẽ không được hoàn
               lại.
+            </p>
+            <p>
+              Để chăm sóc tốt nhất cho cá của quý khách tối đa shop chỉ nhận 20
+              cá thể cho gói chăm sóc theo lô. Quý khách lưu ý số lượng trước
+              khi đặt gói chăm sóc.
             </p>
           </div>
           <p className="content">
