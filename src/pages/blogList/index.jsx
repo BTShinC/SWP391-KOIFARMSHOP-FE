@@ -1,6 +1,7 @@
-import BlogPost from "./BlogPost";
+
 import "./index.scss";
 import { Box, Button, Pagination } from "@mui/material";
+import BlogPost from './blogPost';
 
   const samplePosts = [
     {

@@ -14,7 +14,7 @@ import api from "../../config/api";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/features/userSlice";
-import api from "../../config/api";
+
 
 
 const firebaseConfig = {
@@ -101,7 +101,7 @@ function LoginPage() {
 
     } catch (err) {
       console.error("Error response from API:", err.response?.data);
-      toast.error(err.response.data);
+      toast.error("Vui lòng kiểm tra lại tên đăng nhập và mật khẩu");
     }
   };
 
