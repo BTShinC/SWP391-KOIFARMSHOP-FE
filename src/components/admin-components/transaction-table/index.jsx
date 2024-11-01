@@ -57,6 +57,21 @@ const TransactionTable = ({ columns, transactionData, title, onChange,onUpdateSt
             <td>{transaction.price || transaction.pricesend} VND</td>
             <td>{new Date(transaction.date).toLocaleDateString()}</td>
             <td>{transaction.description}</td>
+            <td>
+              {transaction.bank_name ? (
+                `${transaction.bank_name} - ${transaction.account_number}`
+              ) : (   
+                transaction.account_number
+              )} 
+               
+            </td>
+            <td>
+              {onUpdateStatus && transaction.status !== "Hoàn tất" ? (
+                <button onClick={() => onUpdateStatus(transaction.accountWithdrawalId)}>Hoàn tất</button>
+              ) : (
+                transaction.status
+              )}
+            </td>
           </tr>
         ))}
       </tbody>
