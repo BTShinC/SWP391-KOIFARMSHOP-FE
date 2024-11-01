@@ -11,7 +11,7 @@
       margin-bottom: 1rem;
       color: #333333;
     }
-  
+    
     table {
       width: 100%;
       border-collapse: collapse;
@@ -72,9 +72,30 @@
     }
     .btn-container {
       display: flex;
-      justify-content: center;
-      gap: 20px;
+      justify-content: space-between; /* Ensure buttons align to the left and right */
+      gap: 10px;
+    
+      .btn-left,
+      .btn-right {
+        display: flex;
+        gap: 10px;
+      }
+    
+      .btn-left {
+        flex-grow: 1; /* Ensure left side takes up available space */
+      }
+    
+      .btn-right {
+        justify-content: flex-end;
+      }
+    
+      button {
+        white-space: nowrap; /* Prevent buttons from breaking onto new lines */
+        padding: 8px 12px;
+        border-radius: 5px;
+      }
     }
+    
     button {
       border: none;
       padding: 8px 12px;
