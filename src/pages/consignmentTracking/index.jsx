@@ -12,8 +12,7 @@ import {
   Input,
   Checkbox,
 } from "antd";
-
-import { addDays, format } from "date-fns";
+import { addDays, format, isValid } from "date-fns";
 import api from "../../config/api";
 import "./index.scss";
 import {
@@ -149,8 +148,12 @@ function ConsignmentTracking() {
       key: "dateReceived",
       render: (dateString) => {
         if (!dateString) return "N/A"; // Kiểm tra nếu giá trị null hoặc undefined
-        const date = new Date(dateString);
-        return date.toLocaleDateString();
+
+        const date = new Date(dateString); // Tạo đối tượng Date từ dateString
+
+        if (!isValid(date)) return "Ngày không hợp lệ"; // Kiểm tra tính hợp lệ của ngày
+
+        return format(date, "dd/MM/yyyy"); // Định dạng ngày theo kiểu DD/MM/YYYY
       },
     },
     {
@@ -159,8 +162,12 @@ function ConsignmentTracking() {
       key: "dateExpiration",
       render: (dateString) => {
         if (!dateString) return "N/A"; // Kiểm tra nếu giá trị null hoặc undefined
-        const date = new Date(dateString);
-        return date.toLocaleDateString();
+
+        const date = new Date(dateString); // Tạo đối tượng Date từ dateString
+
+        if (!isValid(date)) return "Ngày không hợp lệ"; // Kiểm tra tính hợp lệ của ngày
+
+        return format(date, "dd/MM/yyyy"); // Định dạng ngày theo kiểu DD/MM/YYYY
       },
     },
     {
@@ -198,8 +205,8 @@ function ConsignmentTracking() {
               // So sánh ngày hiện tại với ngày trước 3 ngày
               if (
                 currentDate >= threeDaysBeforeExpiration &&
-                currentDate < expirationDate && 
-                record.status === 'Đang chăm sóc'
+                currentDate < expirationDate &&
+                record.status === "Đang chăm sóc"
               ) {
                 return (
                   <button
@@ -221,14 +228,14 @@ function ConsignmentTracking() {
             })()}
 
             {/* Nút "Rút cá" chỉ hiển thị khi trạng thái khác "Chờ xác nhận" và "Hoàn tất" */}
-            {record.status === 'Đang chăm sóc' && (
-                <button
-                  className="btn-edit-consignment"
-                  onClick={() => warning(record)}
-                >
-                  Rút cá
-                </button>
-              )}
+            {record.status === "Đang chăm sóc" && (
+              <button
+                className="btn-edit-consignment"
+                onClick={() => warning(record)}
+              >
+                Rút cá
+              </button>
+            )}
           </div>
         );
       },
@@ -269,8 +276,12 @@ function ConsignmentTracking() {
       key: "dateExpiration",
       render: (dateString) => {
         if (!dateString) return "N/A"; // Kiểm tra nếu giá trị null hoặc undefined
-        const date = new Date(dateString);
-        return date.toLocaleDateString();
+
+        const date = new Date(dateString); // Tạo đối tượng Date từ dateString
+
+        if (!isValid(date)) return "Ngày không hợp lệ"; // Kiểm tra tính hợp lệ của ngày
+
+        return format(date, "dd/MM/yyyy"); // Định dạng ngày theo kiểu DD/MM/YYYY
       },
     },
     {
@@ -336,10 +347,10 @@ function ConsignmentTracking() {
         //   );
         // }
         // Nếu còn 3 ngày trước ngày đáo hạn thì hiển thị nút "Gia hạn"
-         if (
+        if (
           currentDate >= threeDaysBeforeExpiration &&
           currentDate < expirationDate &&
-          record.status === 'Đang tiến hành'
+          record.status === "Đang tiến hành"
         ) {
           return (
             <button
@@ -626,9 +637,7 @@ function ConsignmentTracking() {
   //   }
   // };
 
-  const handleReturnCareFish = async (
-    consignment
-  ) => {
+  const handleReturnCareFish = async (consignment) => {
     try {
       // Chuẩn bị dữ liệu để cập nhật trạng thái consignment
       const updatedConsignmentData = {
