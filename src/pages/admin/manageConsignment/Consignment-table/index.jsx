@@ -216,41 +216,47 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
                     "N/A"}
                 </td>
                 <td className="btn-container">
-                  <Button
-                    onClick={() =>
-                      handleViewDetail(
-                        consignment,
-                        consignment.productID,
-                        consignment.productComboID
-                      )
-                    }
-                  >
-                    Xem chi tiết
-                  </Button>
-                  {consignment.consignmentType === "Ký gửi chăm sóc" &&
-                    consignment.status === "Đang chăm sóc" && (
-                      <Button
-                        onClick={() => handleOpenUpdateModal(consignment)}
-                        style={{ marginLeft: "10px" }}
-                      >
-                        Cập nhật tình hình
-                      </Button>
-                    )}
-                  {(consignment.consignmentType === "Ký gửi chăm sóc" &&
-                    consignment.status !== "Hoàn tất") ||
-                  (consignment.consignmentType !== "Ký gửi chăm sóc" &&
-                    consignment.status !== "Đã hoàn tiền" && consignment.status !== "Đã hủy") ? (
-                    <ChangeStatusConsignment
-                      data={consignment}
-                      consignmentID={consignment.consignmentID}
-                      productID={consignment.productID}
-                      productComboID={consignment.productComboID}
-                      onChangeStatus={(newStatus) =>
-                        handleStatusChange(consignment.consignmentID, newStatus)
+                  <div className="btn-left">
+                    {consignment.consignmentType === "Ký gửi chăm sóc" &&
+                      consignment.status === "Đang chăm sóc" && (
+                        <Button
+                          onClick={() => handleOpenUpdateModal(consignment)}
+                        >
+                          Cập nhật tình hình
+                        </Button>
+                      )}
+                  </div>
+                  <div className="btn-right">
+                    <Button
+                      onClick={() =>
+                        handleViewDetail(
+                          consignment,
+                          consignment.productID,
+                          consignment.productComboID
+                        )
                       }
-                      onChange={onChange}
-                    />
-                  ) : null}
+                    >
+                      Xem chi tiết
+                    </Button>
+                    {(consignment.consignmentType === "Ký gửi chăm sóc" &&
+                      consignment.status !== "Hoàn tất") ||
+                    (consignment.consignmentType !== "Ký gửi chăm sóc" &&
+                      consignment.status !== "Đã hoàn tiền") ? (
+                      <ChangeStatusConsignment
+                        data={consignment}
+                        consignmentID={consignment.consignmentID}
+                        productID={consignment.productID}
+                        productComboID={consignment.productComboID}
+                        onChangeStatus={(newStatus) =>
+                          handleStatusChange(
+                            consignment.consignmentID,
+                            newStatus
+                          )
+                        }
+                        onChange={onChange}
+                      />
+                    ) : null}
+                  </div>
                 </td>
               </tr>
             </React.Fragment>

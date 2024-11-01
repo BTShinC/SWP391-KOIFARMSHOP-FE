@@ -11,6 +11,8 @@ const columns = [
   "Số tiền",
   "Ngày giao dịch",
   "Chi tiết",
+  "",
+  "",
 
 
 ];

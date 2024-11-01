@@ -142,7 +142,7 @@ console.log("Cập nhật dữ liệu:", updatedFormValue);
       // Cập nhật trạng thái consignment
       const updatedFormValue = {
         ...formValue,
-        status: "Đã hoàn tiền",
+        status: "Hoàn tất",
         reason:
           "Tiền đã được hoàn lại vào ví của quý khách vui lòng kiểm tra lại nếu có thắc mắc vui lòng liên hệ hotline của KOIFISH",
       };
@@ -339,7 +339,7 @@ message.error("Hoàn tiền thất bại. Không thể cập nhật trạng thá
 
     const updatedFormValue = {
       ...formValue,
-      status: "Hoàn trả ",
+      status: "Hoàn tất ",
       reason: reasonForm,
       saleDate: currentDate,
     };
@@ -404,9 +404,6 @@ message.error("Hoàn tiền thất bại. Không thể cập nhật trạng thá
             )}
             {formValue.status === "Đang tiến hành" && (
               <>
-                <Button className="custom-button" onClick={handleComplete}>
-                  Hoàn tất
-                </Button>
                 <Button className="custom-button" onClick={handleReturnFish}>
                   Hoàn trả
                 </Button>
@@ -428,7 +425,7 @@ message.error("Hoàn tiền thất bại. Không thể cập nhật trạng thá
                 Xác nhận hoàn cá
               </Button>
             )}
-            {formValue.status === "Hoàn tất" &&
+            {formValue.status === "Chưa hoàn tiền" &&
               formValue.consignmentType === "Ký gửi để bán" && (
                 <Button
                   className="custom-button__transport"

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Checkbox, Modal, message } from "antd";
+import { Button, Modal, message } from "antd";
 import PropTypes from "prop-types";
 import "./index.scss";
 import {
@@ -39,11 +39,6 @@ function FishTable({
   const handleViewDetail = (fish) => {
     setSelectedFish(fish);
     setIsDetailModalVisible(true); // Mở modal khi nhấn "Xem chi tiết"
-  };
-
-  const handleChangeStatus = (fish) => {
-    setSelectedFish(fish);
-    setIsModalVisible(true); // Hiển thị modal xác nhận
   };
 
   const handleConfirmStatusChange = async () => {
@@ -119,25 +114,21 @@ function FishTable({
                 <td>{fish.breed}</td>
                 <td>{fish.size}</td>
                 <td>{fish.consignmentType}</td>
-                <td>
-                  {new Intl.NumberFormat("vi-VN").format(fish.price)} VNĐ
-                </td>
+                <td>{new Intl.NumberFormat("vi-VN").format(fish.price)} VNĐ</td>
                 <td>{fish.status}</td>
                 <td className="btn-container">
-                  {fish.status === "Còn hàng" && fish.type === 'Trang trại' && (
-                    <Checkbox
-                      checked={fish.status === "Hết hàng"}
-                      onChange={() => handleChangeStatus(fish)}
-                    >
-                      Đánh dấu hết hàng
-                    </Checkbox>
-                  )}
-                  <Button onClick={() => handleViewDetail(fish)}>
-                    Xem chi tiết
-                  </Button>
-                  {ModalComponent && (
-                    <ModalComponent onChange={onChange} fishData={fish} />
-                  )}
+                  <div className="button-group">
+                    <div>
+                      <Button onClick={() => handleViewDetail(fish)}>
+                        Xem chi tiết
+                      </Button>
+                    </div>
+                    {ModalComponent && (
+                      <div>
+                        <ModalComponent onChange={onChange} fishData={fish} />
+                      </div>
+                    )}
+                  </div>
                 </td>
               </tr>
             </React.Fragment>
@@ -211,8 +202,7 @@ function FishTable({
             </p>
             <p>
               <strong>Giá:</strong>
-              {new Intl.NumberFormat("vi-VN"
-              ).format(selectedFish.price)} VNĐ
+              {new Intl.NumberFormat("vi-VN").format(selectedFish.price)} VNĐ
             </p>
             <p>
               <strong>Trạng thái:</strong> {selectedFish.status}
