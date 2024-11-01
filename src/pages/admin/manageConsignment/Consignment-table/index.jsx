@@ -216,7 +216,17 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
                     "N/A"}
                 </td>
                 <td className="btn-container">
-                  <div className="btn-container">
+                  <div className="btn-left">
+                    {consignment.consignmentType === "Ký gửi chăm sóc" &&
+                      consignment.status === "Đang chăm sóc" && (
+                        <Button
+                          onClick={() => handleOpenUpdateModal(consignment)}
+                        >
+                          Cập nhật tình hình
+                        </Button>
+                      )}
+                  </div>
+                  <div className="btn-right">
                     <Button
                       onClick={() =>
                         handleViewDetail(
@@ -228,20 +238,10 @@ function ConsignmentTable({ consignmentData, columns, onChange }) {
                     >
                       Xem chi tiết
                     </Button>
-                    {consignment.consignmentType === "Ký gửi chăm sóc" &&
-                      consignment.status === "Đang chăm sóc" && (
-                        <Button
-                          onClick={() => handleOpenUpdateModal(consignment)}
-                          style={{ marginLeft: "10px" }}
-                        >
-                          Cập nhật tình hình
-                        </Button>
-                      )}
                     {(consignment.consignmentType === "Ký gửi chăm sóc" &&
                       consignment.status !== "Hoàn tất") ||
                     (consignment.consignmentType !== "Ký gửi chăm sóc" &&
-                      consignment.status !== "Đã hoàn tiền" &&
-                      consignment.status !== "Đã hủy") ? (
+                      consignment.status !== "Đã hoàn tiền") ? (
                       <ChangeStatusConsignment
                         data={consignment}
                         consignmentID={consignment.consignmentID}
