@@ -1,14 +1,16 @@
 import PropTypes from "prop-types";
 import "./index.scss";
-import { Pagination } from "@mui/material";
+import { Pagination } from "antd"; 
 import { useState } from "react";
 
 const AdminTable = ({ columns, data, title, ModalComponent, onChange }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
-  const handleChangePage = (event, page) => {
+  
+  const handleChangePage = (page) => {
     setCurrentPage(page);
   };
+
   // Tính toán dữ liệu cần hiển thị
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -62,11 +64,11 @@ const AdminTable = ({ columns, data, title, ModalComponent, onChange }) => {
           alignContent: "center",
           margin: "3rem 0",
         }}
-        count={Math.ceil(data.length / itemsPerPage)} 
-        page={currentPage}
+        current={currentPage} 
+        total={data.length} 
+        pageSize={itemsPerPage} 
         onChange={handleChangePage} 
-        color="primary" 
-        shape="rounded" 
+        showSizeChanger={false} 
       />
     </div>
   );
