@@ -16,22 +16,34 @@ const columns = [
   "Thao tác",
 ];
 const ManageOrder = () => {
-  const [filteredOrders, setFilteredOrders] = useState([]); // Dữ liệu đơn hàng đã lọc
-  const [loading, setLoading] = useState(true); // Trạng thái loading
-  const [orders, setOrders] = useState([]); // Dữ liệu đơn hàng từ API
-  const [orderDetails, setOrderDetails] = useState(null); // Trạng thái để lưu chi tiết đơn hàng
-  // const [isModalVisible, setIsModalVisible] = useState(false); // Trạng thái hiển thị modal
+  const [filteredOrders, setFilteredOrders] = useState([]);
+  const [loading, setLoading] = useState(true); 
+  const [orders, setOrders] = useState([]);
+  const [orderDetails, setOrderDetails] = useState(null); 
   useEffect(() => {
     const getOrders = async () => {
       try {
-        const ordersData = await fetchOrders(); // Gọi hàm fetchOrders
+        const ordersData = await fetchOrders(); 
         console.log(ordersData);
-        setOrders(ordersData); // Cập nhật dữ liệu đơn hàng
-        setFilteredOrders(ordersData); // Cập nhật dữ liệu đã lọc
+        const statusOrder = [
+          "Đang xử lý", 
+          "Đang chuẩn bị", 
+          "Đang vận chuyển", 
+          "Đã giao hàng",
+          "Hoàn tất",
+          "Đã hủy"
+        ];
+
+        // Filter orders based on the predefined status order
+        const sorted = ordersData.sort((a, b) => {
+          return statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status);
+        });
+        setOrders(sorted); 
+        setFilteredOrders(sorted); 
       } catch (error) {
         console.error("Failed to fetch orders:", error);
       } finally {
-        setLoading(false); // Đặt loading thành false sau khi hoàn thành
+        setLoading(false); 
       }
     };
 
@@ -41,9 +53,9 @@ const ManageOrder = () => {
   // Hàm để lấy chi tiết đơn hàng
   const handleViewOrderDetails = async (orderID) => {
     try {
-      const details = await fetchOrderDetails(orderID); // Gọi hàm fetchOrderDetails
-      setOrderDetails(details); // Cập nhật chi tiết đơn hàng
-      // Có thể hiển thị chi tiết đơn hàng trong một modal hoặc một phần khác của UI
+      const details = await fetchOrderDetails(orderID); 
+      setOrderDetails(details); 
+    
     } catch (error) {
       console.error("Failed to fetch order details:", error);
     }
@@ -62,11 +74,11 @@ const ManageOrder = () => {
   // Lọc theo ngày đặt trong khoảng thời gian
   const handleDateRangeFilter = (dates) => {
     if (!dates || dates.length === 0) {
-      setFilteredOrders(orders); // Sử dụng dữ liệu từ API
+      setFilteredOrders(orders);
     } else {
       const [start, end] = dates;
       const filtered = orders.filter((order) => {
-        const orderDate = new Date(order.date); // Sử dụng trường 'date' từ API
+        const orderDate = new Date(order.date);
         return orderDate >= start && orderDate <= end;
       });
       setFilteredOrders(filtered);

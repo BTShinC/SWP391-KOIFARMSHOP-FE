@@ -40,7 +40,7 @@ const AdminTable = ({ columns, data, title, ModalComponent, onChange }) => {
                 {row.roleName === "Staff" && <span>Nhân viên</span>}
                 {row.roleName === "Customer" && <span>Khách hàng</span>}
               </td>
-              <td>{row.accountBalance}</td>
+              <td>{new Intl.NumberFormat("vi-VN").format(row.accountBalance)} VNĐ</td>
               <td>
                 {ModalComponent && (
                   <ModalComponent

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Button } from "antd";
 import ChangeStatus from "../../changeStatus";
 import { fetchOrderDetails } from "../../../service/userService"; // Import hàm fetchOrderDetails
-
+import { format } from 'date-fns';
 OrderTable.propTypes = {
   columns: PropTypes.array.isRequired,
   orderData: PropTypes.array.isRequired,
@@ -50,7 +50,7 @@ function OrderTable({ columns, orderData, title }) { // Khởi tạo detailData 
               <tr>
                 <td>{order.orderID}</td>
                 <td>{order.total.toLocaleString()} VND</td>
-                <td>{order.date}</td>
+                <td>{format(new Date(order.date), 'dd/MM/yyyy')}</td>
                 <td>{order.status}</td>
                 <td className="btn-container">
                   <Button onClick={() => handleViewDetail(order.orderID)}>
