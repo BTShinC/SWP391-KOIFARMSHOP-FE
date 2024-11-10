@@ -6,10 +6,13 @@ import Carousel from "../carousel";
 import { fetchProductComboById, addToCartAPI } from "../../service/userService";
 import { useDispatch, useSelector } from "react-redux";
 import ShoppingCart from "../shopping-cart";
+import { ShoppingCartOutlined, DollarCircleOutlined } from '@ant-design/icons';
+
 
 const { Title, Text } = Typography;
 
 function SingleProductCombo() {
+
   const { id } = useParams(); // Get product combo ID from URL
   const [productCombo, setProductCombo] = useState(null); // State to store product combo details
   const [cartVisible, setCartVisible] = useState(false); // State to manage cart visibility
@@ -39,6 +42,7 @@ function SingleProductCombo() {
       maximumFractionDigits: 0,
     }).format(amount);
   };
+
 
   const handleAddToCart = async () => {
     try {
@@ -125,17 +129,21 @@ function SingleProductCombo() {
                 Giá: {formatCurrency(productCombo.price)} VNĐ
               </Text>
               <Text>Giống: {productCombo.breed}</Text>
-              <Text>Số lượng: {productCombo.quantity}</Text>
+              <Text>Số lượng: {productCombo.quantity} con</Text>
               <Text>Kích thước: {productCombo.size} cm</Text>
               {productCombo.status === "Còn hàng" ? (
                 <div className="action-buttons">
-                  <Button className="buy-button">Mua ngay</Button>
+                  <Button className="buy-button">
+                    <DollarCircleOutlined />
+                    Mua ngay
+                  </Button>
                   <Button onClick={handleAddToCart} className="buy-button">
+                    <ShoppingCartOutlined />
                     Thêm vào giỏ hàng
                   </Button>
                 </div>
               ) : (
-                <div style={{paddingLeft: "10rem", paddingTop: "3rem"}}>
+                <div style={{ paddingLeft: "10rem", paddingTop: "3rem" }}>
                   <Text style={{ fontSize: "Large", fontWeight: "Bold", color: "red" }}>Sản phẩm hết hàng</Text>
                 </div>
               )}
