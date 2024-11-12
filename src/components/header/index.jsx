@@ -1,10 +1,9 @@
-import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { SearchOutlined, UserOutlined, ShoppingCartOutlined } from "@ant-design/icons";
-
+import { SearchOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import { useState } from "react";
 import "./index.scss";
 import Sidebar from "../slidebars";
-
+import UserAvatar from "../admin-components/user-avatar";
 function Header() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
@@ -36,13 +35,13 @@ function Header() {
             <Link to="/about">Giới thiệu</Link>
           </li>
           <li>
-            <Link to="/">Cá Koi Nhật</Link>
+            <Link to="/product">Cá Koi Nhật</Link>
           </li>
           <li>
-            <Link to="/">Ký gửi</Link>
+            <Link to="/consignment">Ký gửi</Link>
           </li>
           <li>
-            <Link to="/">Tin tức</Link>
+            <Link to="/blog">Tin tức</Link>
           </li>
           <li>
             <Link to="/contact">Liên hệ</Link>
@@ -52,18 +51,22 @@ function Header() {
 
       <div className="header__icon">
         <ul>
+          {/* {user && (
+            <li className="userName">
+              <span>{user.account.fullName}</span>
+              <div>{user.account.accountBalance} VND</div>
+            </li>
+          )} */}
           <li>
-            <Link to="#" onClick={toggleSidebar}>
-              <UserOutlined />
-            </Link>
+            <UserAvatar onClick={toggleSidebar}></UserAvatar>
           </li>
-          <li>
-            <Link to="/">
+          {/* <li>
+            <Link>
               <SearchOutlined />
             </Link>
-          </li>
+          </li> */}
           <li>
-            <Link to="/">
+            <Link to="/shoppingcart">
               <ShoppingCartOutlined />
             </Link>
           </li>

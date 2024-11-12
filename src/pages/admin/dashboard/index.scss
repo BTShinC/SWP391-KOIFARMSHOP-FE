@@ -1,0 +1,27 @@
+.dashboard-page {
+    padding: 20px;
+    background-color: #f5f7fa;
+  
+    .ant-card {
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+  
+    .ant-card-head {
+      background-color: #1d4ed8;
+      color: #fff;
+      border-radius: 8px 8px 0 0;
+    }
+  
+    .ant-card-body {
+      background-color: #fff;
+    }
+  
+    .ant-statistic-title {
+      color: #1d4ed8;
+    }
+  
+    .ant-statistic-content-value {
+      color: #1d4ed8;
+    }
+  }

@@ -1,0 +1,111 @@
+.blog-page {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  background-color: #f7f8fa;
+  min-height: 100vh;
+
+  &__container {
+    display: flex;
+    max-width: 1200px;
+    width: 100%;
+    gap: 24px;
+  }
+
+  &__right {
+    flex: 3;
+    padding: 24px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+
+    &__title {
+      text-align: center;
+      margin-bottom: 24px;
+
+      h1 {
+        color: #333;
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 12px;
+      }
+    }
+
+    .blog-page__content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .blog-post__card {
+      flex: 1 1 calc(50% - 24px);
+      max-width: 100%;
+      margin-bottom: 24px;
+      padding: 16px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      border-radius: 8px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+      &:hover {
+        transform: scale(1.02);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    .MuiPagination-root {
+      display: flex;
+      justify-content: center;
+      margin-top: 24px;
+    }
+  }
+
+  &__recommend {
+    flex: 1;
+    padding: 16px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+
+    h2 {
+      color: #1976d2;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 16px;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin-bottom: 16px;
+
+      li {
+        margin-bottom: 8px;
+
+        a {
+          text-decoration: none;
+          color: #0077b6;
+
+          &:hover {
+            color: #023e8a;
+          }
+        }
+      }
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #8b4513; /* Earthy brown color */
+      color: white;
+      font-weight: bold;
+      text-transform: none;
+      border-radius: 4px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #a0522d; /* Lighter brown on hover */
+      }
+    }
+  }
+}

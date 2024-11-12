@@ -1,0 +1,125 @@
+.consignment-tracking-page {
+  max-width: 80vw;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+
+  .btn-container {
+    display: flex;
+    justify-content: space-between; 
+    gap: 1rem;
+
+    .btn {
+      padding: 0.75rem 1.5rem; 
+      border: none;
+      border-radius: 8px; 
+      font-size: 1rem; 
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease; 
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); 
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+      }
+    }
+  }
+
+  .btn-edit-consignment {
+    background-color: #f9f1e7;
+    color: black;
+    border: 1px solid #d4c8b2;
+    padding: 0.5rem;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+
+    &:hover {
+      background-color: #e9e1d7;
+    }
+  }
+
+  .consignment-tab {
+    font-size: medium;
+  }
+
+  h1 {
+    color: #b88e2f;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .ant-tabs-nav {
+    margin-bottom: 20px;
+  }
+
+  .ant-collapse {
+    background-color: #fff;
+    border: 1px solid #e7e7e7;
+    border-radius: 8px;
+  }
+
+  .ant-collapse-item {
+    border-bottom: 1px solid #e7e7e7;
+  }
+
+  .order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+
+    span {
+      margin-right: 20px;
+    }
+
+    .status {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: bold;
+
+      &.đang-xử-lý {
+        background-color: #fff2cc;
+        color: #d6a100;
+      }
+      &.đã-giao-hàng {
+        background-color: #d4edda;
+        color: #155724;
+      }
+      &.đã-hủy {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+    }
+  }
+
+  .order-details {
+    margin-top: 20px;
+
+    h3 {
+      color: #b88e2f;
+      margin-bottom: 10px;
+    }
+
+    .ant-table-thead > tr > th {
+      background-color: #f9f1e7;
+      color: #b88e2f;
+    }
+
+    .ant-table-tbody > tr > td {
+      border-bottom: 1px solid #e7e7e7;
+    }
+
+    img {
+      object-fit: contain;
+    }
+  }
+}
+
+.consignment-tracking-page-wrapper {
+  padding-top: 5vh;
+  padding-bottom: 5vh;
+}

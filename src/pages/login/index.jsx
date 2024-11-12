@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import logo from "/public/images/logo.svg";
-import googleLogo from "/public/images/google.svg"; 
+import googleLogo from "/public/images/google.svg";
 import { Link, useNavigate } from "react-router-dom";
 import "./index.scss";
 import axios from "axios";
@@ -8,9 +8,14 @@ import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import firebase from "firebase/compat/app";
 import { initializeApp } from "firebase/app";
 import { Button, Form, Input } from "antd";
+
 import api from "../../config/api";
-// import { useDispatch } from "react-redux";
+
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/features/userSlice";
+
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyDzdOryEzjKOSYu5q-EiTZyK5DcwwsUqms",
@@ -21,7 +26,6 @@ const firebaseConfig = {
   appId: "1:73945260552:web:164c3f6496f53250b327bd",
   measurementId: "G-SNF9TGJ1Z6",
 };
-
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
@@ -39,9 +43,6 @@ LoginPage.propTypes = {
 // };
 
 function LoginPage() {
-
-
-
   // const [formValue, setFormValue] = useState(initFormValue);
 
   // const handleChange = (event) => {
@@ -53,60 +54,91 @@ function LoginPage() {
   // };
 
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
-
+  const dispatch = useDispatch();
 
   const handleLogin = async (values) => {
     try {
-      await api.post("login", values);
+      const response = await api.post("authen/login", values);
       console.log("Values sent to API:", values);
-      // chạy xuống đây => account này có tồn tại
-      toast.success("Login success!");
+      console.log("Response from API:", response.data);
+      // Log the roleName to the console
+      console.log("User Role Name:", response.data.account.roleName); // Log the roleName
+
+
+      localStorage.setItem("token", response.data.token); 
+      localStorage.setItem("accountID", response.data.account.accountID); // Lưu accountId vào localStorage
+      console.log("Response from API:", response.data.account);
+
+      // Save user data to Redux
+
+
+     dispatch(login({
+      accountID: response.data.account.accountID,
+      fullName: response.data.account.fullName, 
+      accountBalance: response.data.account.accountBalance, 
+      image: response.data.account.image,
+      email: response.data.account.email,
+      address: response.data.account.address,
+      phoneNumber: response.data.account.phoneNumber,
+      roleName: response.data.account.roleName,
+    }));
+
+
+
+      // Check user role and navigate accordingly
+      if (response.data.account.roleName === "Admin") {
+        navigate("/admin"); // Navigate to admin page if role is Admin
+      } else {
+        navigate("/"); // Navigate to homepage for other roles
+      }
+
+      toast.success("Đăng nhập thành công");
       // chuyển đến trang chủ
       navigate("/");
 
       // lưu trữ thông tin của user
       // dispatch action
-      // dispatch(login(reponse.data));
+
     } catch (err) {
-      toast.error(err.response.data);
+      console.error("Error response from API:", err.response?.data);
+      toast.error("Vui lòng kiểm tra lại tên đăng nhập và mật khẩu");
     }
   };
 
   // Hàm lưu thông tin người dùng vào database qua API backend
-  const saveUserToDatabase = async (user) => {
-    try {
-      const response = await axios.post("/api/users", {
-        displayName: user.displayName,
-        email: user.email,
-        uid: user.uid,
-      });
+  // const saveUserToDatabase = async (user) => {
+  //   try {
+  //     const response = await axios.post("/api/users", {
+  //       displayName: user.displayName,
+  //       email: user.email,
+  //       uid: user.uid,
+  //     });
 
-      console.log("User saved to DB:", response.data);
-    } catch (error) {
-      console.error("Error saving user to database:", error);
-    }
-  };
+  //     console.log("User saved to DB:", response.data);
+  //   } catch (error) {
+  //     console.error("Error saving user to database:", error);
+  //   }
+  // };
 
-  const loginGoogle = async () => {
-    const googleProvider = new GoogleAuthProvider();
+  // const loginGoogle = async () => {
+  //   const googleProvider = new GoogleAuthProvider();
 
-    try {
-      const response = await signInWithPopup(auth, googleProvider);
-      const user = response.user;
+  //   try {
+  //     const response = await signInWithPopup(auth, googleProvider);
+  //     const user = response.user;
+  //     console.log("User:", user.displayName);
+  //     console.log("Email:", user.email);
 
-      console.log("User:", user.displayName);
-      console.log("Email:", user.email);
+  //     // Lưu thông tin người dùng vào database
+  //     await saveUserToDatabase(user);
 
-      // Lưu thông tin người dùng vào database
-      await saveUserToDatabase(user);
+  //     // Điều hướng đến trang home
+  //     navigate("/");
 
-      // Điều hướng đến trang home
-      navigate("/");
-    } catch (error) {
-      console.error("Error logging in with Google:", error);
-    }
-  };
+  //   } catch (error) {
+  //     console.error("Error logging in with Google:", error);
+  //   }
+  // };
 
   return (
     <div className="login">
@@ -162,7 +194,7 @@ function LoginPage() {
             </Button>
           </Form>
 
-          <button
+          {/* <button
             className="google-login-button"
             onClick={() => {
               console.log("Google login button clicked.");
@@ -171,7 +203,7 @@ function LoginPage() {
           >
             <img src={googleLogo} alt="Google Logo" className="google-logo" />
             Đăng nhập với Google
-          </button>
+          </button> */}
 
           <div className="links">
             <li>
@@ -180,7 +212,7 @@ function LoginPage() {
               </Link>
             </li>
             <li>
-              <Link to="/forgot-password">Quên mật khẩu</Link>
+              <Link to="/recoveryPassword">Quên mật khẩu</Link>
             </li>
           </div>
         </div>

@@ -1,0 +1,53 @@
+.own-transaction-page {
+    padding: 20px;
+    background-color: #f4f5f7; // Màu nền nhạt để tạo sự tách biệt với bảng
+    min-height: 100vh; // Chiều cao tối thiểu 100% chiều cao màn hình
+  
+    h2 {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #333;
+    }
+  
+    .ant-spin {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 300px; // Đặt chiều cao để spin loader hiển thị cân đối
+    }
+  
+    .ant-table-wrapper {
+      background-color: #fffbe6; // Màu nền vàng nhạt (vàng đồng nhẹ)
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); // Hiệu ứng đổ bóng cho bảng
+      border: 1px solid #c1a85e; // Đường viền màu vàng đồng
+    }
+  
+    .ant-table-thead > tr > th {
+      background-color: #c1a85e; // Màu nền vàng đồng cho tiêu đề cột
+      color: white;
+      font-weight: bold;
+      text-align: center; // Canh giữa tiêu đề cột
+    }
+  
+    .ant-table-tbody > tr > td {
+      text-align: center; // Canh giữa nội dung
+      padding: 12px;
+      color: #333; // Màu chữ đậm cho nội dung
+    }
+  
+    .ant-pagination {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+    }
+  
+    .ant-table-pagination.ant-pagination {
+      padding: 16px 0;
+      margin-bottom: 0;
+    }
+  }
+  

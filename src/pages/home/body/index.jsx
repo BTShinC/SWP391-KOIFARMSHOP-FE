@@ -1,9 +1,10 @@
-import poster from "swp391-koifarmshop-fe/public/images/poster.svg";
+import poster from "swp391-koifarmshop-fe/public/images/poster-upscaled.jpeg";
+//upscalled image
 
 import "./index.scss";
 import { Link } from "react-router-dom";
 
-import { Button, Card } from "antd";
+import { Card } from "antd";
 import Meta from "antd/es/card/Meta";
 
 import koi1 from "swp391-koifarmshop-fe/public/images/koi1.svg";
@@ -11,6 +12,8 @@ import koi2 from "swp391-koifarmshop-fe/public/images/koi2.svg";
 import koi3 from "swp391-koifarmshop-fe/public/images/koi3.svg";
 import koi4 from "swp391-koifarmshop-fe/public/images/koi4.svg";
 import Carousel from "../../../components/carousel";
+import CarouselCombo from "../../../components/carousel/CarouselCombo";
+
 
 function Body() {
   const koiImages = [
@@ -32,14 +35,14 @@ function Body() {
           <ul className="image-list">
             {koiImages.map((koi) => (
               <li key={koi.id}>
-                <Link to={`/koi/${koi.id}`}>
+                  {" "}
+                  {/* Chỉnh sửa ở đây */}
                   <Card
                     hoverable
                     cover={<img src={koi.imgSrc} alt={koi.title} />}
                   >
                     <Meta title={koi.title} />
                   </Card>
-                </Link>
               </li>
             ))}
           </ul>
@@ -49,13 +52,25 @@ function Body() {
       <div className="body__carousel le">
         <h2>Mua lẻ</h2>
         <Carousel />
-        <Button className="more-button">Xem thêm</Button>
+        <div className="more-button-container">
+          {" "}
+          {/* Thêm thẻ div này */}
+          <Link to="/product" className="more-button">
+            Xem thêm
+          </Link>
+        </div>
       </div>
 
       <div className="body__carousel lo">
         <h2>Mua lô</h2>
-        <Carousel />
-        <Button className="more-button">Xem thêm</Button>
+        <CarouselCombo />
+        <div className="more-button-container">
+          {" "}
+          {/* Thêm thẻ div này */}
+          <Link to="/product" className="more-button">
+            Xem thêm
+          </Link>
+        </div>
       </div>
 
       <div className="body__background">
@@ -65,7 +80,9 @@ function Body() {
             Cá Koi không chỉ làm không gian thêm sinh động mà còn giúp giảm căng
             thẳng và mệt mỏi.
           </h5>
+          <Link to="/product">
           <button className="view-more-button">Xem thêm</button>
+          </Link>
         </div>
         <div className="body__background__carousel">
           <Carousel slidesPerView={2} />
@@ -76,25 +93,24 @@ function Body() {
         <div className="body__introduction__content">
           <h1>Giới thiệu về Koifish - Đam mê Koi Nhật</h1>
           <h5>
-            Chào mừng bạn đến với Koi69, nơi niềm đam mê với cá Koi Nhật Bản
+            Chào mừng bạn đến với Koifish nơi niềm đam mê với cá Koi Nhật Bản
             được kết hợp với sự chuyên nghiệp và tận tâm. Chúng tôi tự hào là
             một trong những địa chỉ uy tín hàng đầu cung cấp cá Koi chất lượng
             cao tại Việt Nam. Với tiêu chuẩn vượt trội và cam kết mang lại dịch
-            vụ hoàn hảo, Koi69 luôn nỗ lực để mỗi khách hàng đều hài lòng.
+            vụ hoàn hảo, Koifish luôn nỗ lực để mỗi khách hàng đều hài lòng.
           </h5>
-          <button className="view-more-button">Xem thêm</button>
+          <Link to="/about">
+            <button className="view-more-button">Xem thêm</button>
+          </Link>
+          
         </div>
 
         <div className="body__introduction__image">
           <img src="/images/imtro.svg" alt="" />
         </div>
       </div>
-
-      
     </body>
   );
 }
 
-
 export default Body;
-

@@ -1,0 +1,67 @@
+.product-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 2 rem;
+    column-gap: 3vw;
+    row-gap: 1vh;
+    
+
+    .ant-card {
+        height: 90vh;
+        text-align: center; // Center all properties
+          display: flex;
+          flex-direction: column; // Stack elements vertically
+          justify-content: space-between; // Space out elements
+
+          .ant-card-cover {
+            img {
+              
+              height: 50vh; // Set a fixed height for uniformity
+              
+              object-fit: contain; 
+              transition: filter 0.3s ease-in-out;
+  
+              &:hover {
+                filter: grayscale(30%);
+              }
+            }
+          }
+        
+
+        .price {
+            font-weight: bold; // Bold the price
+          }
+        
+       
+    }
+}
+
+
+
+.pagination{
+    justify-content: center;
+}
+.button{
+    justify-content: center;
+}
+
+.select-button{
+    background-color: #f9f1e7;
+    color: black;
+    border: 1px solid #d4c8b2;
+    padding: 1.5rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    width: 5vw;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+
+
+    &:hover {
+      background-color: #e9e1d7;
+    } 
+}

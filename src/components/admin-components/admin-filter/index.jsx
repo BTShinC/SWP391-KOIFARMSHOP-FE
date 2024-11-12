@@ -1,26 +1,58 @@
 import PropTypes from "prop-types";
-import { Input, Space, Button } from "antd";
+import { Input, Space, Button } from "antd"; // Import Button từ Ant Design
 const { Search } = Input;
-import './index.scss'
-function AdminFilter({ onSearch, buttonText }) {
+import { useState } from "react";
+import "./index.scss";
+
+function AdminFilter({ onSearch, ModalComponent, onChange }) {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  // Hàm mở modal
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  // Hàm đóng modal
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
+
   return (
     <div className="content__filter">
       <Space direction="vertical">
         <Search
-          placeholder="Nhập từ khóa tìm kiếm"
+          placeholder="Nhập ID cần tìm kiếm"
           onSearch={onSearch}
           style={{ width: 400 }}
           enterButton
         />
       </Space>
-      <Button type="primary">{buttonText}</Button>
+      {/* Hiển thị ModalComponent nếu tồn tại */}
+      {ModalComponent && (
+        <>
+          <Button
+            type="primary"
+            onClick={showModal}
+            style={{ marginLeft: "10px" }}
+          >
+            Thêm cá
+          </Button>
+          <ModalComponent
+            title="Thêm cá"
+            visible={isModalVisible} // Truyền trạng thái visible
+            onClose={closeModal} // Truyền hàm đóng modal
+            onChange={onChange}
+          />
+        </>
+      )}
     </div>
   );
 }
 
 AdminFilter.propTypes = {
   onSearch: PropTypes.func.isRequired,
-  buttonText: PropTypes.string.isRequired, 
+  ModalComponent: PropTypes.elementType,
+  onChange : PropTypes.func,
 };
 
 export default AdminFilter;
