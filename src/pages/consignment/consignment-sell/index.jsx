@@ -73,8 +73,8 @@ function ConsignmentSell() {
             </Button>
             <Typography className="text-content">
               Ký gửi offline giúp bạn mang cá Koi đến cửa hàng đối tác để trưng
-              bày và bán. Đội ngũ chuyên gia sẽ chăm sóc và đảm bảo cá luôn
-              trong tình trạng tốt nhất.
+              bày và bán. Hình thức ký gửi linh hoạt được hỗ trợ bởi đội ngũ chuyên gia sẽ chăm sóc và đảm bảo cá luôn
+              trong tình trạng tốt nhất. 
             </Typography>
             <Typography className="text-content">
               Phù hợp cho người nuôi cá muốn bán nhanh và tiếp cận khách hàng

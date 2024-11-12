@@ -226,6 +226,7 @@ function SingleProductCombo() {
                 <div className="action-buttons">
                   <Button className="buy-button">
                     <DollarCircleOutlined />
+                    </Button>
 
                   <Button onClick={handleBuyNow} className="buy-button">
 
