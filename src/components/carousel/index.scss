@@ -6,6 +6,10 @@
     .swipper{
       width: 100%;
       margin-top: 30px;
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
     }
     .hover-card {
       position: relative;

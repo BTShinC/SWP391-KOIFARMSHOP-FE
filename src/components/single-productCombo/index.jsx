@@ -1,13 +1,14 @@
 import "./index.scss";
 import { Link, useParams } from "react-router-dom";
-import { Button, Typography, Image, Divider, message } from "antd";
+import { Button, Typography, Image, Divider, message, Modal } from "antd";
 import { useState, useEffect } from "react";
 import Carousel from "../carousel";
 import { fetchProductComboById, addToCartAPI } from "../../service/userService";
 import { useDispatch, useSelector } from "react-redux";
 import ShoppingCart from "../shopping-cart";
-import { ShoppingCartOutlined, DollarCircleOutlined } from '@ant-design/icons';
 
+import { ShoppingCartOutlined, DollarCircleOutlined } from '@ant-design/icons';
+import api from "../../config/api";
 
 const { Title, Text } = Typography;
 
@@ -19,6 +20,12 @@ function SingleProductCombo() {
   const [cartItems, setCartItems] = useState([]); // State to store cart items
   const dispatch = useDispatch(); // Initialize dispatch
   const user = useSelector((state) => state.user);
+  const [isBuyNowModalVisible, setBuyNowModalVisible] = useState(false);
+  const [buyNowLoading, setBuyNowLoading] = useState(false);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [discount, setDiscount] = useState(0);
+  const deliveryFee = 200000;
+  const [finalPrice, setFinalPrice] = useState(0);
 
   // Fetch product combo from backend when component mounts
   useEffect(() => {
@@ -34,6 +41,21 @@ function SingleProductCombo() {
 
     loadProductCombo();
   }, [id, dispatch]);
+
+  useEffect(() => {
+    if (productCombo) {
+      const subtotal = productCombo.price;
+      setTotalAmount(subtotal);
+      if (subtotal >= 2000000) {
+        const discountAmount = subtotal * 0.05;
+        setDiscount(discountAmount);
+        setFinalPrice(subtotal - discountAmount + deliveryFee);
+      } else {
+        setDiscount(0);
+        setFinalPrice(subtotal + deliveryFee);
+      }
+    }
+  }, [productCombo]);
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('vi-VN', {
@@ -78,6 +100,75 @@ function SingleProductCombo() {
     } catch (error) {
       console.error("Error adding to cart:", error.response?.data || error.message);
       message.error("Sản phẩm đã hết hàng.");
+    }
+  };
+
+  const handleBuyNow = async () => {
+    if (!user) {
+      message.warning("Vui lòng đăng nhập để mua hàng!");
+      return;
+    }
+    setBuyNowModalVisible(true);
+  };
+
+  const handleConfirmBuyNow = async () => {
+    if (!user || !productCombo) return;
+
+    setBuyNowLoading(true);
+    try {
+      const balanceResponse = await api.get(`/account/${user.accountID}`);
+      const accountBalance = balanceResponse.data.accountBalance;
+
+      if (accountBalance >= finalPrice) {
+        // Deduct balance
+        await api.put(`/account/deductBalance/${user.accountID}?amount=${finalPrice}`);
+
+        // Create order
+        const params = new URLSearchParams({
+          accountID: user.accountID,
+          productComboIDs: productCombo.productComboID,
+        });
+
+        if (totalAmount >= 2000000) {
+          params.append("promotionID", "PM001");
+        }
+
+        const orderResponse = await api.post(`/orders/makeOrder?${params.toString()}`);
+
+        // Create transaction record
+        await api.post("/transactions/create", {
+          accountID: user.accountID,
+          price: finalPrice,
+          date: new Date().toISOString(),
+          description: `Thanh toán đơn hàng ${orderResponse.data.orderID} (Mua ngay)`,
+        });
+
+        message.success("Đặt hàng thành công!");
+        setBuyNowModalVisible(false);
+        
+        // Thêm setTimeout để đảm bảo message hiển thị trước khi reload
+        setTimeout(() => {
+          window.location.reload(); // Reload trang
+        }, 1000);
+        
+      } else {
+        message.info(
+          <div className="no-money-msg">
+            Tài khoản không đủ số dư! Nạp tiền ngay?
+            <Button
+              style={{ marginLeft: "20px" }}
+              onClick={() => navigate("/wallet")}
+            >
+              Nạp tiền
+            </Button>
+          </div>
+        );
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      message.error("Có lỗi xảy ra khi đặt hàng!");
+    } finally {
+      setBuyNowLoading(false);
     }
   };
 
@@ -135,6 +226,9 @@ function SingleProductCombo() {
                 <div className="action-buttons">
                   <Button className="buy-button">
                     <DollarCircleOutlined />
+
+                  <Button onClick={handleBuyNow} className="buy-button">
+
                     Mua ngay
                   </Button>
                   <Button onClick={handleAddToCart} className="buy-button">
@@ -185,6 +279,53 @@ function SingleProductCombo() {
           onClose={() => setCartVisible(false)}
         />
       )}
+
+      <Modal
+        title="Xác nhận đơn hàng"
+        open={isBuyNowModalVisible}
+        onCancel={() => setBuyNowModalVisible(false)}
+        footer={[
+          <Button key="back" onClick={() => setBuyNowModalVisible(false)}>
+            Hủy
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={buyNowLoading}
+            onClick={handleConfirmBuyNow}
+          >
+            Xác nhận đặt hàng
+          </Button>,
+        ]}
+      >
+        <div className="order-summary">
+          <div style={{ marginBottom: '10px' }}>
+            <span>Tổng tiền hàng:</span>
+            <span style={{ float: 'right' }}>
+              {totalAmount.toLocaleString("vi-VN")} VNĐ
+            </span>
+          </div>
+          <div style={{ marginBottom: '10px' }}>
+            <span>Giảm giá:</span>
+            <span style={{ float: 'right' }}>
+              {discount.toLocaleString("vi-VN")} VNĐ
+            </span>
+          </div>
+          <div style={{ marginBottom: '10px' }}>
+            <span>Phí vận chuyển:</span>
+            <span style={{ float: 'right' }}>
+              {deliveryFee.toLocaleString("vi-VN")} VNĐ
+            </span>
+          </div>
+          <Divider />
+          <div>
+            <strong>Tổng cộng:</strong>
+            <strong style={{ float: 'right', color: "#B88E2F" }}>
+              {finalPrice.toLocaleString("vi-VN")} VNĐ
+            </strong>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

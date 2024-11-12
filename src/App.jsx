@@ -48,6 +48,7 @@ import DashboardPage from "./pages/admin/dashboard";
 import AdminRoute from "./components/admin-components/admin-route";
 
 import ManageFeedback from "./pages/admin/manageFeedback";
+import BuyNowCheckout from "./pages/buynow-checkout";
 
 function App() {
   const router = createBrowserRouter([
@@ -181,6 +182,11 @@ function App() {
         {
           path: "/checkout",
           element: <CheckoutPage />,
+        },
+
+        {
+          path: "/buynow-checkout",
+          element: <BuyNowCheckout />,
         },
 
         {

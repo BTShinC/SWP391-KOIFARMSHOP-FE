@@ -16,6 +16,7 @@ const { Option } = Select;
 
 const columns = [
   "Mã Sản Phẩm",
+  "Hình ảnh",
   "Giống Loài",
   "Kích Thước",
   "Hình thức",
@@ -49,35 +50,48 @@ function ManageFish() {
   const applyFilters = useCallback(
     (data) => {
       let filtered = data;
-
+  
       // Lọc theo mã sản phẩm
       if (searchValue.trim() !== "") {
         filtered = filtered.filter((fish) =>
           fish.productID.toLowerCase().includes(searchValue.toLowerCase())
         );
       }
-
+  
       // Lọc theo giống loài
       if (filterType !== "all") {
         filtered = filtered.filter((fish) =>
           fish.breed.toLowerCase().includes(filterType.toLowerCase())
         );
       }
-
+  
       // Lọc theo trạng thái
       if (statusFilter !== "all") {
         filtered = filtered.filter(
           (fish) => fish.status.toLowerCase() === statusFilter.toLowerCase()
         );
       }
-
-      // Sắp xếp theo giá
+  
+      // Sắp xếp theo thứ tự trạng thái cố định
+      const statusOrder = [
+        "Còn hàng",        
+        "Đã bán",          
+        "Đang chăm sóc",  
+        "Hết hàng",       
+        "Hoàn tất chăm sóc"
+      ];
+  
+      filtered = [...filtered].sort((a, b) => {
+        return statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status);
+      });
+  
+      // Sắp xếp theo giá (sau khi sắp xếp theo trạng thái)
       if (sortOrder) {
         filtered = [...filtered].sort((a, b) => {
           return sortOrder === "asc" ? a.price - b.price : b.price - a.price;
         });
       }
-
+  
       setFilteredFishData(filtered);
     },
     [searchValue, filterType, statusFilter, sortOrder]

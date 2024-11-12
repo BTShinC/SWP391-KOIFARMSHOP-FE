@@ -5,7 +5,7 @@
   margin-bottom: 20px;
 
   .ant-btn-primary {
-    background-color: #b8860b; /* Màu vàng đồng */
+    background-color: #b8860b;
     border-color: #b8860b;
     color: white;
     font-weight: bold;
@@ -16,12 +16,12 @@
 
     &:hover,
     &:focus {
-      background-color: #daa520 !important; /* Màu vàng đồng đậm hơn khi hover */
+      background-color: #daa520 !important; 
       border-color: #daa520 !important;;
     }
 
     &:active {
-      background-color: #a67c00; /* Màu vàng đồng tối hơn khi active */
+      background-color: #a67c00;
       border-color: #a67c00;
     }
   }

@@ -16,6 +16,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../redux/features/userSlice";
 
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyDzdOryEzjKOSYu5q-EiTZyK5DcwwsUqms",
   authDomain: "koifarmshop-1f095.firebaseapp.com",
@@ -100,7 +101,7 @@ function LoginPage() {
 
     } catch (err) {
       console.error("Error response from API:", err.response?.data);
-      toast.error(err.response.data);
+      toast.error("Vui lòng kiểm tra lại tên đăng nhập và mật khẩu");
     }
   };
 
