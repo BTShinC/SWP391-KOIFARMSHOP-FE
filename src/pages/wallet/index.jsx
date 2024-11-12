@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import axios from "axios"; // Import axios
 import "./index.scss"; // Import styles
 import vnNum2Words from "vn-num2words"; // Import the vn-num2words library
 import { toast } from "react-toastify"; // Import toast for notifications
@@ -9,7 +8,7 @@ import api from "../../config/api";
 import { withdrawMoney } from "../../service/userService";
 import { Button, Form, Input, Modal } from "antd";
 import CurrencyInput from "../../components/CurrencyInput/CurrencyInput";
-import { Description } from "@mui/icons-material";
+
 
 function WalletPage() {
   const [amount, setAmount] = useState("");
@@ -242,10 +241,10 @@ const fetchTransactionHistory = async () => {
       toast.error("Có lỗi xảy ra khi rút tiền. Vui lòng thử lại sau.");
     }
   };
-  // Sort transactions by transactionID in descending order
-  const sortedTransactions = transactions.sort((a, b) => {
-    return b.transactionID.localeCompare(a.transactionID); // Sort by transactionID
-  });
+  // // Sort transactions by transactionID in descending order
+  // const sortedTransactions = transactions.sort((a, b) => {
+  //   return b.transactionID.localeCompare(a.transactionID); // Sort by transactionID
+  // });
 
   return (
     <div className="wallet-page-wrapper">
