@@ -200,8 +200,8 @@ const fetchTransactionHistory = async () => {
       console.log("API Response:", apiResponse.data); // Kiểm tra xem có nhận được phản hồi không
     } catch (error) {
       console.error("Error adding transaction:", error);
-      const errorMessage = error.response?.data?.message || "Có lỗi xảy ra."; // Lấy thông báo lỗi từ server
-      toast.error("Giao dịch thất bại: " + errorMessage); // Thông báo thất bại với thông báo lỗi
+      // const errorMessage = error.response?.data?.message || "Có lỗi xảy ra."; // Lấy thông báo lỗi từ server
+      // toast.error("Giao dịch thất bại: " + errorMessage); // Thông báo thất bại với thông báo lỗi
     }
 
     setAmount(""); // Đặt lại số tiền sau khi xác nhận

@@ -224,12 +224,10 @@ function SingleProductCombo() {
               <Text>Kích thước: {productCombo.size} cm</Text>
               {productCombo.status === "Còn hàng" ? (
                 <div className="action-buttons">
-                  <Button className="buy-button">
-                    <DollarCircleOutlined />
-                    </Button>
+                  
 
                   <Button onClick={handleBuyNow} className="buy-button">
-
+                  <DollarCircleOutlined />
                     Mua ngay
                   </Button>
                   <Button onClick={handleAddToCart} className="buy-button">
