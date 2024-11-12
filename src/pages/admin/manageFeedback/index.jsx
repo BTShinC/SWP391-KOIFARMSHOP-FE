@@ -44,87 +44,44 @@ function ManageFeedback({data}) {
   const handleRefund = async (feedback) => {
   try {
     setProcessingFeedbacks(prev => new Set(prev).add(feedback.feedbackID));
-    // Bước 1: Lấy chi tiết đơn hàng để có total
-    const orderDetailsResponse = await api.get(`orders-details/order/${feedback.orderID}`);
-    console.log("Order Details Response:", orderDetailsResponse.data);
     
-    // Tính tổng tiền từ chi tiết đơn hàng
-    const orderTotal = orderDetailsResponse.data.reduce((sum, item) => {
-      return sum + (item.discountedPrice);
-    }, 0);
+    // Get order details for total
+    const orderDetailsResponse = await api.get(`orders-details/order/${feedback.orderID}`);
+    const orderTotal = orderDetailsResponse.data.reduce((sum, item) => sum + (item.discountedPrice), 0);
 
-    // Bước 2: Lấy thông tin đơn hàng để có accountID
-    const orderResponse = await api.get(`feedback/order/${feedback.orderID}`);
-    console.log("Order Response:", orderResponse.data);
-    const order = orderResponse.data;
-
+    // Get all orders and find matching order - MODIFIED
+    const ordersResponse = await api.get('/orders');
+    const order = ordersResponse.data.find(order => order.orderID === feedback.orderID);
+    
     if (!order || !order.accountID) {
       message.error('Không tìm thấy thông tin đơn hàng!');
       return;
     }
 
-    // Bước 3: Lấy thông tin tài khoản để kiểm tra
-    const accountResponse = await api.get(`/account/${order.accountID}`);
-    const account = accountResponse.data;
+    // Update order status to "Đã hủy"
+    const updatedOrder = {
+      ...order,
+      status: "Đã hủy",
+    };
+    await api.put(`/orders/${feedback.orderID}`, updatedOrder);
 
-    if (!account) {
-      message.error('Không tìm thấy thông tin tài khoản!');
-      return;
-    }
-
-    // Bước 4: Tính toán số tiền hoàn
-    const refundAmount = orderTotal + 200000; // total từ order details + phí ship
-
-    console.log("Refund Info:", {
-      orderID: feedback.orderID,
-      accountID: order.accountID,
-      currentBalance: account.accountBalance,
-      orderTotal: orderTotal,
-      refundAmount: refundAmount
-    });
-
-    if (isNaN(refundAmount) || refundAmount <= 0) {
-      message.error('Số tiền hoàn không hợp lệ!');
-      return;
-    }
-
-   
+    // Process refund
+    const refundAmount = orderTotal + 200000;
     await updateAccountBalance(order.accountID, refundAmount);
-    // console.log(updateResult);
-    // if (!updateResult) {
-    //   throw new Error("Cập nhật số dư thất bại");
-    // }
 
-    // Tạo transaction ghi nhận hoàn tiền
-    const transactionResponse = await api.post("/transactions/create", {
+    await api.post("/transactions/create", {
       accountID: order.accountID,
       price: refundAmount,
       date: new Date().toISOString(),
       description: `Hoàn tiền đơn hàng ${feedback.orderID} (Xử lý phản hồi)`
     });
 
-    console.log("Transaction Response:", transactionResponse.data);
-
-    // // Cập nhật trạng thái feedback
-    // await api.put(`/feedback/${feedback.feedbackID}`, {
-    //   feedbackID: feedback.feedbackID,
-    //   description: feedback.description,
-    //   image: feedback.image,
-    //   orderID: feedback.orderID,
-    //   accountID: order.accountID,
-    // //   status: 'Đã xử lý'
-    // });
-
     message.success(`Đã hoàn trả ${refundAmount.toLocaleString()} VND cho khách hàng`);
-    fetchFeedbacks(); // Refresh danh sách
+    fetchFeedbacks();
     setIsModalVisible(false);
 
   } catch (error) {
-    console.error('Error details:', {
-      message: error.message,
-      response: error.response?.data,
-      status: error.response?.status
-    });
+    console.error('Error:', error);
     message.error('Có lỗi xảy ra khi xử lý hoàn tiền');
   }
 };
