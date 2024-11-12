@@ -130,8 +130,9 @@ const ShoppingCart = ({ onClose }) => {
         <Link to="/checkout">
           <Button
           disabled={cartItems.length === 0} // Disable button if cart is empty
-          type="primary">Thanh toán
-            
+          type="primary"
+          style={{backgroundColor:"#B88E2F"}}
+          >Thanh toán
           </Button>
         </Link>
       </div>

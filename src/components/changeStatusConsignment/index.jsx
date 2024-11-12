@@ -94,7 +94,7 @@ function ChangeStatusConsignment({
         dateExpiration: dateExpirationFormatted,
         status: updatedConsignmentStatus,
       };
-      console.log("Cập nhật dữ liệu:", updatedFormValue);
+console.log("Cập nhật dữ liệu:", updatedFormValue);
       await updateConsignmentAndProduct(updatedFormValue);
 
       if (onChange) {
@@ -187,7 +187,7 @@ function ChangeStatusConsignment({
       // Hoàn tiền trước
       const refund = await refundConsignmentTotal(consignmentID);
       if (!refund) {
-        message.error("Hoàn tiền thất bại. Không thể cập nhật trạng thái.");
+message.error("Hoàn tiền thất bại. Không thể cập nhật trạng thái.");
         return;
       }
 
@@ -273,7 +273,7 @@ function ChangeStatusConsignment({
       const productData = updatedFormValue.productID
         ? await fetchProductById(updatedFormValue.productID)
         : updatedFormValue.productComboID
-        ? await fetchProductComboById(updatedFormValue.productComboID)
+? await fetchProductComboById(updatedFormValue.productComboID)
         : null;
 
       if (!productData) {
@@ -378,7 +378,7 @@ function ChangeStatusConsignment({
   return (
     <div>
       {!isShowButton ? (
-        <Button onClick={handleShowButton}>Cập nhật trạng thái</Button>
+<Button onClick={handleShowButton}>Cập nhật trạng thái</Button>
       ) : (
         <div className="change-status-button__container">
           <div className="change-status-button__close">
@@ -462,5 +462,4 @@ function ChangeStatusConsignment({
     </div>
   );
 }
-
 export default ChangeStatusConsignment;

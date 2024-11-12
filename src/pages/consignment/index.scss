@@ -14,7 +14,7 @@
       .consignment-page__right {
         flex: 1;
         margin-right: 20px;
-        text-align: center; /* Căn giữa đoạn văn bản và button */
+        text-align: center; 
         justify-content: center;
         h2 {
           font-size: 24px;
@@ -33,14 +33,14 @@
         .ant-btn-primary {
           background-color: #edd38a;
           border-color: #edd38a;
-          display: inline-flex; /* Chuyển sang inline-flex để có căn giữa tốt hơn */
-          justify-content: center; /* Căn giữa nội dung theo chiều ngang */
-          align-items: center; /* Căn giữa nội dung theo chiều dọc */
-          padding: 1.5rem 3rem; /* Điều chỉnh thêm khoảng cách hai bên */
+          display: inline-flex; 
+          justify-content: center; 
+          align-items: center;
+          padding: 1.5rem 3rem; 
           border-radius: 3rem;
           color: #441d01;
-          font-size: 18px; /* Đảm bảo font-size có đơn vị */
-          text-align: center; /* Căn giữa nội dung nếu cần trong các trường hợp đặc biệt */
+          font-size: 18px;
+          text-align: center; 
           &:hover {
             background-color: #d09b35;
             border-color: #d09b35;
@@ -84,15 +84,15 @@
     border-radius: 2px;
   }
   .more-button {
-    display: inline-flex; /* Thay đổi sang inline-flex để nút nhỏ hơn */
+    display: inline-flex; 
     margin: 30px auto 0 auto;
     background-color: white;
     color: #b88e2f;
     border: 2px solid #b88e2f;
-    padding: 15px 25px; /* Điều chỉnh padding để nút nhỏ lại */
-    font-size: 14px; /* Điều chỉnh font size */
-    text-decoration: none; /* Đảm bảo không có gạch chân */
-    border-radius: 8px; /* Thêm bo góc nếu muốn */
+    padding: 15px 25px; 
+    font-size: 14px;
+    text-decoration: none; 
+    border-radius: 8px;
     transition: all 0.3s ease;
     
     &:hover {

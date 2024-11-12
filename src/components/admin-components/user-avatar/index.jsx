@@ -10,7 +10,6 @@ UserAvatar.propTypes = {
 
 function UserAvatar({onClick}
 ) {
-    // Tùy chỉnh Badge để hiển thị dot
 const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
       backgroundColor: '#44b700',
@@ -45,7 +44,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
       <StyledBadge
         overlap="circular"
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        variant="dot" // Đây là phần quan trọng để hiển thị dot
+        variant="dot"
       >
         <Avatar alt={user?.fullName} src={user?.image} onClick ={onClick} style={{cursor:"pointer"}}/>
       </StyledBadge>
