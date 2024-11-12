@@ -130,8 +130,7 @@ function AddFishModal({ title, visible, onClose, onChange }) {
     try {
       let res = await addFish(formValue);
       if (res) {
-        onChange();
-        console.log("Thành công");
+        await onChange();
         toast.success("Thêm cá thành công");
         setFormValue(initFormValue);
         setFileList({
@@ -139,13 +138,13 @@ function AddFishModal({ title, visible, onClose, onChange }) {
           image1: [],
           image2: [],
         });
+        setCertificateList([]);
       }
-      setCertificateList([]);
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      toast.error("Tên cá đã tồn tại");
     }
-
-    onClose(); // Close the modal
+    await onClose();
   };
 
   return (
