@@ -1,82 +1,95 @@
 .relative-img {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem; /* Tăng khoảng cách giữa các hình ảnh */
-  padding: 1.5rem;
+  gap: 2rem; 
+  padding: 2rem;
+  align-items: center;
 
   img {
-    width: 100px; /* Tăng kích thước ảnh nhỏ */
-    height: 100px;
+    width: 120px; 
+    height: 120px;
     object-fit: cover;
-    border-radius: 8px;
-    transition: transform 0.3s ease; /* Thêm hiệu ứng khi hover */
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
 
     &:hover {
-      transform: scale(1.15); /* Phóng to hơn khi hover */
+      transform: scale(1.2); 
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
     }
   }
 }
 
 .main-img {
-  margin: 2rem 0; 
+  margin: 2rem 0;
   display: flex;
-  justify-content: center; 
+  justify-content: center;
 
   img {
-    width: 80%; 
+    width: 85%;
     height: auto;
     object-fit: cover;
-    border-radius: 12px; 
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15); 
-    transition: transform 0.3s ease;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 
     &:hover {
-      transform: scale(1.1); 
+      transform: scale(1.08);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
     }
   }
 }
 
 .global-box {
   margin: 0;
-  padding: 2rem; 
+  padding: 3rem;
+  background-color: #fdf9f3; 
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
 .img-description {
-  margin-top: 2rem;
-  font-size: 1.2rem; 
+  margin-top: 2.5rem;
+  font-size: 1.2rem;
+  color: #6e655b;
+
   h4 {
-    font-size: 2rem; 
+    font-size: 2.2rem;
     color: #b07d62;
     text-transform: uppercase;
     font-weight: bold;
     margin-bottom: 1.5rem;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
   }
 
   h6 {
     font-size: 1.8rem;
     color: #8c6b42;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.2rem;
   }
 
   ul {
-    padding-left: 2rem;
+    padding-left: 2.5rem;
     list-style-type: none;
+
     li {
-      font-size: 1.2rem; 
+      font-size: 1.2rem;
       color: #6e655b;
-      font-weight: bold;
-      margin-bottom: 0.8rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
       position: relative;
-      
+
       &:before {
         content: "✔";
         position: absolute;
-        left: -2rem; 
+        left: -2.5rem;
         color: #a47c48;
+        font-weight: bold;
       }
     }
   }
 }
+
 .back-button {
   position: absolute;
   top: 20px;
@@ -89,35 +102,43 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   text-transform: uppercase;
   font-weight: bold;
-  transition: background-color 0.3s ease;
-  z-index: 100; 
-  &:hover {
-    background-color: #8c6b42;
-  }
-}
-.careConsignment-btn {
-  display: inline-flex; 
-  margin: 40px auto 0 auto; 
-  background-color: white;
-  color: #b88e2f !important;
-  border: 2px solid #b88e2f !important;
-  padding: 20px 35px; 
-  font-size: 16px; 
-  text-decoration: none; 
-  border-radius: 10px; 
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  z-index: 100;
 
   &:hover {
-    background-color: #b88e2f; 
-    color: white !important;
+    background-color: #8c6b42;
+    transform: scale(1.05);
+  }
+}
+
+.careConsignment-btn {
+  display: inline-flex;
+  margin: 2rem auto 0;
+  background-color: white;
+  color: #b88e2f !important;
+  border: 2px solid #b88e2f;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 12px;
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+
+  &:hover {
+    background-color: #b88e2f;
+    color: #fff !important;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
   }
 
   svg {
-    color: #b88e2f; 
-    font-size: 1.5rem;
+    margin-left: 0.5rem;
+    color: #b88e2f;
+    font-size: 1.4rem;
+    transition: color 0.3s ease;
   }
 
   &:hover svg {
-    color: white; 
+    color: white;
   }
 }

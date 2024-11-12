@@ -5,6 +5,9 @@ import "./index.scss";
 import { Link } from "react-router-dom";
 
 import { Card } from "antd";
+import { useState } from 'react';
+import { Modal } from 'antd';
+import { GiftOutlined } from '@ant-design/icons';
 import Meta from "antd/es/card/Meta";
 
 import koi1 from "swp391-koifarmshop-fe/public/images/koi1.svg";
@@ -16,6 +19,16 @@ import CarouselCombo from "../../../components/carousel/CarouselCombo";
 
 
 function Body() {
+
+  const [isSaleModalVisible, setSaleModalVisible] = useState(false);
+  const showSaleModal = () => {
+    setSaleModalVisible(true);
+  };
+
+  const handleSaleModalClose = () => {
+    setSaleModalVisible(false);
+  };
+
   const koiImages = [
     { id: 1, imgSrc: koi1, title: "Asagi" },
     { id: 2, imgSrc: koi2, title: "Showa Sanshoku" },
@@ -35,14 +48,14 @@ function Body() {
           <ul className="image-list">
             {koiImages.map((koi) => (
               <li key={koi.id}>
-                  {" "}
-                  {/* Chỉnh sửa ở đây */}
-                  <Card
-                    hoverable
-                    cover={<img src={koi.imgSrc} alt={koi.title} />}
-                  >
-                    <Meta title={koi.title} />
-                  </Card>
+                {" "}
+                {/* Chỉnh sửa ở đây */}
+                <Card
+                  hoverable
+                  cover={<img src={koi.imgSrc} alt={koi.title} />}
+                >
+                  <Meta title={koi.title} />
+                </Card>
               </li>
             ))}
           </ul>
@@ -81,7 +94,7 @@ function Body() {
             thẳng và mệt mỏi.
           </h5>
           <Link to="/product">
-          <button className="view-more-button">Xem thêm</button>
+            <button className="view-more-button">Xem thêm</button>
           </Link>
         </div>
         <div className="body__background__carousel">
@@ -102,13 +115,40 @@ function Body() {
           <Link to="/about">
             <button className="view-more-button">Xem thêm</button>
           </Link>
-          
+
         </div>
 
         <div className="body__introduction__image">
           <img src="/images/imtro.svg" alt="" />
         </div>
       </div>
+      <div className="floating-sale-icon" onClick={showSaleModal}>
+        <GiftOutlined className="sale-icon" />
+        <span style={{ fontSize: 8 }} className="sale-badge">Ưu đãi sốc!</span>
+      </div>
+
+      <Modal
+        title="Ưu đãi đặc biệt"
+        visible={isSaleModalVisible}
+        onCancel={handleSaleModalClose}
+        footer={null}
+        className="sale-modal"
+        width={500}
+        centered
+
+      >
+        <div className="sale-content">
+          <h2>Giảm giá 5%</h2>
+          <p>Áp dụng cho đơn hàng từ 2.000.000 VND</p>
+          <div className="sale-details">
+            <ul>
+              <li>Ưu đãi áp dụng cho tất cả sản phẩm</li>
+              <li>Thời gian áp dụng: Không giới hạn</li>
+              <li>Không áp dụng cùng các khuyến mãi khác</li>
+            </ul>
+          </div>
+        </div>
+      </Modal>
     </body>
   );
 }

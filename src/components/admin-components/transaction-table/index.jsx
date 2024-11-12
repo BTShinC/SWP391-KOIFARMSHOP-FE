@@ -3,6 +3,7 @@ import "./index.scss";
 import { Pagination } from "@mui/material"; // Ensure you have @mui/material installed
 import { useState } from "react";
 import EditTransactionModal from "../../../pages/admin/manageTransactions/EditTransactionModal";
+import { toast } from "react-toastify";
 
 const TransactionTable = ({ columns, transactionData, title, onChange,onUpdateStatus }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -14,10 +15,10 @@ const TransactionTable = ({ columns, transactionData, title, onChange,onUpdateSt
     setCurrentPage(page);
   };
 
-  const handleEditClick = (transaction) => {
-    setSelectedTransaction(transaction);
-    setIsModalVisible(true);
-  };
+  // const handleEditClick = (transaction) => {
+  //   setSelectedTransaction(transaction);
+  //   setIsModalVisible(true);
+  // };
 
   const handleUpdate = async (transactionID, updatedData) => {
     // Call your API to update the transaction here
@@ -29,6 +30,7 @@ const TransactionTable = ({ columns, transactionData, title, onChange,onUpdateSt
     if (onUpdateStatus) {
       await onUpdateStatus(id);
     }
+    toast.success("Cập nhật trạng thái thành công");
   };
 
   // Calculate the data to display
@@ -57,6 +59,9 @@ const TransactionTable = ({ columns, transactionData, title, onChange,onUpdateSt
             <td>{transaction.price || transaction.pricesend} VND</td>
             <td>{new Date(transaction.date).toLocaleDateString()}</td>
             <td>{transaction.description}</td>
+            <td> 
+              {transaction.status}
+            </td>
             <td>
               {transaction.bank_name ? (
                 `${transaction.bank_name} - ${transaction.account_number}`
@@ -67,7 +72,7 @@ const TransactionTable = ({ columns, transactionData, title, onChange,onUpdateSt
             </td>
             <td>
               {onUpdateStatus && transaction.status !== "Hoàn tất" ? (
-                <button onClick={() => onUpdateStatus(transaction.accountWithdrawalId)}>Hoàn tất</button>
+                <button onClick={() => handleUpdateStatus(transaction.accountWithdrawalId)}>Hoàn tất</button>
               ) : (
                 transaction.status
               )}

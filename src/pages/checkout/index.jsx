@@ -104,7 +104,7 @@ function CheckoutPage() {
             date: new Date().toISOString(), // Add the current date
             description: `Thanh toán đơn hàng ${orderResponse.data.orderID} `, // Add a description
           },
-     
+
         );
 
         let countdown = 3;
@@ -152,7 +152,10 @@ function CheckoutPage() {
           </div>
           <div>
             <span>Giảm giá:</span>
-            <span>{discount.toLocaleString("vi-VN")} VNĐ</span>
+            <div className="discount-container">
+              <span>{discount.toLocaleString("vi-VN")} VNĐ</span>
+              {discount > 0 && <span className="discount-tag">-5%</span>}
+            </div>
           </div>
           <div>
             <span>Phí giao hàng:</span>

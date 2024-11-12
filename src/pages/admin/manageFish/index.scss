@@ -44,13 +44,13 @@
   
     &:hover,
     &:focus {
-      background-color: #b8860b; /* Màu vàng đồng khi hover */
+      background-color: #b8860b; 
       color: white;
       border-color: #b8860b;
     }
   
     &:active {
-      background-color: #a67c00; /* Màu vàng đồng tối hơn khi active */
+      background-color: #a67c00; 
       border-color: #a67c00;
     }
   }

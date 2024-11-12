@@ -102,7 +102,7 @@ return (
                             <p><strong>Giá:</strong> {formatCurrency(selectedFishes[1].price)} VND</p>
                             <div className="comparepage-button-wrapper">
                                 <Button className="comparepage-button" onClick={() => removeFish(1)}><DeleteOutlined />Xóa</Button>
-                                <Link to={`/singleproduct/${selectedFishes[0].productID}`}>
+                                <Link to={`/singleproduct/${selectedFishes[1].productID}`}>
                                 <Button className="comparepage-button"><ExclamationCircleOutlined />Chi tiết</Button>
                                 </Link>
                             </div>

@@ -8,6 +8,7 @@ import { addToCartAPI, fetchCartItems, fetchProductById } from "../../service/us
 import { useDispatch, useSelector } from "react-redux";
 import { setBuyNowItem } from "../../pages/redux/features/buyNowSlice";
 import api from "../../config/api";
+import { DollarOutlined,ShoppingCartOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
 
@@ -242,8 +243,9 @@ function SingleProduct() {
               <Text>Nguồn gốc: {product.origin}</Text>
               {product.status === "Còn hàng" ? (
                 <div className="action-buttons">
-                  <Button className="buy-button" onClick={handleBuyNow}>Mua ngay</Button>
+                  <Button className="buy-button" onClick={handleBuyNow}><DollarOutlined/>Mua ngay</Button>
                   <Button onClick={handleAddToCart} className="buy-button">
+                    <ShoppingCartOutlined/>
                     Thêm vào giỏ hàng
                   </Button>
                 </div>

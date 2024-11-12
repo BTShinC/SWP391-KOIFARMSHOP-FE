@@ -57,6 +57,8 @@ function LayoutTitle() {
     title = "Thanh toán";
   }else if (location.pathname === "/wallet/vnpay/response") {  
     title = "Xác nhận thanh toán";
+  }else if (location.pathname === "/ownTransaction") {  
+    title = "Lịch sử giao dịch";
   }
   return (
     <>
