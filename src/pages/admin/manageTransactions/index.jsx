@@ -21,6 +21,7 @@ const withdrawalColumns = [
   "Mã Khách hàng",
   "Số tiền",
   "Ngày yêu cầu",
+  "Mô tả",
   "Trạng thái",
   "Thông tin ngân hàng",
   "Thao tác",
