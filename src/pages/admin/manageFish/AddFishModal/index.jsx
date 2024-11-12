@@ -133,7 +133,14 @@ function AddFishModal({ title, visible, onClose, onChange }) {
         onChange();
         console.log("Thành công");
         toast.success("Thêm cá thành công");
+        setFormValue(initFormValue);
+        setFileList({
+          image: [],
+          image1: [],
+          image2: [],
+        });
       }
+      setCertificateList([]);
     } catch (error) {
       console.log(error);
     }

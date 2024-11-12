@@ -51,38 +51,44 @@ function ManageProductCombo() {
 
   const applyFiltersAndSorting = useCallback(() => {
     let updatedData = [...data];
-  
+
     // Filter by status
     if (statusFilter) {
       updatedData = updatedData.filter((item) => item.status === statusFilter);
     }
-  
-    
+
     const statusOrder = [
       "Chờ xác nhận",
-      "Còn hàng",      
+      "Còn hàng",
       "Đã bán",
       "Đang tiến hành",
-      "Đang chăm sóc", 
-      "Hết hàng", 
-      "Đã hủy",    
+      "Đang chăm sóc",
+      "Hết hàng",
+      "Đã hủy",
     ];
-  
-    // Sort by status
+
+
     updatedData.sort((a, b) => {
-      return statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status);
+      const statusComparison =
+        statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status);
+
+      if (statusComparison === 0) {
+        
+        if (priceSortOrder) {
+          const priceComparison =
+            priceSortOrder === "ascend" ? a.price - b.price : b.price - a.price;
+
+          if (priceComparison !== 0) {
+            return priceComparison;
+          }
+        }
+        return b.productComboID.localeCompare(a.productComboID);
+      }
+
+      return statusComparison;
     });
-  
-    // Sort by price
-    if (priceSortOrder === "ascend") {
-      updatedData.sort((a, b) => a.price - b.price);
-    } else if (priceSortOrder === "descend") {
-      updatedData.sort((a, b) => b.price - a.price);
-    }
-  
     setFilteredData(updatedData);
   }, [data, statusFilter, priceSortOrder]);
-  
 
   useEffect(() => {
     applyFiltersAndSorting();
