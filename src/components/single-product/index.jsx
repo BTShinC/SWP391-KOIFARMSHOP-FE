@@ -6,6 +6,8 @@ import { useState, useEffect } from "react";
 import ShoppingCart from "../shopping-cart";
 import { addToCartAPI, fetchCartItems, fetchProductById } from "../../service/userService";
 import { useDispatch, useSelector } from "react-redux";
+import { ShoppingCartOutlined, DollarCircleOutlined } from '@ant-design/icons';
+
 import { setBuyNowItem } from "../../pages/redux/features/buyNowSlice";
 import api from "../../config/api";
 
@@ -31,6 +33,25 @@ function SingleProduct() {
   console.log("Current account:", account);
   console.log("Current ID:", account?.accountID);
 
+
+  // Trong trang chi tiết sản phẩm, thêm hàm xử lý mua ngay
+  const handleBuyNow = () => {
+    const buyNowProduct = {
+      productID: product.productID,
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+      image: product.image,
+      type: "Product"
+    };
+
+    // Chuyển đến trang checkout với thông tin sản phẩm
+    navigate('/checkout', {
+      state: {
+        isBuyNow: true,
+        buyNowProduct: buyNowProduct
+      }
+    });
   const [isBuyNowModalVisible, setBuyNowModalVisible] = useState(false);
   const [buyNowLoading, setBuyNowLoading] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -153,7 +174,7 @@ function SingleProduct() {
 
       // Fetch current cart items from API
       const currentCartItems = await fetchCartItems(account.accountID);
-      
+
       // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
       const existingItem = currentCartItems.find(
         item => item.productID === product.productID
@@ -242,14 +263,18 @@ function SingleProduct() {
               <Text>Nguồn gốc: {product.origin}</Text>
               {product.status === "Còn hàng" ? (
                 <div className="action-buttons">
-                  <Button className="buy-button" onClick={handleBuyNow}>Mua ngay</Button>
+                  <Button className="buy-button" onClick={handleBuyNow}>
+                    <DollarCircleOutlined />
+                    Mua ngay
+                  </Button>
                   <Button onClick={handleAddToCart} className="buy-button">
+                    <ShoppingCartOutlined />
                     Thêm vào giỏ hàng
                   </Button>
                 </div>
               ) : (
-                <div style={{paddingLeft: "10rem", paddingTop: "3rem"}}>
-                <Text style={{ fontSize: "Large",fontWeight: "Bold", color: "red" }}>Sản phẩm hết hàng</Text>
+                <div style={{ paddingLeft: "10rem", paddingTop: "3rem" }}>
+                  <Text style={{ fontSize: "Large", fontWeight: "Bold", color: "red" }}>Sản phẩm hết hàng</Text>
                 </div>
               )}
               <div className="divider-wrapper">

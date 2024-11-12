@@ -67,11 +67,20 @@
       margin-top: 50px;
 
       .price {
-        font-size: 18px;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        color: #9f9f9f;
+        font-size: 24px !important; // Increase font size
+        color: #ff4d4f !important; // Change to red color
+        font-weight: bold !important;
+        margin: 15px 0 !important;
       }
+
+      // Add container for product info
+      .product-info {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
       .color-selection {
         margin-top: 10px;
         display: flex;
@@ -89,16 +98,21 @@
 
       .action-buttons {
         display: flex;
-        justify-content: center; /* Centering buttons */
-        align-items: center;
-        margin-top: 60px;
-
-        .buy-button {
-          margin-right: 10px;
-          width: 150px; /* Set button width */
-          padding: 20px;
-        }
+        gap: 15px;
+        margin-top: 20px;
+        align-self: flex-start; // Align with product info
         
+        .buy-button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          height: 40px;
+          
+          .anticon {
+            font-size: 16px;
+          }
+        }
       }
       .divider-wrapper {
         width: 605.01px; /* Set the width here */
