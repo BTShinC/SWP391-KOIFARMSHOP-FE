@@ -24,7 +24,6 @@ import { v4 as uuidv4 } from "uuid";
 import { format } from "date-fns";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
-import { formatCurrency } from '../../../utils/formatters';
 
 SellForm.propTypes = {
   isOnline: PropTypes.bool,

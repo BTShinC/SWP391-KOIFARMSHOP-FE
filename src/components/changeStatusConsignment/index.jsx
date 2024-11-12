@@ -84,7 +84,7 @@ function ChangeStatusConsignment({
       const currentDate = format(new Date(), "yyyy-MM-dd");
       const dateExpiration = addDays(currentDate, formValue.duration);
 
-      const dateExpirationFormatted = dateExpiration.toISOString(); 
+      const dateExpirationFormatted = dateExpiration.toISOString();
 
       // Chuẩn bị dữ liệu cập nhật
       const updatedFormValue = {
@@ -94,7 +94,7 @@ function ChangeStatusConsignment({
         dateExpiration: dateExpirationFormatted,
         status: updatedConsignmentStatus,
       };
-console.log("Cập nhật dữ liệu:", updatedFormValue);
+      console.log("Cập nhật dữ liệu:", updatedFormValue);
       await updateConsignmentAndProduct(updatedFormValue);
 
       if (onChange) {
@@ -133,11 +133,11 @@ console.log("Cập nhật dữ liệu:", updatedFormValue);
 
   const handleRefund = async () => {
     try {
-      console.log(formValue.consignmentID)
+      console.log(formValue.consignmentID);
       // Thực hiện hoàn tiền
       const refundRes = await refundConsignmentSell(formValue.consignmentID);
       if (refundRes) {
-        message.success(`Hoàn tiền thành công.${refundRes.data}`);
+        message.success(`Hoàn tiền thành công.`);
       }
       // Cập nhật trạng thái consignment
       const updatedFormValue = {
@@ -187,7 +187,7 @@ console.log("Cập nhật dữ liệu:", updatedFormValue);
       // Hoàn tiền trước
       const refund = await refundConsignmentTotal(consignmentID);
       if (!refund) {
-message.error("Hoàn tiền thất bại. Không thể cập nhật trạng thái.");
+        message.error("Hoàn tiền thất bại. Không thể cập nhật trạng thái.");
         return;
       }
 
@@ -273,7 +273,7 @@ message.error("Hoàn tiền thất bại. Không thể cập nhật trạng thá
       const productData = updatedFormValue.productID
         ? await fetchProductById(updatedFormValue.productID)
         : updatedFormValue.productComboID
-? await fetchProductComboById(updatedFormValue.productComboID)
+        ? await fetchProductComboById(updatedFormValue.productComboID)
         : null;
 
       if (!productData) {
@@ -364,11 +364,11 @@ message.error("Hoàn tiền thất bại. Không thể cập nhật trạng thá
       const consignmentRes = await updateConsignmentByID(
         updatedConsignmentData
       );
-      if (!consignmentRes)
+      onChange();
+      if (!consignmentRes) {
         throw new Error("Cập nhật trạng thái đơn ký gửi thất bại");
-      message.success("Cập nhật trạng thái đơn ký gửi thành công");
-      if (onChange) {
-        onChange();
+      } else {
+        message.success("Cập nhật trạng thái đơn ký gửi thành công");
       }
     } catch (error) {
       console.error(error);
@@ -378,7 +378,7 @@ message.error("Hoàn tiền thất bại. Không thể cập nhật trạng thá
   return (
     <div>
       {!isShowButton ? (
-<Button onClick={handleShowButton}>Cập nhật trạng thái</Button>
+        <Button onClick={handleShowButton}>Cập nhật trạng thái</Button>
       ) : (
         <div className="change-status-button__container">
           <div className="change-status-button__close">
@@ -415,12 +415,12 @@ message.error("Hoàn tiền thất bại. Không thể cập nhật trạng thá
                 Hoàn tất
               </Button>
             )}
-            {formValue.status === "Yêu cầu hoàn trả" && (
+            {data.status === "Yêu cầu hoàn trả" && (
               <Button className="custom-button" onClick={handleCareReturn}>
                 Chuẩn bị hoàn tất
               </Button>
             )}
-            {formValue.status === "Chuẩn bị hoàn tất" && (
+            {data.status === "Chuẩn bị hoàn tất" && (
               <Button className="custom-button" onClick={handleComplete}>
                 Xác nhận hoàn cá
               </Button>

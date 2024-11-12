@@ -159,7 +159,10 @@ function ManageFeedback({data}) {
       key: 'action',
       render: (_, record) => (
         <Button 
-          type="primary"
+          style={{
+            backgroundColor: "#c3ae86",
+            color: "white",
+          }}
           onClick={() => {
             setSelectedFeedback(record);
             setIsModalVisible(true);

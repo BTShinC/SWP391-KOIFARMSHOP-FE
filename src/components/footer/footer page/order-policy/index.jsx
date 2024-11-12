@@ -29,8 +29,8 @@ function OrderPolicy() {
                     </p>
                     <h1 className="title-1">4. Xác nhận đơn hàng</h1>
                     <p className="content">
-                        Sau khi thanh toán thành công, bạn sẽ nhận được email xác nhận đơn hàng cùng với thông tin chi tiết về đơn hàng của bạn.
-                        Đội ngũ chăm sóc khách hàng của chúng tôi sẽ liên hệ để xác nhận và cập nhật về quá trình giao hàng.
+                        Sau khi thanh toán thành công, xác nhận đơn hàng cùng với thông tin chi tiết về đơn hàng của bạn.
+                        Đội ngũ chăm sóc khách hàng của chúng tôi sẽ liên hệ để xác nhận và cập nhật về quá trình giao hàng. Phí vận chuyển cố định 200.000VND cho mỗi đơn hàng.
                     </p>
                 </div>
 

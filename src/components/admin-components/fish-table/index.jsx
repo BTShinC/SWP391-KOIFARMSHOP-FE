@@ -111,6 +111,17 @@ function FishTable({
             <React.Fragment key={fish.productID || index}>
               <tr>
                 <td>{fish.productID}</td>
+                <td>
+                  <img
+                    src={fish.image}
+                    alt="Fish"
+                    style={{
+                      maxWidth: "100px",
+                      borderRadius: "8px",
+                      marginRight: "20px",
+                    }}
+                  />
+                </td>
                 <td>{fish.breed}</td>
                 <td>{fish.size}</td>
                 <td>{fish.consignmentType}</td>

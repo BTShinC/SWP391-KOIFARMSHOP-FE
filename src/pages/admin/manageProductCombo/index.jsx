@@ -14,11 +14,11 @@ ManageProductCombo.propTypes = {};
 
 function ManageProductCombo() {
   const [data, setData] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1); // Current page
-  const [pageSize, setPageSize] = useState(8); // Items per page
-  const [filteredData, setFilteredData] = useState([]); // Data after applying filters
-  const [statusFilter, setStatusFilter] = useState(""); // Status filter state
-  const [priceSortOrder, setPriceSortOrder] = useState(null); // Price sorting order state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(8);
+  const [filteredData, setFilteredData] = useState([]);
+  const [statusFilter, setStatusFilter] = useState("");
+  const [priceSortOrder, setPriceSortOrder] = useState(null);
 
   useEffect(() => {
     getProductCombo();
@@ -40,17 +40,15 @@ function ManageProductCombo() {
 
   // Function to handle status filtering
   const handleStatusFilter = (value) => {
-    console.log("Status Filter selected:", value); // Debugging log
+    console.log("Status Filter selected:", value);
     setStatusFilter(value);
   };
 
-  // Function to handle price sorting
   const handlePriceSort = (value) => {
-    console.log("Price Sort selected:", value); // Debugging log
+    console.log("Price Sort selected:", value);
     setPriceSortOrder(value);
   };
 
-  // Apply status filtering and price sorting
   const applyFiltersAndSorting = useCallback(() => {
     let updatedData = [...data];
 
@@ -59,13 +57,36 @@ function ManageProductCombo() {
       updatedData = updatedData.filter((item) => item.status === statusFilter);
     }
 
-    // Sort by price
-    if (priceSortOrder === "ascend") {
-      updatedData.sort((a, b) => a.price - b.price);
-    } else if (priceSortOrder === "descend") {
-      updatedData.sort((a, b) => b.price - a.price);
-    }
+    const statusOrder = [
+      "Chờ xác nhận",
+      "Còn hàng",
+      "Đã bán",
+      "Đang tiến hành",
+      "Đang chăm sóc",
+      "Hết hàng",
+      "Đã hủy",
+    ];
 
+
+    updatedData.sort((a, b) => {
+      const statusComparison =
+        statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status);
+
+      if (statusComparison === 0) {
+        
+        if (priceSortOrder) {
+          const priceComparison =
+            priceSortOrder === "ascend" ? a.price - b.price : b.price - a.price;
+
+          if (priceComparison !== 0) {
+            return priceComparison;
+          }
+        }
+        return b.productComboID.localeCompare(a.productComboID);
+      }
+
+      return statusComparison;
+    });
     setFilteredData(updatedData);
   }, [data, statusFilter, priceSortOrder]);
 
@@ -79,7 +100,15 @@ function ManageProductCombo() {
   };
 
   const handleSearch = (value) => {
-    console.log(value);
+    const searchTerm = value.trim().toLowerCase();
+    if (searchTerm === "") {
+      setFilteredData(data);
+    } else {
+      const result = data.filter((fish) =>
+        fish.productComboID.toLowerCase().includes(searchTerm)
+      );
+      setFilteredData(result);
+    }
   };
 
   const handleOnChange = () => {
@@ -160,7 +189,7 @@ function ManageProductCombo() {
             pageSize={pageSize}
             total={filteredData.length}
             onChange={handlePaginationChange}
-            showSizeChanger={false} // Hide page size changer
+            showSizeChanger={false}
           />
         </div>
       </div>
