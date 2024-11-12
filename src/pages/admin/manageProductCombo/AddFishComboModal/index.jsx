@@ -94,22 +94,25 @@ function AddFishComboModal({ title, visible, onClose, onChange }) {
   };
 
   const handleOk = async () => {
-    // Xử lý lưu thông tin
-    console.log(formValue);
     try {
       let res = await AddFishCombo(formValue);
       if (res) {
         onChange();
-        message.success("Thêm lô thành công")
-        console.log("Thành công");
-        setFormValue(initFormValue)
+        message.success("Thêm lô thành công");
+
+        // Reset form values and fileList after success
+        setFormValue(initFormValue);
+        setFileList({ image: [], image1: [], image2: [] });
+      }else{
+        message.error("Cá đã trùng tên");
       }
     } catch (error) {
       console.log(error);
     }
-    onClose(); // Đóng modal sau khi cập nhật
+    onClose(); // Close modal after updating
   };
 
+  
   return (
     <Modal
       title={title}
