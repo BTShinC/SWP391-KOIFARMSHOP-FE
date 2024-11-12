@@ -39,20 +39,34 @@ function ManageConsignment() {
       const res = await fetchAllConsignment();
       if (res) {
         console.log("Lấy dữ liệu thành công");
+
         const statusOrder = [
           "Chưa xác nhận",
           "Chưa hoàn tiền",
           "Đang tiến hành",
           "Đang chăm sóc",
           "Hoàn tất",
-          "Đã hủy"
+          "Đã hủy",
         ];
 
         const sortedData = res.data.sort((a, b) => {
-          return statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status);
-        }); 
-        setKoiConsignmentData(sortedData); 
-        setFilteredData(sortedData); 
+          // So sánh theo status trước
+          const statusComparison =
+            statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status);
+
+          // Nếu status khác nhau, sắp xếp theo status; nếu giống nhau, sắp xếp theo ngày đặt từ gần nhất đến xa nhất
+          if (statusComparison !== 0) {
+            return statusComparison;
+          }
+
+          // Sắp xếp theo ngày đặt (orderDate) giảm dần
+          const dateA = new Date(a.consignmentDate);
+          const dateB = new Date(b.consignmentDate);
+          return dateB - dateA; // Ngày gần nhất sẽ đứng trước
+        });
+
+        setKoiConsignmentData(sortedData);
+        setFilteredData(sortedData);
       }
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu ký gửi:", error);
@@ -73,13 +87,13 @@ function ManageConsignment() {
       filtered = filtered.filter((item) => item.status === statusFilter);
     }
 
-    setFilteredData(filtered); 
-  }, [filterType, statusFilter, koiConsignmentData]); 
+    setFilteredData(filtered);
+  }, [filterType, statusFilter, koiConsignmentData]);
 
   // Xử lý khi thay đổi loại ký gửi
   const handleTypeChange = (value) => {
     setFilterType(value);
-    setStatusFilter("all"); 
+    setStatusFilter("all");
   };
 
   // Xử lý khi thay đổi trạng thái
