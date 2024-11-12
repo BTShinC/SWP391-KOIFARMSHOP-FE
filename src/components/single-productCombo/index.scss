@@ -40,7 +40,14 @@
       display: flex;
       align-items: flex-start;
       margin-top: 50px;
-      margin-right: 120px;
+      margin-right: 20px;
+      margin-left: 20px;
+
+      .main-image{
+        margin-left: 20px;
+        height: 10vh;
+        width: 16vw;
+      }
 
       .thumbnail-container {
         display: flex;

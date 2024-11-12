@@ -42,10 +42,16 @@
       margin-top: 50px;
       margin-right: 120px;
 
+      .main-image{
+        margin-left: 20px;
+        height: 10vh;
+        width: 16vw;
+      }
       .thumbnail-container {
         display: flex;
         flex-direction: column;
-        margin-right: 30px;
+        margin-right: 20px;
+        margin-left: 20px;
 
         .thumbnail {
           width: 80px;
