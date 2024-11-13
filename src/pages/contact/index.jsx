@@ -33,7 +33,7 @@ function ContactPage() {
             contact: formValue.contact,
             topic: formValue.subject,
             question: formValue.message,
-            status: "pending" // Assuming the initial status is "pending"
+            status: "Chờ xử lý" // Assuming the initial status is "pending"
         };
 
         console.log("Question data to be sent:", questionData);
